@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.mainScreen.activities.MainActivity;
+import com.ble.sharan.mainScreen.activities.MainActivityNew;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -187,7 +187,7 @@ public class MyDialogs
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord)
         {
-            ((MainActivity)context).runOnUiThread(new Runnable()
+            ((MainActivityNew)context).runOnUiThread(new Runnable()
             {
                 @Override
                 public void run()

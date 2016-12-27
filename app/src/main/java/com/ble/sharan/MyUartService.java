@@ -46,9 +46,9 @@ import java.util.UUID;
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
  */
-public class UartService extends Service
+public class MyUartService extends Service
 {
-    private final static String TAG = UartService.class.getSimpleName();
+    private final static String TAG = MyUartService.class.getSimpleName();
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
@@ -132,6 +132,8 @@ public class UartService extends Service
                                          BluetoothGattCharacteristic characteristic,
                                          int status)
         {
+
+            Log.e(TAG, "onCharacteristicRead" + characteristic+"--status--"+status);
             if (status == BluetoothGatt.GATT_SUCCESS)
             {
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
@@ -142,6 +144,7 @@ public class UartService extends Service
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic)
         {
+            Log.e(TAG, "onCharacteristicChanged-----" + characteristic);
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
         }
     };
@@ -170,9 +173,9 @@ public class UartService extends Service
 
     public class LocalBinder extends Binder
     {
-        public UartService getService()
+        public MyUartService getService()
         {
-            return UartService.this;
+            return MyUartService.this;
         }
     }
 

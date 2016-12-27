@@ -10,4 +10,14 @@ public class MyConstant
     public static final String DEVICE_ADDRESS = "device_address";
     public static final String IS_CONNECTED = "is_connected";
     public static final String IS_MANUAL_DISCONNECTED = "is_manual_disconnected";
+
+
+
+
+    public static final String CONNECTED = "connected";
+    public static final String CONNECTING = "connecting";
+
+    public static final String DISCONNECTED = "disconnected";
+    public static final String DISCONNECTING = "disonnecting";
+
 }

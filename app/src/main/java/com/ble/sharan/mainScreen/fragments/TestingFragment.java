@@ -52,7 +52,7 @@ import android.widget.Toast;
 
 import com.ble.sharan.DeviceListActivity;
 import com.ble.sharan.R;
-import com.ble.sharan.UartService;
+import com.ble.sharan.MyUartService;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
@@ -71,7 +71,7 @@ public class TestingFragment extends Fragment implements View.OnClickListener
     TextView mRemoteRssiVal;
     RadioGroup mRg;
     private int mState = UART_PROFILE_DISCONNECTED;
-    private UartService mService = null;
+    private MyUartService mService = null;
     private BluetoothDevice mDevice = null;
     private BluetoothAdapter mBtAdapter = null;
     private ListView messageListView;
@@ -305,7 +305,7 @@ public class TestingFragment extends Fragment implements View.OnClickListener
     {
         public void onServiceConnected(ComponentName className, IBinder rawBinder)
         {
-            mService = ((UartService.LocalBinder) rawBinder).getService();
+            mService = ((MyUartService.LocalBinder) rawBinder).getService();
             Log.d(TAG, "onServiceConnected mService= " + mService);
             if (!mService.initialize())
             {
@@ -342,7 +342,7 @@ public class TestingFragment extends Fragment implements View.OnClickListener
 
           //  final Intent mIntent = intent;
             //*********************//
-            if (action.equals(UartService.ACTION_GATT_CONNECTED))
+            if (action.equals(MyUartService.ACTION_GATT_CONNECTED))
             {
                 getActivity().runOnUiThread(new Runnable()
                 {
@@ -362,7 +362,7 @@ public class TestingFragment extends Fragment implements View.OnClickListener
             }
 
             //*********************//
-            if (action.equals(UartService.ACTION_GATT_DISCONNECTED))
+            if (action.equals(MyUartService.ACTION_GATT_DISCONNECTED))
             {
                 getActivity().runOnUiThread(new Runnable()
                 {
@@ -386,15 +386,15 @@ public class TestingFragment extends Fragment implements View.OnClickListener
 
 
             //*********************//
-            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED))
+            if (action.equals(MyUartService.ACTION_GATT_SERVICES_DISCOVERED))
             {
                 mService.enableTXNotification();
             }
             //*********************//
-            if (action.equals(UartService.ACTION_DATA_AVAILABLE))
+            if (action.equals(MyUartService.ACTION_DATA_AVAILABLE))
             {
 
-                final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
+                final byte[] txValue = intent.getByteArrayExtra(MyUartService.EXTRA_DATA);
                 getActivity().runOnUiThread(new Runnable()
                 {
                     public void run()
@@ -418,7 +418,7 @@ public class TestingFragment extends Fragment implements View.OnClickListener
                 });
             }
             //*********************//
-            if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART))
+            if (action.equals(MyUartService.DEVICE_DOES_NOT_SUPPORT_UART))
             {
                 showMessage("Device doesn't support UART. Disconnecting");
                 mService.disconnect();
@@ -431,7 +431,7 @@ public class TestingFragment extends Fragment implements View.OnClickListener
 
     private void service_init()
     {
-        Intent bindIntent = new Intent(context, UartService.class);
+        Intent bindIntent = new Intent(context, MyUartService.class);
         context.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
         LocalBroadcastManager.getInstance(context).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
@@ -440,11 +440,11 @@ public class TestingFragment extends Fragment implements View.OnClickListener
     private static IntentFilter makeGattUpdateIntentFilter()
     {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+        intentFilter.addAction(MyUartService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(MyUartService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(MyUartService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(MyUartService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(MyUartService.DEVICE_DOES_NOT_SUPPORT_UART);
         return intentFilter;
     }
 

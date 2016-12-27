@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ble.sharan.R;
-import com.ble.sharan.UartService;
+import com.ble.sharan.MyUartService;
 import com.ble.sharan.myUtilities.MyDialogs;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener
 
 
 //    RadioGroup mRg;
-    private UartService mService = null;
+    private MyUartService mService = null;
     private BluetoothDevice mDevice = null;
     private BluetoothAdapter mBtAdapter = null;
     //    private ListView messageListView;
@@ -258,7 +258,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener
     {
         public void onServiceConnected(ComponentName className, IBinder rawBinder)
         {
-            mService = ((UartService.LocalBinder) rawBinder).getService();
+            mService = ((MyUartService.LocalBinder) rawBinder).getService();
             Log.e(TAG, "onServiceConnected mService= " + mService);
             if (!mService.initialize())
             {
@@ -302,7 +302,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener
         }
     };
 
-    boolean isDonnectedByRange = false;
+    boolean isDisconnectedByRange = false;
     private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver()
     {
 
@@ -312,9 +312,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener
 
             Log.e(TAG, "Action : " + action);
 
-            if (action.equals(UartService.ACTION_GATT_CONNECTING))
+            if (action.equals(MyUartService.ACTION_GATT_CONNECTING))
             {
-                if (!isDonnectedByRange)
+                if (!isDisconnectedByRange)
                 {
                     txtv_connect_disconnect.setText("Connecting...");
                     txtv_deviceName.setText(deviceName + " : Connecting...");
@@ -323,7 +323,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener
                 }
 
             }
-            else if (action.equals(UartService.ACTION_GATT_DISCONNECTING))
+            else if (action.equals(MyUartService.ACTION_GATT_DISCONNECTING))
             {
                 txtv_connect_disconnect.setText("Disconnecting...");
                 txtv_deviceName.setText(deviceName + " : Disconnecting...");
@@ -331,7 +331,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener
                 Log.e(TAG, "Disconnecting");
 
             }
-            else if (action.equals(UartService.ACTION_GATT_CONNECTED))
+            else if (action.equals(MyUartService.ACTION_GATT_CONNECTED))
             {
               /*  getActivity().runOnUiThread(new Runnable()
                 {
@@ -352,9 +352,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener
                 // }
 //                });
             }
-            else if (action.equals(UartService.ACTION_GATT_DISCONNECTED_DUE_TO_RANGE))
+            else if (action.equals(MyUartService.ACTION_GATT_DISCONNECTED_DUE_TO_RANGE))
             {
-                isDonnectedByRange = true;
+                isDisconnectedByRange = true;
                 txtv_connect_disconnect.setText("Connect");
                 txtv_deviceName.setText("Not Connected");
                 txtv_refresh.setEnabled(false);
@@ -369,9 +369,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener
                 reconnectTimer.start();
                 // }
             }
-            else if (action.equals(UartService.ACTION_GATT_DISCONNECTED))
+            else if (action.equals(MyUartService.ACTION_GATT_DISCONNECTED))
             {
-                isDonnectedByRange = false;
+                isDisconnectedByRange = false;
                 /*getActivity().runOnUiThread(new Runnable()
                 {
                     public void run()
@@ -388,7 +388,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener
                 });*/
 
             }
-            else if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED))
+            else if (action.equals(MyUartService.ACTION_GATT_SERVICES_DISCOVERED))
             {
                 mService.enableTXNotification();
 
@@ -396,10 +396,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener
                 countDownTimer.start();
 
             }
-            else if (action.equals(UartService.ACTION_DATA_AVAILABLE))
+            else if (action.equals(MyUartService.ACTION_DATA_AVAILABLE))
             {
 
-                final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
+                final byte[] txValue = intent.getByteArrayExtra(MyUartService.EXTRA_DATA);
          /*       getActivity().runOnUiThread(new Runnable()
                 {
                     public void run()
@@ -417,7 +417,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener
 //                    }
 //                });
             }
-            else if (action.equals(UartService.DEVICE_DOES_NOT_SUPPORT_UART))
+            else if (action.equals(MyUartService.DEVICE_DOES_NOT_SUPPORT_UART))
             {
                 MyUtil.showToast(context, "Device doesn't support UART. Disconnecting");
                 mService.disconnect();
@@ -482,7 +482,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener
 
     private void service_init()
     {
-        Intent bindIntent = new Intent(context, UartService.class);
+        Intent bindIntent = new Intent(context, MyUartService.class);
         context.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
         LocalBroadcastManager.getInstance(context).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
@@ -491,14 +491,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener
     private static IntentFilter makeGattUpdateIntentFilter()
     {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(UartService.ACTION_GATT_CONNECTING);
-        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTING);
-        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED_DUE_TO_RANGE);
-        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+        intentFilter.addAction(MyUartService.ACTION_GATT_CONNECTING);
+        intentFilter.addAction(MyUartService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(MyUartService.ACTION_GATT_DISCONNECTING);
+        intentFilter.addAction(MyUartService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(MyUartService.ACTION_GATT_DISCONNECTED_DUE_TO_RANGE);
+        intentFilter.addAction(MyUartService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(MyUartService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(MyUartService.DEVICE_DOES_NOT_SUPPORT_UART);
         return intentFilter;
     }
 

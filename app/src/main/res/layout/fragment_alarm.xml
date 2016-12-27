@@ -6,28 +6,69 @@
               android:padding="30dp">
 
 
-    <TextView
-        android:id="@+id/txtv_date"
+    <!--<TextView
+        android:id="@+id/txtv_currentDateTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="10dp"
-        android:text="Date"/>
+        android:text="Date"/>-->
 
-
-    <TextView
-        android:id="@+id/txtv_time"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Time"/>
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="Select Date"/>
+
+        <TextView
+            android:id="@+id/txtv_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:padding="10dp"
+            android:hint="Enter Date"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="Select Time"/>
+
+        <TextView
+            android:id="@+id/txtv_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:padding="10dp"
+            android:hint="Enter Time"/>
+
+    </LinearLayout>
 
 
     <Button
         android:id="@+id/btn_set"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="set"/>
 
 </LinearLayout>
