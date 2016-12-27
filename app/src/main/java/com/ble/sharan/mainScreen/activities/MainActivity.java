@@ -17,9 +17,11 @@ import android.widget.ListView;
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.DrawerList_Adapter;
 import com.ble.sharan.mainScreen.fragments.AboutUsFragment;
+import com.ble.sharan.mainScreen.fragments.AlarmFragment;
 import com.ble.sharan.mainScreen.fragments.FragmentDrawer;
 import com.ble.sharan.mainScreen.fragments.HomeFragment;
 import com.ble.sharan.mainScreen.fragments.ProfileFragment;
+import com.ble.sharan.mainScreen.fragments.TestingFragment;
 
 import java.util.ArrayList;
 
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listDataHeader = new ArrayList<>();
 
         listDataHeader.add("Home");
-        listDataHeader.add("History");
+        listDataHeader.add("Alarm");
         listDataHeader.add("About us");
         listDataHeader.add("Invite Friends");
         listDataHeader.add("Share App");
@@ -115,11 +117,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             case 1:
-                fragment = new AboutUsFragment();
+                fragment = new AlarmFragment();
                 break;
 
             case 2:
-                fragment = new AboutUsFragment();
+                fragment = new TestingFragment();
                 break;
 
             case 3:

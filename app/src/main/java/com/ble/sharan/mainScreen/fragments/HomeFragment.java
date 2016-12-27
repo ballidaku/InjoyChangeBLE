@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +72,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener
     TextView txtv_refresh;
     TextView txtv_deviceName;
 
+
+//    ImageView imgvRefresh;
+
     View view = null;
 
     Context context;
@@ -77,6 +82,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener
     ReconnectTimer reconnectTimer;
 
     //static boolean isConnectedEarlier;
+
+
+    Animation animFadein ;
 
 
     MyDialogs myDialogs = new MyDialogs();
@@ -171,12 +179,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener
 
     private void setUpIds()
     {
+
+        animFadein= AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.hover_effect);
+
         txtv_connect_disconnect = (TextView) view.findViewById(R.id.txtv_connect_disconnect);
         txtv_calories = (TextView) view.findViewById(R.id.txtv_calories);
         txtv_stepsTaken = (TextView) view.findViewById(R.id.txtv_stepsTaken);
         txtv_distance = (TextView) view.findViewById(R.id.txtv_distance);
 
         txtv_deviceName = (TextView) view.findViewById(R.id.txtv_deviceName);
+
+       // (imgvRefresh= (ImageView) view.findViewById(R.id.imgvRefresh)).setOnClickListener(this);
+
 
         (txtv_refresh = (TextView) view.findViewById(R.id.txtv_refresh)).setOnClickListener(this);
         txtv_refresh.setEnabled(false);
