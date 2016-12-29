@@ -18,11 +18,26 @@
                  android:layout_height="55dp">
 
         <ImageView
+            android:id="@+id/imgv_headerLogo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/ic_header_logo"
             android:layout_marginRight="50dp"
+            android:visibility="visible"
             android:padding="5dp"/>
+
+        <TextView
+            android:id="@+id/txtv_heading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="ALARM"
+            android:gravity="center"
+            android:textColor="@color/White"
+            android:layout_marginRight="55dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="5dp"/>
+
 
         <ImageView
             android:id="@+id/imgv_refresh"
@@ -30,6 +45,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_refresh"
             android:layout_gravity="right"
+            android:visibility="invisible"
             android:padding="15dp"/>
 
     </FrameLayout>

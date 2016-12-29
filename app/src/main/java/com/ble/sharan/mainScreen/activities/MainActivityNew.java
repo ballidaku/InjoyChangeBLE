@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -114,12 +115,21 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    ImageView imgv_headerLogo;
+    TextView txtv_heading;
+
     private void setUpIds()
     {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
         mToolbar.findViewById(R.id.imgv_refresh).setOnClickListener(this);
+
+        imgv_headerLogo=(ImageView) mToolbar.findViewById(R.id.imgv_headerLogo);
+        txtv_heading=(TextView) mToolbar.findViewById(R.id.txtv_heading);
+
+
+        txtv_heading.setVisibility(View.GONE);
 
         listv_drawer = (ListView) findViewById(R.id.listv_drawer);
 
@@ -164,10 +174,12 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public void displayView(int groupPosition)
     {
-
+        txtv_heading.setVisibility(View.GONE);
+        imgv_headerLogo.setVisibility(View.VISIBLE);
 
         switch (groupPosition)
         {
+
 
             case 0:
                 fragment = new HomeFragmentNew();
@@ -175,6 +187,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
             case 1:
+                imgv_headerLogo.setVisibility(View.GONE);
+                txtv_heading.setVisibility(View.VISIBLE);
+                txtv_heading.setText("ALARM");
                 fragment = new AlarmFragment();
                 break;
 

@@ -20,4 +20,9 @@ public class MyConstant
     public static final String DISCONNECTED = "disconnected";
     public static final String DISCONNECTING = "disonnecting";
 
+
+    public static final String ALARM_ONE = "0";
+    public static final String ALARM_TWO = "1";
+    public static final String ALARM_THREE = "2";
+
 }
