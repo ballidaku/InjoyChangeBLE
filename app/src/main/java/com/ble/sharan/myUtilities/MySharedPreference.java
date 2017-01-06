@@ -55,11 +55,32 @@ public class MySharedPreference
         editor.apply();
     }
 
-
     public boolean getIsConnectedNow(Context context)
     {
         return getPreference(context).getBoolean(MyConstant.IS_CONNECTED, false);
     }
+
+
+
+    //**********************************************************************************************
+    // Clear Connection Data
+    //**********************************************************************************************
+
+    public void clearConnectionData(Context context)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.remove(MyConstant.IS_CONNECTED);
+        editor.remove(MyConstant.DEVICE_ADDRESS);
+        editor.apply();
+    }
+
+    //**********************************************************************************************
+    //**********************************************************************************************
+
+
+
+
+
 
 
     public void saveIsManualDisconnected(Context context, boolean isTrue)
@@ -77,28 +98,10 @@ public class MySharedPreference
 
     public void saveAlarm(Context context,String alarmKey, String alarm)
     {
-
-//        String  alarm1 = getPreference(context).getString(MyConstant.ALARM_ONE, "");
-//        String  alarm2 = getPreference(context).getString(MyConstant.ALARM_TWO, "");
-//        String  alarm3 = getPreference(context).getString(MyConstant.ALARM_THREE, "");
-
-
         SharedPreferences.Editor editor = getPreference(context).edit();
 
-
         editor.putString(alarmKey, alarm);
-//        if(alarm1.isEmpty())
-//        {
-//            editor.putString(MyConstant.ALARM_ONE, alarm);
-//        }
-//        else if(alarm2.isEmpty())
-//        {
-//            editor.putString(MyConstant.ALARM_TWO, alarm);
-//        }
-//        else if(alarm3.isEmpty())
-//        {
-//            editor.putString(MyConstant.ALARM_THREE, alarm);
-//        }
+
 
         editor.apply();
     }
@@ -138,9 +141,168 @@ public class MySharedPreference
         map.put(MyConstant.ALARM_TWO,getPreference(context).getString(MyConstant.ALARM_TWO, ""));
         map.put(MyConstant.ALARM_THREE,getPreference(context).getString(MyConstant.ALARM_THREE, ""));
 
-
        return map;
     }
+
+
+    //**********************************************************************************************
+    // Pofile
+    //**********************************************************************************************
+
+
+    public void saveName(Context context, String name)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.NAME, name);
+        editor.apply();
+    }
+
+    public String getName(Context context)
+    {
+        return getPreference(context).getString(MyConstant.NAME, "");
+    }
+
+    public void saveHeight(Context context, String height)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.HEIGHT, height);
+        editor.apply();
+    }
+
+    public String getHeight(Context context)
+    {
+        return getPreference(context).getString(MyConstant.HEIGHT, "172")+" Cm";
+    }
+
+
+    public void saveWeight(Context context, String weight)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.WEIGHT, weight);
+        editor.apply();
+    }
+
+    public String getWeight(Context context)
+    {
+        return getPreference(context).getString(MyConstant.WEIGHT, "60")+" Kg";
+    }
+
+    public void saveStride(Context context, String stride)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.STRIDE, stride);
+        editor.apply();
+    }
+
+    public String getStride(Context context)
+    {
+        return getPreference(context).getString(MyConstant.STRIDE, "45")+" Cm";
+    }
+
+    public void saveGender(Context context, String gender)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.GENDER, gender);
+        editor.apply();
+    }
+
+    public String getGender(Context context)
+    {
+        return getPreference(context).getString(MyConstant.GENDER, "");
+    }
+
+    public void saveDistanceUnit(Context context, String distanceUnit)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.DISTANCE_UNIT, distanceUnit);
+        editor.apply();
+    }
+
+    public String getDistanceUnit(Context context)
+    {
+        return getPreference(context).getString(MyConstant.DISTANCE_UNIT, "");
+    }
+
+
+    public void saveWeightUnit(Context context, String distanceUnit)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.WEIGHT_UNIT, distanceUnit);
+        editor.apply();
+    }
+
+    public String getWeightUnit(Context context)
+    {
+        return getPreference(context).getString(MyConstant.WEIGHT_UNIT, "");
+    }
+
+
+
+
+    //**********************************************************************************************
+    // Set Goals
+    //**********************************************************************************************
+
+
+    // DAILY STEPS
+    public void setDailySteps(Context context, String steps)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.STEPS, steps);
+        editor.apply();
+    }
+
+    public String getDailySteps(Context context)
+    {
+        return getPreference(context).getString(MyConstant.STEPS,"1000");
+    }
+    //**********************************************************************************************
+
+    // DAILY MILES
+    public void setDailyMiles(Context context, String miles)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.MILES, miles);
+        editor.apply();
+    }
+
+    public String getDailyMiles(Context context)
+    {
+        return getPreference(context).getString(MyConstant.MILES,"2.5")+ " per day";
+    }
+    //**********************************************************************************************
+
+
+    // DAILY CALORIES
+    public void setDailyCalories(Context context, String calories)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.CALORIES, calories);
+        editor.apply();
+    }
+
+    public String getDailyCalories(Context context)
+    {
+        return getPreference(context).getString(MyConstant.CALORIES,"1000")+" per day";
+    }
+    //**********************************************************************************************
+
+    // DAILY SLEEP
+    public void setDailySleep(Context context, String sleep)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.SLEEP, sleep);
+        editor.apply();
+    }
+
+    public String getDailySleep(Context context)
+    {
+        return getPreference(context).getString(MyConstant.SLEEP,"7")+" hour per day";
+
+    }
+    //**********************************************************************************************
+
+
 
 
 }

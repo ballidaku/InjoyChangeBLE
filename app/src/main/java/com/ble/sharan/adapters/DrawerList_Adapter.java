@@ -67,7 +67,7 @@ public class DrawerList_Adapter extends BaseAdapter
 
         if(selectedposition == position)
         {
-            txtv_drawer_item.setTextColor(ContextCompat.getColor(con, R.color.White));
+            txtv_drawer_item.setTextColor(ContextCompat.getColor(con, R.color.colorWhite));
             row.setBackgroundColor(ContextCompat.getColor(con,R.color.YellowDark));
         }
 

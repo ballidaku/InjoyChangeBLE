@@ -1,5 +1,6 @@
 
 /*
+
  * Copyright (c) 2015, Nordic Semiconductor
  * All rights reserved.
  *
@@ -42,7 +43,7 @@ import android.util.Log;
 import java.util.List;
 import java.util.UUID;
 
-/**
+/**0
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
  */
@@ -204,6 +205,7 @@ public class MyUartService extends Service
      */
     public boolean initialize()
     {
+
         // For API level 18 and above, get a reference to BluetoothAdapter through
         // BluetoothManager.
         if (mBluetoothManager == null)

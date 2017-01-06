@@ -30,12 +30,15 @@ import android.widget.TextView;
 import com.ble.sharan.MyUartService;
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.DrawerList_Adapter;
-import com.ble.sharan.mainScreen.fragments.AboutUsFragment;
 import com.ble.sharan.mainScreen.fragments.AlarmFragment;
 import com.ble.sharan.mainScreen.fragments.FragmentDrawer;
+import com.ble.sharan.mainScreen.fragments.HealthData;
 import com.ble.sharan.mainScreen.fragments.HomeFragmentNew;
+import com.ble.sharan.mainScreen.fragments.MyDailyGoal;
+import com.ble.sharan.mainScreen.fragments.MyWeek;
+import com.ble.sharan.mainScreen.fragments.Overall;
 import com.ble.sharan.mainScreen.fragments.ProfileFragment;
-import com.ble.sharan.mainScreen.fragments.TestingFragment;
+import com.ble.sharan.mainScreen.fragments.Today;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDialogs;
 import com.ble.sharan.myUtilities.MySharedPreference;
@@ -61,6 +64,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public String deviceName="";
 
+
+
+    ImageView imgv_profile;
+    TextView txtv_username;
 
     Toolbar mToolbar;
     DrawerLayout mDrawerLayout;
@@ -135,11 +142,21 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+
+
+        imgv_profile = (ImageView) mDrawerLayout.findViewById(R.id.imgv_profile);
+        txtv_username = (TextView) mDrawerLayout.findViewById(R.id.txtv_username);
+
+
+
         frame_layout_profile = (FrameLayout) findViewById(R.id.frame_layout_profile);
         frame_layout_profile.setOnClickListener(this);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+
+
+        onRefreshName();
     }
 
     private void prepareListData()
@@ -147,10 +164,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         listDataHeader = new ArrayList<>();
 
         listDataHeader.add("Home");
+        listDataHeader.add("Profile");
+        listDataHeader.add("Today");
+        listDataHeader.add("My Week");
+        listDataHeader.add("My Daily Goal");
+        listDataHeader.add("Overall");
         listDataHeader.add("Alarm");
-        listDataHeader.add("Testing");
-        listDataHeader.add("Invite Friends");
-        listDataHeader.add("Share App");
+
 
 
         drawer_adapter = new DrawerList_Adapter(context, listDataHeader, 0);
@@ -163,8 +183,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             {
                 displayView(position);
 
-                drawer_adapter.changeSelectedBackground(position);
-                drawer_adapter.notifyDataSetChanged();
+
             }
         });
 
@@ -174,35 +193,55 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public void displayView(int groupPosition)
     {
-        txtv_heading.setVisibility(View.GONE);
-        imgv_headerLogo.setVisibility(View.VISIBLE);
+        imgv_headerLogo.setVisibility(View.GONE);
+        txtv_heading.setVisibility(View.VISIBLE);
+        txtv_heading.setText(listDataHeader.get(groupPosition));
+
+
+
+        drawer_adapter.changeSelectedBackground(groupPosition);
+        drawer_adapter.notifyDataSetChanged();
+
+
 
         switch (groupPosition)
         {
 
 
             case 0:
-                fragment = new HomeFragmentNew();
+                //fragment = new HomeFragmentNew();
+                fragment = new HealthData();
                 break;
 
 
             case 1:
-                imgv_headerLogo.setVisibility(View.GONE);
-                txtv_heading.setVisibility(View.VISIBLE);
-                txtv_heading.setText("ALARM");
-                fragment = new AlarmFragment();
+
+                fragment = new ProfileFragment();
+
                 break;
 
             case 2:
-                fragment = new TestingFragment();
+                fragment = new Today();
                 break;
 
             case 3:
-                fragment = new AboutUsFragment();
+                fragment = new MyWeek();
                 break;
 
+
             case 4:
-                fragment = new AboutUsFragment();
+                fragment = new MyDailyGoal();
+                break;
+
+
+            case 5:
+                fragment = new Overall();
+                break;
+
+
+            case 6:
+
+                fragment = new AlarmFragment();
                 break;
 
 
@@ -229,6 +268,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
+
+    public void onRefreshName()
+    {
+        txtv_username.setText(MySharedPreference.getInstance().getName(context));
+    }
+
+
+
     @Override
     public void onClick(View v)
     {
@@ -237,8 +285,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.frame_layout_profile:
 
 //                txt_titleTV.setText("Profile");
-                fragment = new ProfileFragment();
-                changeFragment(fragment);
+//                fragment = new ProfileFragment();
+//                changeFragment(fragment);
 
                 break;
 
@@ -327,9 +375,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                     if (fragment instanceof HomeFragmentNew)
                     {
-                        //((HomeFragmentNew) fragment).connecting(mDevice.getName());
 
                         ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
+                    }
+                    else if (fragment instanceof Today)
+                    {
+
+                        ((Today) fragment).bleStatus(BLE_STATUS);
                     }
                 }
 
@@ -345,9 +397,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 if (fragment instanceof HomeFragmentNew)
                 {
-                   // ((HomeFragmentNew) fragment).disconnecting(mDevice.getName());
 
                     ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
+                }
+                else  if (fragment instanceof Today)
+                {
+
+                    ((Today) fragment).bleStatus(BLE_STATUS);
                 }
 
             }
@@ -366,6 +422,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 {
                     ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
                 }
+                else if (fragment instanceof Today)
+                {
+                    ((Today) fragment).bleStatus(BLE_STATUS);
+                }
+
 
 
                 MyUtil.showToast(context, "Device Connected");
@@ -385,6 +446,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 if (fragment instanceof HomeFragmentNew)
                 {
                     ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
+                }
+                else  if (fragment instanceof Today)
+                {
+                    ((Today) fragment).bleStatus(BLE_STATUS);
                 }
 
 
@@ -406,6 +471,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 if (fragment instanceof HomeFragmentNew)
                 {
                     ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
+                }
+                else if (fragment instanceof Today)
+                {
+                    ((Today) fragment).bleStatus(BLE_STATUS);
                 }
 
                 MyUtil.showToast(context, "Device Disconnected");
@@ -433,6 +502,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     if (fragment instanceof HomeFragmentNew)
                     {
                         ((HomeFragmentNew) fragment).calculate(stepsTaken=new String(txValue, "UTF-8"));
+                    }
+                    else if (fragment instanceof Today)
+                    {
+                        ((Today) fragment).calculate(stepsTaken=new String(txValue, "UTF-8"));
                     }
 
                 } catch (Exception e)
@@ -615,7 +688,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         super.onDestroy();
         // sharan Work for reconnection
         reconnectTimer.cancel();
-        MySharedPreference.getInstance().getPreference(context).edit().clear().apply();
+
+        MySharedPreference.getInstance().clearConnectionData(context);
 
 
         try

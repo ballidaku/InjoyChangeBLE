@@ -12,8 +12,6 @@ public class MyConstant
     public static final String IS_MANUAL_DISCONNECTED = "is_manual_disconnected";
 
 
-
-
     public static final String CONNECTED = "connected";
     public static final String CONNECTING = "connecting";
 
@@ -25,4 +23,23 @@ public class MyConstant
     public static final String ALARM_TWO = "1";
     public static final String ALARM_THREE = "2";
 
+
+    public static final String ACTIVITY = "activity";
+    public static final String SLEEP = "sleep";
+
+
+    //PROFILE
+    public static final String NAME = "name";
+    public static final String HEIGHT = "height";
+    public static final String WEIGHT = "weight";
+    public static final String STRIDE = "stride";
+    public static final String DISTANCE_UNIT = "distance_unit";
+    public static final String WEIGHT_UNIT = "weight_unit";
+    public static final String GENDER = "gender";
+
+
+    //SET GOALS
+    public static final String STEPS = "steps";
+    public static final String MILES = "miles";
+    public static final String CALORIES = "calories";
 }

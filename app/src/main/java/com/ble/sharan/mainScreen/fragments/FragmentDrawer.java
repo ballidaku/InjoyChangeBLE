@@ -9,8 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ble.sharan.R;
 
@@ -23,9 +21,9 @@ public class FragmentDrawer extends Fragment
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private View                  containerView;
-    ImageView imgv_profile;
-    TextView txtv_username;
-    Context  con;
+//    ImageView imgv_profile;
+//    TextView txtv_username;
+    Context  context;
 
     public FragmentDrawer()
     {
@@ -43,12 +41,12 @@ public class FragmentDrawer extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
 
-        con = getActivity();
+        context = getActivity();
 
         View layout = inflater.inflate(R.layout.fragment_fragment_drawer, container, false);
 
-        imgv_profile = (ImageView) layout.findViewById(R.id.imgv_profile);
-        txtv_username = (TextView) layout.findViewById(R.id.txtv_username);
+//        imgv_profile = (ImageView) layout.findViewById(R.id.imgv_profile);
+//        txtv_username = (TextView) layout.findViewById(R.id.txtv_username);
 
 
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"
-    android:background="@color/Yellow"
+    android:background="@color/colorBlueDark"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
@@ -14,7 +14,7 @@
     <FrameLayout
                  android:orientation="vertical"
                  android:layout_width="match_parent"
-                 android:background="@color/Yellow"
+                 android:background="@color/colorBlueDark"
                  android:layout_height="55dp">
 
         <ImageView
@@ -32,7 +32,7 @@
             android:layout_height="match_parent"
             android:text="ALARM"
             android:gravity="center"
-            android:textColor="@color/White"
+            android:textColor="@color/colorWhite"
             android:layout_marginRight="55dp"
             android:textSize="18sp"
             android:textStyle="bold"

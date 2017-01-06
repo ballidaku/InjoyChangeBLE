@@ -20,9 +20,11 @@ import com.ble.sharan.myUtilities.MyConstant;
 public class HomeFragmentNew extends Fragment implements View.OnClickListener
 {
     //    private static final int REQUEST_SELECT_DEVICE = 1;
-//    private static final int REQUEST_ENABLE_BT = 2;
+    //    private static final int REQUEST_ENABLE_BT = 2;
     //    private static final int UART_PROFILE_READY = 10;
+
     public static final String TAG = HomeFragmentNew.class.getSimpleName();
+
 //    private static final int UART_PROFILE_CONNECTING = 19;
 //    private static final int UART_PROFILE_CONNECTED = 20;
 //    private static final int UART_PROFILE_DISCONNECTED = 21;
@@ -82,7 +84,6 @@ public class HomeFragmentNew extends Fragment implements View.OnClickListener
         txtv_refresh.setEnabled(false);
 
 
-
     }
 
 
@@ -93,14 +94,14 @@ public class HomeFragmentNew extends Fragment implements View.OnClickListener
         {
             case R.id.txtv_refresh:
 
-                ((MainActivityNew)context).getTotalSteps();
+                ((MainActivityNew) context).getTotalSteps();
 
                 break;
 
 
             case R.id.txtv_connect_disconnect:
 
-                ((MainActivityNew)context).connectDisconnect();
+                ((MainActivityNew) context).connectDisconnect();
 
                 break;
         }
@@ -114,25 +115,25 @@ public class HomeFragmentNew extends Fragment implements View.OnClickListener
 
     public void bleStatus(String BLE_STATUS)
     {
-        String deviceName=((MainActivityNew)context).deviceName;
+        String deviceName = ((MainActivityNew) context).deviceName;
 
-        if(BLE_STATUS.equals(MyConstant.CONNECTING))
+        if (BLE_STATUS.equals(MyConstant.CONNECTING))
         {
             txtv_connect_disconnect.setText("Connecting...");
             txtv_deviceName.setText(deviceName + " : Connecting...");
         }
-        else if(BLE_STATUS.equals(MyConstant.DISCONNECTING))
+        else if (BLE_STATUS.equals(MyConstant.DISCONNECTING))
         {
             txtv_connect_disconnect.setText("Disconnecting...");
             txtv_deviceName.setText(deviceName + " : Disconnecting...");
         }
-        else if(BLE_STATUS.equals(MyConstant.CONNECTED))
+        else if (BLE_STATUS.equals(MyConstant.CONNECTED))
         {
             txtv_connect_disconnect.setText("Disconnect");
             txtv_deviceName.setText(deviceName + " : Connected Successfully");
             txtv_refresh.setEnabled(true);
         }
-        else if(BLE_STATUS.equals(MyConstant.DISCONNECTED))
+        else if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
         {
             txtv_connect_disconnect.setText("Connect");
             txtv_deviceName.setText("Not Connected");
@@ -197,9 +198,9 @@ public class HomeFragmentNew extends Fragment implements View.OnClickListener
 
 
         // onRefresh get the previous Count
-        calculate(((MainActivityNew)context).stepsTaken);
+        calculate(((MainActivityNew) context).stepsTaken);
 
-        bleStatus(((MainActivityNew)context).BLE_STATUS);
+        bleStatus(((MainActivityNew) context).BLE_STATUS);
 
         Log.d(TAG, "onResume");
     }

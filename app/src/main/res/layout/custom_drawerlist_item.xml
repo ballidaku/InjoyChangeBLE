@@ -14,7 +14,7 @@
         android:background = "@android:color/transparent"
         android:gravity = "center_vertical"
         android:padding="10dp"
-        android:textColor = "@color/White"
+        android:textColor = "@color/colorWhite"
         android:text="Hello"
         android:textSize = "16sp"
         android:textStyle = "bold"/>
