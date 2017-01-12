@@ -256,8 +256,8 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
         {
             final String value = map.get(key);
 
-            if (!value.isEmpty())
-            {
+//            if (!value.isEmpty())
+//            {
                 count++;
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View v = inflater.inflate(R.layout.custom_alarm, null);
@@ -268,12 +268,21 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
                 ImageView imgv_cross = (ImageView) v.findViewById(R.id.imgv_cross);
 
-                imgv_cross.setVisibility(View.VISIBLE);
+                if (!value.isEmpty())
+                {
 
+                    imgv_cross.setVisibility(View.VISIBLE);
 
-                String[] showTime = value.split(",");
+                    String[] showTime = value.split(",");
 
-                txtv_alarmTime.setText("" + count + ".   " + showTime[0]);
+                    txtv_alarmTime.setText("" + count + ".   " + showTime[0]);
+                }
+                else
+                {
+                    imgv_cross.setVisibility(View.INVISIBLE);
+
+                    txtv_alarmTime.setText("" + count + ".   Set Alarm");
+                }
 
 
                 txtv_alarmTime.setOnClickListener(new View.OnClickListener()
@@ -316,7 +325,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             }
 
 
-        }
+//        }
     }
 
 

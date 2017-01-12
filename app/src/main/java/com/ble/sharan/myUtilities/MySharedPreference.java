@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 /**
@@ -184,7 +185,7 @@ public class MySharedPreference
 
     public String getWeight(Context context)
     {
-        return getPreference(context).getString(MyConstant.WEIGHT, "60")+" Kg";
+        return getPreference(context).getString(MyConstant.WEIGHT, "132.277")+" "+getWeightUnit(context);
     }
 
     public void saveStride(Context context, String stride)
@@ -196,7 +197,8 @@ public class MySharedPreference
 
     public String getStride(Context context)
     {
-        return getPreference(context).getString(MyConstant.STRIDE, "45")+" Cm";
+        String abc=new DecimalFormat("##.##").format(Double.parseDouble(getPreference(context).getString(MyConstant.STRIDE, "17.7165")));
+        return abc+" "+getStrideUnit(context);
     }
 
     public void saveGender(Context context, String gender)
@@ -210,33 +212,6 @@ public class MySharedPreference
     {
         return getPreference(context).getString(MyConstant.GENDER, "");
     }
-
-    public void saveDistanceUnit(Context context, String distanceUnit)
-    {
-        SharedPreferences.Editor editor = getPreference(context).edit();
-        editor.putString(MyConstant.DISTANCE_UNIT, distanceUnit);
-        editor.apply();
-    }
-
-    public String getDistanceUnit(Context context)
-    {
-        return getPreference(context).getString(MyConstant.DISTANCE_UNIT, "");
-    }
-
-
-    public void saveWeightUnit(Context context, String distanceUnit)
-    {
-        SharedPreferences.Editor editor = getPreference(context).edit();
-        editor.putString(MyConstant.WEIGHT_UNIT, distanceUnit);
-        editor.apply();
-    }
-
-    public String getWeightUnit(Context context)
-    {
-        return getPreference(context).getString(MyConstant.WEIGHT_UNIT, "");
-    }
-
-
 
 
     //**********************************************************************************************
@@ -302,7 +277,49 @@ public class MySharedPreference
     }
     //**********************************************************************************************
 
+    //**********************************************************************************************
+    //**********************************************************************************************
+    //**********************************************************************************************
 
 
 
+    // DISATNCE UNIT MILES KM
+    public void saveDistanceUnit(Context context, String distanceUnit)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.MILES_KM, distanceUnit);
+        editor.apply();
+    }
+
+    public String getDistanceUnit(Context context)
+    {
+        return getPreference(context).getString(MyConstant.MILES_KM,MyConstant.KM);
+
+    }
+
+
+    public void saveWeightUnit(Context context, String weightUnit)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.LBS_KG, weightUnit);
+        editor.apply();
+    }
+
+    public String getWeightUnit(Context context)
+    {
+        return getPreference(context).getString(MyConstant.LBS_KG, MyConstant.KG);
+    }
+
+
+    public void saveStrideUnit(Context context, String strideUnit)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.IN_CM, strideUnit);
+        editor.apply();
+    }
+
+    public String getStrideUnit(Context context)
+    {
+        return getPreference(context).getString(MyConstant.IN_CM, MyConstant.CM);
+    }
 }

@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +23,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ import com.ble.sharan.mainScreen.fragments.HomeFragmentNew;
 import com.ble.sharan.mainScreen.fragments.MyDailyGoal;
 import com.ble.sharan.mainScreen.fragments.MyWeek;
 import com.ble.sharan.mainScreen.fragments.Overall;
+import com.ble.sharan.mainScreen.fragments.PreviousWeek;
 import com.ble.sharan.mainScreen.fragments.ProfileFragment;
 import com.ble.sharan.mainScreen.fragments.Today;
 import com.ble.sharan.myUtilities.MyConstant;
@@ -78,7 +80,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     DrawerList_Adapter drawer_adapter;
     Context context;
 
-    FrameLayout frame_layout_profile;
+    LinearLayout frame_layout_profile;
     Fragment fragment;
 
     boolean isDisconnectedByRange = false;
@@ -94,6 +96,31 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
     MyDialogs myDialogs = new MyDialogs();
+
+
+    //    Bottom Tabs actuallt button
+
+    View view_challenge;
+    View view_data;
+    View view_myinfo;
+    View view_alarm;
+
+
+    ImageView imgv_challenge;
+    ImageView imgv_data;
+    ImageView imgv_myinfo;
+    ImageView imgv_alarm;
+
+
+    TextView txtv_challenge;
+    TextView txtv_data;
+    TextView txtv_myinfo;
+    TextView txtv_alarm;
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -124,19 +151,19 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     ImageView imgv_headerLogo;
     TextView txtv_heading;
+    TextView txtv_right;
 
     private void setUpIds()
     {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        mToolbar.findViewById(R.id.imgv_refresh).setOnClickListener(this);
+//        mToolbar.findViewById(R.id.imgv_refresh).setOnClickListener(this);
 
         imgv_headerLogo=(ImageView) mToolbar.findViewById(R.id.imgv_headerLogo);
         txtv_heading=(TextView) mToolbar.findViewById(R.id.txtv_heading);
 
-
-        txtv_heading.setVisibility(View.GONE);
+        (txtv_right=(TextView) mToolbar.findViewById(R.id.txtv_right)).setOnClickListener(this);
 
         listv_drawer = (ListView) findViewById(R.id.listv_drawer);
 
@@ -149,27 +176,100 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
 
-        frame_layout_profile = (FrameLayout) findViewById(R.id.frame_layout_profile);
+        frame_layout_profile = (LinearLayout) findViewById(R.id.frame_layout_profile);
         frame_layout_profile.setOnClickListener(this);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
 
 
+        view_challenge=findViewById(R.id.view_challenge);
+        view_data=findViewById(R.id.view_data);
+        view_myinfo=findViewById(R.id.view_myinfo);
+        view_alarm=findViewById(R.id.view_alarm);
+
+
+        imgv_challenge=(ImageView)findViewById(R.id.imgv_challenge);
+        imgv_data=(ImageView)findViewById(R.id.imgv_data);
+        imgv_myinfo=(ImageView)findViewById(R.id.imgv_myinfo);
+        imgv_alarm=(ImageView)findViewById(R.id.imgv_alarm);
+
+
+        txtv_challenge=(TextView)findViewById(R.id.txtv_challenge);
+        txtv_data=(TextView)findViewById(R.id.txtv_data);
+        txtv_myinfo=(TextView)findViewById(R.id.txtv_myinfo);
+        txtv_alarm=(TextView)findViewById(R.id.txtv_alarm);
+
+
+        findViewById(R.id.linearLayout_challenge).setOnClickListener(this);
+        findViewById(R.id.linearLayout_data).setOnClickListener(this);
+        findViewById(R.id.linearLayout_myinfo).setOnClickListener(this);
+        findViewById(R.id.linearLayout_alarm).setOnClickListener(this);
+
+
+
+        setBottomTabSelected(view_data,imgv_data,txtv_data);
+
         onRefreshName();
+    }
+
+    private void setBottomTabSelected(View v, ImageView image, TextView txtv)
+    {
+        view_challenge.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
+        view_data.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
+        view_myinfo.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
+        view_alarm.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
+
+
+        imgv_challenge.setImageResource(R.mipmap.ic_challenge);
+        imgv_data.setImageResource(R.mipmap.ic_data);
+        imgv_myinfo.setImageResource(R.mipmap.ic_myinfo);
+        imgv_alarm.setImageResource(R.mipmap.ic_alarm);
+
+        txtv_challenge.setTextColor(ContextCompat.getColor(context,R.color.colorGray));
+        txtv_data.setTextColor(ContextCompat.getColor(context,R.color.colorGray));
+        txtv_myinfo.setTextColor(ContextCompat.getColor(context,R.color.colorGray));
+        txtv_alarm.setTextColor(ContextCompat.getColor(context,R.color.colorGray));
+
+
+
+
+
+        v.setBackgroundColor(ContextCompat.getColor(context, R.color.colorBlue));
+        txtv.setTextColor(ContextCompat.getColor(context,R.color.colorBlue));
+
+        if(image == imgv_challenge)
+        {
+            imgv_challenge.setImageResource(R.mipmap.ic_challenge_selected);
+        }
+        else if(image == imgv_data)
+        {
+            imgv_data.setImageResource(R.mipmap.ic_data_selected);
+        }
+        else if(image == imgv_myinfo)
+        {
+            imgv_myinfo.setImageResource(R.mipmap.ic_myinfo_selected);
+        }
+        else if(image == imgv_alarm)
+        {
+            imgv_alarm.setImageResource(R.mipmap.ic_alarm_selected);
+        }
+
+
     }
 
     private void prepareListData()
     {
         listDataHeader = new ArrayList<>();
 
-        listDataHeader.add("Home");
-        listDataHeader.add("Profile");
+        listDataHeader.add("Health Data");
+//        listDataHeader.add("Profile");
         listDataHeader.add("Today");
         listDataHeader.add("My Week");
+        listDataHeader.add("Previous Week");
         listDataHeader.add("My Daily Goal");
         listDataHeader.add("Overall");
-        listDataHeader.add("Alarm");
+//        listDataHeader.add("Alarm");
 
 
 
@@ -194,14 +294,26 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     public void displayView(int groupPosition)
     {
         imgv_headerLogo.setVisibility(View.GONE);
+        txtv_right.setVisibility(View.INVISIBLE);
         txtv_heading.setVisibility(View.VISIBLE);
-        txtv_heading.setText(listDataHeader.get(groupPosition));
 
+        if(groupPosition == 6)
+        {
+            txtv_heading.setText("My Info");
+        }
+        else if(groupPosition == 7)
+        {
+            txtv_heading.setText("Alarm");
+        }
+        else
+        {
+            txtv_heading.setText(listDataHeader.get(groupPosition));
+            setBottomTabSelected(view_data,imgv_data,txtv_data);
 
+        }
 
         drawer_adapter.changeSelectedBackground(groupPosition);
         drawer_adapter.notifyDataSetChanged();
-
 
 
         switch (groupPosition)
@@ -215,17 +327,18 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
             case 1:
-
-                fragment = new ProfileFragment();
-
-                break;
-
-            case 2:
+                txtv_right.setVisibility(View.VISIBLE);
                 fragment = new Today();
                 break;
 
-            case 3:
+            case 2:
+                txtv_right.setVisibility(View.VISIBLE);
                 fragment = new MyWeek();
+                break;
+
+
+            case 3:
+                fragment = new PreviousWeek();
                 break;
 
 
@@ -240,6 +353,12 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
             case 6:
+
+                fragment = new ProfileFragment();
+
+                break;
+
+            case 7:
 
                 fragment = new AlarmFragment();
                 break;
@@ -290,12 +409,37 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 break;
 
-            case R.id.imgv_refresh:
+            case R.id.linearLayout_challenge:
 
-              /* if( fragment instanceof Pedometer)
-               {
-                   ((Pedometer)fragment).resetValues(true);
-               }*/
+
+                break;
+
+            case R.id.linearLayout_data:
+
+                setBottomTabSelected(view_data,imgv_data,txtv_data);
+
+                displayView(0);
+
+                break;
+
+            case R.id.linearLayout_myinfo:
+
+                setBottomTabSelected(view_myinfo,imgv_myinfo,txtv_myinfo);
+                displayView(6);
+
+                break;
+
+            case R.id.linearLayout_alarm:
+
+                setBottomTabSelected(view_alarm,imgv_alarm,txtv_alarm);
+                displayView(7);
+
+                break;
+
+            case R.id.txtv_right:
+
+                displayView(5);
+
                 break;
 
             default:

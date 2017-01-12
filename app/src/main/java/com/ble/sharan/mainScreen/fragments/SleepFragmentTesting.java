@@ -15,10 +15,10 @@ import com.ble.sharan.R;
  * Created by brst-pc93 on 1/2/17.
  */
 
-public class SleepFragment extends Fragment implements View.OnClickListener
+public class SleepFragmentTesting extends Fragment implements View.OnClickListener
 {
 
-    String TAG = SleepFragment.class.getSimpleName();
+    String TAG = SleepFragmentTesting.class.getSimpleName();
 
 
     Button btn_refresh;
@@ -37,7 +37,7 @@ public class SleepFragment extends Fragment implements View.OnClickListener
 
         if (view == null)
         {
-            view = inflater.inflate(R.layout.fragment_sleep, container, false);
+            view = inflater.inflate(R.layout.fragment_sleep_testing, container, false);
 
             setUpIds();
 

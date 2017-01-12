@@ -33,8 +33,9 @@ public class MyConstant
     public static final String HEIGHT = "height";
     public static final String WEIGHT = "weight";
     public static final String STRIDE = "stride";
-    public static final String DISTANCE_UNIT = "distance_unit";
-    public static final String WEIGHT_UNIT = "weight_unit";
+
+//    public static final String DISTANCE_UNIT = "distance_unit";
+//    public static final String WEIGHT_UNIT = "weight_unit";
     public static final String GENDER = "gender";
 
 
@@ -42,4 +43,18 @@ public class MyConstant
     public static final String STEPS = "steps";
     public static final String MILES = "miles";
     public static final String CALORIES = "calories";
+
+
+    //UNITS
+    public static final String MILES_KM = "miles_km";
+    public static final String LBS_KG = "lbs_kg";
+    public static final String IN_CM = "in_cm";
+
+
+
+    public static final String KM = "Km";
+    public static final String LBS = "Lbs";
+    public static final String KG = "Kg";
+    public static final String IN = "In";
+    public static final String CM = "Cm";
 }

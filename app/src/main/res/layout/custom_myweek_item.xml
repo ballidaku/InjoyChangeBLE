@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:gravity="center_vertical"
+        android:layout_weight="0.7">
 
         <TextView
             android:id="@+id/txtv_date"
@@ -19,27 +20,40 @@
             android:paddingRight="5dp"
             android:text="Date"
             android:textColor="@color/colorWhite"
+            android:textSize="16sp"
             android:textStyle="bold"/>
     </LinearLayout>
+    <!--<LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">-->
 
     <TextView
         android:id="@+id/txtv_calories"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center"
+        android:gravity="right"
+        android:drawablePadding="5dp"
         android:text="Calories"
+        android:textSize="16sp"
         android:textColor="@color/colorBlack"
+        android:drawableRight="@mipmap/ic_calories_very_small"
         android:textStyle="bold"/>
+
+    <!--</LinearLayout>-->
 
     <TextView
         android:id="@+id/txtv_steps"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center"
+        android:gravity="right"
+        android:drawablePadding="5dp"
         android:text="Steps"
+        android:textSize="16sp"
         android:textColor="@color/colorBlack"
+        android:drawableRight="@mipmap/ic_steps_very_small"
         android:textStyle="bold"/>
 
     <TextView
@@ -49,7 +63,10 @@
         android:layout_weight="1"
         android:gravity="right"
         android:text="Km"
+        android:textSize="16sp"
+        android:drawablePadding="5dp"
         android:textColor="@color/colorBlack"
+        android:drawableRight="@mipmap/ic_km_miles_very_small"
         android:textStyle="bold"/>
 
 </LinearLayout>

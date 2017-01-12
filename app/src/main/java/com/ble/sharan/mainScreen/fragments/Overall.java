@@ -14,6 +14,7 @@ import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyUtil;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -83,8 +84,11 @@ public class Overall extends Fragment
             totalSteps+=Long.parseLong(list.get(i).getSteps());
         }
 
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        String yourFormattedString = formatter.format(totalSteps);
 
-        txtv_totalSteps.setText(String.valueOf(totalSteps));
+
+        txtv_totalSteps.setText(yourFormattedString);
         txtv_totalKm.setText(myUtil.stepsToDistance((int)totalSteps));
         txtv_totalCalories.setText(myUtil.stepsToCalories((int)totalSteps));
 

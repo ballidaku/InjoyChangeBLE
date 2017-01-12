@@ -4,20 +4,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.mainScreen.activities.MainActivityNew;
-import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyConstant;
-import com.ble.sharan.myUtilities.MyDatabase;
-import com.ble.sharan.myUtilities.MyUtil;
-
-import java.util.List;
 
 /**
  * Created by brst-pc93 on 1/4/17.
@@ -35,26 +29,10 @@ public class Today extends Fragment implements View.OnClickListener
     TextView txtv_activity;
     TextView txtv_sleep;
 
+    FrameLayout framelayout_activity;
+    FrameLayout framelayout_sleep;
 
-    TextView txtv_steps;
-    TextView txtv_stepsToGo;
-
-    TextView txtv_calories;
-    TextView txtv_caloriesToGo;
-
-    TextView txtv_milesKm;
-    TextView txtv_milesKmToGo;
-
-    TextView txtv_sleepHour;
-    TextView txtv_sleepHourToGo;
-
-    TextView txtv_refresh;
-    TextView txtv_connect_disconnect;
-
-
-    MyUtil myUtil = new MyUtil();
-
-    MyDatabase myDatabase;
+    Fragment fragment_activity;
 
 
     @Override
@@ -69,9 +47,6 @@ public class Today extends Fragment implements View.OnClickListener
 
             setUpIds();
 
-
-            myDatabase = new MyDatabase(getActivity());
-
         }
 
         return view;
@@ -83,21 +58,14 @@ public class Today extends Fragment implements View.OnClickListener
         (txtv_sleep = (TextView) view.findViewById(R.id.txtv_sleep)).setOnClickListener(this);
 
 
-        txtv_steps = (TextView) view.findViewById(R.id.txtv_steps);
-        txtv_stepsToGo = (TextView) view.findViewById(R.id.txtv_stepsToGo);
-
-        txtv_calories = (TextView) view.findViewById(R.id.txtv_calories);
-        txtv_caloriesToGo = (TextView) view.findViewById(R.id.txtv_caloriesToGo);
-
-        txtv_milesKm = (TextView) view.findViewById(R.id.txtv_milesKm);
-        txtv_milesKmToGo = (TextView) view.findViewById(R.id.txtv_milesKmToGo);
-
-        txtv_sleepHour = (TextView) view.findViewById(R.id.txtv_sleepHour);
-        txtv_sleepHourToGo = (TextView) view.findViewById(R.id.txtv_sleepHourToGo);
+        framelayout_activity = (FrameLayout) view.findViewById(R.id.framelayout_activity);
+        framelayout_sleep = (FrameLayout) view.findViewById(R.id.framelayout_sleep);
 
 
-        (txtv_refresh = (TextView) view.findViewById(R.id.txtv_refresh)).setOnClickListener(this);
-        (txtv_connect_disconnect = (TextView) view.findViewById(R.id.txtv_connect_disconnect)).setOnClickListener(this);
+
+         fragment_activity = getChildFragmentManager().findFragmentById(R.id.fragment_activity);
+
+        changeF("A");
 
     }
 
@@ -110,6 +78,7 @@ public class Today extends Fragment implements View.OnClickListener
             case R.id.txtv_activity:
 
                 change(MyConstant.ACTIVITY);
+                changeF("A");
 
                 break;
 
@@ -117,18 +86,7 @@ public class Today extends Fragment implements View.OnClickListener
             case R.id.txtv_sleep:
 
                 change(MyConstant.SLEEP);
-
-                break;
-
-            case R.id.txtv_refresh:
-
-                ((MainActivityNew) context).getTotalSteps();
-
-                break;
-
-            case R.id.txtv_connect_disconnect:
-
-                ((MainActivityNew) context).connectDisconnect();
+                changeF("S");
 
                 break;
 
@@ -155,106 +113,39 @@ public class Today extends Fragment implements View.OnClickListener
             txtv_sleep.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
             txtv_sleep.setBackgroundResource(R.drawable.right_selector_white);
         }
-
-
     }
 
 
-    @Override
-    public void onResume()
+    public void changeF(String value)
     {
-        super.onResume();
-
-
-        // onRefresh get the previous Count
-        calculate(((MainActivityNew) context).stepsTaken);
-
-        bleStatus(((MainActivityNew) context).BLE_STATUS);
-
-        Log.d(TAG, "onResume");
-    }
-
-
-    //**********************************************************************************************
-
-
-    public void calculate(String data)
-    {
-        int steps = 0;
-        int stepsFromBand =Integer.parseInt(data);
-
-        // DATABASE UPDATE
-        if (stepsFromBand > 0)
+        if (value.equals("A"))
         {
-            steps = stepsFromBand;
-            myDatabase.addData(new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
+            framelayout_activity.setVisibility(View.VISIBLE);
+            framelayout_sleep.setVisibility(View.GONE);
         }
         else
         {
-            steps = myDatabase.getTodaySteps();
+            framelayout_sleep.setVisibility(View.VISIBLE);
+            framelayout_activity.setVisibility(View.GONE);
         }
-
-//          myDatabase.addData(new BeanRecords("05-01-2017", "2005"));
-
-
-        List<BeanRecords> list = myDatabase.getAllContacts();
-
-        for (int i = 0; i < list.size(); i++)
-        {
-            Log.e("Data", "----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps());
-
-             // myDatabase.deleteContact(list.get(i));
-        }
-
-
-
-
-
-        txtv_steps.setText(String.valueOf(steps));
-
-        txtv_stepsToGo.setText(myUtil.getRemainingSteps(context, steps));
-
-        txtv_calories.setText(myUtil.stepsToCalories(steps));
-
-        txtv_caloriesToGo.setText(myUtil.stepsToRemainingCalories(context, steps));
-
-        txtv_milesKm.setText(myUtil.stepsToDistance(steps));
-
-        txtv_milesKmToGo.setText(myUtil.stepsToRemainingDistance(context, steps));
 
     }
-
-
-
-
-    //**********************************************************************************************
-    // Update UI
-    //**********************************************************************************************
 
 
     public void bleStatus(String BLE_STATUS)
     {
-        // String deviceName = ((MainActivityNew) context).deviceName;
 
-        if (BLE_STATUS.equals(MyConstant.CONNECTING))
-        {
-            txtv_connect_disconnect.setText("Connecting...");
-        }
-        else if (BLE_STATUS.equals(MyConstant.DISCONNECTING))
-        {
-            txtv_connect_disconnect.setText("Disconnecting...");
-        }
-        else if (BLE_STATUS.equals(MyConstant.CONNECTED))
-        {
-            txtv_connect_disconnect.setText("Disconnect");
-            txtv_refresh.setEnabled(true);
-        }
-        else if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
-        {
-            txtv_connect_disconnect.setText("Connect");
-            txtv_refresh.setEnabled(false);
-        }
+        ((TodayActivityFragment) fragment_activity).bleStatus(BLE_STATUS);
+
     }
+
+    public void calculate(String data)
+    {
+        ((TodayActivityFragment) fragment_activity).calculate(data);
+    }
+
+
+
 
 
 }

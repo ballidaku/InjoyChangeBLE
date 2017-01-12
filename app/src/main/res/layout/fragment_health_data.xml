@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:card_view="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:gravity="center"
-              android:background="@color/colorBlue"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@drawable/ic_background_with_shadow"
+              android:padding="3dp"
+              android:gravity="center"
+              android:orientation="vertical">
+
 
 
     <LinearLayout
@@ -15,98 +15,133 @@
         android:orientation="horizontal">
 
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/cardv_today"
+        <!--  <android.support.v7.widget.CardView
+              android:id="@+id/cardv_today"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_marginLeft="3dp"
+              android:layout_marginRight="2.5dp"
+              android:layout_weight="1"
+              app:cardUseCompatPadding="true"
+              card_view:cardCornerRadius="15dp"
+              card_view:cardElevation="4dp">-->
+
+
+        <!--<LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
             android:layout_weight="1"
-            app:cardUseCompatPadding="true"
-            card_view:cardCornerRadius="10dp"
-            card_view:cardElevation="5dp">
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="2.5dp">-->
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorWhite">
-
-                    <TextView
-                        android:id="@+id/txtv_today"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="TODAY"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
-
-
-                </FrameLayout>
-            </LinearLayout>
-
-
-        </android.support.v7.widget.CardView>
-
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/cardv_myweek"
+        <FrameLayout
+            android:id="@+id/frameLayout_today"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            app:cardUseCompatPadding="true"
-            card_view:cardCornerRadius="10dp"
-            card_view:cardElevation="5dp">
+            android:layout_marginRight="2dp"
+            android:layout_weight="1">
 
-            <LinearLayout
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorWhite">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="MY WEEK"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_btn_background"/>
 
 
-                </FrameLayout>
-            </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/ic_today"/>
+
+            <TextView
+                android:id="@+id/txtv_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="TODAY"
+                android:textColor="@color/colorBlack"
+                android:textSize="22sp"/>
 
 
-        </android.support.v7.widget.CardView>
+        </FrameLayout>
+        <!--</LinearLayout>-->
 
 
+        <!-- </android.support.v7.widget.CardView>-->
+
+
+        <!--  <android.support.v7.widget.CardView
+              android:id="@+id/cardv_myweek"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_marginLeft="2.5dp"
+              android:layout_marginRight="3dp"
+              android:layout_weight="1"
+              app:cardUseCompatPadding="true"
+              card_view:cardCornerRadius="10dp"
+              card_view:cardElevation="5dp">
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">-->
+
+        <FrameLayout
+            android:id="@+id/frameLayout_myweek"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_btn_background"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/ic_week"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="MY WEEK"
+                android:textColor="@color/colorBlack"
+                android:textSize="22sp"/>
+
+
+        </FrameLayout>
     </LinearLayout>
 
 
+    <!--</android.support.v7.widget.CardView>
+
+
+</LinearLayout>-->
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="horizontal">
 
 
-        <android.support.v7.widget.CardView
+ <!--       <android.support.v7.widget.CardView
             android:id="@+id/cardv_mygoal"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="2.5dp"
             android:layout_weight="1"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="10dp"
@@ -115,37 +150,53 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent">-->
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorWhite">
+        <FrameLayout
+            android:id="@+id/frameLayout_mygoal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="2dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_btn_background"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_goal"/>
+
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:layout_marginBottom="20dp"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="MY GOAL"
+                        android:text="MY GOALS"
                         android:textColor="@color/colorBlack"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="22sp"/>
 
 
                 </FrameLayout>
-            </LinearLayout>
+          <!--  </LinearLayout>
 
 
-        </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>-->
 
 
-        <android.support.v7.widget.CardView
+   <!--     <android.support.v7.widget.CardView
             android:id="@+id/cardv_overall"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="2.5dp"
+            android:layout_marginRight="3dp"
             android:layout_weight="1"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="10dp"
@@ -153,35 +204,49 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent">-->
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorWhite">
+        <FrameLayout
+            android:id="@+id/frameLayout_overall"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_btn_background"/>
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="20dp"
+                        android:src="@drawable/ic_overall"/>
 
                     <TextView
                         android:id="@+id/txtv_"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:layout_marginBottom="20dp"
                         android:gravity="center"
                         android:padding="10dp"
                         android:text="OVERALL"
                         android:textColor="@color/colorBlack"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:textSize="22sp"/>
 
 
                 </FrameLayout>
-            </LinearLayout>
+        <!--     </LinearLayout>
 
 
-        </android.support.v7.widget.CardView>
+         </android.support.v7.widget.CardView>-->
 
 
     </LinearLayout>
-
 
 
 </LinearLayout>

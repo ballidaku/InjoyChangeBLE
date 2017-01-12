@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+              android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_weight="0.6">
+
+        <TextView
+            android:id="@+id/txtv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_corner_orange"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Date"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/txtv_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right|center_vertical"
+        android:text="Time"
+        android:textSize="16sp"
+        android:drawablePadding="5dp"
+        android:textColor="@color/colorBlack"
+        android:drawableRight="@mipmap/ic_sleep_small"
+        android:textStyle="bold"/>
+
+</LinearLayout>

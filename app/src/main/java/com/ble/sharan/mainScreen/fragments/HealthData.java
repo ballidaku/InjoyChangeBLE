@@ -3,10 +3,10 @@ package com.ble.sharan.mainScreen.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.ble.sharan.R;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
@@ -18,12 +18,13 @@ import com.ble.sharan.mainScreen.activities.MainActivityNew;
 public class HealthData extends Fragment implements View.OnClickListener
 {
 
-    String TAG = SleepFragment.class.getSimpleName();
+    String TAG = SleepFragmentTesting.class.getSimpleName();
 
-    CardView cardv_today;
-    CardView cardv_myweek;
-    CardView cardv_mygoal;
-    CardView cardv_overall;
+    FrameLayout frameLayout_today;
+    FrameLayout frameLayout_myweek;
+    FrameLayout frameLayout_mygoal;
+    FrameLayout frameLayout_overall;
+
 
     Context context;
 
@@ -49,10 +50,10 @@ public class HealthData extends Fragment implements View.OnClickListener
 
     private void setUpIds()
     {
-        (cardv_today = (CardView) view.findViewById(R.id.cardv_today)).setOnClickListener(this);
-        (cardv_myweek = (CardView) view.findViewById(R.id.cardv_myweek)).setOnClickListener(this);
-        (cardv_mygoal = (CardView) view.findViewById(R.id.cardv_mygoal)).setOnClickListener(this);
-        (cardv_overall = (CardView) view.findViewById(R.id.cardv_overall)).setOnClickListener(this);
+        (frameLayout_today = (FrameLayout) view.findViewById(R.id.frameLayout_today)).setOnClickListener(this);
+        (frameLayout_myweek = (FrameLayout) view.findViewById(R.id.frameLayout_myweek)).setOnClickListener(this);
+        (frameLayout_mygoal = (FrameLayout) view.findViewById(R.id.frameLayout_mygoal)).setOnClickListener(this);
+        (frameLayout_overall = (FrameLayout) view.findViewById(R.id.frameLayout_overall)).setOnClickListener(this);
 
     }
 
@@ -62,26 +63,26 @@ public class HealthData extends Fragment implements View.OnClickListener
     {
         switch (view.getId())
         {
-            case R.id.cardv_today:
+            case R.id.frameLayout_today:
+
+                ((MainActivityNew)getActivity()).displayView(1);
+
+                break;
+
+
+            case R.id.frameLayout_myweek:
 
                 ((MainActivityNew)getActivity()).displayView(2);
 
                 break;
 
-
-            case R.id.cardv_myweek:
-
-                ((MainActivityNew)getActivity()).displayView(3);
-
-                break;
-
-            case R.id.cardv_mygoal:
+            case R.id.frameLayout_mygoal:
 
                 ((MainActivityNew)getActivity()).displayView(4);
 
                 break;
 
-            case R.id.cardv_overall:
+            case R.id.frameLayout_overall:
 
                 ((MainActivityNew)getActivity()).displayView(5);
 

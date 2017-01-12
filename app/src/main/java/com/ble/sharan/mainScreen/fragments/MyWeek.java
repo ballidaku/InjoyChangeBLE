@@ -7,16 +7,11 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.adapters.MyWeekAdapter;
-import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyConstant;
-import com.ble.sharan.myUtilities.MyDatabase;
-
-import java.util.List;
 
 /**
  * Created by brst-pc93 on 1/4/17.
@@ -33,11 +28,10 @@ public class MyWeek extends Fragment implements View.OnClickListener
     TextView txtv_sleep;
 
 
-    ListView listView_weekRecords;
+    FrameLayout framelayout_activity;
+    FrameLayout framelayout_sleep;
 
-    MyWeekAdapter myWeekAdapter;
 
-    MyDatabase myDatabase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -49,7 +43,6 @@ public class MyWeek extends Fragment implements View.OnClickListener
         {
             view = inflater.inflate(R.layout.fragment_myweek, container, false);
 
-            myDatabase = new MyDatabase(getActivity());
 
             setUpIds();
 
@@ -63,19 +56,12 @@ public class MyWeek extends Fragment implements View.OnClickListener
         (txtv_activity = (TextView) view.findViewById(R.id.txtv_activity)).setOnClickListener(this);
         (txtv_sleep = (TextView) view.findViewById(R.id.txtv_sleep)).setOnClickListener(this);
 
-        listView_weekRecords=(ListView)view.findViewById(R.id.listView_weekRecords);
 
+        framelayout_activity = (FrameLayout) view.findViewById(R.id.framelayout_activity);
+        framelayout_sleep = (FrameLayout) view.findViewById(R.id.framelayout_sleep);
 
-        updateUI();
-    }
+        changeF("A");
 
-    private void updateUI()
-    {
-        List<BeanRecords> list = myDatabase.getAllContacts();
-
-        myWeekAdapter=new MyWeekAdapter(context,list);
-
-        listView_weekRecords.setAdapter(myWeekAdapter);
 
     }
 
@@ -89,12 +75,18 @@ public class MyWeek extends Fragment implements View.OnClickListener
 
                 change(MyConstant.ACTIVITY);
 
+                changeF("A");
+
+
                 break;
 
 
             case R.id.txtv_sleep:
 
                 change(MyConstant.SLEEP);
+
+                changeF("S");
+
 
                 break;
 
@@ -111,7 +103,7 @@ public class MyWeek extends Fragment implements View.OnClickListener
         txtv_sleep.setBackgroundResource(R.drawable.right_selector_blue);
 
 
-        if(fromWhere.equals(MyConstant.ACTIVITY))
+        if (fromWhere.equals(MyConstant.ACTIVITY))
         {
             txtv_activity.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
             txtv_activity.setBackgroundResource(R.drawable.left_selector_white);
@@ -122,6 +114,22 @@ public class MyWeek extends Fragment implements View.OnClickListener
             txtv_sleep.setBackgroundResource(R.drawable.right_selector_white);
         }
 
+
+    }
+
+
+    public void changeF(String value)
+    {
+        if (value.equals("A"))
+        {
+            framelayout_activity.setVisibility(View.VISIBLE);
+            framelayout_sleep.setVisibility(View.GONE);
+        }
+        else
+        {
+            framelayout_sleep.setVisibility(View.VISIBLE);
+            framelayout_activity.setVisibility(View.GONE);
+        }
 
     }
 

@@ -2,17 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:card_view="http://schemas.android.com/apk/res-auto"
-              xmlns:app="http://schemas.android.com/tools"
-              android:background="@color/colorBlue"
               android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorBlue"
-        android:elevation="5dp"
-        android:layout_marginBottom="5dp"
         android:padding="5dp">
 
         <LinearLayout
@@ -20,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/round_stroke"
-            android:padding="2dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:padding="2dp">
 
             <TextView
                 android:id="@+id/txtv_activity"
@@ -31,8 +26,8 @@
                 android:background="@drawable/left_selector_white"
                 android:gravity="center"
                 android:text="Activity"
-                android:textSize="18sp"
                 android:textColor="@color/colorBlue"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
 
@@ -45,87 +40,160 @@
                 android:text="Sleep"
                 android:textColor="@color/colorWhite"
                 android:textSize="18sp"
+
                 android:textStyle="bold"/>
 
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.v7.widget.CardView
+
+    <FrameLayout
+        android:id="@+id/framelayout_activity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardUseCompatPadding="true"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="5dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
 
-        <LinearLayout
+        <fragment
+            android:id="@+id/fragment_activity"
+            android:name="com.ble.sharan.mainScreen.fragments.MyWeekActivityFragment"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/framelayout_sleep"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+
+        <fragment
+            android:id="@+id/fragment_sleep"
+            android:name="com.ble.sharan.mainScreen.fragments.MyWeekSleepFragment"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_width="match_parent"/>
+
+    </FrameLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+    <!--    <FrameLayout
+            android:id="@+id/container_body"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>-->
+
+    <!--  <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@drawable/ic_background_with_shadow">
+
+      <android.support.v7.widget.CardView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="5dp"
+          android:layout_marginRight="5dp"
+          android:layout_marginTop="15dp"
+          app:cardUseCompatPadding="true"
+          card_view:cardCornerRadius="10dp"
+          card_view:cardElevation="5dp">
 
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:paddingLeft="10dp"
-                    android:textColor="@color/colorBlack"
-                    android:text="Date"/>
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:padding="10dp">
 
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:textColor="@color/colorBlack"
-                    android:text="Calories"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorBlack"
-                    android:text="Steps"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:textStyle="bold"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/colorBlack"
-                    android:text="KM"/>
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
 
 
-            </LinearLayout>
+                  <TextView
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="0.6"
+                      android:textStyle="bold"
+                      android:paddingLeft="10dp"
+                      android:textColor="@color/colorBlack"
+                      android:text="Date"/>
 
 
-            <ListView
-                android:id="@+id/listView_weekRecords"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                  <TextView
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:textStyle="bold"
+                      android:gravity="right"
+                      android:textColor="@color/colorBlack"
+                      android:text="Calories"/>
+
+                  <TextView
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:gravity="right"
+                      android:textStyle="bold"
+                      android:paddingRight="10dp"
+                      android:textColor="@color/colorBlack"
+                      android:text="Steps"/>
+
+                  <TextView
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:gravity="right"
+                      android:textStyle="bold"
+                      android:paddingRight="15dp"
+                      android:textColor="@color/colorBlack"
+                      android:text="KM"/>
 
 
-            </LinearLayout>
+              </LinearLayout>
 
 
-    </android.support.v7.widget.CardView>
+              <ListView
+                  android:id="@+id/listView_weekRecords"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"/>
 
+
+              </LinearLayout>
+
+
+      </android.support.v7.widget.CardView>
+
+
+    &lt;!&ndash;  <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingLeft="10dp"
+          android:paddingRight="10dp"
+          android:paddingTop="5dp"
+          android:paddingBottom="5dp"
+          android:layout_margin="10dp"
+          android:layout_gravity="center|bottom"
+          android:gravity="center"
+          android:text="View Graph"
+          android:textSize="16sp"
+          android:textColor="@color/colorBlue"
+          android:background="@drawable/round_corner_white"/>&ndash;&gt;
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center|bottom"
+              android:clickable="true"
+              android:layout_margin="10dp"
+              android:background="@drawable/selector_view_graph"/>
+
+      </FrameLayout>-->
 
 
 </LinearLayout>
