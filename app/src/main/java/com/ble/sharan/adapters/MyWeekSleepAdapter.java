@@ -1,6 +1,7 @@
 package com.ble.sharan.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.myUtilities.BeanSleepRecord;
+import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by brst-pc93 on 1/11/17.
@@ -20,11 +24,11 @@ import java.util.List;
 public class MyWeekSleepAdapter extends BaseAdapter
 {
     Context context;
-    List<BeanSleepRecord> list;
+    ArrayList<HashMap<String,String>> list;
     MyUtil myUtil = new MyUtil();
 
 
-    public MyWeekSleepAdapter(Context context, List<BeanSleepRecord> list)
+    public MyWeekSleepAdapter(Context context, ArrayList<HashMap<String,String>> list)
     {
         this.context = context;
         this.list = list;
@@ -61,19 +65,41 @@ public class MyWeekSleepAdapter extends BaseAdapter
         TextView txtv_date = (TextView) row.findViewById(R.id.txtv_date);
         TextView txtv_time = (TextView) row.findViewById(R.id.txtv_time);
 
-      /*  SimpleDateFormat input = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat input = new SimpleDateFormat("dd-MM-yyyy");
         SimpleDateFormat output = new SimpleDateFormat("dd/MM");
 
         try
         {
-            txtv_date.setText(output.format(input.parse(list.get(position).getDate())));    // format output
+            txtv_date.setText(output.format(input.parse(list.get(position).get(MyConstant.DATE))));    // format output
         } catch (ParseException e)
         {
             e.printStackTrace();
-        }*/
+        }
 
-        txtv_date.setText(list.get(position).getDate());
-        txtv_time.setText(list.get(position).getTime());
+
+
+
+
+        try
+        {
+
+            long millis = Long.parseLong(list.get(position).get(MyConstant.SLEEP));
+            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+
+            int Hours = (int) (millis / (1000 * 60 * 60));
+            int Mins = (int) (millis / (1000 * 60)) % 60;
+
+            String diff = Hours + ":" + Mins; // updated value every1 second
+
+            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+            txtv_time.setText(""+Hours +" Hrs. "+Mins+" Mins");
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
 
 
         return row;

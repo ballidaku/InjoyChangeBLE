@@ -11,6 +11,9 @@ public class MyConstant
     public static final String IS_CONNECTED = "is_connected";
     public static final String IS_MANUAL_DISCONNECTED = "is_manual_disconnected";
 
+    public static final String ID = "id";
+    public static final String DATE = "date";
+
 
     public static final String CONNECTED = "connected";
     public static final String CONNECTING = "connecting";
@@ -57,4 +60,9 @@ public class MyConstant
     public static final String KG = "Kg";
     public static final String IN = "In";
     public static final String CM = "Cm";
+
+
+    //COMMANDS
+    public static final String GET_STEPS="stepR";
+    public static final String GET_SLEEP="mSlp";
 }

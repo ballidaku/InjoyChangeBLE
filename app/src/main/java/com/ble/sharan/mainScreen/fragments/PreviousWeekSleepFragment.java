@@ -10,10 +10,10 @@ import android.widget.ListView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.MyWeekSleepAdapter;
-import com.ble.sharan.myUtilities.BeanSleepRecord;
+import com.ble.sharan.myUtilities.MyDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Created by brst-pc93 on 1/12/17.
@@ -30,6 +30,9 @@ public class PreviousWeekSleepFragment extends Fragment /*implements View.OnClic
 
     MyWeekSleepAdapter myWeekSleepAdapter;
 
+    MyDatabase myDatabase;
+
+
     Context context;
 
     View view;
@@ -39,6 +42,8 @@ public class PreviousWeekSleepFragment extends Fragment /*implements View.OnClic
     {
 
         context = getActivity();
+
+        myDatabase= new MyDatabase(context);
 
         if (view == null)
         {
@@ -67,13 +72,13 @@ public class PreviousWeekSleepFragment extends Fragment /*implements View.OnClic
     private void updateUI()
     {
 //        List<BeanRecords> list = myDatabase.getAllContacts();
-        List<BeanSleepRecord> list = new ArrayList<>();
+        ArrayList<HashMap<String,String>> list = myDatabase.getAllSleepData();
 
-        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
-        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
-        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
-        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
-        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
+//        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
+//        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
+//        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
+//        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
+//        list.add(new BeanSleepRecord("12/11","3 Hrs. 23 Mins"));
 
 
         myWeekSleepAdapter=new MyWeekSleepAdapter(context,list);

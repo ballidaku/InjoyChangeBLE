@@ -18,6 +18,7 @@ import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyUtil;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -31,9 +32,6 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
     Context context;
     View view;
-
-
-
 
     TextView txtv_steps;
     TextView txtv_stepsToGo;
@@ -72,6 +70,9 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
 
             myDatabase = new MyDatabase(getActivity());
+
+
+
 
         }
 
@@ -112,7 +113,9 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
             case R.id.linearLayout_refresh:
 
-                ((MainActivityNew) context).getTotalSteps();
+                ((MainActivityNew) context).commandToBLE(MyConstant.GET_STEPS);
+//                ((MainActivityNew) context).commandToBLE(MyConstant.GET_SLEEP);
+                //((MainActivityNew) context).TestingSleep2();
 
                 break;
 
@@ -189,6 +192,38 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
         txtv_milesKmToGo.setText(myUtil.stepsToRemainingDistance(context, steps));
 
+
+
+        sleepTime();
+
+    }
+
+
+
+
+    public void sleepTime()
+    {
+        try
+        {
+
+            long millis = myDatabase.getTodaySleepTime();
+            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+
+            int Hours = (int) (millis / (1000 * 60 * 60));
+            int Mins = (int) (millis / (1000 * 60)) % 60;
+
+            String diff = Hours + ":" + Mins; // updated value every1 second
+
+            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+            txtv_sleepHour.setText(""+myFormat.format(myFormat.parse(diff)));
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+        Log.e("Sleep Database",""+myDatabase.getAllSleepData());
     }
 
 

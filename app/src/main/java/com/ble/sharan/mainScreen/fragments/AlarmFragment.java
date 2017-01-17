@@ -68,7 +68,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             String commandToSetDateTime = "dt" + currentDateTime;
 
-            ((MainActivityNew) context).setDateTimeORAlarm(commandToSetDateTime);
+            ((MainActivityNew) context).commandToBLE(commandToSetDateTime);
         }
 
           convert();
@@ -219,7 +219,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
         MyLog("Command", commandToSetAlarm);
 
-        ((MainActivityNew) context).setDateTimeORAlarm(commandToSetAlarm);
+        ((MainActivityNew) context).commandToBLE(commandToSetAlarm);
     }
 
     public void disableAlarm(String command)
@@ -230,7 +230,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
         MyLog("disableAlarm", stringBuilder.toString());
 
-        ((MainActivityNew) context).setDateTimeORAlarm(stringBuilder.toString());
+        ((MainActivityNew) context).commandToBLE(stringBuilder.toString());
     }
 
     @Override

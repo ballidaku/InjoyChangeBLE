@@ -144,7 +144,10 @@ public class Today extends Fragment implements View.OnClickListener
         ((TodayActivityFragment) fragment_activity).calculate(data);
     }
 
-
+    public void sleepTime()
+    {
+        ((TodayActivityFragment) fragment_activity).sleepTime();
+    }
 
 
 

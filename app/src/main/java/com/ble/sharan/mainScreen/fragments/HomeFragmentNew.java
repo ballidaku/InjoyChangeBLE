@@ -94,7 +94,7 @@ public class HomeFragmentNew extends Fragment implements View.OnClickListener
         {
             case R.id.txtv_refresh:
 
-                ((MainActivityNew) context).getTotalSteps();
+                ((MainActivityNew) context).commandToBLE(MyConstant.GET_STEPS);
 
                 break;
 
