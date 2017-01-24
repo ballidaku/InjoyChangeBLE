@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/colorBlue"
+              android:background="@drawable/ic_drawer_unselected"
               android:orientation="vertical">
 
 
@@ -9,30 +9,28 @@
         android:id="@+id/frame_layout_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:background="@drawable/ic_drawer_unselected"
         android:clickable="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:elevation="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
 
-        <ImageView
-            android:id="@+id/imgv_profile"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_girl"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circularImageView_Profile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
 
 
         <TextView
             android:id="@+id/txtv_username"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Eva Watson"
             android:textColor="@color/colorWhite"
-            android:textSize="18sp"
+            android:paddingRight="6dp"
+            android:textSize="17sp"
             android:textStyle="bold"/>
 
 
@@ -41,13 +39,15 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.7dp"
-        android:background="@color/whitegrey"/>
+        android:background="@color/colorBlack"/>
 
     <ListView
         android:id="@+id/listv_drawer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:dividerHeight="0.7dp"
+        android:divider="@color/colorBlack"
         android:listSelector="@android:color/transparent"/>
 
 

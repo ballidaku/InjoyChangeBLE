@@ -37,9 +37,22 @@
 
     <ListView
         android:id="@+id/listv_newDevices"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stackFromBottom="true"/>
+
+
+    <TextView
+        android:id="@+id/txtv_noDevice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:padding="15dp"
+        android:visibility="visible"
+        android:text="No Device Found"/>
 
 
 </LinearLayout>

@@ -27,12 +27,14 @@ public class Today extends Fragment implements View.OnClickListener
 
 
     TextView txtv_activity;
-    TextView txtv_sleep;
+    TextView txtv_overall;
 
     FrameLayout framelayout_activity;
     FrameLayout framelayout_sleep;
 
     Fragment fragment_activity;
+
+    Fragment fragment_overall;
 
 
     @Override
@@ -55,7 +57,7 @@ public class Today extends Fragment implements View.OnClickListener
     private void setUpIds()
     {
         (txtv_activity = (TextView) view.findViewById(R.id.txtv_activity)).setOnClickListener(this);
-        (txtv_sleep = (TextView) view.findViewById(R.id.txtv_sleep)).setOnClickListener(this);
+        (txtv_overall = (TextView) view.findViewById(R.id.txtv_overall)).setOnClickListener(this);
 
 
         framelayout_activity = (FrameLayout) view.findViewById(R.id.framelayout_activity);
@@ -64,6 +66,7 @@ public class Today extends Fragment implements View.OnClickListener
 
 
          fragment_activity = getChildFragmentManager().findFragmentById(R.id.fragment_activity);
+        fragment_overall = getChildFragmentManager().findFragmentById(R.id.fragment_overall);
 
         changeF("A");
 
@@ -83,10 +86,10 @@ public class Today extends Fragment implements View.OnClickListener
                 break;
 
 
-            case R.id.txtv_sleep:
+            case R.id.txtv_overall:
 
-                change(MyConstant.SLEEP);
-                changeF("S");
+                change(MyConstant.OVERALL);
+                changeF("O");
 
                 break;
 
@@ -99,8 +102,8 @@ public class Today extends Fragment implements View.OnClickListener
         txtv_activity.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
         txtv_activity.setBackgroundResource(R.drawable.left_selector_blue);
 
-        txtv_sleep.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
-        txtv_sleep.setBackgroundResource(R.drawable.right_selector_blue);
+        txtv_overall.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
+        txtv_overall.setBackgroundResource(R.drawable.right_selector_blue);
 
 
         if (fromWhere.equals(MyConstant.ACTIVITY))
@@ -110,8 +113,8 @@ public class Today extends Fragment implements View.OnClickListener
         }
         else
         {
-            txtv_sleep.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
-            txtv_sleep.setBackgroundResource(R.drawable.right_selector_white);
+            txtv_overall.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
+            txtv_overall.setBackgroundResource(R.drawable.right_selector_white);
         }
     }
 
@@ -127,11 +130,17 @@ public class Today extends Fragment implements View.OnClickListener
         {
             framelayout_sleep.setVisibility(View.VISIBLE);
             framelayout_activity.setVisibility(View.GONE);
+
+
+            ((Overall)fragment_overall).updateUI();
+
         }
 
     }
 
 
+
+    // Roots to  child fragment
     public void bleStatus(String BLE_STATUS)
     {
 
@@ -146,7 +155,7 @@ public class Today extends Fragment implements View.OnClickListener
 
     public void sleepTime()
     {
-        ((TodayActivityFragment) fragment_activity).sleepTime();
+        ((TodayActivityFragment) fragment_activity).refreshSleepTextView();
     }
 
 

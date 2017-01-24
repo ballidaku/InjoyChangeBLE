@@ -97,50 +97,86 @@ public class MySharedPreference
     }
 
 
+    //**********************************************************************************************
+    // ALARM
+    //**********************************************************************************************
+
+
     public void saveAlarm(Context context,String alarmKey, String alarm)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
 
         editor.putString(alarmKey, alarm);
 
+        editor.apply();
+
+        setFalseIsAlarmActivated(context,alarmKey);
+
+    }
+
+    // For switch
+    public void setFalseIsAlarmActivated(Context context,String alarmKey)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+
+        if(MyConstant.ALARM_FIRST.equals(alarmKey))
+        {
+            editor.putBoolean(MyConstant.IS_ALARM_FIRST_ACTIVATED, false);
+        }
+        else if(MyConstant.ALARM_SECOND.equals(alarmKey))
+        {
+            editor.putBoolean(MyConstant.IS_ALARM_SECOND_ACTIVATED, false);
+        }
+        else if(MyConstant.ALARM_THIRD.equals(alarmKey))
+        {
+            editor.putBoolean(MyConstant.IS_ALARM_THIRD_ACTIVATED, false);
+        }
 
         editor.apply();
+    }
+
+
+    // For switch
+    public void setTrueIsAlarmActivated(Context context,String alarmKey)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+
+        if(MyConstant.ALARM_FIRST.equals(alarmKey))
+        {
+            editor.putBoolean(MyConstant.IS_ALARM_FIRST_ACTIVATED, true);
+        }
+        else if(MyConstant.ALARM_SECOND.equals(alarmKey))
+        {
+            editor.putBoolean(MyConstant.IS_ALARM_SECOND_ACTIVATED, true);
+        }
+        else if(MyConstant.ALARM_THIRD.equals(alarmKey))
+        {
+            editor.putBoolean(MyConstant.IS_ALARM_THIRD_ACTIVATED, true);
+        }
+
+        editor.apply();
+    }
+
+
+    public boolean getIsAlarmActivated(Context context, String alarmNo)
+    {
+       return getPreference(context).getBoolean(alarmNo,false);
     }
 
 
     public void deleteAlarm(Context context, String alarm)
     {
+        setFalseIsAlarmActivated(context,alarm);
 
-        String  alarm1 = getPreference(context).getString(MyConstant.ALARM_ONE, "");
-        String  alarm2 = getPreference(context).getString(MyConstant.ALARM_TWO, "");
-        String  alarm3 = getPreference(context).getString(MyConstant.ALARM_THREE, "");
-
-
-        SharedPreferences.Editor editor = getPreference(context).edit();
-
-        if(alarm1.equals(alarm))
-        {
-            editor.putString(MyConstant.ALARM_ONE, "");
-        }
-        else if(alarm2.equals(alarm))
-        {
-            editor.putString(MyConstant.ALARM_TWO, "");
-        }
-        else if(alarm3.equals(alarm))
-        {
-            editor.putString(MyConstant.ALARM_THREE, "");
-        }
-
-        editor.apply();
     }
 
-    public HashMap<String,String> getAlarm(Context context)
+    public HashMap<String,String> getAllAlarm(Context context)
     {
         HashMap<String,String> map=new HashMap<>();
 
-        map.put(MyConstant.ALARM_ONE,getPreference(context).getString(MyConstant.ALARM_ONE, ""));
-        map.put(MyConstant.ALARM_TWO,getPreference(context).getString(MyConstant.ALARM_TWO, ""));
-        map.put(MyConstant.ALARM_THREE,getPreference(context).getString(MyConstant.ALARM_THREE, ""));
+        map.put(MyConstant.ALARM_FIRST,getPreference(context).getString(MyConstant.ALARM_FIRST, ""));
+        map.put(MyConstant.ALARM_SECOND,getPreference(context).getString(MyConstant.ALARM_SECOND, ""));
+        map.put(MyConstant.ALARM_THIRD,getPreference(context).getString(MyConstant.ALARM_THIRD, ""));
 
        return map;
     }
@@ -213,6 +249,18 @@ public class MySharedPreference
         return getPreference(context).getString(MyConstant.GENDER, "");
     }
 
+
+    public void savePhoto(Context context, String photo)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.PHOTO, photo);
+        editor.apply();
+    }
+
+    public String getPhoto(Context context)
+    {
+        return getPreference(context).getString(MyConstant.PHOTO, "");
+    }
 
     //**********************************************************************************************
     // Set Goals
@@ -307,7 +355,7 @@ public class MySharedPreference
 
     public String getWeightUnit(Context context)
     {
-        return getPreference(context).getString(MyConstant.LBS_KG, MyConstant.KG);
+        return getPreference(context).getString(MyConstant.LBS_KG, MyConstant.LBS);
     }
 
 
@@ -320,6 +368,26 @@ public class MySharedPreference
 
     public String getStrideUnit(Context context)
     {
-        return getPreference(context).getString(MyConstant.IN_CM, MyConstant.CM);
+        return getPreference(context).getString(MyConstant.IN_CM, MyConstant.IN);
     }
+
+
+
+
+    //**********************************************************************************************
+    // User Details
+    //**********************************************************************************************
+
+    public void saveAccessToken(Context context, String accessToken)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.ACCESS_TOKEN, accessToken);
+        editor.apply();
+    }
+
+    public String getAccessToken(Context context)
+    {
+        return getPreference(context).getString(MyConstant.ACCESS_TOKEN, "");
+    }
+
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +18,15 @@ import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by brst-pc93 on 1/11/17.
  */
 
-public class TodayActivityFragment  extends Fragment implements View.OnClickListener
+public class TodayActivityFragment extends Fragment implements View.OnClickListener
 {
     public static final String TAG = TodayActivityFragment.class.getSimpleName();
 
@@ -70,8 +71,6 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
 
             myDatabase = new MyDatabase(getActivity());
-
-
 
 
         }
@@ -121,7 +120,13 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
             case R.id.linearLayout_connect_disconnect:
 
+//                getActivity().runOnUiThread(new Runnable()
+//                {
+//                    public void run()
+//                    {
                 ((MainActivityNew) context).connectDisconnect();
+//                    }
+//                });
 
                 break;
 
@@ -150,7 +155,10 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
     public void calculate(String data)
     {
         int steps = 0;
-        int stepsFromBand =Integer.parseInt(data);
+        int stepsFromBand = Integer.parseInt(data);
+
+        String todayCalories = "";
+        String todayMilesCovered = "";
 
         // DATABASE UPDATE
         if (stepsFromBand > 0)
@@ -158,10 +166,16 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
             steps = stepsFromBand;
             myDatabase.addData(new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
         }
+        else if (myDatabase.getTodaySteps() == 0)
+        {
+            myDatabase.addData(new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
+            steps = myDatabase.getTodaySteps();
+        }
         else
         {
             steps = myDatabase.getTodaySteps();
         }
+
 
 //          myDatabase.addData(new BeanRecords("05-01-2017", "2005"));
 
@@ -176,7 +190,7 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
         }
 
 
-        DecimalFormat formatter = new DecimalFormat("#,###,###");
+//        DecimalFormat formatter = new DecimalFormat("#,###,###");
 //        String yourFormattedString = formatter.format(steps);
 
 
@@ -184,28 +198,35 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
         txtv_stepsToGo.setText(myUtil.getRemainingSteps(context, steps));
 
-        txtv_calories.setText(myUtil.stepsToCalories(steps));
+        txtv_calories.setText(todayCalories = myUtil.stepsToCalories(context, steps));
 
         txtv_caloriesToGo.setText(myUtil.stepsToRemainingCalories(context, steps));
 
-        txtv_milesKm.setText(myUtil.stepsToDistance(steps));
+        txtv_milesKm.setText(todayMilesCovered = myUtil.stepsToDistance(context, steps));
 
         txtv_milesKmToGo.setText(myUtil.stepsToRemainingDistance(context, steps));
 
 
+        refreshSleepTextView();
 
-        sleepTime();
+
+        SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
 
     }
 
-
-
-
-    public void sleepTime()
+    public void refreshSleepTextView()
     {
+        txtv_sleepHour.setText(sleepTime());
+
+        txtv_sleepHourToGo.setText(myUtil.sleepHrToRemainingHr(context, sleepTime()));
+    }
+
+    public String sleepTime()
+    {
+        String sleepTime = "";
+
         try
         {
-
             long millis = myDatabase.getTodaySleepTime();
             SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
 
@@ -214,8 +235,9 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
             String diff = Hours + ":" + Mins; // updated value every1 second
 
-            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
-            txtv_sleepHour.setText(""+myFormat.format(myFormat.parse(diff)));
+//            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+
+            sleepTime = myFormat.format(myFormat.parse(diff));
 
         } catch (Exception e)
         {
@@ -223,10 +245,9 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
         }
 
 
-        Log.e("Sleep Database",""+myDatabase.getAllSleepData());
+        return sleepTime;
+//        Log.e("Sleep Database",""+myDatabase.getAllSleepData());
     }
-
-
 
 
     //**********************************************************************************************
@@ -240,22 +261,60 @@ public class TodayActivityFragment  extends Fragment implements View.OnClickList
 
         if (BLE_STATUS.equals(MyConstant.CONNECTING))
         {
+            txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
             txtv_connect_disconnect.setText("Connecting");
         }
         else if (BLE_STATUS.equals(MyConstant.DISCONNECTING))
         {
+            txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._14sdp));
             txtv_connect_disconnect.setText("Disconnecting");
+
         }
         else if (BLE_STATUS.equals(MyConstant.CONNECTED))
         {
+            txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
             txtv_connect_disconnect.setText("Disconnect");
             linearLayout_refresh.setEnabled(true);
         }
         else if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
         {
+            txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
             txtv_connect_disconnect.setText("Connect");
             linearLayout_refresh.setEnabled(false);
         }
+    }
+
+
+    //**********************************************************************************************
+    // API TO UPLOAD DATA TO SERVER
+    //**********************************************************************************************
+
+    public void SEND_DATA_TO_SERVER(int steps, String calories, String todayMilesCovered)
+    {
+        String todayDate = myUtil.getTodaydate();
+        String todaySteps = String.valueOf(steps);
+        String todaySleepTime = sleepTime();
+
+        HashMap<String,String> map=new HashMap<>();
+        map.put(MyConstant.STEPS,todaySteps);
+        map.put(MyConstant.DATE,todayDate);
+        map.put(MyConstant.SLEEP,todaySleepTime);
+        map.put(MyConstant.CALORIES,calories);
+        map.put(MyConstant.MILES,todayMilesCovered);
+
+
+//
+//        MyUtil.execute(new Super_AsyncTask(context, map, MyConstant.UPLOAD_USER_DATA, MyConstant.LOGIN_ACTIVITY, new Super_AsyncTask_Interface()
+//        {
+//
+//            @Override
+//            public void onTaskCompleted(String output)
+//            {
+//
+//            }
+//        }, true));
+
+
     }
 
 

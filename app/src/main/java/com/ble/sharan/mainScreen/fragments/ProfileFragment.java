@@ -5,15 +5,16 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -23,6 +24,8 @@ import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by brst-pc93 on 11/4/16.
  */
@@ -30,8 +33,12 @@ import com.ble.sharan.myUtilities.MyUtil;
 public class ProfileFragment extends Fragment
 {
 
+    String TAG = ProfileFragment.class.getSimpleName();
+
     Context context;
     View view;
+
+    CircleImageView circularImageView_Profile;
 
     TextView txtv_username;
     TextView txtv_gender;
@@ -40,14 +47,17 @@ public class ProfileFragment extends Fragment
     EditText edtv_height;
     EditText edtv_weight;
     EditText edtv_stride;
-    EditText edtv_gender;
+//    EditText edtv_gender;
+
+
+    Spinner spinner_gender;
 
 
     KeyListener edtv_nameListener;
     KeyListener edtv_heightListener;
     KeyListener edtv_weightListener;
     KeyListener edtv_strideListener;
-    KeyListener edtv_genderListener;
+//    KeyListener edtv_genderListener;
 
 
     Drawable RIGHT_ICON_GREEN;
@@ -59,7 +69,13 @@ public class ProfileFragment extends Fragment
     Switch switch_stride;
 
 
-    MyUtil.HeightWeightHelper heightWeightHelper =new MyUtil.HeightWeightHelper();
+    MyUtil.HeightWeightHelper heightWeightHelper = new MyUtil.HeightWeightHelper();
+
+
+    MyUtil myUtil = new MyUtil();
+
+
+    boolean startWork = false;
 
 
     @Override
@@ -75,8 +91,6 @@ public class ProfileFragment extends Fragment
             RIGHT_ICON_GREEN = getContext().getResources().getDrawable(R.drawable.ic_tick);
             EDIT_ICON = getContext().getResources().getDrawable(R.mipmap.ic_edit);
 
-
-
             setUpIds();
         }
 
@@ -84,9 +98,19 @@ public class ProfileFragment extends Fragment
         return view;
     }
 
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        startWork = true;
+    }
+
     private void setUpIds()
     {
 
+        circularImageView_Profile = (CircleImageView) view.findViewById(R.id.circularImageView_Profile);
 
         txtv_username = (TextView) view.findViewById(R.id.txtv_username);
         txtv_gender = (TextView) view.findViewById(R.id.txtv_gender);
@@ -119,31 +143,32 @@ public class ProfileFragment extends Fragment
         edtv_stride.setOnTouchListener(new MyTouchListerner(edtv_stride));
 
 
-        edtv_gender = (EditText) view.findViewById(R.id.edtv_gender);
-        edtv_gender.setFilters(new InputFilter[]{
-                new InputFilter()
+        spinner_gender = (Spinner) view.findViewById(R.id.spinner_gender);
+
+
+        spinner_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
+            {
+
+                if (i != 0)
                 {
-                    public CharSequence filter(CharSequence src, int start,
-                                               int end, Spanned dst, int dstart, int dend)
-                    {
-                        if (src.equals(""))
-                        { // for backspace
-                            return src;
-                        }
-                        if (src.toString().matches("[a-zA-Z ]+"))
-                        {
-                            return src;
-                        }
-                        return "";
-                    }
+                    String gender = spinner_gender.getSelectedItem().toString();
+
+                    MySharedPreference.getInstance().saveGender(context, gender);
+
+                    txtv_gender.setText(MySharedPreference.getInstance().getGender(context));
                 }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
+            }
         });
-
-
-        edtv_genderListener = edtv_gender.getKeyListener();
-        edtv_gender.setKeyListener(null);
-        // edtv_gender.addTextChangedListener(new MyUtil.MyTextWatcher(edtv_gender));
-        edtv_gender.setOnTouchListener(new MyTouchListerner(edtv_gender));
 
 
         switch_distance = (Switch) view.findViewById(R.id.switch_distance);
@@ -167,6 +192,7 @@ public class ProfileFragment extends Fragment
 
 
         refreshUI();
+
     }
 
 
@@ -200,21 +226,33 @@ public class ProfileFragment extends Fragment
                     {
                         edtv_height.setKeyListener(edtv_heightListener);
                         edtv_height.setText(editText.getText().toString().replace("Cm", "").trim());
+
+                        InputFilter[] filterArray = new InputFilter[1];
+                        filterArray[0] = new InputFilter.LengthFilter(3);
+                        edtv_height.setFilters(filterArray);
                     }
                     else if (editText == edtv_weight)
                     {
                         edtv_weight.setKeyListener(edtv_weightListener);
                         edtv_weight.setText(editText.getText().toString().replace("Kg", "").replace("Lbs", "").trim());
+
+                        InputFilter[] filterArray = new InputFilter[1];
+                        filterArray[0] = new InputFilter.LengthFilter(3);
+                        edtv_weight.setFilters(filterArray);
                     }
                     else if (editText == edtv_stride)
                     {
                         edtv_stride.setKeyListener(edtv_strideListener);
                         edtv_stride.setText(editText.getText().toString().replace("Cm", "").replace("In", "").trim());
+
+                        InputFilter[] filterArray = new InputFilter[1];
+                        filterArray[0] = new InputFilter.LengthFilter(3);
+                        edtv_stride.setFilters(filterArray);
                     }
-                    else if (editText == edtv_gender)
-                    {
-                        edtv_gender.setKeyListener(edtv_genderListener);
-                    }
+//                    else if (editText == edtv_gender)
+//                    {
+//                        edtv_gender.setKeyListener(edtv_genderListener);
+//                    }
 
 
                     editText.requestFocus();
@@ -269,26 +307,26 @@ public class ProfileFragment extends Fragment
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b)
         {
-            if (mySwitch == switch_distance)
+            if (mySwitch == switch_distance && startWork)
             {
-                MySharedPreference.getInstance().saveDistanceUnit(context,b ? MyConstant.KM : MyConstant.MILES);
+                MySharedPreference.getInstance().saveDistanceUnit(context, b ? MyConstant.KM : MyConstant.MILES);
                 Log.e("switch_distance", "" + b);
             }
-            else if (mySwitch == switch_weight)
+            else if (mySwitch == switch_weight && startWork)
             {
-                MySharedPreference.getInstance().saveWeightUnit(context,b ? MyConstant.KG : MyConstant.LBS);
+                MySharedPreference.getInstance().saveWeightUnit(context, b ? MyConstant.KG : MyConstant.LBS);
                 Log.e("switch_weight", "" + b);
 
-                double d= Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg","").replace("Lbs","").trim());
+                double d = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
 
                 double result;
-                if(b)
+                if (b)
                 {
-                    result=heightWeightHelper.lbToKgConverter(d);
+                    result = heightWeightHelper.lbToKgConverter(d);
                 }
                 else
                 {
-                    result=heightWeightHelper.kgToLbConverter(d);
+                    result = heightWeightHelper.kgToLbConverter(d);
                 }
 
                 MySharedPreference.getInstance().saveWeight(context, String.valueOf(result));
@@ -296,22 +334,22 @@ public class ProfileFragment extends Fragment
                 edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
 
             }
-            else if (mySwitch == switch_stride)
+            else if (mySwitch == switch_stride && startWork)
             {
-                MySharedPreference.getInstance().saveStrideUnit(context,b ? MyConstant.CM : MyConstant.IN);
+                MySharedPreference.getInstance().saveStrideUnit(context, b ? MyConstant.CM : MyConstant.IN);
                 Log.e("switch_stride", "" + b);
 
-                double d= Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In","").replace("Cm","").trim());
+                double d = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
 
 
                 double result;
-                if(b)
+                if (b)
                 {
-                    result=heightWeightHelper.inchesToCm(d);
+                    result = heightWeightHelper.inchesToCm(d);
                 }
                 else
                 {
-                    result=heightWeightHelper.cmToInches(d);
+                    result = heightWeightHelper.cmToInches(d);
                 }
 
 
@@ -345,7 +383,13 @@ public class ProfileFragment extends Fragment
 
             MySharedPreference.getInstance().saveHeight(context, value);
 
+            InputFilter[] filterArray = new InputFilter[1];
+            filterArray[0] = new InputFilter.LengthFilter(6);
+            edtv_height.setFilters(filterArray);
+
             edtv_height.setText(MySharedPreference.getInstance().getHeight(context));
+
+            refreshDataToBLE();
 
         }
         else if (editText == edtv_weight)
@@ -354,7 +398,13 @@ public class ProfileFragment extends Fragment
 
             MySharedPreference.getInstance().saveWeight(context, value);
 
+            InputFilter[] filterArray = new InputFilter[1];
+            filterArray[0] = new InputFilter.LengthFilter(8);
+            edtv_weight.setFilters(filterArray);
+
             edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
+
+            refreshDataToBLE();
 
         }
         else if (editText == edtv_stride)
@@ -364,18 +414,16 @@ public class ProfileFragment extends Fragment
 
             MySharedPreference.getInstance().saveStride(context, value);
 
+
+            InputFilter[] filterArray = new InputFilter[1];
+            filterArray[0] = new InputFilter.LengthFilter(7);
+            edtv_stride.setFilters(filterArray);
+
             edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
 
-        }
-        else if (editText == edtv_gender)
-        {
-            MySharedPreference.getInstance().saveGender(context, value);
-
-            txtv_gender.setText(MySharedPreference.getInstance().getGender(context));
+            refreshDataToBLE();
 
         }
-
-
         editText.setCompoundDrawablesWithIntrinsicBounds(null, null, EDIT_ICON, null);
 
         MyUtil.hideKeyBoard(getActivity());
@@ -385,6 +433,8 @@ public class ProfileFragment extends Fragment
     private void refreshUI()
     {
 
+        myUtil.showImageWithPicasso(context, circularImageView_Profile, MySharedPreference.getInstance().getPhoto(context));
+
         txtv_username.setText(MySharedPreference.getInstance().getName(context));
         txtv_gender.setText(MySharedPreference.getInstance().getGender(context));
 
@@ -392,8 +442,30 @@ public class ProfileFragment extends Fragment
         edtv_height.setText(MySharedPreference.getInstance().getHeight(context));
         edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
         edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
-        edtv_gender.setText(MySharedPreference.getInstance().getGender(context));
 
+
+//        edtv_gender.setText(MySharedPreference.getInstance().getGender(context));\
+
+        String gender = MySharedPreference.getInstance().getGender(context);
+        if (gender.isEmpty())
+        {
+            spinner_gender.setSelection(0);
+        }
+        else if (gender.equals("MALE"))
+        {
+            spinner_gender.setSelection(1);
+        }
+        else
+        {
+            spinner_gender.setSelection(2);
+        }
+
+    }
+
+
+    public void refreshDataToBLE()
+    {
+        ((MainActivityNew) context).setHeightWeightStrideDataToBLE();
 
     }
 

@@ -77,9 +77,9 @@ public class MyWeekAdapter extends BaseAdapter
         }
 
         //txtv_date.setText(list.get(position).getDate());
-        txtv_calories.setText(myUtil.stepsToCalories(Integer.parseInt(list.get(position).getSteps())));
+        txtv_calories.setText(myUtil.stepsToCalories(context,Integer.parseInt(list.get(position).getSteps())));
         txtv_steps.setText(list.get(position).getSteps());
-        txtv_km.setText(myUtil.stepsToDistance(Integer.parseInt(list.get(position).getSteps())));
+        txtv_km.setText(myUtil.stepsToDistance(context,Integer.parseInt(list.get(position).getSteps())));
 
 
         return row;

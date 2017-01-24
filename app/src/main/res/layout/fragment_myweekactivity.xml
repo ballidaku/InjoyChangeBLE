@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:card_view="http://schemas.android.com/tools"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/ic_background_with_shadow">
+
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -17,6 +18,40 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="15dp"
+            app:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="10dp"
+            card_view:cardElevation="5dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:text="No Show Result Found"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView_myWeekActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="15dp"
+            android:visibility="visible"
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="10dp"
             card_view:cardElevation="5dp">
@@ -40,44 +75,44 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6"
-                        android:textStyle="bold"
                         android:paddingLeft="10dp"
+                        android:text="Date"
                         android:textColor="@color/colorBlack"
                         android:textSize="16sp"
-                        android:text="Date"/>
+                        android:textStyle="bold"/>
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textStyle="bold"
                         android:gravity="right"
-                        android:textSize="16sp"
+                        android:text="Calories"
                         android:textColor="@color/colorBlack"
-                        android:text="Calories"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
                         android:paddingRight="10dp"
+                        android:text="Steps"
                         android:textColor="@color/colorBlack"
-                        android:text="Steps"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:textStyle="bold"
-                        android:paddingRight="40dp"
-                        android:textSize="16sp"
+                        android:paddingRight="22dp"
+                        android:text="MILES"
                         android:textColor="@color/colorBlack"
-                        android:text="KM"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
 
 
                 </LinearLayout>
@@ -110,13 +145,15 @@
               android:textColor="@color/colorBlue"
               android:background="@drawable/round_corner_white"/>-->
 
+
         <ImageView
+            android:id="@+id/imgv_viewGraph"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
-            android:clickable="true"
             android:layout_margin="10dp"
-            android:background="@drawable/selector_view_graph"/>
+            android:background="@drawable/selector_view_graph"
+            android:clickable="true"/>
 
     </FrameLayout>
 

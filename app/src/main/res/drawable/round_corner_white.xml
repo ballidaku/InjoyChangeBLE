@@ -3,7 +3,7 @@
 
     <item android:state_selected="true">
         <shape>
-            <corners android:radius="20dp"/>
+            <corners android:radius="@dimen/_20sdp"/>
             <solid android:color="@color/colorGray"/>
         </shape>
     </item>
@@ -11,14 +11,14 @@
     <item
         android:state_pressed="true">
         <shape>
-            <corners android:radius="20dp"/>
+            <corners android:radius="@dimen/_20sdp"/>
             <solid android:color="@color/colorGray"/>
         </shape>
     </item>
 
     <item>
         <shape>
-            <corners android:radius="20dp"/>
+            <corners android:radius="@dimen/_20sdp"/>
             <solid android:color="@color/colorWhite"/>
         </shape>
     </item>

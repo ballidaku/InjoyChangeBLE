@@ -44,14 +44,20 @@
                 android:padding="10dp">
 
 
-                <ImageView
+                <!--<ImageView
                     android:id="@+id/imgv_profile"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="10dp"
                     android:padding="2dp"
-                    android:src="@drawable/ic_girl"/>
+                    android:src="@drawable/ic_girl"/>-->
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circularImageView_Profile"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"/>
 
 
                 <TextView
@@ -132,7 +138,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0.8"
                         android:text="Name"
                         android:textSize="20sp"/>
 
@@ -177,7 +183,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0.8"
                         android:text="Height"
                         android:textSize="20sp"/>
 
@@ -224,7 +230,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0.8"
                         android:text="Weight"
                         android:textSize="20sp"/>
 
@@ -270,7 +276,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0.8"
                         android:text="Stride"
                         android:textSize="20sp"/>
 
@@ -316,7 +322,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0.8"
                         android:text="Gender"
                         android:textSize="20sp"/>
 
@@ -328,7 +334,7 @@
                         android:textColor="@color/colorBlack"
                         android:textSize="14sp"/>-->
 
-                    <EditText
+                   <!-- <EditText
                         android:id="@+id/edtv_gender"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -341,7 +347,15 @@
                         android:maxLength="6"
                         android:padding="5dp"
                         android:textStyle="bold"
-                        android:theme="@style/EditTextStyle2"/>
+                        android:theme="@style/EditTextStyle2"/>-->
+
+
+                    <Spinner
+                        android:id="@+id/spinner_gender"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:entries="@array/gender"/>
 
 
                 </LinearLayout>

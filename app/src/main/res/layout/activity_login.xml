@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,7 +26,7 @@
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginBottom="80dp"
-            android:src="@drawable/ic_app_logo"/>
+            android:src="@mipmap/ic_app_logo_new"/>
 
 
         <EditText
@@ -33,6 +34,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username"
+            android:text=""
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="@color/colorWhite"
             android:theme="@style/EditTextStyle"
             android:inputType="textCapSentences"/>
 
@@ -42,6 +47,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:text=""
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="@color/colorWhite"
             android:theme="@style/EditTextStyle"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"

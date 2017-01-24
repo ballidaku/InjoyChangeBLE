@@ -1,14 +1,17 @@
 package com.ble.sharan.mainScreen.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -31,6 +34,7 @@ import android.widget.TextView;
 import com.ble.sharan.MyUartService;
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.DrawerList_Adapter;
+import com.ble.sharan.loginScreen.LoginActivity;
 import com.ble.sharan.mainScreen.fragments.AlarmFragment;
 import com.ble.sharan.mainScreen.fragments.FragmentDrawer;
 import com.ble.sharan.mainScreen.fragments.HealthData;
@@ -62,6 +66,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 {
 
     public static final String TAG = MainActivityNew.class.getSimpleName();
+
+
+    private static final int REQUEST_SELECT_DEVICE = 1;
 
     private static final int REQUEST_ENABLE_BT = 2;
 
@@ -104,6 +111,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     MyDialogs myDialogs = new MyDialogs();
 
     MyDatabase myDatabase;
+
+    MyUtil myUtil = new MyUtil();
 
 
     //    Bottom Tabs actuallt button
@@ -154,6 +163,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         reconnectTimer = new ReconnectTimer(6000, 3500);
 
 
+        oneTimeDialogToConnect(context);
+
+
     }
 
     ImageView imgv_headerLogo;
@@ -177,7 +189,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
-        imgv_profile = (ImageView) mDrawerLayout.findViewById(R.id.imgv_profile);
+        imgv_profile = (ImageView) mDrawerLayout.findViewById(R.id.circularImageView_Profile);
         txtv_username = (TextView) mDrawerLayout.findViewById(R.id.txtv_username);
 
 
@@ -280,7 +292,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         listDataHeader.add("Previous Week");
         listDataHeader.add("My Daily Goal");
         listDataHeader.add("Overall");
-//        listDataHeader.add("Alarm");
+        listDataHeader.add("Sign Out");
 
 
         drawer_adapter = new DrawerList_Adapter(context, listDataHeader, 0);
@@ -307,11 +319,31 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         txtv_right.setVisibility(View.INVISIBLE);
         txtv_heading.setVisibility(View.VISIBLE);
 
+
+        drawer_adapter.changeSelectedBackground(groupPosition);
+        drawer_adapter.notifyDataSetChanged();
+
+
         if (groupPosition == 6)
+        {
+//            mDrawerLayout.closeDrawers();
+
+            MySharedPreference.getInstance().saveAccessToken(context, "");
+
+            Intent intent = new Intent(context, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            finish();
+
+
+            return;
+        }
+        else if (groupPosition == 7)
         {
             txtv_heading.setText("My Info");
         }
-        else if (groupPosition == 7)
+        else if (groupPosition == 8)
         {
             txtv_heading.setText("Alarm");
         }
@@ -322,14 +354,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         }
 
-        drawer_adapter.changeSelectedBackground(groupPosition);
-        drawer_adapter.notifyDataSetChanged();
-
-
         switch (groupPosition)
         {
-
-
             case 0:
                 //fragment = new HomeFragmentNew();
                 fragment = new HealthData();
@@ -337,7 +363,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
             case 1:
-                txtv_right.setVisibility(View.VISIBLE);
                 fragment = new Today();
                 break;
 
@@ -362,13 +387,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 break;
 
 
-            case 6:
+            case 7:
 
                 fragment = new ProfileFragment();
 
                 break;
 
-            case 7:
+            case 8:
 
                 fragment = new AlarmFragment();
                 break;
@@ -400,6 +425,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public void onRefreshName()
     {
+        myUtil.showImageWithPicasso(context, imgv_profile, MySharedPreference.getInstance().getPhoto(context));
+
         txtv_username.setText(MySharedPreference.getInstance().getName(context));
     }
 
@@ -420,6 +447,12 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.linearLayout_challenge:
 
 
+                String url = MyConstant.MAIN_API;
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+
+
                 break;
 
             case R.id.linearLayout_data:
@@ -433,14 +466,14 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.linearLayout_myinfo:
 
                 setBottomTabSelected(view_myinfo, imgv_myinfo, txtv_myinfo);
-                displayView(6);
+                displayView(7);
 
                 break;
 
             case R.id.linearLayout_alarm:
 
                 setBottomTabSelected(view_alarm, imgv_alarm, txtv_alarm);
-                displayView(7);
+                displayView(8);
 
                 break;
 
@@ -493,6 +526,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             if (!mService.initialize())
             {
                 Log.e(TAG, "Unable to initialize Bluetooth");
+                finish();
             }
 
         }
@@ -605,7 +639,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 }
 
 
-                mService.close();
+                if (mService != null)
+                {
+                    mService.close();
+                }
 
                 // If Connection Lost
                 MySharedPreference.getInstance().saveIsConnectedNow(context, false);
@@ -624,6 +661,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 {
                     ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
                 }
+
                 else if (fragment instanceof Today)
                 {
                     ((Today) fragment).bleStatus(BLE_STATUS);
@@ -653,8 +691,17 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 try
                 {
 
-
-                    if (COMMAND.equals(MyConstant.GET_SLEEP))
+                    if (COMMAND.contains("dt"))
+                    {
+                        //TODO
+                        setHeightWeightStrideDataToBLE();
+                    }
+                    else if (COMMAND.contains("b"))
+                    {
+                        //TODO
+                        commandToBLE(MyConstant.GET_STEPS);
+                    }
+                    else if (COMMAND.equals(MyConstant.GET_SLEEP))
                     {
                         String hex = MyUtil.bytesToHex(txValue);
                         sleepData += hex.substring(8, hex.length());
@@ -668,22 +715,30 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     }
                     else if (COMMAND.equals(MyConstant.GET_STEPS))
                     {
+
+
+//                        if (fragment instanceof HomeFragmentNew)
+//                        {
+//                            ((HomeFragmentNew) fragment).calculate(stepsTaken = new String(txValue, "UTF-8"));
+//                        }
+//                        else
+                        if (fragment instanceof Today)
+                        {
+                            ((Today) fragment).calculate(stepsTaken = new String(txValue, "UTF-8"));
+                        }
+
+
+                        Log.e("Steps", "" + new String(txValue, "UTF-8"));
+
+
+                        // To get Sleep data********************************************************
+                        //TODO
                         commandToBLE(MyConstant.GET_SLEEP);
-
+                        //**************************************************************************
                     }
 
+                    Log.e("Response of Command", "" + new String(txValue, "UTF-8"));
 
-                    Log.e("BALLI", "" + new String(txValue, "UTF-8"));
-
-
-                    if (fragment instanceof HomeFragmentNew)
-                    {
-                        ((HomeFragmentNew) fragment).calculate(stepsTaken = new String(txValue, "UTF-8"));
-                    }
-                    else if (fragment instanceof Today)
-                    {
-                        ((Today) fragment).calculate(stepsTaken = new String(txValue, "UTF-8"));
-                    }
 
                 } catch (Exception e)
                 {
@@ -740,6 +795,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
             if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
             {
+//                Intent newIntent = new Intent(MainActivityNew.this, DeviceListActivity.class);
+//                startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
                 myDialogs.bleDeviceAvailable(context, mDeviceClickListener);
             }
             else
@@ -764,75 +821,16 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onFinish()
         {
+
+            // TODO
+            setDateToBLE();
 //            getTotalSteps();
-            commandToBLE(MyConstant.GET_STEPS);
+//            commandToBLE(MyConstant.GET_STEPS);
         }
 
         @Override
         public void onTick(long millisUntilFinished)
         {
-        }
-    }
-
-
-
-
-
-/*    public void getTotalSteps()
-    {
-        String msg = "stepR";
-
-        try
-        {
-            byte[] value = msg.getBytes("UTF-8");
-
-            mService.writeRXCharacteristic(value);
-
-        } catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-    }*/
-
-/*    public void setDateTimeORAlarm(String dateTime)
-    {
-        try
-        {
-            byte[] value = dateTime.getBytes("UTF-8");
-
-            mService.writeRXCharacteristic(value);
-
-        } catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-    }*/
-
-
-    String COMMAND;
-
-    public void commandToBLE(String command)
-    {
-        COMMAND = command;
-
-
-        Log.e(TAG, "COMMANDToBLE" + command);
-
-        if (COMMAND.equals(MyConstant.GET_SLEEP))
-        {
-            // Clear Sleep Data
-            sleepData = "";
-        }
-
-        try
-        {
-            byte[] value = command.getBytes("UTF-8");
-
-            mService.writeRXCharacteristic(value);
-
-        } catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
         }
     }
 
@@ -924,6 +922,24 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     {
         switch (requestCode)
         {
+
+
+            case REQUEST_SELECT_DEVICE:
+                //When the DeviceListActivity return, with the selected device address
+                if (resultCode == Activity.RESULT_OK && data != null)
+                {
+                    String deviceAddress = data.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
+                    mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
+
+                    Log.d(TAG, "... onActivityResultdevice.address==" + mDevice + "mserviceValue" + mService);
+                    ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName() + " - connecting");
+                    mService.connect(deviceAddress);
+
+
+                }
+                break;
+
+
             case REQUEST_ENABLE_BT:
                 // When the request to enable Bluetooth returns
                 if (resultCode == Activity.RESULT_OK)
@@ -959,7 +975,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //        String remaining ="000000000011010D1203007412040001120500021206000212080002120A0002120B0003120C0001120E0001120F000212100002122800141229004E122C0002123000091235000112360001130000011302000213030001130500071311000113140001131A0001132B0001132C0001132E000113300001133A0002140A0050";
 
 
-        HashMap<String, Long> map = new HashMap<>();
+        ArrayList<HashMap<String, Long>> list = new ArrayList<>();
 
         while (remaining.startsWith("0000000000"))
         {
@@ -982,7 +998,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 // Log.e("date", "---"+date);
                 // Log.e("startTime", "---"+startTime);
-                Log.e("totalBytes", "---" + totalBytes);
+//                Log.e("totalBytes", "---" + totalBytes);
 
 
                 int last = totalBytes * 2;
@@ -1004,7 +1020,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                     String str = remainingLast.substring(i, i + 2);
 
-                    Log.e("Inside", "" + count + "---" + str);
+//                    Log.e("Inside", "" + count + "---" + str);
 
                     int value = Integer.parseInt(str, 16);
 
@@ -1021,13 +1037,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 //Log.e("endTime", endTime);
 
-                Log.e("remaining", "" + remaining);
-                Log.e("String to be cut", remaining.substring(0, f));
+//                Log.e("remaining", "" + remaining);
+//                Log.e("String to be cut", remaining.substring(0, f));
 
 
                 remaining = remaining.replaceFirst(remaining.substring(0, f), "");
 
-                Log.e("After cut", remaining);
+//                Log.e("After cut", remaining);
 
 
                 try
@@ -1041,25 +1057,43 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //                    totalTime += mills;
 //                    Log.e("Date1", "" + Date1.getTime());
 //                    Log.e("Date2", "" + Date2.getTime());
-                    int Hours = (int) (mills / (1000 * 60 * 60));
-                    int Mins = (int) (mills / (1000 * 60)) % 60;
+//                    int Hours = (int) (mills / (1000 * 60 * 60));
+//                    int Mins = (int) (mills / (1000 * 60)) % 60;
 
-                    String diff = Hours + ":" + Mins; // updated value every1 second
+//                    String diff = Hours + ":" + Mins; // updated value every1 second
 
 
-                    if (!map.containsKey(parseDateToddMMyyyy(date)))
+                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertmillisToHrMins(mills));
+
+
+                    boolean isStored = false;
+
+                    for (int k = 0; k < list.size(); k++)
                     {
+
+
+                        if (list.get(k).containsKey(parseDateToddMMyyyy(date)))
+                        {
+                            isStored = true;
+                            long totalMillis = list.get(k).get(parseDateToddMMyyyy(date)) + mills;
+
+                            HashMap<String, Long> map = new HashMap<>();
+                            map.put(parseDateToddMMyyyy(date), totalMillis);
+
+                            list.set(k, map);
+
+                            break;
+                        }
+                    }
+
+
+                    if (!isStored)
+                    {
+                        HashMap<String, Long> map = new HashMap<>();
                         map.put(parseDateToddMMyyyy(date), mills);
-                    }
-                    else
-                    {
-                        long previousMillis = map.get(parseDateToddMMyyyy(date));
-                        long totalmillis = mills + previousMillis;
-
-                        map.put(parseDateToddMMyyyy(date), totalmillis);
+                        list.add(map);
                     }
 
-//                    Log.e("DateTime ", "" + date + "----" + diff + "---" + myFormat.format(myFormat.parse(diff)));
                 } catch (Exception e)
                 {
                     e.printStackTrace();
@@ -1067,30 +1101,12 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             }
         }
 
-        if(map.size() != 0)
-        myDatabase.addSleepData(map);
+        Log.e("List-----", "" + list);
 
-
-        for (String key : map.keySet())
+        if (list.size() > 0)
         {
-            long MILLIS = map.get(key);
-
-            try
-            {
-                SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
-
-                int Hours = (int) (MILLIS / (1000 * 60 * 60));
-                int Mins = (int) (MILLIS / (1000 * 60)) % 60;
-
-                String diff = Hours + ":" + Mins; // updated value every1 second
-                Log.e("Final", "" + key + "--------------" + myFormat.format(myFormat.parse(diff)));
-
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            myDatabase.addSleepData(list);
         }
-
 
         if (fragment instanceof Today)
         {
@@ -1118,6 +1134,149 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             e.printStackTrace();
         }
         return str;
+    }
+
+
+    public void oneTimeDialogToConnect(Context context)
+    {
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Connection Alert");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("You have to connect mobile to band to get data.");
+
+        // Setting Icon to Dialog
+        alertDialog.setIcon(R.mipmap.ic_alert);
+
+        // Setting Positive "Yes" Button
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                alertDialog.dismiss();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
+
+    //*********************************************************************************************
+    //*********************************************************************************************
+    //  Commands To Device
+    //*********************************************************************************************
+    //*********************************************************************************************
+
+
+    String COMMAND;
+
+    public void commandToBLE(String command)
+    {
+        COMMAND = command;
+
+
+        Log.e(TAG, "COMMANDToBLE----" + command);
+
+        if (COMMAND.equals(MyConstant.GET_SLEEP))
+        {
+            // Clear Sleep Data
+            sleepData = "";
+        }
+
+        try
+        {
+            byte[] value = command.getBytes("UTF-8");
+
+            mService.writeRXCharacteristic(value);
+
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    MyUtil.HeightWeightHelper heightWeightHelper = new MyUtil.HeightWeightHelper();
+
+    public void setHeightWeightStrideDataToBLE()
+    {
+        // Weight
+
+        double weightInDouble = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
+        String weightUnit = MySharedPreference.getInstance().getWeightUnit(context);
+
+//        Log.e(TAG, "Weight-----" + weightInDouble + "-----Unit-----" + weightUnit);
+
+
+        if (!weightUnit.equals(MyConstant.LBS))
+        {
+            weightInDouble = heightWeightHelper.kgToLbConverter(weightInDouble);
+
+//            Log.e(TAG, "WeightInLBS-----" + weightInDouble);
+        }
+
+        String finalWeight = String.format("%03d", Math.round(weightInDouble));
+
+//        Log.e(TAG, "FinalWeightInLBS---" + finalWeight);
+
+
+        // Stride
+
+        double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
+        String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
+
+//        Log.e(TAG, "Stride-----" + strideInDouble + "-----Unit-----" + strideUnit);
+
+        if (!strideUnit.equals(MyConstant.IN))
+        {
+            strideInDouble = heightWeightHelper.cmToInches(strideInDouble);
+
+//            Log.e(TAG, "StrideInINCHES-----" + strideInDouble);
+        }
+
+        String finalStride = String.format("%03d", Math.round(strideInDouble));
+
+//        Log.e(TAG, "FinalStideInINCHES---" + finalStride);
+
+
+        //Height
+
+        double heightInDouble = Double.parseDouble(MySharedPreference.getInstance().getHeight(context).replace("Cm", "").trim());
+
+        String finalHeight = String.format("%03d", Math.round(heightInDouble));
+
+//        Log.e(TAG, "FinalHeight---" + finalHeight);
+
+
+        String commandToSetHeightWeightStride = "b" + finalHeight + finalWeight + finalStride + "1" + "0";
+//        Log.e(TAG, "commandToSetHeightWeightStride---" + commandToSetHeightWeightStride);
+
+
+        if (BLE_STATUS.equals(MyConstant.CONNECTED))
+        {
+            commandToBLE(commandToSetHeightWeightStride);
+        }
+    }
+
+
+    public void setDateToBLE()
+    {
+        SimpleDateFormat mSDF1 = new SimpleDateFormat("yyMMddHHmmss");
+        String currentDateTime = mSDF1.format(new Date());
+
+//        Log.e("currentDateTime", currentDateTime);
+
+        String commandToSetDateTime = "dt" + currentDateTime;
+
+
+        if (BLE_STATUS.equals(MyConstant.CONNECTED))
+        {
+            commandToBLE(commandToSetDateTime);
+        }
     }
 
 

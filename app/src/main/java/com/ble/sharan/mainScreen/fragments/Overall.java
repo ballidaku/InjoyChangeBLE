@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.myUtilities.BeanRecords;
+import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
+import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
 import java.text.DecimalFormat;
@@ -23,6 +25,7 @@ import java.util.List;
 
 public class Overall extends Fragment
 {
+    String TAG = Overall.class.getSimpleName();
 
     Context context;
     View view;
@@ -31,11 +34,11 @@ public class Overall extends Fragment
     TextView txtv_totalSteps;
     TextView txtv_totalKm;
     TextView txtv_totalCalories;
+    TextView txtv_km_milesHeading;
 
     MyDatabase myDatabase;
 
-    MyUtil myUtil=new MyUtil();
-
+    MyUtil myUtil = new MyUtil();
 
 
     @Override
@@ -55,7 +58,6 @@ public class Overall extends Fragment
         }
 
 
-
         return view;
     }
 
@@ -64,12 +66,20 @@ public class Overall extends Fragment
         txtv_totalSteps = (TextView) view.findViewById(R.id.txtv_totalSteps);
         txtv_totalKm = (TextView) view.findViewById(R.id.txtv_totalKm);
         txtv_totalCalories = (TextView) view.findViewById(R.id.txtv_totalCalories);
+        txtv_km_milesHeading = (TextView) view.findViewById(R.id.txtv_km_milesHeading);
 
-        updateUI();
+
     }
 
 
-   long totalSteps=0;
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        updateUI();
+    }
+
+    long totalSteps = 0;
 
 
     public void updateUI()
@@ -77,11 +87,13 @@ public class Overall extends Fragment
 
         List<BeanRecords> list = myDatabase.getAllContacts();
 
+        totalSteps = 0;
+
         for (int i = 0; i < list.size(); i++)
         {
             Log.e("Data", "----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps());
 
-            totalSteps+=Long.parseLong(list.get(i).getSteps());
+            totalSteps += Long.parseLong(list.get(i).getSteps());
         }
 
         DecimalFormat formatter = new DecimalFormat("#,###,###");
@@ -89,10 +101,56 @@ public class Overall extends Fragment
 
 
         txtv_totalSteps.setText(yourFormattedString);
-        txtv_totalKm.setText(myUtil.stepsToDistance((int)totalSteps));
-        txtv_totalCalories.setText(myUtil.stepsToCalories((int)totalSteps));
 
 
+
+//        txtv_totalKm.setText(myUtil.stepsToDistance(context, (int) totalSteps));
+        txtv_totalKm.setText(stepsToDistance((int) totalSteps));
+
+
+        txtv_totalCalories.setText(myUtil.stepsToCalories(context, (int) totalSteps));
+
+
+    }
+
+
+    public String stepsToDistance(int steps)
+    {
+        double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
+
+        String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
+
+
+        if (strideUnit.equals(MyConstant.CM))
+        {
+            strideInDouble = new MyUtil.HeightWeightHelper().cmToInches(strideInDouble);
+        }
+
+
+        strideInDouble = (strideInDouble * 0.0254) * 0.001 * 0.621371;
+
+
+        Log.e(TAG, "strideInDouble-----" + strideInDouble);
+
+
+//        double stride = 0.00045; //in Km
+        double distance = steps * strideInDouble;
+
+
+        if(MySharedPreference.getInstance().getDistanceUnit(context).equals(MyConstant.MILES))
+        {
+            txtv_km_milesHeading.setText("TOTAL MILES");
+            Log.e(TAG, "distance-----" + distance);
+            return new DecimalFormat("##.##").format(distance);
+        }
+        else
+        {
+            txtv_km_milesHeading.setText("TOTAL KM");
+            distance=distance*1.60934;
+            return new DecimalFormat("##.##").format(distance);
+
+
+        }
 
 
     }

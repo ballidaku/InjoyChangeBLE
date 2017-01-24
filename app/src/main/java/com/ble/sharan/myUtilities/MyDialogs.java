@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Handler;
@@ -50,20 +51,23 @@ public class MyDialogs
     ListView listv_newDevices;
 
     TextView txtv_close;
+    TextView txtv_noDevice;
 
     Handler mHandler;
 
-    AdapterView.OnItemClickListener mDeviceClickListener ;
+    AdapterView.OnItemClickListener mDeviceClickListener;
 
 
     Context context;
 
 
-
     public void bleDeviceAvailable(Context context, AdapterView.OnItemClickListener mDeviceClickListener)
     {
-        this.context=context;
-        this.mDeviceClickListener=mDeviceClickListener;
+
+
+
+        this.context = context;
+        this.mDeviceClickListener = mDeviceClickListener;
 
         dialog = new Dialog(context, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar);
         dialog.setContentView(R.layout.dialog_ble_list);
@@ -71,6 +75,7 @@ public class MyDialogs
 
         listv_newDevices = (ListView) dialog.findViewById(R.id.listv_newDevices);
         txtv_close = (TextView) dialog.findViewById(R.id.txtv_close);
+        txtv_noDevice = (TextView) dialog.findViewById(R.id.txtv_noDevice);
 
         mHandler = new Handler();
 
@@ -78,20 +83,20 @@ public class MyDialogs
         // selectively disable BLE-related features.
         if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE))
         {
-            MyUtil.showToast(context,context.getResources().getString(R.string.ble_not_supported));
+            MyUtil.showToast(context, context.getResources().getString(R.string.ble_not_supported));
             dialog.dismiss();
         }
 
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager = (BluetoothManager)context.getSystemService(Context.BLUETOOTH_SERVICE);
+        final BluetoothManager bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null)
         {
-            MyUtil.showToast(context,context.getResources().getString(R.string.ble_not_supported));
+            MyUtil.showToast(context, context.getResources().getString(R.string.ble_not_supported));
             dialog.dismiss();
             return;
         }
@@ -100,23 +105,24 @@ public class MyDialogs
      /*   deviceAddess= MySharedPreference.getInstance().getDeviceAddress(context);
         if (deviceAddess.isEmpty())
         {*/
-            populateList();
-            txtv_close.setOnClickListener(new View.OnClickListener()
+        populateList();
+        txtv_close.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
             {
-                @Override
-                public void onClick(View v)
-                {
 
-                    if (!mScanning)
-                    {
-                        scanLeDevice(true);
-                    }
-                    else
-                    {
-                        dialog.dismiss();
-                    }
+                if (!mScanning)
+                {
+                    scanLeDevice(true);
+                    txtv_noDevice.setText("Scanning please wait...");
                 }
-            });
+                else
+                {
+                    dialog.dismiss();
+                }
+            }
+        });
         /*}
         else
         {
@@ -129,7 +135,7 @@ public class MyDialogs
             public void onDismiss(DialogInterface dialog)
             {
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
-               // Log.e("Dialog","Dismiss");
+                // Log.e("Dialog","Dismiss");
             }
         });
 
@@ -138,19 +144,40 @@ public class MyDialogs
 
 
 
+        onStart();
+
+
     }
+
+
+    public void onStart()
+    {
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+    }
+
 
 
     private void populateList()
     {
         /* Initialize device list container */
         deviceList = new ArrayList<BluetoothDevice>();
+
+
+//        txtv_noDevice.setVisibility(View.VISIBLE);
+//        listv_newDevices.setVisibility(View.GONE);
+
+        txtv_noDevice.setText("Scanning please wait...");
+
+
         deviceAdapter = new DeviceAdapter(context, deviceList);
         devRssiValues = new HashMap<String, Integer>();
 
         //ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
         listv_newDevices.setAdapter(deviceAdapter);
         listv_newDevices.setOnItemClickListener(mDeviceClickListener);
+
 
         scanLeDevice(true);
 
@@ -180,14 +207,13 @@ public class MyDialogs
 //    };
 
 
-
     private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback()
     {
 
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord)
         {
-            ((MainActivityNew)context).runOnUiThread(new Runnable()
+            ((MainActivityNew) context).runOnUiThread(new Runnable()
             {
                 @Override
                 public void run()
@@ -217,14 +243,22 @@ public class MyDialogs
         devRssiValues.put(device.getAddress(), rssi);
         if (!deviceFound)
         {
+            txtv_noDevice.setVisibility(View.GONE);
+            listv_newDevices.setVisibility(View.VISIBLE);
             deviceList.add(device);
             //mEmptyList.setVisibility(View.GONE);
 
 
             deviceAdapter.notifyDataSetChanged();
         }
+//        else
+//        {
+//            txtv_noDevice.setText("No Device Found");
+//
+////            txtv_noDevice.setVisibility(View.VISIBLE);
+////            listv_newDevices.setVisibility(View.GONE);
+//        }
     }
-
 
 
 //    public void sharanConnect()
@@ -243,14 +277,13 @@ public class MyDialogs
 //    }
 
 
-
     private void scanLeDevice(final boolean enable)
     {
-       // final Button cancelButton = (Button) findViewById(R.id.btn_cancel);
+        // final Button cancelButton = (Button) findViewById(R.id.btn_cancel);
         if (enable)
         {
             // Stops scanning after a pre-defined scan period.
-           mHandler.postDelayed(new Runnable()
+            mHandler.postDelayed(new Runnable()
             {
                 @Override
                 public void run()
@@ -259,6 +292,11 @@ public class MyDialogs
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
 
                     txtv_close.setText(R.string.scan);
+
+                    if(deviceList.size()==0)
+                    {
+                        txtv_noDevice.setText("No Device Found");
+                    }
 
                 }
             }, SCAN_PERIOD);
@@ -335,7 +373,7 @@ public class MyDialogs
                 tvrssi.setText("Rssi = " + String.valueOf(rssival));
             }
 
-            tvname.setText(device.getName());
+            tvname.setText(device.getName()== null? "No Device" : device.getName().equals("Prime") ? "InjoyHealth" : device.getName());
             tvadd.setText(device.getAddress());
             if (device.getBondState() == BluetoothDevice.BOND_BONDED)
             {
@@ -360,6 +398,10 @@ public class MyDialogs
             return vg;
         }
     }
+
+
+
+
 
 
 
