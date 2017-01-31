@@ -10,16 +10,28 @@ public class BeanRecords
     int id;
     String date;
     String steps;
+    String access_token;
 
     // Empty constructor
     public BeanRecords(){
 
     }
     // constructor
-    public BeanRecords(int id, String date, String steps){
+    public BeanRecords(int id, String date, String steps,String access_token){
         this.id = id;
         this.date = date;
         this.steps = steps;
+        this.access_token=access_token;
+    }
+
+    public String getAccess_token()
+    {
+        return access_token;
+    }
+
+    public void setAccess_token(String access_token)
+    {
+        this.access_token = access_token;
     }
 
     // constructor
@@ -27,6 +39,7 @@ public class BeanRecords
         this.date = date;
         this.steps = steps;
     }
+
     // getting ID
     public int getID(){
         return this.id;

@@ -85,7 +85,7 @@ public class Overall extends Fragment
     public void updateUI()
     {
 
-        List<BeanRecords> list = myDatabase.getAllContacts();
+        List<BeanRecords> list = myDatabase.getAllStepRecords(context);
 
         totalSteps = 0;
 

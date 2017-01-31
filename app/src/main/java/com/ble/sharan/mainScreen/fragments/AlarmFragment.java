@@ -201,6 +201,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             if (!((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
             {
                 MyUtil.showToast(context, "Your device is not connected yet!!");
+                mySwitch.setChecked(false);
             }
             else if (mySwitch == switch_firstOnOff && startWork)
             {

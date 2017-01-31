@@ -23,17 +23,6 @@
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="20dp"
             card_view:cardElevation="20dp">
-            <!-- <FrameLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="210dp"
-                 android:padding="5dp">
-
-                 <ImageView
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:scaleType="fitXY"
-
-                     android:src="@drawable/ic_my_goal_bg"/>-->
 
 
             <LinearLayout
@@ -42,16 +31,6 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="10dp">
-
-
-                <!--<ImageView
-                    android:id="@+id/imgv_profile"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:padding="2dp"
-                    android:src="@drawable/ic_girl"/>-->
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -79,13 +58,12 @@
                     android:gravity="center"
                     android:hint="Gender"
                     android:text=""
-                    android:textSize="16sp"
-                    android:textColor="@color/colorBlack"/>
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"/>
 
 
             </LinearLayout>
 
-            <!--</FrameLayout>-->
         </android.support.v7.widget.CardView>
 
         <TextView
@@ -107,18 +85,6 @@
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="10dp"
             card_view:cardElevation="5dp">
-
-            <!--     <FrameLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="300dp"
-                     android:padding="5dp">
-
-                     <ImageView
-                         android:layout_width="match_parent"
-                         android:layout_height="match_parent"
-                         android:scaleType="fitXY"
-
-                         android:src="@drawable/ic_my_goal_bg"/>-->
 
 
             <LinearLayout
@@ -142,13 +108,19 @@
                         android:text="Name"
                         android:textSize="20sp"/>
 
-                    <!-- <EditText
-                         android:layout_width="0dp"
-                         android:layout_height="wrap_content"
-                         android:layout_weight="1"
-                         android:inputType="textCapSentences"
-                         android:textColor="@color/colorBlack"
-                         android:textSize="14sp"/>-->
+
+                   <!-- <EditText
+                        android:id="@+id/edtv_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:drawableEnd="@mipmap/ic_edit"
+                        android:drawablePadding="5dp"
+                        android:hint="Name"
+                        android:inputType="textCapSentences"
+                        android:padding="5dp"
+                        android:theme="@style/EditTextStyle2"/>-->
 
                     <EditText
                         android:id="@+id/edtv_name"
@@ -156,10 +128,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:drawableEnd="@mipmap/ic_edit"
+                        android:drawablePadding="5dp"
                         android:hint="Name"
                         android:inputType="textCapSentences"
-                        android:drawablePadding="5dp"
                         android:padding="5dp"
                         android:theme="@style/EditTextStyle2"/>
 
@@ -187,13 +158,6 @@
                         android:text="Height"
                         android:textSize="20sp"/>
 
-                    <!-- <EditText
-                         android:layout_width="0dp"
-                         android:layout_height="wrap_content"
-                         android:layout_weight="1"
-                         android:inputType="number"
-                         android:textColor="@color/colorBlack"
-                         android:textSize="14sp"/>-->
 
                     <EditText
                         android:id="@+id/edtv_height"
@@ -201,7 +165,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:drawableEnd="@mipmap/ic_edit"
                         android:gravity="center_vertical"
                         android:hint="Height"
                         android:inputType="numberDecimal"
@@ -234,20 +197,13 @@
                         android:text="Weight"
                         android:textSize="20sp"/>
 
-                    <!--<EditText
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:inputType="number"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14sp"/>-->
+
                     <EditText
                         android:id="@+id/edtv_weight"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:drawableEnd="@mipmap/ic_edit"
                         android:gravity="center_vertical"
                         android:hint="Weight"
                         android:inputType="number"
@@ -280,20 +236,13 @@
                         android:text="Stride"
                         android:textSize="20sp"/>
 
-                    <!-- <EditText
-                         android:layout_width="0dp"
-                         android:layout_height="wrap_content"
-                         android:layout_weight="1"
-                         android:inputType="number"
-                         android:textColor="@color/colorBlack"
-                         android:textSize="14sp"/>-->
+
                     <EditText
                         android:id="@+id/edtv_stride"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:drawableEnd="@mipmap/ic_edit"
                         android:gravity="center_vertical"
                         android:hint="Stride"
                         android:inputType="number"
@@ -326,35 +275,25 @@
                         android:text="Gender"
                         android:textSize="20sp"/>
 
-                    <!--<EditText
+
+
+                    <TextView
+                        android:id="@+id/txtv_gender_temp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:inputType="textCapSentences"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14sp"/>-->
-
-                   <!-- <EditText
-                        android:id="@+id/edtv_gender"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:drawableEnd="@mipmap/ic_edit"
-                        android:gravity="center_vertical"
-                        android:hint="Gender"
-                        android:inputType="textCapSentences"
-                        android:maxLength="6"
-                        android:padding="5dp"
-                        android:textStyle="bold"
-                        android:theme="@style/EditTextStyle2"/>-->
-
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp"
+                        android:text=""
+                        android:paddingLeft="@dimen/_7sdp"
+                        android:textStyle="bold"/>
 
                     <Spinner
                         android:id="@+id/spinner_gender"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:visibility="gone"
                         android:entries="@array/gender"/>
 
 
@@ -370,12 +309,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1.07"
             android:padding="10dp"
             android:text="Preferences"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/heading"
-            android:textStyle="bold"
-            android:layout_weight="1.07"/>
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -396,20 +335,6 @@
             app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="10dp"
             card_view:cardElevation="5dp">
-
-
-            <!-- <FrameLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="270dp"
-                 android:layout_marginBottom="25dp"
-                 android:padding="5dp">
-
-                 <ImageView
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:scaleType="fitXY"
-
-                     android:src="@drawable/ic_my_goal_bg"/>-->
 
 
             <LinearLayout
@@ -580,8 +505,6 @@
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
-
-        <!--</FrameLayout>-->
 
 
     </LinearLayout>

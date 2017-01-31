@@ -13,6 +13,8 @@ import com.ble.sharan.R;
 import com.ble.sharan.asyncTask.Super_AsyncTask;
 import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
+import com.ble.sharan.myUtilities.ConnectivityReceiver;
+import com.ble.sharan.myUtilities.MyApplication;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
@@ -21,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, ConnectivityReceiver.ConnectivityReceiverListener
 {
 
     View view;
@@ -30,6 +32,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     EditText edtv_userName;
     EditText edtv_Password;
+
+    MyUtil myUtil = new MyUtil();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         context = this;
 
 
-
+//       Log.e("CONNECTION","------------"+ myUtil.checkConnection());
 
 
         setUpIds();
@@ -60,6 +64,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         findViewById(R.id.txtv_signIn).setOnClickListener(this);
         findViewById(R.id.txtv_forgotPassword).setOnClickListener(this);
         findViewById(R.id.txtv_createAccount).setOnClickListener(this);
+    }
+
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        MyApplication.getInstance().setConnectivityListener(this);
     }
 
     @Override
@@ -81,46 +93,57 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.txtv_forgotPassword:
 
-                hitApi();
+                hitApi(MyConstant.FORGOT_PASSWORD);
 
                 break;
 
             case R.id.txtv_createAccount:
 
-                hitApi();
+                hitApi(MyConstant.SIGN_UP);
 
                 break;
         }
     }
 
 
-    public void hitApi()
+    public void hitApi(String url)
     {
-        String url = MyConstant.MAIN_API;
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        startActivity(i);
+        if (!myUtil.checkConnection())
+        {
+            MyUtil.show_snackbar(view, context, "Please check your internet connection");
+        }
+        else
+        {
+
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }
     }
 
     private void checkHit()
     {
-       String userName= edtv_userName.getText().toString().trim();
-       String password= edtv_Password.getText().toString().trim();
+        String userName = edtv_userName.getText().toString().trim();
+        String password = edtv_Password.getText().toString().trim();
 
 
-        if(userName.isEmpty())
+        if (!myUtil.checkConnection())
         {
-            MyUtil.show_snackbar(view,context, "Please enter the username");
+            MyUtil.show_snackbar(view, context, "Please check your internet connection");
         }
-        else  if(password.isEmpty())
+        else if (userName.isEmpty())
         {
-            MyUtil.show_snackbar(view,context, "Please enter the password");
+            MyUtil.show_snackbar(view, context, "Please enter the username");
+        }
+        else if (password.isEmpty())
+        {
+            MyUtil.show_snackbar(view, context, "Please enter the password");
         }
         else
         {
-            HashMap<String,String>map=new HashMap<>();
-            map.put(MyConstant.USER_NANE,userName);
-            map.put(MyConstant.PASSWORD,password);
+            HashMap<String, String> map = new HashMap<>();
+            map.put(MyConstant.USER_NANE, userName);
+            map.put(MyConstant.PASSWORD, password);
 
 
             LoginService(map);
@@ -131,62 +154,65 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
+
+
+
     /*Login Service*/
 
-    public void LoginService(HashMap<String, String> map) {
+    public void LoginService(HashMap<String, String> map)
+    {
 
 
-        MyUtil.execute(new Super_AsyncTask(context, map, MyConstant.SIGN_IN,MyConstant.LOGIN_ACTIVITY, new Super_AsyncTask_Interface() {
+        MyUtil.execute(new Super_AsyncTask(context, map, MyConstant.SIGN_IN, MyConstant.LOGIN_ACTIVITY, new Super_AsyncTask_Interface()
+        {
 
             @Override
-            public void onTaskCompleted(String output) {
+            public void onTaskCompleted(String output)
+            {
 
 
-                Log.e("OUTPUT",""+output);
+                Log.e("OUTPUT", "" + output);
 
-                try {
+                try
+                {
 
                     JSONObject object = new JSONObject(output);
 
-                    if(object.getString(MyConstant.STATUS).equals("200"))
+                    if (object.getString(MyConstant.STATUS).equals("200"))
                     {
-                        String ACCESS_TOKEN= object.getString(MyConstant.ACCESS_TOKEN);
+                        String ACCESS_TOKEN = object.getString(MyConstant.ACCESS_TOKEN);
 
 
-                        if(!ACCESS_TOKEN.isEmpty())
-                        MySharedPreference.getInstance().saveAccessToken(context, ACCESS_TOKEN);
+                        if (!ACCESS_TOKEN.isEmpty())
+                            MySharedPreference.getInstance().saveAccessToken(context, ACCESS_TOKEN);
 
 
+                        JSONObject object2 = object.getJSONObject("profile");
 
-                        JSONObject object2= object.getJSONObject("profile");
+                        String name = object2.getString("fullname");
+                        String gender = object2.getString("gender");
+                        String height = object2.getString("height");
+                        String weight = object2.getString("weight");
+                        String stride = object2.getString("stride");
+                        String profile_picture = object2.getString("profile_picture");
 
-                        String name=object2.getString("fullname");
-                        String gender=object2.getString("gender");
-                        String height=object2.getString("height");
-                        String weight=object2.getString("weight");
-                        String stride=object2.getString("stride");
-                        String profile_picture=object2.getString("profile_picture");
+                        if (!name.isEmpty())
+                            MySharedPreference.getInstance().saveName(context, name);
 
-                        if(!name.isEmpty())
-                        MySharedPreference.getInstance().saveName(context, name);
+                        if (!gender.isEmpty())
+                            MySharedPreference.getInstance().saveGender(context, gender);
 
-                        if(!gender.isEmpty())
-                        MySharedPreference.getInstance().saveGender(context, gender);
+                        if (!height.isEmpty())
+                            MySharedPreference.getInstance().saveHeight(context, height);
 
-                        if(!height.isEmpty())
-                        MySharedPreference.getInstance().saveHeight(context, height);
+                        if (!weight.isEmpty())
+                            MySharedPreference.getInstance().saveWeight(context, weight);
 
-                        if(!weight.isEmpty())
-                        MySharedPreference.getInstance().saveWeight(context, weight);
+                        if (!stride.isEmpty())
+                            MySharedPreference.getInstance().saveStride(context, stride);
 
-                        if(!stride.isEmpty())
-                        MySharedPreference.getInstance().saveStride(context, stride);
-
-                        if(!profile_picture.isEmpty())
-                        MySharedPreference.getInstance().savePhoto(context, profile_picture);
-
-
-
+                        if (!profile_picture.isEmpty())
+                            MySharedPreference.getInstance().savePhoto(context, profile_picture);
 
 
                         Intent intent = new Intent(context, MainActivityNew.class);
@@ -195,14 +221,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         finish();
                     }
-                    else  if(object.getString(MyConstant.STATUS).equals("401"))
+                    else if (object.getString(MyConstant.STATUS).equals("401"))
                     {
-                        MyUtil.show_snackbar(view,context, "Username and password did not match");
+                        MyUtil.show_snackbar(view, context, "Username and password did not match");
                     }
 
 
-                }
-                catch (Exception ex) {
+                } catch (Exception ex)
+                {
                     Log.e("Exception is", ex.toString());
                 }
 
@@ -210,9 +236,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }, true));
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected)
+    {
 
-
-
+    }
 
 
 //    public void TestingSleep()

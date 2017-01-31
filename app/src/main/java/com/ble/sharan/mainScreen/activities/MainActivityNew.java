@@ -38,11 +38,9 @@ import com.ble.sharan.loginScreen.LoginActivity;
 import com.ble.sharan.mainScreen.fragments.AlarmFragment;
 import com.ble.sharan.mainScreen.fragments.FragmentDrawer;
 import com.ble.sharan.mainScreen.fragments.HealthData;
-import com.ble.sharan.mainScreen.fragments.HomeFragmentNew;
 import com.ble.sharan.mainScreen.fragments.MyDailyGoal;
 import com.ble.sharan.mainScreen.fragments.MyWeek;
 import com.ble.sharan.mainScreen.fragments.Overall;
-import com.ble.sharan.mainScreen.fragments.PreviousWeek;
 import com.ble.sharan.mainScreen.fragments.ProfileFragment;
 import com.ble.sharan.mainScreen.fragments.Today;
 import com.ble.sharan.myUtilities.MyConstant;
@@ -74,7 +72,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public String BLE_STATUS = MyConstant.DISCONNECTED;
 
-    public String stepsTaken = "0";
+    public int stepsTaken = 0;
 
     public String deviceName = "";
 
@@ -237,6 +235,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             }
         });*/
 
+
+
+
     }
 
     private void setBottomTabSelected(View v, ImageView image, TextView txtv)
@@ -289,7 +290,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //        listDataHeader.add("Profile");
         listDataHeader.add("Today");
         listDataHeader.add("My Week");
-        listDataHeader.add("Previous Week");
+//        listDataHeader.add("Previous Week");
         listDataHeader.add("My Daily Goal");
         listDataHeader.add("Overall");
         listDataHeader.add("Sign Out");
@@ -324,11 +325,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         drawer_adapter.notifyDataSetChanged();
 
 
-        if (groupPosition == 6)
+        if (groupPosition == 5)// SIGN OUT
         {
 //            mDrawerLayout.closeDrawers();
 
             MySharedPreference.getInstance().saveAccessToken(context, "");
+            MySharedPreference.getInstance().removeGoalKeys(context);
+
 
             Intent intent = new Intent(context, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -339,11 +342,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
             return;
         }
-        else if (groupPosition == 7)
+        else if (groupPosition == 6)
         {
             txtv_heading.setText("My Info");
         }
-        else if (groupPosition == 8)
+        else if (groupPosition == 7)
         {
             txtv_heading.setText("Alarm");
         }
@@ -372,28 +375,28 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 break;
 
 
+//            case 3:
+//                fragment = new PreviousWeek();
+//                break;
+
+
             case 3:
-                fragment = new PreviousWeek();
-                break;
-
-
-            case 4:
                 fragment = new MyDailyGoal();
                 break;
 
 
-            case 5:
+            case 4:
                 fragment = new Overall();
                 break;
 
 
-            case 7:
+            case 6:
 
                 fragment = new ProfileFragment();
 
                 break;
 
-            case 8:
+            case 7:
 
                 fragment = new AlarmFragment();
                 break;
@@ -447,7 +450,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.linearLayout_challenge:
 
 
-                String url = MyConstant.MAIN_API;
+                String url = MyConstant.CHALLENGE_API;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);
@@ -466,20 +469,20 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.linearLayout_myinfo:
 
                 setBottomTabSelected(view_myinfo, imgv_myinfo, txtv_myinfo);
-                displayView(7);
+                displayView(6);
 
                 break;
 
             case R.id.linearLayout_alarm:
 
                 setBottomTabSelected(view_alarm, imgv_alarm, txtv_alarm);
-                displayView(8);
+                displayView(7);
 
                 break;
 
             case R.id.txtv_right:
 
-                displayView(5);
+                displayView(4);
 
                 break;
 
@@ -560,12 +563,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                     BLE_STATUS = MyConstant.CONNECTING;
 
-                    if (fragment instanceof HomeFragmentNew)
-                    {
-
-                        ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
-                    }
-                    else if (fragment instanceof Today)
+                    if (fragment instanceof Today)
                     {
 
                         ((Today) fragment).bleStatus(BLE_STATUS);
@@ -582,12 +580,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 BLE_STATUS = MyConstant.DISCONNECTING;
 
-                if (fragment instanceof HomeFragmentNew)
-                {
-
-                    ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
-                }
-                else if (fragment instanceof Today)
+                if (fragment instanceof Today)
                 {
 
                     ((Today) fragment).bleStatus(BLE_STATUS);
@@ -604,12 +597,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 BLE_STATUS = MyConstant.CONNECTED;
 
-
-                if (fragment instanceof HomeFragmentNew)
-                {
-                    ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
-                }
-                else if (fragment instanceof Today)
+                if (fragment instanceof Today)
                 {
                     ((Today) fragment).bleStatus(BLE_STATUS);
                 }
@@ -629,13 +617,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 BLE_STATUS = MyConstant.DISCONNECTED;
 
 
-                if (fragment instanceof HomeFragmentNew)
+                if (fragment instanceof Today)
                 {
-                    ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
-                }
-                else if (fragment instanceof Today)
-                {
-                    ((Today) fragment).bleStatus(BLE_STATUS);
+                    try
+                    {
+                        ((Today) fragment).bleStatus(BLE_STATUS);
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
 
 
@@ -657,12 +647,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 BLE_STATUS = MyConstant.DISCONNECTED;
 
-                if (fragment instanceof HomeFragmentNew)
-                {
-                    ((HomeFragmentNew) fragment).bleStatus(BLE_STATUS);
-                }
-
-                else if (fragment instanceof Today)
+                if (fragment instanceof Today)
                 {
                     ((Today) fragment).bleStatus(BLE_STATUS);
                 }
@@ -673,7 +658,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             }
             else if (action.equals(MyUartService.ACTION_GATT_SERVICES_DISCOVERED))
             {
-                mService.enableTXNotification();
+
+                if(mService != null)
+                {
+                    mService.enableTXNotification();
+                }
 
                 MyCountDownTimer countDownTimer = new MyCountDownTimer(2000, 1000);
                 countDownTimer.start();
@@ -724,17 +713,39 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //                        else
                         if (fragment instanceof Today)
                         {
-                            ((Today) fragment).calculate(stepsTaken = new String(txValue, "UTF-8"));
+
+                            String stepsString = new String(txValue, "UTF-8");
+
+
+                            try
+                            {
+                                if(stepsString.length()==6)
+                                {
+                                    stepsTaken = Integer.parseInt(stepsString);
+
+
+                                    ((Today) fragment).calculate(stepsTaken);
+
+                                    Log.e("Steps", "" + new String(txValue, "UTF-8"));
+
+
+                                    // To get Sleep data********************************************************
+                                    //TODO
+                                    commandToBLE(MyConstant.GET_SLEEP);
+                                    //**************************************************************************
+
+                                }
+
+                            } catch (NumberFormatException e)
+                            {
+                                e.printStackTrace();
+                            }
+
+
+
                         }
 
 
-                        Log.e("Steps", "" + new String(txValue, "UTF-8"));
-
-
-                        // To get Sleep data********************************************************
-                        //TODO
-                        commandToBLE(MyConstant.GET_SLEEP);
-                        //**************************************************************************
                     }
 
                     Log.e("Response of Command", "" + new String(txValue, "UTF-8"));
@@ -847,6 +858,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         {
             if (!MySharedPreference.getInstance().getIsConnectedNow(context))
             {
+                reconnectTimer.cancel();
                 reconnectTimer.start();
             }
         }
@@ -1063,7 +1075,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //                    String diff = Hours + ":" + Mins; // updated value every1 second
 
 
-                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertmillisToHrMins(mills));
+                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills));
 
 
                     boolean isStored = false;
@@ -1105,7 +1117,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         if (list.size() > 0)
         {
-            myDatabase.addSleepData(list);
+            myDatabase.addSleepData(context,list);
         }
 
         if (fragment instanceof Today)
@@ -1245,11 +1257,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         //Height
 
-        double heightInDouble = Double.parseDouble(MySharedPreference.getInstance().getHeight(context).replace("Cm", "").trim());
+        double heightInDouble = Double.parseDouble(MySharedPreference.getInstance().getHeight(context).replace("In", "").trim());
 
         String finalHeight = String.format("%03d", Math.round(heightInDouble));
 
-//        Log.e(TAG, "FinalHeight---" + finalHeight);
+        Log.e(TAG, "FinalHeight---" + finalHeight);
 
 
         String commandToSetHeightWeightStride = "b" + finalHeight + finalWeight + finalStride + "1" + "0";

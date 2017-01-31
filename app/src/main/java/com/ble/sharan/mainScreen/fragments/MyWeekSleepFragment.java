@@ -14,17 +14,16 @@ import com.ble.sharan.R;
 import com.ble.sharan.adapters.MyWeekSleepAdapter;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
+import com.ble.sharan.myUtilities.MyUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 /**
  * Created by brst-pc93 on 1/11/17.
  */
 
-public class MyWeekSleepFragment extends Fragment /*implements View.OnClickListener*/
+public class MyWeekSleepFragment extends Fragment implements View.OnClickListener
 {
 
     String TAG = MyWeekSleepFragment.class.getSimpleName();
@@ -38,12 +37,16 @@ public class MyWeekSleepFragment extends Fragment /*implements View.OnClickListe
 
 
     CardView cardView_myWeekSleep;
+    CardView cardView_noResult;
 
     ImageView imgv_viewGraph;
 
     Context context;
 
     View view;
+
+    MyUtil myUtil = new MyUtil();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -67,10 +70,10 @@ public class MyWeekSleepFragment extends Fragment /*implements View.OnClickListe
 
     private void setUpIds()
     {
+        cardView_noResult = (CardView) view.findViewById(R.id.cardView_noResult);
         cardView_myWeekSleep = (CardView) view.findViewById(R.id.cardView_myWeekSleep);
 
-        imgv_viewGraph=(ImageView) view.findViewById(R.id.imgv_viewGraph);
-        imgv_viewGraph.setVisibility(View.GONE);
+        (imgv_viewGraph = (ImageView) view.findViewById(R.id.imgv_viewGraph)).setOnClickListener(this);
 
 
         listView_weekSleepRecords = (ListView) view.findViewById(R.id.listView_weekSleepRecords);
@@ -82,28 +85,12 @@ public class MyWeekSleepFragment extends Fragment /*implements View.OnClickListe
 
     private void updateUI()
     {
-        ArrayList<HashMap<String, String>> list = myDatabase.getAllSleepData();
+        ArrayList<HashMap<String, String>> list = myDatabase.getAllSleepData(context);
         if (list.size() > 0)
         {
+            cardView_noResult.setVisibility(View.GONE);
             cardView_myWeekSleep.setVisibility(View.VISIBLE);
-//            imgv_viewGraph.setVisibility(View.VISIBLE);
-
-//            Collections.reverse(list);
-
-
-            Collections.sort(list, new Comparator<HashMap<String,String>>() {
-                public int compare(HashMap<String,String> o1, HashMap<String,String> o2) {
-                    if (o1.get(MyConstant.DATE) == null || o2.get(MyConstant.DATE) == null)
-                        return 0;
-                    return o2.get(MyConstant.DATE).compareTo(o1.get(MyConstant.DATE));
-                }
-            });
-
-
-
-
-
-
+            imgv_viewGraph.setVisibility(View.VISIBLE);
 
             myWeekSleepAdapter = new MyWeekSleepAdapter(context, list);
 
@@ -111,10 +98,30 @@ public class MyWeekSleepFragment extends Fragment /*implements View.OnClickListe
         }
         else
         {
+            cardView_noResult.setVisibility(View.VISIBLE);
             cardView_myWeekSleep.setVisibility(View.GONE);
             imgv_viewGraph.setVisibility(View.GONE);
         }
 
+    }
+
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.imgv_viewGraph:
+
+                ViewGraphFragment viewGraphFragment = new ViewGraphFragment ();
+                Bundle args = new Bundle();
+                args.putString(MyConstant.FROM_WHERE, MyConstant.MY_WEEK_SLEEP_FRAGMENT);
+                viewGraphFragment.setArguments(args);
+
+                myUtil.switchfragment(MyWeekSleepFragment.this, viewGraphFragment);
+
+                break;
+        }
     }
 
 

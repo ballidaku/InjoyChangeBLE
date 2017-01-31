@@ -12,10 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
+import com.ble.sharan.asyncTask.Super_AsyncTask;
+import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
+import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
 import java.text.SimpleDateFormat;
@@ -112,6 +115,8 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
             case R.id.linearLayout_refresh:
 
+                MyUtil.showToast(context,"Please wait... data is refreshing.");
+
                 ((MainActivityNew) context).commandToBLE(MyConstant.GET_STEPS);
 //                ((MainActivityNew) context).commandToBLE(MyConstant.GET_SLEEP);
                 //((MainActivityNew) context).TestingSleep2();
@@ -141,7 +146,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
 
         // onRefresh get the previous Count
-        calculate(((MainActivityNew) context).stepsTaken);
+        calculate(((MainActivityNew) context).stepsTaken,false);
 
         bleStatus(((MainActivityNew) context).BLE_STATUS);
 
@@ -152,10 +157,10 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     //**********************************************************************************************
 
 
-    public void calculate(String data)
+    public void calculate(int data,boolean wantToUpdate)
     {
         int steps = 0;
-        int stepsFromBand = Integer.parseInt(data);
+        int stepsFromBand = data;
 
         String todayCalories = "";
         String todayMilesCovered = "";
@@ -164,27 +169,27 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         if (stepsFromBand > 0)
         {
             steps = stepsFromBand;
-            myDatabase.addData(new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
+            myDatabase.addStepData(context,new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
         }
-        else if (myDatabase.getTodaySteps() == 0)
+        else if (myDatabase.getTodaySteps(context) == 0)
         {
-            myDatabase.addData(new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
-            steps = myDatabase.getTodaySteps();
+            myDatabase.addStepData(context,new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
+            steps = myDatabase.getTodaySteps(context);
         }
         else
         {
-            steps = myDatabase.getTodaySteps();
+            steps = myDatabase.getTodaySteps(context);
         }
 
 
-//          myDatabase.addData(new BeanRecords("05-01-2017", "2005"));
+//          myDatabase.addStepData(new BeanRecords("05-01-2017", "2005"));
 
 
-        List<BeanRecords> list = myDatabase.getAllContacts();
+        List<BeanRecords> list = myDatabase.getAllStepRecords(context);
 
         for (int i = 0; i < list.size(); i++)
         {
-            Log.e("Data", "----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps());
+            Log.e(TAG, "Ballidaku----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps()+ "----" + list.get(i).getAccess_token());
 
             // myDatabase.deleteContact(list.get(i));
         }
@@ -210,7 +215,10 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         refreshSleepTextView();
 
 
-        SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
+        if(wantToUpdate)
+        {
+            SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
+        }
 
     }
 
@@ -227,7 +235,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         try
         {
-            long millis = myDatabase.getTodaySleepTime();
+            long millis = myDatabase.getTodaySleepTime(context);
             SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
 
             int Hours = (int) (millis / (1000 * 60 * 60));
@@ -291,28 +299,28 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
     public void SEND_DATA_TO_SERVER(int steps, String calories, String todayMilesCovered)
     {
-        String todayDate = myUtil.getTodaydate();
+        String todayDate = myUtil.getTodaydate2();
         String todaySteps = String.valueOf(steps);
         String todaySleepTime = sleepTime();
 
-        HashMap<String,String> map=new HashMap<>();
-        map.put(MyConstant.STEPS,todaySteps);
-        map.put(MyConstant.DATE,todayDate);
-        map.put(MyConstant.SLEEP,todaySleepTime);
-        map.put(MyConstant.CALORIES,calories);
-        map.put(MyConstant.MILES,todayMilesCovered);
+        HashMap<String, String> map = new HashMap<>();
+
+        map.put(MyConstant.ACCESS_TOKEN, MySharedPreference.getInstance().getAccessToken(context));
+        map.put(MyConstant.STEPS, todaySteps);
+        map.put(MyConstant.DATE, todayDate);
+        map.put("sleephr", todaySleepTime);
+        map.put(MyConstant.CALORIES, calories);
+        map.put(MyConstant.DISTANCE, todayMilesCovered);
 
 
-//
-//        MyUtil.execute(new Super_AsyncTask(context, map, MyConstant.UPLOAD_USER_DATA, MyConstant.LOGIN_ACTIVITY, new Super_AsyncTask_Interface()
-//        {
-//
-//            @Override
-//            public void onTaskCompleted(String output)
-//            {
-//
-//            }
-//        }, true));
+        MyUtil.execute(new Super_AsyncTask(context, map, MyConstant.UPLOAD_USER_DATA, new Super_AsyncTask_Interface()
+        {
+            @Override
+            public void onTaskCompleted(String output)
+            {
+                Log.e(TAG, "OUTPUT RESPONSE-------" + output);
+            }
+        }, false));
 
 
     }

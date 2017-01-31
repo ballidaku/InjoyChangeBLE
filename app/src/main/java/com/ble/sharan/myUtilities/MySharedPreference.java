@@ -208,7 +208,7 @@ public class MySharedPreference
 
     public String getHeight(Context context)
     {
-        return getPreference(context).getString(MyConstant.HEIGHT, "172")+" Cm";
+        return getPreference(context).getString(MyConstant.HEIGHT, "60")+" In";
     }
 
 
@@ -277,7 +277,7 @@ public class MySharedPreference
 
     public String getDailySteps(Context context)
     {
-        return getPreference(context).getString(MyConstant.STEPS,"1000");
+        return getPreference(context).getString(MyConstant.STEPS,"5000");
     }
     //**********************************************************************************************
 
@@ -320,8 +320,21 @@ public class MySharedPreference
 
     public String getDailySleep(Context context)
     {
-        return getPreference(context).getString(MyConstant.SLEEP,"7")+" hour per day";
+        return getPreference(context).getString(MyConstant.SLEEP,"9")+" hour per day";
 
+    }
+
+
+
+
+   public void removeGoalKeys(Context context)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.remove(MyConstant.STEPS);
+        editor.remove(MyConstant.MILES);
+        editor.remove(MyConstant.CALORIES);
+        editor.remove(MyConstant.SLEEP);
+        editor.apply();
     }
     //**********************************************************************************************
 

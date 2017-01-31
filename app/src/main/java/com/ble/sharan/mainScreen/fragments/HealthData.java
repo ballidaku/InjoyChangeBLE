@@ -18,7 +18,7 @@ import com.ble.sharan.mainScreen.activities.MainActivityNew;
 public class HealthData extends Fragment implements View.OnClickListener
 {
 
-    String TAG = SleepFragmentTesting.class.getSimpleName();
+    String TAG = HealthData.class.getSimpleName();
 
     FrameLayout frameLayout_today;
     FrameLayout frameLayout_myweek;
@@ -78,13 +78,13 @@ public class HealthData extends Fragment implements View.OnClickListener
 
             case R.id.frameLayout_mygoal:
 
-                ((MainActivityNew)getActivity()).displayView(4);
+                ((MainActivityNew)getActivity()).displayView(3);
 
                 break;
 
             case R.id.frameLayout_overall:
 
-                ((MainActivityNew)getActivity()).displayView(5);
+                ((MainActivityNew)getActivity()).displayView(4);
 
                 break;
         }

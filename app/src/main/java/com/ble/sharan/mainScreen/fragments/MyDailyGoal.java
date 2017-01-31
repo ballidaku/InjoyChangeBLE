@@ -23,7 +23,7 @@ import com.ble.sharan.myUtilities.MyUtil;
 public class MyDailyGoal extends Fragment
 {
 
-    String TAG = SleepFragmentTesting.class.getSimpleName();
+    String TAG = MyDailyGoal.class.getSimpleName();
 
     EditText edtv_steps;
     EditText edtv_miles;

@@ -366,6 +366,7 @@ public class MyDialogs
             final TextView tvpaired = (TextView) vg.findViewById(R.id.paired);
             final TextView tvrssi = (TextView) vg.findViewById(R.id.rssi);
 
+            tvadd.setVisibility(View.GONE);
             tvrssi.setVisibility(View.VISIBLE);
             byte rssival = (byte) devRssiValues.get(device.getAddress()).intValue();
             if (rssival != 0)

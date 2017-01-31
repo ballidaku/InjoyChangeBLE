@@ -51,6 +51,7 @@ public class ProfileFragment extends Fragment
 
 
     Spinner spinner_gender;
+    TextView txtv_gender_temp;
 
 
     KeyListener edtv_nameListener;
@@ -114,33 +115,30 @@ public class ProfileFragment extends Fragment
 
         txtv_username = (TextView) view.findViewById(R.id.txtv_username);
         txtv_gender = (TextView) view.findViewById(R.id.txtv_gender);
+        txtv_gender_temp = (TextView) view.findViewById(R.id.txtv_gender_temp);
 
 
         edtv_name = (EditText) view.findViewById(R.id.edtv_name);
         edtv_nameListener = edtv_name.getKeyListener();
         edtv_name.setKeyListener(null);
-        //  edtv_name.addTextChangedListener(new MyUtil.MyTextWatcher(edtv_name));
-        edtv_name.setOnTouchListener(new MyTouchListerner(edtv_name));
+       // edtv_name.setOnTouchListener(new MyTouchListerner(edtv_name));
 
         edtv_height = (EditText) view.findViewById(R.id.edtv_height);
         edtv_heightListener = edtv_height.getKeyListener();
         edtv_height.setKeyListener(null);
-        // edtv_height.addTextChangedListener(new MyUtil.MyTextWatcher(edtv_height));
-        edtv_height.setOnTouchListener(new MyTouchListerner(edtv_height));
+        //edtv_height.setOnTouchListener(new MyTouchListerner(edtv_height));
 
 
         edtv_weight = (EditText) view.findViewById(R.id.edtv_weight);
         edtv_weightListener = edtv_weight.getKeyListener();
         edtv_weight.setKeyListener(null);
-        //  edtv_weight.addTextChangedListener(new MyUtil.MyTextWatcher(edtv_weight));
-        edtv_weight.setOnTouchListener(new MyTouchListerner(edtv_weight));
+        //edtv_weight.setOnTouchListener(new MyTouchListerner(edtv_weight));
 
 
         edtv_stride = (EditText) view.findViewById(R.id.edtv_stride);
         edtv_strideListener = edtv_stride.getKeyListener();
         edtv_stride.setKeyListener(null);
-        // edtv_stride.addTextChangedListener(new MyUtil.MyTextWatcher(edtv_stride));
-        edtv_stride.setOnTouchListener(new MyTouchListerner(edtv_stride));
+       // edtv_stride.setOnTouchListener(new MyTouchListerner(edtv_stride));
 
 
         spinner_gender = (Spinner) view.findViewById(R.id.spinner_gender);
@@ -225,7 +223,7 @@ public class ProfileFragment extends Fragment
                     else if (editText == edtv_height)
                     {
                         edtv_height.setKeyListener(edtv_heightListener);
-                        edtv_height.setText(editText.getText().toString().replace("Cm", "").trim());
+                        edtv_height.setText(editText.getText().toString().replace("In", "").trim());
 
                         InputFilter[] filterArray = new InputFilter[1];
                         filterArray[0] = new InputFilter.LengthFilter(3);
@@ -310,7 +308,9 @@ public class ProfileFragment extends Fragment
             if (mySwitch == switch_distance && startWork)
             {
                 MySharedPreference.getInstance().saveDistanceUnit(context, b ? MyConstant.KM : MyConstant.MILES);
-                Log.e("switch_distance", "" + b);
+//                Log.e("switch_distance", "" + b);
+                MyUtil.showToast(context,"Distance unit changed.");
+
             }
             else if (mySwitch == switch_weight && startWork)
             {
@@ -333,6 +333,8 @@ public class ProfileFragment extends Fragment
 
                 edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
 
+
+                MyUtil.showToast(context,"Weight unit changed.");
             }
             else if (mySwitch == switch_stride && startWork)
             {
@@ -356,6 +358,8 @@ public class ProfileFragment extends Fragment
                 MySharedPreference.getInstance().saveStride(context, String.valueOf(result));
 
                 edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
+
+                MyUtil.showToast(context,"Stride Measurement unit changed.");
             }
         }
     }
@@ -451,13 +455,15 @@ public class ProfileFragment extends Fragment
         {
             spinner_gender.setSelection(0);
         }
-        else if (gender.equals("MALE"))
+        else if (gender.equalsIgnoreCase("MALE"))
         {
             spinner_gender.setSelection(1);
+            txtv_gender_temp.setText("Male");
         }
         else
         {
             spinner_gender.setSelection(2);
+            txtv_gender_temp.setText("Female");
         }
 
     }

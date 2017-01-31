@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -25,8 +24,10 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by brst-pc93 on 12/21/16.
@@ -39,6 +40,13 @@ public class MyUtil
 
     public static Toast toast;
     public static Snackbar snackbar;
+
+
+    public boolean checkConnection()
+    {
+        return ConnectivityReceiver.isConnected();
+    }
+
 
     // To show Toast ****************************************************************************************************
     public static void showToast(Context context, String message)
@@ -130,38 +138,48 @@ public class MyUtil
     public String getTodaydate()
     {
         Calendar c = Calendar.getInstance();
-        System.out.println("Current time => " + c.getTime());
+        //System.out.println("Current time => " + c.getTime());
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         return df.format(c.getTime());
     }
+
+    public String getTodaydate2()
+    {
+        Calendar c = Calendar.getInstance();
+        //System.out.println("Current time => " + c.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
+        return df.format(c.getTime());
+    }
+
 
     //**********************************************************************************************
     // STEPS
     //**********************************************************************************************
 
 
-
-
     public String getRemainingSteps(Context context, int steps)
     {
         int remainingSteps = Integer.parseInt(MySharedPreference.getInstance().getDailySteps(context)) - steps;
 
+        if (remainingSteps < 0)
+        {
+            MyUtil.showToast(context, "Steps goal completed.");
+        }
+
         return remainingSteps > 0 ? String.valueOf(remainingSteps) : "" + 0;
     }
-
-
-
 
 
     //**********************************************************************************************
     // STEPS To CALORIES
     //**********************************************************************************************
 
-    public double stepsToCaloriesFormula(Context context,int steps)
+    public double stepsToCaloriesFormula(Context context, int steps)
     {
         //        int weight = 60;
-        double weight =Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
+        double weight = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
 
         String weightUnit = MySharedPreference.getInstance().getWeightUnit(context);
 
@@ -179,10 +197,7 @@ public class MyUtil
     }
 
 
-
-
-
-    public String stepsToCalories(Context context,int steps)
+    public String stepsToCalories(Context context, int steps)
     {
 //        int weight = 60;
 //        double weight =Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
@@ -201,9 +216,9 @@ public class MyUtil
 //
 //        return new DecimalFormat("##.##").format(Calories);
 
-        double Calories =stepsToCaloriesFormula(context,steps);
+        double Calories = stepsToCaloriesFormula(context, steps);
 
-        Log.e(TAG, "Calories-----" + Calories);
+        //  Log.e(TAG, "Calories-----" + Calories);
 
 
         return Calories > 0 ? new DecimalFormat("##.##").format(Calories) : "" + 0;
@@ -229,28 +244,29 @@ public class MyUtil
 //        double Energy = (weight - 30) * 0.000315 + 0.00495;
 //        double Calories = Energy * steps;
 
-        double Calories =stepsToCaloriesFormula(context,steps);
+
+        double Calories = stepsToCaloriesFormula(context, steps);
 
         double remainingCalories = Double.parseDouble(MySharedPreference.getInstance().getDailyCalories(context).replace("per day", "").trim()) - Calories;
 
-        Log.e(TAG, "remainingCalories-----" + remainingCalories);
+
+        if (remainingCalories < 0)
+        {
+            MyUtil.showToast(context, "Calories goal completed.");
+        }
+
+        //  Log.e(TAG, "remainingCalories-----" + remainingCalories);
 
         return remainingCalories > 0 ? new DecimalFormat("##.##").format(remainingCalories) : "" + 0;
 
     }
 
 
-
-
-
-
-
-
     //**********************************************************************************************
     // STEPS To DISTANCE
     //**********************************************************************************************
 
-    public double stepsToDistanceFormula(Context context,int steps)
+    public double stepsToDistanceFormula(Context context, int steps)
     {
         double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
 
@@ -259,11 +275,11 @@ public class MyUtil
 
         if (strideUnit.equals(MyConstant.CM))
         {
-            strideInDouble =new  HeightWeightHelper().cmToInches(strideInDouble);
+            strideInDouble = new HeightWeightHelper().cmToInches(strideInDouble);
         }
 
 
-        strideInDouble = (strideInDouble*0.0254)*0.001*0.621371;
+        strideInDouble = (strideInDouble * 0.0254) * 0.001 * 0.621371;
 
 
 //        Log.e(TAG,"strideInDouble-----"+strideInDouble);
@@ -278,10 +294,7 @@ public class MyUtil
     }
 
 
-
-
-
-    public String stepsToDistance(Context context,int steps)
+    public String stepsToDistance(Context context, int steps)
     {
 //        double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
 //
@@ -307,9 +320,9 @@ public class MyUtil
 
         //txtv_milesKm.setText(String.format("%.2f", distance));
 
-        double distance = stepsToDistanceFormula(context,steps);
+        double distance = stepsToDistanceFormula(context, steps);
 
-        return distance > 0 ? new DecimalFormat("##.##").format(distance): "" + 0;
+        return distance > 0 ? new DecimalFormat("##.##").format(distance) : "" + 0;
     }
 
 
@@ -333,15 +346,17 @@ public class MyUtil
 //        double distance = steps * strideInDouble;
 
 
-        double distance = stepsToDistanceFormula(context,steps);
+        double distance = stepsToDistanceFormula(context, steps);
 
         double remainingKm = Double.parseDouble(MySharedPreference.getInstance().getDailyMiles(context).replace("per day", "").trim()) - distance;
 
+        if (remainingKm < 0)
+        {
+            MyUtil.showToast(context, "Distance goal completed.");
+        }
+
         return remainingKm > 0 ? new DecimalFormat("##.##").format(remainingKm) : "" + 0;
     }
-
-
-
 
 
     //**********************************************************************************************
@@ -370,18 +385,21 @@ public class MyUtil
 
         long difference = endDate.getTime() - startDate.getTime();
 
-        Log.e(TAG, "Difference---" + difference);
+        //  Log.e(TAG, "Difference---" + difference);
 
         if (difference > 0)
         {
-            return convertmillisToHrMins(difference);
+            return convertMillisToHrMins(difference);
         }
         else
+        {
+            MyUtil.showToast(context, "Sleep goal completed.");
             return "00:00";
+        }
     }
 
 
-    public String convertmillisToHrMins(long millis)
+    public String convertMillisToHrMins(long millis)
     {
         String time = "";
         try
@@ -579,6 +597,86 @@ public class MyUtil
 
 
     }
+
+
+    // COnvert Date to Day
+
+    public String convertDateToDay(String date)
+    {
+        String day = "";
+
+        SimpleDateFormat input = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat output = new SimpleDateFormat("EEEE");
+
+        try
+        {
+            day = output.format(input.parse(date));
+
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        return day;
+    }
+
+
+    // GET DATES BETWEEN TWO DATES
+    public List<String> getDates(String dateString1, String dateString2)
+    {
+        ArrayList<String> dates = new ArrayList<String>();
+        SimpleDateFormat df1 = new SimpleDateFormat("dd-MM-yyyy");
+
+        Date date1 = null;
+        Date date2 = null;
+
+        try
+        {
+            date1 = df1.parse(dateString1);
+            date2 = df1.parse(dateString2);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+
+        while (!cal1.after(cal2))
+        {
+            dates.add(df1.format(cal1.getTime()));
+            cal1.add(Calendar.DATE, 1);
+        }
+        return dates;
+    }
+
+
+//    // Convert millis to Hr Mins
+//    public String convertMillisToHrMins()
+//    {
+//        try
+//        {
+//
+//            long millis = Long.parseLong(list.get(position).get(MyConstant.SLEEP));
+//            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+//
+//            int Hours = (int) (millis / (1000 * 60 * 60));
+//            int Mins = (int) (millis / (1000 * 60)) % 60;
+//
+//            String diff = Hours + ":" + Mins; // updated value every1 second
+//
+//            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+//            txtv_time.setText(""+Hours +" Hrs. "+Mins+" Mins");
+//
+//        } catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }
