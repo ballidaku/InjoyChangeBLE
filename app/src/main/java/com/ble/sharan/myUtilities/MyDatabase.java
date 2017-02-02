@@ -7,9 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,13 +35,17 @@ public class MyDatabase extends SQLiteOpenHelper
     // Contacts table name
     private static final String TABLE_STEP_RECORD = "steps_records";
     private static final String TABLE_SLEEP_RECORD = "sleep_records";
+    private static final String TABLE_DAILY_GOAL_RECORD = "daily_goal_reords";
 
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_DATE = "date";
     private static final String KEY_STEPS = "steps";
-    private static final String KEY_SLEEP_TIME = "sleep_time";
+    private static final String KEY_SLEEP_TIME = "sleep_time";// in millis
     private static final String KEY_ACCESS_TOKEN = "access_token";
+
+    private static final String KEY_DISTANCE = "distance";
+    private static final String KEY_CALORIES = "calories";
 
 
     MyUtil myUtil = new MyUtil();
@@ -62,6 +69,13 @@ public class MyDatabase extends SQLiteOpenHelper
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE + " TEXT,"
                 + KEY_SLEEP_TIME + " INTEGER," + KEY_ACCESS_TOKEN + " TEXT" + ")";
         db.execSQL(CREATE_SLEEP_TABLE);
+
+
+        String CREATE_DAILY_GOAL_TABLE = "CREATE TABLE " + TABLE_DAILY_GOAL_RECORD + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE + " TEXT,"
+                + KEY_STEPS + " TEXT," + KEY_DISTANCE + " TEXT,"
+                + KEY_CALORIES + " TEXT," + KEY_SLEEP_TIME + " TEXT" + ")";
+        db.execSQL(CREATE_DAILY_GOAL_TABLE);
     }
 
     // Upgrading database
@@ -71,16 +85,22 @@ public class MyDatabase extends SQLiteOpenHelper
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_STEP_RECORD);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SLEEP_RECORD);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAILY_GOAL_RECORD);
 
         // Create tables again
         onCreate(db);
     }
 
 
+    //**********************************************************************************************
+    // STEP FUNCTIONALITY***************************************************************************
+    //**********************************************************************************************
+
+
     public void addStepData(Context context, BeanRecords beanRecords)
     {
 
-        int ID = getIdOnDate(context,beanRecords.getDate());
+        int ID = getStepIdOnDate(context, beanRecords.getDate());
 
         if (ID == 0)
         {
@@ -105,11 +125,11 @@ public class MyDatabase extends SQLiteOpenHelper
     }
 
 
-    public int getIdOnDate(Context context,String date)
+    public int getStepIdOnDate(Context context, String date)
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID,KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN }, KEY_DATE + "=? AND "+KEY_ACCESS_TOKEN +"=?",new String[]{String.valueOf(date),MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN}, KEY_DATE + "=? AND " + KEY_ACCESS_TOKEN + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
         if (cursor != null)
         {
             cursor.moveToFirst();
@@ -129,9 +149,9 @@ public class MyDatabase extends SQLiteOpenHelper
 
     public int getTodaySteps(Context context)
     {
-        int ID = getIdOnDate(context,myUtil.getTodaydate());
+        int ID = getStepIdOnDate(context, myUtil.getTodaydate());
 
-       // Log.e(TAG,"ID------"+ID+"-------Date--"+myUtil.getTodaydate());
+        // Log.e(TAG,"ID------"+ID+"-------Date--"+myUtil.getTodaydate());
 
         if (ID == 0)
         {
@@ -149,13 +169,13 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID,KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN}, KEY_ID + "=?",new String[]{String.valueOf(id)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
         {
             cursor.moveToFirst();
         }
 
-        BeanRecords beanRecords = new BeanRecords(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2),cursor.getString(3));
+        BeanRecords beanRecords = new BeanRecords(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3));
 
         return beanRecords;
     }
@@ -170,7 +190,7 @@ public class MyDatabase extends SQLiteOpenHelper
 
         SQLiteDatabase db = this.getWritableDatabase();
 //        Cursor cursor = db.rawQuery(selectQuery, null);
-        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID,KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN }, KEY_ACCESS_TOKEN +"=?",new String[]{MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN}, KEY_ACCESS_TOKEN + "=?", new String[]{MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst())
@@ -189,38 +209,40 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (stepsList.size()>1)
+        if (stepsList.size() > 1)
         {
-            Collections.sort(stepsList, new Comparator<BeanRecords>() {
-                public int compare(BeanRecords o1, BeanRecords o2) {
+            Collections.sort(stepsList, new Comparator<BeanRecords>()
+            {
+                public int compare(BeanRecords o1, BeanRecords o2)
+                {
                     if (o1.getDate() == null || o2.getDate() == null)
                         return 0;
-                    return o2.getDate().compareTo(o1.getDate());
+                    return convertToDate(o2.getDate()).compareTo(convertToDate(o1.getDate()));
                 }
             });
         }
 
 
         // ADD date which is missing between two dates
-        if (stepsList.size()>1)
+        if (stepsList.size() > 1)
         {
 
-            List<String> dates = myUtil.getDates(stepsList.get(stepsList.size()-1).getDate(),stepsList.get(0).getDate());
+            List<String> dates = myUtil.getDates(stepsList.get(stepsList.size() - 1).getDate(), stepsList.get(0).getDate());
 
-            for(String date:dates)
+            for (String date : dates)
             {
-                boolean isDateInside=false;
-                for (int i = 0; i <stepsList.size() ; i++)
+                boolean isDateInside = false;
+                for (int i = 0; i < stepsList.size(); i++)
                 {
-                    if(stepsList.get(i).getDate().equals(date))
+                    if (stepsList.get(i).getDate().equals(date))
                     {
-                        isDateInside=true;
+                        isDateInside = true;
                         break;
                     }
                 }
 
 
-                if(!isDateInside)
+                if (!isDateInside)
                 {
                     BeanRecords beanRecords = new BeanRecords();
                     beanRecords.setID(0);
@@ -232,12 +254,12 @@ public class MyDatabase extends SQLiteOpenHelper
                     stepsList.add(beanRecords);
 
 
-                    Log.e(TAG,"--MissingStepsDate---"+date);
+                    Log.e(TAG, "--MissingStepsDate---" + date);
                 }
             }
         }
 
-        if (stepsList.size()>1)
+        if (stepsList.size() > 1)
         {
             Collections.sort(stepsList, new Comparator<BeanRecords>()
             {
@@ -245,11 +267,10 @@ public class MyDatabase extends SQLiteOpenHelper
                 {
                     if (o1.getDate() == null || o2.getDate() == null)
                         return 0;
-                    return o2.getDate().compareTo(o1.getDate());
+                    return convertToDate(o2.getDate()).compareTo(convertToDate(o1.getDate()));
                 }
             });
         }
-
 
 
         // return contact list
@@ -282,7 +303,7 @@ public class MyDatabase extends SQLiteOpenHelper
         values.put(KEY_STEPS, beanRecords.getSteps());
 
         // updating row
-        return db.update(TABLE_STEP_RECORD, values, KEY_ID + " = ?",new String[]{String.valueOf(beanRecords.getID())});
+        return db.update(TABLE_STEP_RECORD, values, KEY_ID + " = ?", new String[]{String.valueOf(beanRecords.getID())});
     }
 
 
@@ -291,7 +312,7 @@ public class MyDatabase extends SQLiteOpenHelper
     public void deleteContact(BeanRecords beanRecords)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_STEP_RECORD, KEY_ID + " = ?",new String[]{String.valueOf(beanRecords.getID())});
+        db.delete(TABLE_STEP_RECORD, KEY_ID + " = ?", new String[]{String.valueOf(beanRecords.getID())});
         db.close();
     }
 
@@ -301,7 +322,7 @@ public class MyDatabase extends SQLiteOpenHelper
     //**********************************************************************************************
 
 
-    public void addSleepData(Context context,ArrayList<HashMap<String, Long>> list)
+    public void addSleepData(Context context, ArrayList<HashMap<String, Long>> list)
     {
 
 //        Collections.reverse(list);
@@ -314,7 +335,7 @@ public class MyDatabase extends SQLiteOpenHelper
                 long MILLIS = list.get(i).get(date);
 
 
-                int ID = getSleepIdOnDate(context,date);
+                int ID = getSleepIdOnDate(context, date);
 
                 if (ID == 0)
                 {
@@ -334,7 +355,7 @@ public class MyDatabase extends SQLiteOpenHelper
                 {
 //                    if( getSleepTime(ID) < MILLIS  )
 //                    {
-                        updateSleepData(ID,date,MILLIS);
+                    updateSleepData(ID, date, MILLIS);
 //                    }
                 }
             }
@@ -344,11 +365,11 @@ public class MyDatabase extends SQLiteOpenHelper
     }
 
 
-    public int getSleepIdOnDate(Context context,String date)
+    public int getSleepIdOnDate(Context context, String date)
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID,KEY_DATE, KEY_SLEEP_TIME,KEY_ACCESS_TOKEN}, KEY_DATE + "=? AND "+KEY_ACCESS_TOKEN +"=?",new String[]{String.valueOf(date),MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME, KEY_ACCESS_TOKEN}, KEY_DATE + "=? AND " + KEY_ACCESS_TOKEN + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
         if (cursor != null)
         {
             cursor.moveToFirst();
@@ -369,7 +390,7 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID,KEY_DATE, KEY_SLEEP_TIME }, KEY_DATE + "=?",new String[]{String.valueOf(date)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME}, KEY_DATE + "=?", new String[]{String.valueOf(date)}, null, null, null, null);
         if (cursor != null)
         {
             cursor.moveToFirst();
@@ -391,7 +412,7 @@ public class MyDatabase extends SQLiteOpenHelper
     {
 
         //Log.e(TAG, "TodaySleepDate---" + myUtil.getTodaydate());
-        int ID = getSleepIdOnDate(context,myUtil.getTodaydate());
+        int ID = getSleepIdOnDate(context, myUtil.getTodaydate());
 
         //Log.e(TAG, "ID---" + ID);
 
@@ -433,7 +454,7 @@ public class MyDatabase extends SQLiteOpenHelper
         values.put(KEY_SLEEP_TIME, MILLIS);
 
         // updating row
-        return db.update(TABLE_SLEEP_RECORD, values, KEY_DATE + " = ?",new String[]{String.valueOf(date)});
+        return db.update(TABLE_SLEEP_RECORD, values, KEY_DATE + " = ?", new String[]{String.valueOf(date)});
     }
 
 
@@ -442,7 +463,7 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID,KEY_DATE, KEY_SLEEP_TIME}, KEY_ID + "=?",new String[]{String.valueOf(id)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -460,7 +481,7 @@ public class MyDatabase extends SQLiteOpenHelper
         SQLiteDatabase db = this.getWritableDatabase();
 
 
-        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID,KEY_DATE, KEY_SLEEP_TIME, KEY_ACCESS_TOKEN }, KEY_ACCESS_TOKEN +"=?",new String[]{MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME, KEY_ACCESS_TOKEN}, KEY_ACCESS_TOKEN + "=?", new String[]{MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst())
@@ -478,38 +499,40 @@ public class MyDatabase extends SQLiteOpenHelper
             } while (cursor.moveToNext());
         }
 
-        if (list.size()>0)
+        if (list.size() > 0)
         {
-            Collections.sort(list, new Comparator<HashMap<String,String>>() {
-                public int compare(HashMap<String,String> o1, HashMap<String,String> o2) {
+            Collections.sort(list, new Comparator<HashMap<String, String>>()
+            {
+                public int compare(HashMap<String, String> o1, HashMap<String, String> o2)
+                {
                     if (o1.get(MyConstant.DATE) == null || o2.get(MyConstant.DATE) == null)
                         return 0;
-                    return o2.get(MyConstant.DATE).compareTo(o1.get(MyConstant.DATE));
+                    return convertToDate(o2.get(MyConstant.DATE)).compareTo(convertToDate(o1.get(MyConstant.DATE)));
                 }
             });
         }
 
 
         // ADD date which is missing between two dates
-        if (list.size()>1)
+        if (list.size() > 1)
         {
 
-            List<String> dates = myUtil.getDates(list.get(list.size()-1).get(MyConstant.DATE),list.get(0).get(MyConstant.DATE));
+            List<String> dates = myUtil.getDates(list.get(list.size() - 1).get(MyConstant.DATE), list.get(0).get(MyConstant.DATE));
 
-            for(String date:dates)
+            for (String date : dates)
             {
-                boolean isDateInside=false;
-                for (int i = 0; i <list.size() ; i++)
+                boolean isDateInside = false;
+                for (int i = 0; i < list.size(); i++)
                 {
-                    if(list.get(i).get(MyConstant.DATE).equals(date))
+                    if (list.get(i).get(MyConstant.DATE).equals(date))
                     {
-                        isDateInside=true;
+                        isDateInside = true;
                         break;
                     }
                 }
 
 
-                if(!isDateInside)
+                if (!isDateInside)
                 {
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put(MyConstant.ID, "0");
@@ -519,19 +542,21 @@ public class MyDatabase extends SQLiteOpenHelper
                     list.add(map);
 
 
-                    Log.e(TAG,"--MissingDate---"+date);
+                    Log.e(TAG, "--MissingDate---" + date);
                 }
             }
         }
 
 
-        if (list.size()>1)
+        if (list.size() > 1)
         {
-            Collections.sort(list, new Comparator<HashMap<String,String>>() {
-                public int compare(HashMap<String,String> o1, HashMap<String,String> o2) {
+            Collections.sort(list, new Comparator<HashMap<String, String>>()
+            {
+                public int compare(HashMap<String, String> o1, HashMap<String, String> o2)
+                {
                     if (o1.get(MyConstant.DATE) == null || o2.get(MyConstant.DATE) == null)
                         return 0;
-                    return o2.get(MyConstant.DATE).compareTo(o1.get(MyConstant.DATE));
+                    return convertToDate(o2.get(MyConstant.DATE)).compareTo(convertToDate(o1.get(MyConstant.DATE)));
                 }
             });
         }
@@ -540,8 +565,218 @@ public class MyDatabase extends SQLiteOpenHelper
     }
 
 
+    //**********************************************************************************************
+    //MY GOAL FUNCTIONALITY*************************************************************************
+    //**********************************************************************************************
 
 
+    public void addDailyGoalData(HashMap<String, String> map)
+    {
+
+
+        int ID = getDailyGoalIdOnDate(myUtil.getTodaydate());
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_DATE, myUtil.getTodaydate()); // Date
+        values.put(KEY_STEPS, map.get(MyConstant.STEPS)); // Steps
+        values.put(KEY_DISTANCE, map.get(MyConstant.DISTANCE)); // Distance
+        values.put(KEY_CALORIES, map.get(MyConstant.CALORIES)); // Calories
+        values.put(KEY_SLEEP_TIME, map.get(MyConstant.SLEEP)); // Sleep Time
+
+
+//        Log.e(TAG, "----addDailyGoalData----ID---" + ID);
+
+        if (ID == 0)
+        {
+            // Inserting Row
+            db.insert(TABLE_DAILY_GOAL_RECORD, null, values);
+        }
+        else
+        {
+            // Updating Row
+            db.update(TABLE_DAILY_GOAL_RECORD, values, KEY_ID + " = ?", new String[]{String.valueOf(ID)});
+        }
+
+        db.close(); // Closing database connection
+    }
+
+
+    public int getDailyGoalIdOnDate(String date)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_DAILY_GOAL_RECORD, new String[]{KEY_ID}, KEY_DATE + "=?", new String[]{String.valueOf(date)}, null, null, null, null);
+        if (cursor != null)
+        {
+            cursor.moveToFirst();
+        }
+
+
+        if (cursor.getCount() > 0)
+        {
+            return Integer.parseInt(cursor.getString(0));
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    // Getting  Goal Data on date
+    public HashMap<String, String> getGoalDataOnDate(String date)
+    {
+        HashMap<String, String> map = new HashMap<String, String>();
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_DAILY_GOAL_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_DISTANCE, KEY_CALORIES, KEY_SLEEP_TIME}, KEY_DATE + "=?", new String[]{date}, null, null, null, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst())
+        {
+            do
+            {
+                map.put(MyConstant.ID, cursor.getString(0));
+                map.put(MyConstant.DATE, cursor.getString(1));
+                map.put(MyConstant.STEPS, cursor.getString(2));
+                map.put(MyConstant.DISTANCE, cursor.getString(3));
+                map.put(MyConstant.CALORIES, cursor.getString(4));
+                map.put(MyConstant.SLEEP, cursor.getString(5));
+
+                // Adding contact to list
+
+            } while (cursor.moveToNext());
+        }
+
+        return map;
+
+    }
+
+
+    //get data of previous date if exists
+    public HashMap<String, String> getGoalDataOnDateIfExistsOrNot(String date)
+    {
+        HashMap<String, String> map = new HashMap<>();
+
+        String localDate = date;
+
+
+        // Previous date of the oldest date if previous date equals to oldest date i.e we get
+        String oldestDate = myUtil.getPreviousDate(getOldestDateInDailyGoalRecord());
+
+//        Log.e(TAG, "---------Database Oldest Date--------" + oldestDate);
+
+
+        while (!oldestDate.equals(localDate))
+        {
+            if (getDailyGoalIdOnDate(localDate) == 0)
+            {
+                localDate = myUtil.getPreviousDate(localDate);
+            }
+            else
+            {
+
+//                Log.e(TAG, "---------Database DATA--------" + getGoalDataOnDate(localDate));
+                map.putAll(getGoalDataOnDate(localDate));
+                break;
+            }
+        }
+
+
+        return map;
+
+    }
+
+
+    // Getting all Goal Data
+    public ArrayList<HashMap<String, String>> getAllGoalData()
+    {
+        ArrayList<HashMap<String, String>> list = new ArrayList<>();
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_DAILY_GOAL_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_DISTANCE, KEY_CALORIES, KEY_SLEEP_TIME}, null, null, null, null, null, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst())
+        {
+            do
+            {
+
+                HashMap<String, String> map = new HashMap<String, String>();
+
+                map.put(MyConstant.ID, cursor.getString(0));
+                map.put(MyConstant.DATE, cursor.getString(1));
+                map.put(MyConstant.STEPS, cursor.getString(2));
+                map.put(MyConstant.DISTANCE, cursor.getString(3));
+                map.put(MyConstant.CALORIES, cursor.getString(4));
+                map.put(MyConstant.SLEEP, cursor.getString(5));
+
+                list.add(map);
+
+                // Adding contact to list
+
+            } while (cursor.moveToNext());
+        }
+
+        return list;
+
+    }
+
+
+    // To get oldest date
+    public String getOldestDateInDailyGoalRecord()
+    {
+        String oldestDate = "";
+
+        ArrayList<HashMap<String, String>> list = getAllGoalData();
+
+        if (list.size() > 0)
+        {
+
+            Collections.sort(list, new Comparator<HashMap<String, String>>()
+            {
+                public int compare(HashMap<String, String> o1, HashMap<String, String> o2)
+                {
+                    if (o1.get(MyConstant.DATE) == null || o2.get(MyConstant.DATE) == null)
+                        return 0;
+
+                    return convertToDate(o1.get(MyConstant.DATE)).compareTo(convertToDate((o2.get(MyConstant.DATE))));
+                }
+            });
+        }
+
+        if (list.size() > 0)
+        {
+            oldestDate = list.get(0).get(MyConstant.DATE);
+        }
+
+        return oldestDate;
+
+    }
+
+    // Convert String to Date
+    public Date convertToDate(String date)
+    {
+
+        Date d = null;
+
+        final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        try
+        {
+            d = formatter.parse(date);
+        } catch (ParseException e)
+        {
+
+            e.printStackTrace();
+        }
+
+        return d;
+
+    }
 
 
 }

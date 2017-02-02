@@ -655,28 +655,33 @@ public class MyUtil
     }
 
 
-//    // Convert millis to Hr Mins
-//    public String convertMillisToHrMins()
-//    {
-//        try
-//        {
-//
-//            long millis = Long.parseLong(list.get(position).get(MyConstant.SLEEP));
-//            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
-//
-//            int Hours = (int) (millis / (1000 * 60 * 60));
-//            int Mins = (int) (millis / (1000 * 60)) % 60;
-//
-//            String diff = Hours + ":" + Mins; // updated value every1 second
-//
-//            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
-//            txtv_time.setText(""+Hours +" Hrs. "+Mins+" Mins");
-//
-//        } catch (Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//    }
+    // To Get Previous Date
+    public String getPreviousDate(String inputDate)
+    {
+//        inputDate = "15-12-2015"; // for example
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try
+        {
+
+//            Log.e(TAG, "Input date : " + inputDate);
+
+            Date date = format.parse(inputDate);
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+
+            c.add(Calendar.DATE, -1);
+            inputDate = format.format(c.getTime());
+
+//            Log.e(TAG, "Previous date : " + inputDate);
+
+        } catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            inputDate = "";
+        }
+        return inputDate;
+    }
 
 
 }

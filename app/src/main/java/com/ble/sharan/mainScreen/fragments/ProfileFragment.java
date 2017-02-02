@@ -4,22 +4,17 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.InputFilter;
 import android.text.method.KeyListener;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
@@ -65,9 +60,13 @@ public class ProfileFragment extends Fragment
     Drawable EDIT_ICON;
 
 
-    Switch switch_distance;
-    Switch switch_weight;
-    Switch switch_stride;
+//    Switch switch_distance;
+//    Switch switch_weight;
+//    Switch switch_stride;
+
+    RadioGroup radioGroupDistance;
+    RadioGroup radioGroupWeight;
+    RadioGroup radioGroupStride;
 
 
     MyUtil.HeightWeightHelper heightWeightHelper = new MyUtil.HeightWeightHelper();
@@ -168,15 +167,18 @@ public class ProfileFragment extends Fragment
             }
         });
 
+        radioGroupDistance = (RadioGroup) view.findViewById(R.id.radioGroupDistance);
+        radioGroupWeight = (RadioGroup) view.findViewById(R.id.radioGroupWeight);
+        radioGroupStride = (RadioGroup) view.findViewById(R.id.radioGroupStride);
 
-        switch_distance = (Switch) view.findViewById(R.id.switch_distance);
-        switch_weight = (Switch) view.findViewById(R.id.switch_weight);
-        switch_stride = (Switch) view.findViewById(R.id.switch_stride);
-
-
-        switch_distance.setOnCheckedChangeListener(new SwitchListener(switch_distance));
-        switch_weight.setOnCheckedChangeListener(new SwitchListener(switch_weight));
-        switch_stride.setOnCheckedChangeListener(new SwitchListener(switch_stride));
+//        switch_distance = (Switch) view.findViewById(R.id.switch_distance);
+//        switch_weight = (Switch) view.findViewById(R.id.switch_weight);
+//        switch_stride = (Switch) view.findViewById(R.id.switch_stride);
+//
+//
+//        switch_distance.setOnCheckedChangeListener(new SwitchListener(switch_distance));
+//        switch_weight.setOnCheckedChangeListener(new SwitchListener(switch_weight));
+//        switch_stride.setOnCheckedChangeListener(new SwitchListener(switch_stride));
 
 
         String distanceUnit = MySharedPreference.getInstance().getDistanceUnit(context);
@@ -184,9 +186,22 @@ public class ProfileFragment extends Fragment
         String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
 
 
-        switch_distance.setChecked(distanceUnit.equals(MyConstant.KM));
-        switch_weight.setChecked(weightUnit.equals(MyConstant.KG));
-        switch_stride.setChecked(strideUnit.equals(MyConstant.CM));
+//        switch_distance.setChecked(distanceUnit.equals(MyConstant.KM));
+//        switch_weight.setChecked(weightUnit.equals(MyConstant.KG));
+//        switch_stride.setChecked(strideUnit.equals(MyConstant.CM));
+
+
+
+        radioGroupDistance.setOnCheckedChangeListener(new RadioGroupListener(radioGroupDistance));
+        radioGroupWeight.setOnCheckedChangeListener(new RadioGroupListener(radioGroupWeight));
+        radioGroupStride.setOnCheckedChangeListener(new RadioGroupListener(radioGroupStride));
+
+
+
+
+        radioGroupDistance.check(distanceUnit.equals(MyConstant.KM) ? R.id.radioButtonKm : R.id.radioButtonMiles);
+        radioGroupWeight.check(weightUnit.equals(MyConstant.KG) ? R.id.radioButtonKg : R.id.radioButtonLbs);
+        radioGroupStride.check(strideUnit.equals(MyConstant.CM) ? R.id.radioButtonCm : R.id.radioButtonIn);
 
 
         refreshUI();
@@ -194,133 +209,35 @@ public class ProfileFragment extends Fragment
     }
 
 
-    class MyTouchListerner implements View.OnTouchListener
+    public class RadioGroupListener implements RadioGroup.OnCheckedChangeListener
     {
-        EditText editText;
 
-        public MyTouchListerner(EditText editText)
+        RadioGroup radioGroup;
+
+        RadioGroupListener(RadioGroup radioGroup)
         {
-            this.editText = editText;
+            this.radioGroup=radioGroup;
         }
 
         @Override
-        public boolean onTouch(View v, MotionEvent event)
+        public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
         {
-            final int DRAWABLE_LEFT = 0;
-            final int DRAWABLE_TOP = 1;
-            final int DRAWABLE_RIGHT = 2;
-            final int DRAWABLE_BOTTOM = 3;
-
-            if (event.getAction() == MotionEvent.ACTION_UP)
+            if (radioGroup == radioGroupDistance && startWork)
             {
-                if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
-                {
+                MySharedPreference.getInstance().saveDistanceUnit(context, checkedId == R.id.radioButtonKm ? MyConstant.KM : MyConstant.MILES);
 
-                    if (editText == edtv_name)
-                    {
-                        edtv_name.setKeyListener(edtv_nameListener);
-                    }
-                    else if (editText == edtv_height)
-                    {
-                        edtv_height.setKeyListener(edtv_heightListener);
-                        edtv_height.setText(editText.getText().toString().replace("In", "").trim());
-
-                        InputFilter[] filterArray = new InputFilter[1];
-                        filterArray[0] = new InputFilter.LengthFilter(3);
-                        edtv_height.setFilters(filterArray);
-                    }
-                    else if (editText == edtv_weight)
-                    {
-                        edtv_weight.setKeyListener(edtv_weightListener);
-                        edtv_weight.setText(editText.getText().toString().replace("Kg", "").replace("Lbs", "").trim());
-
-                        InputFilter[] filterArray = new InputFilter[1];
-                        filterArray[0] = new InputFilter.LengthFilter(3);
-                        edtv_weight.setFilters(filterArray);
-                    }
-                    else if (editText == edtv_stride)
-                    {
-                        edtv_stride.setKeyListener(edtv_strideListener);
-                        edtv_stride.setText(editText.getText().toString().replace("Cm", "").replace("In", "").trim());
-
-                        InputFilter[] filterArray = new InputFilter[1];
-                        filterArray[0] = new InputFilter.LengthFilter(3);
-                        edtv_stride.setFilters(filterArray);
-                    }
-//                    else if (editText == edtv_gender)
-//                    {
-//                        edtv_gender.setKeyListener(edtv_genderListener);
-//                    }
-
-
-                    editText.requestFocus();
-
-                    Drawable[] drawables = editText.getCompoundDrawables();
-
-
-//                    Log.e("Bitmap1", "---" + RIGHT_ICON_GREEN);
-//                    Log.e("Bitmap2", "---" + drawables[2]);
-
-                    if (RIGHT_ICON_GREEN == drawables[2])
-                    {
-//                        Log.e("hello", "Hello");
-                        UpdateProfile(editText);
-                    }
-                    else
-                    {
-                        editText.setCompoundDrawablesWithIntrinsicBounds(null, null, RIGHT_ICON_GREEN, null);
-
-                        MyUtil.showKeyBoard(getActivity(), editText);
-                    }
-
-
-                    /*if (event.getAction() == MotionEvent.ACTION_UP)
-                    {
-                        if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
-                        {
-                            UpdateProfile(editText);
-
-                            return true;
-                        }
-                    }
-                    return false;*/
-
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-
-    class SwitchListener implements CompoundButton.OnCheckedChangeListener
-    {
-        Switch mySwitch;
-
-        public SwitchListener(Switch mySwitch)
-        {
-            this.mySwitch = mySwitch;
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b)
-        {
-            if (mySwitch == switch_distance && startWork)
-            {
-                MySharedPreference.getInstance().saveDistanceUnit(context, b ? MyConstant.KM : MyConstant.MILES);
-//                Log.e("switch_distance", "" + b);
                 MyUtil.showToast(context,"Distance unit changed.");
 
             }
-            else if (mySwitch == switch_weight && startWork)
+            else if (radioGroup == radioGroupWeight && startWork)
             {
-                MySharedPreference.getInstance().saveWeightUnit(context, b ? MyConstant.KG : MyConstant.LBS);
-                Log.e("switch_weight", "" + b);
+                MySharedPreference.getInstance().saveWeightUnit(context, checkedId == R.id.radioButtonKg ? MyConstant.KG : MyConstant.LBS);
+
 
                 double d = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
 
                 double result;
-                if (b)
+                if (checkedId == R.id.radioButtonKg)
                 {
                     result = heightWeightHelper.lbToKgConverter(d);
                 }
@@ -336,16 +253,15 @@ public class ProfileFragment extends Fragment
 
                 MyUtil.showToast(context,"Weight unit changed.");
             }
-            else if (mySwitch == switch_stride && startWork)
+            else if (radioGroup == radioGroupStride && startWork)
             {
-                MySharedPreference.getInstance().saveStrideUnit(context, b ? MyConstant.CM : MyConstant.IN);
-                Log.e("switch_stride", "" + b);
+                MySharedPreference.getInstance().saveStrideUnit(context, checkedId == R.id.radioButtonCm ? MyConstant.CM : MyConstant.IN);
 
                 double d = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
 
 
                 double result;
-                if (b)
+                if (checkedId == R.id.radioButtonCm)
                 {
                     result = heightWeightHelper.inchesToCm(d);
                 }
@@ -365,74 +281,7 @@ public class ProfileFragment extends Fragment
     }
 
 
-    private void UpdateProfile(EditText editText)
-    {
-        editText.setKeyListener(null);
 
-
-        String value = editText.getText().toString().trim();
-
-
-        if (editText == edtv_name)
-        {
-            MySharedPreference.getInstance().saveName(context, value);
-            txtv_username.setText(MySharedPreference.getInstance().getName(context));
-            ((MainActivityNew) getActivity()).onRefreshName();
-
-
-        }
-        else if (editText == edtv_height)
-        {
-            value = value.isEmpty() ? "0" : value;
-
-            MySharedPreference.getInstance().saveHeight(context, value);
-
-            InputFilter[] filterArray = new InputFilter[1];
-            filterArray[0] = new InputFilter.LengthFilter(6);
-            edtv_height.setFilters(filterArray);
-
-            edtv_height.setText(MySharedPreference.getInstance().getHeight(context));
-
-            refreshDataToBLE();
-
-        }
-        else if (editText == edtv_weight)
-        {
-            value = value.isEmpty() ? "0" : value;
-
-            MySharedPreference.getInstance().saveWeight(context, value);
-
-            InputFilter[] filterArray = new InputFilter[1];
-            filterArray[0] = new InputFilter.LengthFilter(8);
-            edtv_weight.setFilters(filterArray);
-
-            edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
-
-            refreshDataToBLE();
-
-        }
-        else if (editText == edtv_stride)
-        {
-
-            value = value.isEmpty() ? "0" : value;
-
-            MySharedPreference.getInstance().saveStride(context, value);
-
-
-            InputFilter[] filterArray = new InputFilter[1];
-            filterArray[0] = new InputFilter.LengthFilter(7);
-            edtv_stride.setFilters(filterArray);
-
-            edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
-
-            refreshDataToBLE();
-
-        }
-        editText.setCompoundDrawablesWithIntrinsicBounds(null, null, EDIT_ICON, null);
-
-        MyUtil.hideKeyBoard(getActivity());
-
-    }
 
     private void refreshUI()
     {
@@ -469,11 +318,255 @@ public class ProfileFragment extends Fragment
     }
 
 
-    public void refreshDataToBLE()
-    {
-        ((MainActivityNew) context).setHeightWeightStrideDataToBLE();
+//    public void refreshDataToBLE()
+//    {
+//        ((MainActivityNew) context).setHeightWeightStrideDataToBLE();
+//
+//    }
 
-    }
+
+
+//    private void UpdateProfile(EditText editText)
+//    {
+//        editText.setKeyListener(null);
+//
+//
+//        String value = editText.getText().toString().trim();
+//
+//
+//        if (editText == edtv_name)
+//        {
+//            MySharedPreference.getInstance().saveName(context, value);
+//            txtv_username.setText(MySharedPreference.getInstance().getName(context));
+//            ((MainActivityNew) getActivity()).onRefreshName();
+//
+//
+//        }
+//        else if (editText == edtv_height)
+//        {
+//            value = value.isEmpty() ? "0" : value;
+//
+//            MySharedPreference.getInstance().saveHeight(context, value);
+//
+//            InputFilter[] filterArray = new InputFilter[1];
+//            filterArray[0] = new InputFilter.LengthFilter(6);
+//            edtv_height.setFilters(filterArray);
+//
+//            edtv_height.setText(MySharedPreference.getInstance().getHeight(context));
+//
+//            refreshDataToBLE();
+//
+//        }
+//        else if (editText == edtv_weight)
+//        {
+//            value = value.isEmpty() ? "0" : value;
+//
+//            MySharedPreference.getInstance().saveWeight(context, value);
+//
+//            InputFilter[] filterArray = new InputFilter[1];
+//            filterArray[0] = new InputFilter.LengthFilter(8);
+//            edtv_weight.setFilters(filterArray);
+//
+//            edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
+//
+//            refreshDataToBLE();
+//
+//        }
+//        else if (editText == edtv_stride)
+//        {
+//
+//            value = value.isEmpty() ? "0" : value;
+//
+//            MySharedPreference.getInstance().saveStride(context, value);
+//
+//
+//            InputFilter[] filterArray = new InputFilter[1];
+//            filterArray[0] = new InputFilter.LengthFilter(7);
+//            edtv_stride.setFilters(filterArray);
+//
+//            edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
+//
+//            refreshDataToBLE();
+//
+//        }
+//        editText.setCompoundDrawablesWithIntrinsicBounds(null, null, EDIT_ICON, null);
+//
+//        MyUtil.hideKeyBoard(getActivity());
+//
+//    }
+
+
+
+    //    class MyTouchListerner implements View.OnTouchListener
+//    {
+//        EditText editText;
+//
+//        public MyTouchListerner(EditText editText)
+//        {
+//            this.editText = editText;
+//        }
+//
+//        @Override
+//        public boolean onTouch(View v, MotionEvent event)
+//        {
+//            final int DRAWABLE_LEFT = 0;
+//            final int DRAWABLE_TOP = 1;
+//            final int DRAWABLE_RIGHT = 2;
+//            final int DRAWABLE_BOTTOM = 3;
+//
+//            if (event.getAction() == MotionEvent.ACTION_UP)
+//            {
+//                if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
+//                {
+//
+//                    if (editText == edtv_name)
+//                    {
+//                        edtv_name.setKeyListener(edtv_nameListener);
+//                    }
+//                    else if (editText == edtv_height)
+//                    {
+//                        edtv_height.setKeyListener(edtv_heightListener);
+//                        edtv_height.setText(editText.getText().toString().replace("In", "").trim());
+//
+//                        InputFilter[] filterArray = new InputFilter[1];
+//                        filterArray[0] = new InputFilter.LengthFilter(3);
+//                        edtv_height.setFilters(filterArray);
+//                    }
+//                    else if (editText == edtv_weight)
+//                    {
+//                        edtv_weight.setKeyListener(edtv_weightListener);
+//                        edtv_weight.setText(editText.getText().toString().replace("Kg", "").replace("Lbs", "").trim());
+//
+//                        InputFilter[] filterArray = new InputFilter[1];
+//                        filterArray[0] = new InputFilter.LengthFilter(3);
+//                        edtv_weight.setFilters(filterArray);
+//                    }
+//                    else if (editText == edtv_stride)
+//                    {
+//                        edtv_stride.setKeyListener(edtv_strideListener);
+//                        edtv_stride.setText(editText.getText().toString().replace("Cm", "").replace("In", "").trim());
+//
+//                        InputFilter[] filterArray = new InputFilter[1];
+//                        filterArray[0] = new InputFilter.LengthFilter(3);
+//                        edtv_stride.setFilters(filterArray);
+//                    }
+////                    else if (editText == edtv_gender)
+////                    {
+////                        edtv_gender.setKeyListener(edtv_genderListener);
+////                    }
+//
+//
+//                    editText.requestFocus();
+//
+//                    Drawable[] drawables = editText.getCompoundDrawables();
+//
+//
+////                    Log.e("Bitmap1", "---" + RIGHT_ICON_GREEN);
+////                    Log.e("Bitmap2", "---" + drawables[2]);
+//
+//                    if (RIGHT_ICON_GREEN == drawables[2])
+//                    {
+////                        Log.e("hello", "Hello");
+//                        UpdateProfile(editText);
+//                    }
+//                    else
+//                    {
+//                        editText.setCompoundDrawablesWithIntrinsicBounds(null, null, RIGHT_ICON_GREEN, null);
+//
+//                        MyUtil.showKeyBoard(getActivity(), editText);
+//                    }
+//
+//
+//                    /*if (event.getAction() == MotionEvent.ACTION_UP)
+//                    {
+//                        if (event.getRawX() >= (editText.getRight() - editText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width()))
+//                        {
+//                            UpdateProfile(editText);
+//
+//                            return true;
+//                        }
+//                    }
+//                    return false;*/
+//
+//                    return true;
+//                }
+//            }
+//            return false;
+//        }
+//    }
+
+
+//    class SwitchListener implements CompoundButton.OnCheckedChangeListener
+//    {
+//        Switch mySwitch;
+//
+//        public SwitchListener(Switch mySwitch)
+//        {
+//            this.mySwitch = mySwitch;
+//        }
+//
+//        @Override
+//        public void onCheckedChanged(CompoundButton compoundButton, boolean b)
+//        {
+//            if (mySwitch == switch_distance && startWork)
+//            {
+//                MySharedPreference.getInstance().saveDistanceUnit(context, b ? MyConstant.KM : MyConstant.MILES);
+////                Log.e("switch_distance", "" + b);
+//                MyUtil.showToast(context,"Distance unit changed.");
+//
+//            }
+//            else if (mySwitch == switch_weight && startWork)
+//            {
+//                MySharedPreference.getInstance().saveWeightUnit(context, b ? MyConstant.KG : MyConstant.LBS);
+//                Log.e("switch_weight", "" + b);
+//
+//                double d = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
+//
+//                double result;
+//                if (b)
+//                {
+//                    result = heightWeightHelper.lbToKgConverter(d);
+//                }
+//                else
+//                {
+//                    result = heightWeightHelper.kgToLbConverter(d);
+//                }
+//
+//                MySharedPreference.getInstance().saveWeight(context, String.valueOf(result));
+//
+//                edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
+//
+//
+//                MyUtil.showToast(context,"Weight unit changed.");
+//            }
+//            else if (mySwitch == switch_stride && startWork)
+//            {
+//                MySharedPreference.getInstance().saveStrideUnit(context, b ? MyConstant.CM : MyConstant.IN);
+//                Log.e("switch_stride", "" + b);
+//
+//                double d = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
+//
+//
+//                double result;
+//                if (b)
+//                {
+//                    result = heightWeightHelper.inchesToCm(d);
+//                }
+//                else
+//                {
+//                    result = heightWeightHelper.cmToInches(d);
+//                }
+//
+//
+//                MySharedPreference.getInstance().saveStride(context, String.valueOf(result));
+//
+//                edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
+//
+//                MyUtil.showToast(context,"Stride Measurement unit changed.");
+//            }
+//        }
+//    }
+
 
 
 }

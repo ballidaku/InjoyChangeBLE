@@ -13,8 +13,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.ble.sharan.R;
+import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+
+import java.util.HashMap;
 
 /**
  * Created by brst-pc93 on 1/4/17.
@@ -43,6 +47,10 @@ public class MyDailyGoal extends Fragment
     Drawable RIGHT_ICON_GREEN;
     Drawable EDIT_ICON;
 
+
+    MyDatabase myDatabase;
+    MyUtil myUtil=new MyUtil();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -55,6 +63,9 @@ public class MyDailyGoal extends Fragment
 
             RIGHT_ICON_GREEN = getContext().getResources().getDrawable(R.drawable.ic_tick);
             EDIT_ICON = getContext().getResources().getDrawable(R.mipmap.ic_edit);
+
+
+            myDatabase=new MyDatabase(context);
 
             setUpIds();
 
@@ -236,11 +247,22 @@ public class MyDailyGoal extends Fragment
             edtv_sleep.setText(MySharedPreference.getInstance().getDailySleep(context));
         }
 
+        HashMap<String,String> map=new HashMap<>();
+        map.put(MyConstant.STEPS,MySharedPreference.getInstance().getDailySteps(context));
+        map.put(MyConstant.DISTANCE,MySharedPreference.getInstance().getDailyMiles(context).replace("per day", "").trim());
+        map.put(MyConstant.CALORIES,MySharedPreference.getInstance().getDailyCalories(context).replace("per day", "").trim());
+        map.put(MyConstant.SLEEP,MySharedPreference.getInstance().getDailySleep(context).replace("hour per day", "").trim());
+
+        myDatabase.addDailyGoalData(map);
+
+
         editText.setCompoundDrawablesWithIntrinsicBounds(null, null, EDIT_ICON, null);
 
 
         MyUtil.hideKeyBoard(getActivity());
     }
+
+
 
 
     private void refreshUI()

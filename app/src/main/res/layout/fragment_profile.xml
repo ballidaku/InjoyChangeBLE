@@ -109,18 +109,18 @@
                         android:textSize="20sp"/>
 
 
-                   <!-- <EditText
-                        android:id="@+id/edtv_name"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:drawableEnd="@mipmap/ic_edit"
-                        android:drawablePadding="5dp"
-                        android:hint="Name"
-                        android:inputType="textCapSentences"
-                        android:padding="5dp"
-                        android:theme="@style/EditTextStyle2"/>-->
+                    <!-- <EditText
+                         android:id="@+id/edtv_name"
+                         android:layout_width="0dp"
+                         android:layout_height="wrap_content"
+                         android:layout_weight="1"
+                         android:background="@null"
+                         android:drawableEnd="@mipmap/ic_edit"
+                         android:drawablePadding="5dp"
+                         android:hint="Name"
+                         android:inputType="textCapSentences"
+                         android:padding="5dp"
+                         android:theme="@style/EditTextStyle2"/>-->
 
                     <EditText
                         android:id="@+id/edtv_name"
@@ -276,16 +276,15 @@
                         android:textSize="20sp"/>
 
 
-
                     <TextView
                         android:id="@+id/txtv_gender_temp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:paddingLeft="@dimen/_7sdp"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/_14sdp"
-                        android:text=""
-                        android:paddingLeft="@dimen/_7sdp"
                         android:textStyle="bold"/>
 
                     <Spinner
@@ -293,8 +292,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:visibility="gone"
-                        android:entries="@array/gender"/>
+                        android:entries="@array/gender"
+                        android:visibility="gone"/>
 
 
                 </LinearLayout>
@@ -359,34 +358,57 @@
                         android:text="Distance"
                         android:textSize="20sp"/>
 
-                    <LinearLayout
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <Switch
-                            android:id="@+id/switch_distance"
-                            android:layout_width="100dp"
+                        <RadioButton
+                            android:id="@+id/radioButtonMiles"
+                            android:layout_width="@dimen/_55sdp"
                             android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:padding="5dp"
-                            android:switchMinWidth="30dp"
-                            android:textOff=""
-                            android:textOn=""
-                            android:thumb="@mipmap/thumb_track"
-                            android:track="@mipmap/switch_bg"/>
+                            android:text="Miles"/>
 
-
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <RadioButton
+                            android:id="@+id/radioButtonKm"
+                            android:layout_width="@dimen/_45sdp"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:padding="5dp"
-                            android:text="Miles/Km"/>
+                            android:text="Km"/>
 
 
-                    </LinearLayout>
+                    </RadioGroup>
+
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<Switch-->
+                            <!--android:id="@+id/switch_distance"-->
+                            <!--android:layout_width="100dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:checked="false"-->
+                            <!--android:padding="5dp"-->
+                            <!--android:switchMinWidth="30dp"-->
+                            <!--android:textOff=""-->
+                            <!--android:textOn=""-->
+                            <!--android:thumb="@mipmap/thumb_track"-->
+                            <!--android:track="@mipmap/switch_bg"/>-->
+
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:gravity="center"-->
+                            <!--android:padding="5dp"-->
+                            <!--android:text="Miles/Km"/>-->
+
+
+                    <!--</LinearLayout>-->
 
 
                 </LinearLayout>
@@ -414,34 +436,55 @@
                         android:text="Weight"
                         android:textSize="20sp"/>
 
-                    <LinearLayout
+                    <RadioGroup
+                        android:id="@+id/radioGroupWeight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <Switch
-                            android:id="@+id/switch_weight"
-                            android:layout_width="100dp"
+                        <RadioButton
+                            android:id="@+id/radioButtonLbs"
+                            android:layout_width="@dimen/_55sdp"
                             android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:padding="5dp"
-                            android:switchMinWidth="24dp"
-                            android:textOff=""
-                            android:textOn=""
-                            android:thumb="@mipmap/thumb_track"
-                            android:track="@mipmap/switch_bg"/>
+                            android:text="Lbs"/>
 
-
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <RadioButton
+                            android:id="@+id/radioButtonKg"
+                            android:layout_width="@dimen/_45sdp"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:padding="5dp"
-                            android:text="Lbs/Kg"/>
+                            android:text="Kg"/>
 
 
-                    </LinearLayout>
+                    </RadioGroup>
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<Switch-->
+                            <!--android:id="@+id/switch_weight"-->
+                            <!--android:layout_width="100dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:checked="false"-->
+                            <!--android:padding="5dp"-->
+                            <!--android:switchMinWidth="24dp"-->
+                            <!--android:textOff=""-->
+                            <!--android:textOn=""-->
+                            <!--android:thumb="@mipmap/thumb_track"-->
+                            <!--android:track="@mipmap/switch_bg"/>-->
+
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:gravity="center"-->
+                            <!--android:padding="5dp"-->
+                            <!--android:text="Lbs/Kg"/>-->
+
+
+                    <!--</LinearLayout>-->
 
 
                 </LinearLayout>
@@ -469,34 +512,55 @@
                         android:textSize="20sp"/>
 
 
-                    <LinearLayout
+                    <RadioGroup
+                        android:id="@+id/radioGroupStride"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <Switch
-                            android:id="@+id/switch_stride"
-                            android:layout_width="100dp"
+                        <RadioButton
+                            android:id="@+id/radioButtonIn"
+                            android:layout_width="@dimen/_55sdp"
                             android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:padding="5dp"
-                            android:switchMinWidth="24dp"
-                            android:textOff=""
-                            android:textOn=""
-                            android:thumb="@mipmap/thumb_track"
-                            android:track="@mipmap/switch_bg"/>
+                            android:text="In"/>
 
-
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <RadioButton
+                            android:id="@+id/radioButtonCm"
+                            android:layout_width="@dimen/_45sdp"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:padding="5dp"
-                            android:text="In/Cm"/>
+                            android:text="Cm"/>
+
+                    </RadioGroup>
 
 
-                    </LinearLayout>
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="right"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<Switch-->
+                            <!--android:id="@+id/switch_stride"-->
+                            <!--android:layout_width="100dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:checked="false"-->
+                            <!--android:padding="5dp"-->
+                            <!--android:switchMinWidth="24dp"-->
+                            <!--android:textOff=""-->
+                            <!--android:textOn=""-->
+                            <!--android:thumb="@mipmap/thumb_track"-->
+                            <!--android:track="@mipmap/switch_bg"/>-->
+
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:gravity="center"-->
+                            <!--android:padding="5dp"-->
+                            <!--android:text="In/Cm"/>-->
+
+
+                    <!--</LinearLayout>-->
 
 
                 </LinearLayout>

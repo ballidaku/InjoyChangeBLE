@@ -54,8 +54,6 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
     TextView txtv_totalSleep;
 
 
-
-
     TextView txtv_stepsWeeklyAverage;
     TextView txtv_caloriesWeeklyAverage;
     TextView txtv_distanceWeeklyAverage;
@@ -90,16 +88,18 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
             setUpIds();
 
 
-            if( getArguments().getString(MyConstant.FROM_WHERE).equals(MyConstant.MY_WEEK_SLEEP_FRAGMENT))
+            if (getArguments().getString(MyConstant.FROM_WHERE).equals(MyConstant.MY_WEEK_SLEEP_FRAGMENT))
             {
 
 
-                scrollView.postDelayed(new Runnable() {
+                scrollView.postDelayed(new Runnable()
+                {
                     @Override
-                    public void run() {
+                    public void run()
+                    {
                         scrollView.fullScroll(ScrollView.FOCUS_DOWN);
                     }
-                },100);
+                }, 100);
 
             }
 
@@ -113,13 +113,12 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
     private void setUpIds()
     {
 
-        scrollView=(ScrollView)view.findViewById(R.id.scrollView);
+        scrollView = (ScrollView) view.findViewById(R.id.scrollView);
 
         txtv_totalSteps = (TextView) view.findViewById(R.id.txtv_totalSteps);
         txtv_totalCalories = (TextView) view.findViewById(R.id.txtv_totalCalories);
         txtv_totalDistance = (TextView) view.findViewById(R.id.txtv_totalDistance);
         txtv_totalSleep = (TextView) view.findViewById(R.id.txtv_totalSleep);
-
 
 
         txtv_stepsWeeklyAverage = (TextView) view.findViewById(R.id.txtv_stepsWeeklyAverage);
@@ -128,20 +127,14 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
         txtv_sleepWeeklyAverage = (TextView) view.findViewById(R.id.txtv_sleepWeeklyAverage);
 
 
-
         mChart1 = (BarChart) view.findViewById(R.id.chart1);
         mChart2 = (BarChart) view.findViewById(R.id.chart2);
         mChart3 = (BarChart) view.findViewById(R.id.chart3);
         mChart4 = (BarChart) view.findViewById(R.id.chart4);
 
 
-
-
         Calendar calendar = Calendar.getInstance();
         Log.v("Current Week", String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR)));
-
-
-
 
 
         XAxis xAxis1 = mChart1.getXAxis();
@@ -155,8 +148,6 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
 
         XAxis xAxis4 = mChart4.getXAxis();
         xAxis4.setPosition(XAxis.XAxisPosition.BOTTOM);
-
-
 
 
         getStartEndOFWeek(calendar.get(Calendar.WEEK_OF_YEAR), calendar.get(Calendar.YEAR));
@@ -174,25 +165,24 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date startDate = calendar.getTime();
         String startDateInStr = formatter.format(startDate);
-        System.out.println("...date..." + startDateInStr);
+//        System.out.println("...date..." + startDateInStr);
 
         calendar.add(Calendar.DATE, 6);
         Date enddate = calendar.getTime();
         String endDaString = formatter.format(enddate);
-        System.out.println("...date..." + endDaString);
+//        System.out.println("...date..." + endDaString);
 
 
-       Log.e("Missing List","-----"+ myUtil.getDates(startDateInStr,endDaString));
+//        Log.e("Missing List", "-----" + myUtil.getDates(startDateInStr, endDaString));
 
 
-        setData(myUtil.getDates(startDateInStr,endDaString));
+        setData(myUtil.getDates(startDateInStr, endDaString));
 
     }
 
 
     public void setData(List<String> dates)
     {
-
 
 
         // STEPS
@@ -207,36 +197,41 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
         {
             stepsMap.put(date, 0);
 
-            for (int i = 0; i <list.size() ; i++)
+            for (int i = 0; i < list.size(); i++)
             {
-                if(date.equals(list.get(i).getDate()))
+                if (date.equals(list.get(i).getDate()))
                 {
-                    int steps=Integer.parseInt(list.get(i).getSteps());
+                    int steps = Integer.parseInt(list.get(i).getSteps());
 
-                    stepsMap.put(date,steps );
+                    stepsMap.put(date, steps);
 
                     totalSteps += steps;
                 }
             }
         }
 
-        Log.e(TAG, "MAP----" + stepsMap);
+//        Log.e(TAG, "MAP----" + stepsMap);
 
         ArrayList<String> xAxisValues = getXAxisWeakValues();
 
-        ArrayList<BarEntry> yAxisStepData = new ArrayList<>();
-        yAxisStepData.add(new BarEntry(stepsMap.get(dates.get(0)), 0));
-        yAxisStepData.add(new BarEntry(stepsMap.get(dates.get(1)), 1));
-        yAxisStepData.add(new BarEntry(stepsMap.get(dates.get(2)), 2));
-        yAxisStepData.add(new BarEntry(stepsMap.get(dates.get(3)), 3));
-        yAxisStepData.add(new BarEntry(stepsMap.get(dates.get(4)), 4));
-        yAxisStepData.add(new BarEntry(stepsMap.get(dates.get(5)), 5));
-        yAxisStepData.add(new BarEntry(stepsMap.get(dates.get(6)), 6));
 
+//        percentage(MyConstant.STEPS,dates.get(0), (float)stepsMap.get(dates.get(0)));
+        ;
+
+
+        ArrayList<BarEntry> yAxisStepData = new ArrayList<>();
+
+        yAxisStepData.add(new BarEntry(percentage(MyConstant.STEPS,dates.get(0),(float)stepsMap.get(dates.get(0))), 0));
+        yAxisStepData.add(new BarEntry(percentage(MyConstant.STEPS,dates.get(1),(float)stepsMap.get(dates.get(1))), 1));
+        yAxisStepData.add(new BarEntry(percentage(MyConstant.STEPS,dates.get(2),(float)stepsMap.get(dates.get(2))), 2));
+        yAxisStepData.add(new BarEntry(percentage(MyConstant.STEPS,dates.get(3),(float)stepsMap.get(dates.get(3))), 3));
+        yAxisStepData.add(new BarEntry(percentage(MyConstant.STEPS,dates.get(4),(float)stepsMap.get(dates.get(4))), 4));
+        yAxisStepData.add(new BarEntry(percentage(MyConstant.STEPS,dates.get(5),(float)stepsMap.get(dates.get(5))), 5));
+        yAxisStepData.add(new BarEntry(percentage(MyConstant.STEPS,dates.get(6),(float)stepsMap.get(dates.get(6))), 6));
+//        yAxisStepData.add(new BarEntry(stepsMap.get(dates.get(6)), 6));
 
 
         drawGraph(mChart1, yAxisStepData, xAxisValues, R.color.colorYellowNew);
-
 
 
         // Set Data
@@ -244,82 +239,104 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
         txtv_stepsWeeklyAverage.setText(String.valueOf(totalSteps / 7));
 
 
-
         // CALORIES
 
         ArrayList<BarEntry> yAxisCaloriesData = new ArrayList<>();
-        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context,stepsMap.get(dates.get(0)))), 0));
-        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context,stepsMap.get(dates.get(1)))), 1));
-        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context,stepsMap.get(dates.get(2)))), 2));
-        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context,stepsMap.get(dates.get(3)))), 3));
-        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context,stepsMap.get(dates.get(4)))), 4));
-        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context,stepsMap.get(dates.get(5)))), 5));
-        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context,stepsMap.get(dates.get(6)))), 6));
 
+
+
+//        percentage(MyConstant.CALORIES,dates.get(0),Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(0)))));
+
+        yAxisCaloriesData.add(new BarEntry(percentage(MyConstant.CALORIES,dates.get(0),Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(0))))), 0));
+        yAxisCaloriesData.add(new BarEntry(percentage(MyConstant.CALORIES,dates.get(1),Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(1))))), 1));
+        yAxisCaloriesData.add(new BarEntry(percentage(MyConstant.CALORIES,dates.get(2),Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(2))))), 2));
+        yAxisCaloriesData.add(new BarEntry(percentage(MyConstant.CALORIES,dates.get(3),Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(3))))), 3));
+        yAxisCaloriesData.add(new BarEntry(percentage(MyConstant.CALORIES,dates.get(4),Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(4))))), 4));
+        yAxisCaloriesData.add(new BarEntry(percentage(MyConstant.CALORIES,dates.get(5),Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(5))))), 5));
+        yAxisCaloriesData.add(new BarEntry(percentage(MyConstant.CALORIES,dates.get(6),Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(6))))), 6));
+
+
+
+//        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(0)))), 0));
+//        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(1)))), 1));
+//        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(2)))), 2));
+//        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(3)))), 3));
+//        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(4)))), 4));
+//        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(5)))), 5));
+//        yAxisCaloriesData.add(new BarEntry(Float.parseFloat(myUtil.stepsToCalories(context, stepsMap.get(dates.get(6)))), 6));
 
 
         drawGraph(mChart2, yAxisCaloriesData, xAxisValues, R.color.colorBlueNew);
 
 
-
-        txtv_totalCalories.setText(String.valueOf(Math.round(Float.parseFloat(myUtil.stepsToCalories(context,totalSteps)))));
-        txtv_caloriesWeeklyAverage.setText(String.valueOf(Math.round(Float.parseFloat(myUtil.stepsToCalories(context,totalSteps/7)))));
+        txtv_totalCalories.setText(String.valueOf(Math.round(Float.parseFloat(myUtil.stepsToCalories(context, totalSteps)))));
+        txtv_caloriesWeeklyAverage.setText(String.valueOf(Math.round(Float.parseFloat(myUtil.stepsToCalories(context, totalSteps / 7)))));
 
 
         // DISTANCE
 
         ArrayList<BarEntry> yAxisDistanceData = new ArrayList<>();
-        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context,stepsMap.get(dates.get(0)))), 0));
-        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context,stepsMap.get(dates.get(1)))), 1));
-        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context,stepsMap.get(dates.get(2)))), 2));
-        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context,stepsMap.get(dates.get(3)))), 3));
-        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context,stepsMap.get(dates.get(4)))), 4));
-        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context,stepsMap.get(dates.get(5)))), 5));
-        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context,stepsMap.get(dates.get(6)))), 6));
 
+        yAxisDistanceData.add(new BarEntry(percentage(MyConstant.DISTANCE,dates.get(0),Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(0))))), 0));
+        yAxisDistanceData.add(new BarEntry(percentage(MyConstant.DISTANCE,dates.get(1),Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(1))))), 1));
+        yAxisDistanceData.add(new BarEntry(percentage(MyConstant.DISTANCE,dates.get(2),Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(2))))), 2));
+        yAxisDistanceData.add(new BarEntry(percentage(MyConstant.DISTANCE,dates.get(3),Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(3))))), 3));
+        yAxisDistanceData.add(new BarEntry(percentage(MyConstant.DISTANCE,dates.get(4),Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(4))))), 4));
+        yAxisDistanceData.add(new BarEntry(percentage(MyConstant.DISTANCE,dates.get(5),Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(5))))), 5));
+        yAxisDistanceData.add(new BarEntry(percentage(MyConstant.DISTANCE,dates.get(6),Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(6))))), 6));
+
+//        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(0)))), 0));
+//        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(1)))), 1));
+//        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(2)))), 2));
+//        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(3)))), 3));
+//        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(4)))), 4));
+//        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(5)))), 5));
+//        yAxisDistanceData.add(new BarEntry(Float.parseFloat(myUtil.stepsToDistance(context, stepsMap.get(dates.get(6)))), 6));
 
 
         drawGraph(mChart3, yAxisDistanceData, xAxisValues, R.color.colorOrangeNew);
 
 
-
-        txtv_totalDistance.setText(String.valueOf(Float.parseFloat(myUtil.stepsToDistance(context,totalSteps))));
-        txtv_distanceWeeklyAverage.setText(String.valueOf(Float.parseFloat(myUtil.stepsToDistance(context,totalSteps/7))));
-
+        txtv_totalDistance.setText(String.valueOf(Float.parseFloat(myUtil.stepsToDistance(context, totalSteps))));
+        txtv_distanceWeeklyAverage.setText(String.valueOf(Float.parseFloat(myUtil.stepsToDistance(context, totalSteps / 7))));
 
 
         // SLEEP
 
 
+        long t0 = myDatabase.getSleepMillisOnDate(dates.get(0));
+        long t1 = myDatabase.getSleepMillisOnDate(dates.get(1));
+        long t2 = myDatabase.getSleepMillisOnDate(dates.get(2));
+        long t3 = myDatabase.getSleepMillisOnDate(dates.get(3));
+        long t4 = myDatabase.getSleepMillisOnDate(dates.get(4));
+        long t5 = myDatabase.getSleepMillisOnDate(dates.get(5));
+        long t6 = myDatabase.getSleepMillisOnDate(dates.get(6));
 
-
-       long t0= myDatabase.getSleepMillisOnDate(dates.get(0));
-       long t1= myDatabase.getSleepMillisOnDate(dates.get(1));
-       long t2= myDatabase.getSleepMillisOnDate(dates.get(2));
-       long t3= myDatabase.getSleepMillisOnDate(dates.get(3));
-       long t4= myDatabase.getSleepMillisOnDate(dates.get(4));
-       long t5= myDatabase.getSleepMillisOnDate(dates.get(5));
-       long t6= myDatabase.getSleepMillisOnDate(dates.get(6));
-
-        String all=myUtil.convertMillisToHrMins(t0+t1+t2+t3+t4+t5+t6);
-        String average=myUtil.convertMillisToHrMins((t0+t1+t2+t3+t4+t5+t6)/7);
-
-
+        String all = myUtil.convertMillisToHrMins(t0 + t1 + t2 + t3 + t4 + t5 + t6);
+        String average = myUtil.convertMillisToHrMins((t0 + t1 + t2 + t3 + t4 + t5 + t6) / 7);
 
 
         ArrayList<BarEntry> yAxisSleepData = new ArrayList<>();
-        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t0), 0));
-        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t1), 1));
-        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t2), 2));
-        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t3), 3));
-        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t4), 4));
-        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t5), 5));
-        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t6), 6));
 
+
+        yAxisSleepData.add(new BarEntry(percentage(MyConstant.SLEEP,dates.get(0),(float)t0), 0));
+        yAxisSleepData.add(new BarEntry(percentage(MyConstant.SLEEP,dates.get(1),(float)t1), 1));
+        yAxisSleepData.add(new BarEntry(percentage(MyConstant.SLEEP,dates.get(2),(float)t2), 2));
+        yAxisSleepData.add(new BarEntry(percentage(MyConstant.SLEEP,dates.get(3),(float)t3), 3));
+        yAxisSleepData.add(new BarEntry(percentage(MyConstant.SLEEP,dates.get(4),(float)t4), 4));
+        yAxisSleepData.add(new BarEntry(percentage(MyConstant.SLEEP,dates.get(5),(float)t5), 5));
+        yAxisSleepData.add(new BarEntry(percentage(MyConstant.SLEEP,dates.get(6),(float)t6), 6));
+
+//        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t0), 0));
+//        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t1), 1));
+//        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t2), 2));
+//        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t3), 3));
+//        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t4), 4));
+//        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t5), 5));
+//        yAxisSleepData.add(new BarEntry(convertMillisToDecimalHr(t6), 6));
 
 
         drawGraph(mChart4, yAxisSleepData, xAxisValues, R.color.colorGreenNew);
-
 
 
         txtv_totalSleep.setText(all);
@@ -329,10 +346,52 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
     }
 
 
+    public float percentage(String type,String date, float obtained)
+    {
+
+        HashMap<String, String> mapGoal = myDatabase.getGoalDataOnDateIfExistsOrNot(date);
+
+//        Log.e(TAG, "---------Database  Goal Data   " + mapGoal);
+
+
+        float total=0.0f;
+
+
+        if(MyConstant.STEPS.equals(type))
+        {
+
+            total = Float.parseFloat(mapGoal.get(MyConstant.STEPS));
+        }
+        else  if(MyConstant.CALORIES.equals(type))
+        {
+
+            total = Float.parseFloat(mapGoal.get(MyConstant.CALORIES));
+        }
+        else if (MyConstant.DISTANCE.equals(type))
+        {
+
+            total = Float.parseFloat(mapGoal.get(MyConstant.DISTANCE));
+        }
+        else if (MyConstant.SLEEP.equals(type))
+        {
+
+            total = Integer.parseInt(mapGoal.get(MyConstant.SLEEP))*60*60*1000;
+        }
+
+        float percentage = (obtained*100)/total;
+
+
+//        Log.e(TAG, "--Type---"+type+"----obtained---"+obtained+"-----percentage data    " + percentage);
+
+
+        return percentage;
+
+    }
+
 
     public float convertMillisToDecimalHr(long millis)
     {
-        float time= 0.0f;
+        float time = 0.0f;
         try
         {
             SimpleDateFormat myFormat = new SimpleDateFormat("HH.mm");
@@ -352,7 +411,6 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
 
         return time;
     }
-
 
 
     @Override
