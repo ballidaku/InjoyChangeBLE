@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -33,9 +32,10 @@ import android.widget.TextView;
 
 import com.ble.sharan.MyUartService;
 import com.ble.sharan.R;
-import com.ble.sharan.adapters.DrawerList_Adapter;
+import com.ble.sharan.adapters.DrawerListAdapter;
 import com.ble.sharan.loginScreen.LoginActivity;
 import com.ble.sharan.mainScreen.fragments.AlarmFragment;
+import com.ble.sharan.mainScreen.fragments.Challenge;
 import com.ble.sharan.mainScreen.fragments.FragmentDrawer;
 import com.ble.sharan.mainScreen.fragments.HealthData;
 import com.ble.sharan.mainScreen.fragments.MyDailyGoal;
@@ -43,6 +43,12 @@ import com.ble.sharan.mainScreen.fragments.MyWeek;
 import com.ble.sharan.mainScreen.fragments.Overall;
 import com.ble.sharan.mainScreen.fragments.ProfileFragment;
 import com.ble.sharan.mainScreen.fragments.Today;
+import com.ble.sharan.mainScreen.fragments.challengeFragments.CheckIn;
+import com.ble.sharan.mainScreen.fragments.challengeFragments.DailyInspiration;
+import com.ble.sharan.mainScreen.fragments.challengeFragments.MyPoints;
+import com.ble.sharan.mainScreen.fragments.challengeFragments.ShareWin;
+import com.ble.sharan.mainScreen.fragments.challengeFragments.ShoutOut;
+import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyDialogs;
@@ -88,7 +94,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     ListView listv_drawer;
     ArrayList<String> listDataHeader;
 
-    DrawerList_Adapter drawer_adapter;
+    DrawerListAdapter drawer_adapter;
     Context context;
 
     LinearLayout frame_layout_profile;
@@ -132,6 +138,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     TextView txtv_myinfo;
     TextView txtv_alarm;
 
+    String challengeHeadings[] = {
+            "Daily Inspiration",
+            "Check-In with Yourself",
+            "My Points",
+            "Shout Outs",
+            "Tool Box",
+            "Share A Win & Weekly Video"
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -162,6 +177,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
         oneTimeDialogToConnect(context);
+
+
+        // IF there is no data
+        myDatabase.addDailyGoalDataFirstTime(context);
+
+        if (myDatabase.getTodaySteps(context) == 0)
+        {
+            myDatabase.addStepData(context, new BeanRecords(myUtil.getTodaydate(), "0"));
+        }
 
 
     }
@@ -226,19 +250,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         onRefreshName();
 
-
-   /*     runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-//                TestingSleep2();
-            }
-        });*/
-
-
-
-
     }
+
 
     private void setBottomTabSelected(View v, ImageView image, TextView txtv)
     {
@@ -296,7 +309,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         listDataHeader.add("Sign Out");
 
 
-        drawer_adapter = new DrawerList_Adapter(context, listDataHeader, 0);
+        drawer_adapter = new DrawerListAdapter(context, listDataHeader, 0);
         listv_drawer.setAdapter(drawer_adapter);
 
         listv_drawer.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -350,6 +363,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         {
             txtv_heading.setText("Alarm");
         }
+        else if (groupPosition == 8)
+        {
+            txtv_heading.setText("Challenge");
+        }
         else
         {
             txtv_heading.setText(listDataHeader.get(groupPosition));
@@ -360,7 +377,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         switch (groupPosition)
         {
             case 0:
-                //fragment = new HomeFragmentNew();
                 fragment = new HealthData();
                 break;
 
@@ -373,11 +389,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 txtv_right.setVisibility(View.VISIBLE);
                 fragment = new MyWeek();
                 break;
-
-
-//            case 3:
-//                fragment = new PreviousWeek();
-//                break;
 
 
             case 3:
@@ -402,6 +413,12 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 break;
 
 
+            case 8:
+
+                fragment = new Challenge();
+                break;
+
+
             default:
                 break;
         }
@@ -412,6 +429,55 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     }
 
+
+    // For Challenge Fragments
+    public void displayView2(int position)
+    {
+        txtv_heading.setText(challengeHeadings[position]);
+
+        Fragment myFragment = null;
+
+        switch (position)
+        {
+            case 0:
+                myFragment = new DailyInspiration();
+                break;
+
+
+            case 1:
+                myFragment = new CheckIn();
+                break;
+
+            case 2:
+                myFragment = new MyPoints();
+                break;
+
+
+            case 3:
+                myFragment = new ShoutOut();
+                break;
+
+
+            case 4:
+                //  fragment = new Overall();
+                break;
+
+
+            case 5:
+
+                myFragment = new ShareWin();
+                break;
+
+
+            default:
+                break;
+        }
+
+
+        changeFragment2(myFragment);
+
+
+    }
 
     private void changeFragment(Fragment fragment)
     {
@@ -425,6 +491,39 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    private void changeFragment2(Fragment fragment)
+    {
+        if (fragment != null)
+        {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+    }
+
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+
+
+        if (fragment instanceof Challenge)
+        {
+            int count = getSupportFragmentManager().getBackStackEntryCount();
+
+            Log.e("Count", "" + count);
+
+            if (count == 0)
+            {
+                txtv_heading.setText("Challenge");
+            }
+        }
+
+
+    }
 
     public void onRefreshName()
     {
@@ -450,10 +549,14 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.linearLayout_challenge:
 
 
-                String url = MyConstant.CHALLENGE_API;
+                /*String url = MyConstant.CHALLENGE_API;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
-                startActivity(i);
+                startActivity(i);*/
+
+                setBottomTabSelected(view_challenge, imgv_challenge, txtv_challenge);
+
+                displayView(8);
 
 
                 break;
@@ -659,13 +762,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             else if (action.equals(MyUartService.ACTION_GATT_SERVICES_DISCOVERED))
             {
 
-                if(mService != null)
+                if (mService != null)
                 {
                     mService.enableTXNotification();
                 }
 
-                MyCountDownTimer countDownTimer = new MyCountDownTimer(2000, 1000);
-                countDownTimer.start();
+                SetDateCountDownTimer setDateCountDownTimer = new SetDateCountDownTimer(2000, 1000);
+                setDateCountDownTimer.start();
 
             }
             else if (action.equals(MyUartService.ACTION_DATA_AVAILABLE))
@@ -705,12 +808,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     else if (COMMAND.equals(MyConstant.GET_STEPS))
                     {
 
-
-//                        if (fragment instanceof HomeFragmentNew)
-//                        {
-//                            ((HomeFragmentNew) fragment).calculate(stepsTaken = new String(txValue, "UTF-8"));
-//                        }
-//                        else
                         if (fragment instanceof Today)
                         {
 
@@ -719,7 +816,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                             try
                             {
-                                if(stepsString.length()==6)
+                                if (stepsString.length() == 6)
                                 {
                                     stepsTaken = Integer.parseInt(stepsString);
 
@@ -740,12 +837,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                             {
                                 e.printStackTrace();
                             }
-
-
-
                         }
-
-
                     }
 
                     Log.e("Response of Command", "" + new String(txValue, "UTF-8"));
@@ -822,9 +914,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public class MyCountDownTimer extends CountDownTimer
+    public class SetDateCountDownTimer extends CountDownTimer
     {
-        public MyCountDownTimer(long startTime, long interval)
+        public SetDateCountDownTimer(long startTime, long interval)
         {
             super(startTime, interval);
         }
@@ -832,11 +924,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onFinish()
         {
-
             // TODO
             setDateToBLE();
-//            getTotalSteps();
-//            commandToBLE(MyConstant.GET_STEPS);
         }
 
         @Override
@@ -897,8 +986,17 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //        {
 //            reconnectTimer.start();
 //        }
+
     }
 
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        // sharan Work for reconnection
+        reconnectTimer.cancel();
+    }
 
     @Override
     protected void onDestroy()
@@ -1117,7 +1215,34 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         if (list.size() > 0)
         {
-            myDatabase.addSleepData(context,list);
+            myDatabase.addSleepData(context, list);
+
+
+            //To set sleep time to band
+            String todayDate = myUtil.getTodaydate();
+
+            boolean isSleepRecordAvailable = false;
+
+            for (int i = 0; i < list.size(); i++)
+            {
+                for (String listDate : list.get(i).keySet())
+                {
+                    if (listDate.equals(todayDate))
+                    {
+                        isSleepRecordAvailable = true;
+//                        Log.e(TAG,"----Date----"+todayDate+"-----"+list.get(i).get(listDate));
+                        processingSleeptimeForSetting(list.get(i).get(listDate));
+
+                        break;
+                    }
+                }
+            }
+
+            if (!isSleepRecordAvailable)
+            {
+                processingSleeptimeForSetting((long) 0);
+            }
+
         }
 
         if (fragment instanceof Today)
@@ -1126,6 +1251,17 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
 
     }
+
+    public void processingSleeptimeForSetting(Long millis)
+    {
+        String time = myUtil.convertMillisToHrMins(millis).replace(":", "");
+//        Log.e(TAG,"----Time----"+time);
+        String commandSleepTime = "setslptm" + time;
+
+        commandToBLE(commandSleepTime);
+
+    }
+
 
     public String parseDateToddMMyyyy(String time)
     {

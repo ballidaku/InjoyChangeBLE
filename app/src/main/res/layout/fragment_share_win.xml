@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_background_with_shadow">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="@dimen/_3sdp"
+            card_view:cardElevation="@dimen/_5sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/_10sdp"
+                    android:text="Share a Win"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_18sdp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGray"/>
+
+
+                <com.ble.sharan.myUtilities.AutoScrollViewPager
+                    android:id="@+id/autoScrollViewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+
+                </com.ble.sharan.myUtilities.AutoScrollViewPager>
+
+                <com.ble.sharan.myUtilities.CirclePageIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"/>
+
+                <!--  <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
+                      android:id="@+id/viewpager"
+                      android:layout_width="wrap_content"
+                      android:layout_height="200dp"
+                      android:paddingLeft="@dimen/normal_margin"
+                      android:paddingRight="@dimen/normal_margin">
+
+                  </cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager>-->
+
+                <!--  <me.relex.circleindicator.CircleIndicator
+                      android:id="@+id/indicator"
+                      android:layout_width="match_parent"
+                      android:layout_height="40dp"
+                      app:ci_drawable="@drawable/indicator"
+
+                      />-->
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/ic_module_btn"/>
+
+                    <TextView
+                        android:id="@+id/seeall_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_gravity="end|center"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:background="@drawable/gray_background_round_corners"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="See All"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"/>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            app:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="@dimen/_3sdp"
+            card_view:cardElevation="@dimen/_5sdp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/_10sdp"
+                    android:text="Weekly Video"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/_18sdp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGray"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:background="@mipmap/ic_video"/>
+
+                <ImageView
+                    android:id="@+id/btnvid_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@mipmap/ic_submit_20_points"/>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>
+
+
+

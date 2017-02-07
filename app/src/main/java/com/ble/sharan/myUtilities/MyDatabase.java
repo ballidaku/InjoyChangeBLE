@@ -339,16 +339,18 @@ public class MyDatabase extends SQLiteOpenHelper
 
                 if (ID == 0)
                 {
-                    SQLiteDatabase db = this.getWritableDatabase();
+//                    SQLiteDatabase db = this.getWritableDatabase();
+//
+//                    ContentValues values = new ContentValues();
+//                    values.put(KEY_DATE, date); // Date
+//                    values.put(KEY_SLEEP_TIME, MILLIS);
+//                    values.put(KEY_ACCESS_TOKEN, MySharedPreference.getInstance().getAccessToken(context)); // Access Token
+//
+//                    // Inserting Row
+//                    db.insert(TABLE_SLEEP_RECORD, null, values);
+//                    db.close(); // Closing database connection
 
-                    ContentValues values = new ContentValues();
-                    values.put(KEY_DATE, date); // Date
-                    values.put(KEY_SLEEP_TIME, MILLIS);
-                    values.put(KEY_ACCESS_TOKEN, MySharedPreference.getInstance().getAccessToken(context)); // Access Token
-
-                    // Inserting Row
-                    db.insert(TABLE_SLEEP_RECORD, null, values);
-                    db.close(); // Closing database connection
+                    addSleepDataOnDate(context,date,MILLIS);
 
                 }
                 else
@@ -362,6 +364,21 @@ public class MyDatabase extends SQLiteOpenHelper
 
         }
 
+    }
+
+
+    public void addSleepDataOnDate(Context context, String date, long MILLIS)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_DATE, date); // Date
+        values.put(KEY_SLEEP_TIME, MILLIS);
+        values.put(KEY_ACCESS_TOKEN, MySharedPreference.getInstance().getAccessToken(context)); // Access Token
+
+        // Inserting Row
+        db.insert(TABLE_SLEEP_RECORD, null, values);
+        db.close(); // Closing database connection
     }
 
 
@@ -478,6 +495,14 @@ public class MyDatabase extends SQLiteOpenHelper
 
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
 
+
+        // If there is no sleep data of Today date
+        if(getSleepIdOnDate(context,myUtil.getTodaydate()) == 0)
+        {
+            addSleepDataOnDate(context,myUtil.getTodaydate(),0);
+        }
+
+
         SQLiteDatabase db = this.getWritableDatabase();
 
 
@@ -542,10 +567,15 @@ public class MyDatabase extends SQLiteOpenHelper
                     list.add(map);
 
 
-                    Log.e(TAG, "--MissingDate---" + date);
+                   // Log.e(TAG, "--MissingDate---" + date);
                 }
             }
         }
+
+
+
+
+
 
 
         if (list.size() > 1)
@@ -568,6 +598,26 @@ public class MyDatabase extends SQLiteOpenHelper
     //**********************************************************************************************
     //MY GOAL FUNCTIONALITY*************************************************************************
     //**********************************************************************************************
+
+    // Add data first time in case to show graph, only added if there is no data
+    public void addDailyGoalDataFirstTime(Context context)
+    {
+
+        if(getAllGoalData().size()==0)
+        {
+            HashMap<String, String> map = new HashMap<>();
+            map.put(MyConstant.STEPS, MySharedPreference.getInstance().getDailySteps(context));
+            map.put(MyConstant.DISTANCE, MySharedPreference.getInstance().getDailyMiles(context).replace("per day", "").trim());
+            map.put(MyConstant.CALORIES, MySharedPreference.getInstance().getDailyCalories(context).replace("per day", "").trim());
+            map.put(MyConstant.SLEEP, MySharedPreference.getInstance().getDailySleep(context).replace("hour per day", "").trim());
+
+            addDailyGoalData(map);
+        }
+    }
+
+
+
+
 
 
     public void addDailyGoalData(HashMap<String, String> map)
@@ -606,9 +656,12 @@ public class MyDatabase extends SQLiteOpenHelper
 
     public int getDailyGoalIdOnDate(String date)
     {
+
+       // Log.e(TAG,"-----getDailyGoalIdOnDate------DATE-----"+date);
+
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_DAILY_GOAL_RECORD, new String[]{KEY_ID}, KEY_DATE + "=?", new String[]{String.valueOf(date)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_DAILY_GOAL_RECORD, new String[]{KEY_ID}, KEY_DATE + " = ?", new String[]{String.valueOf(date)}, null, null, null, null);
         if (cursor != null)
         {
             cursor.moveToFirst();
@@ -661,29 +714,45 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         HashMap<String, String> map = new HashMap<>();
 
-        String localDate = date;
+        String currentWeekDate = date;
 
 
         // Previous date of the oldest date if previous date equals to oldest date i.e we get
-        String oldestDate = myUtil.getPreviousDate(getOldestDateInDailyGoalRecord());
+        String oldestDateInDatabase=getOldestDateInDailyGoalRecord();
+        String previousDateOfOldestDate = myUtil.getPreviousDate(oldestDateInDatabase);
 
-//        Log.e(TAG, "---------Database Oldest Date--------" + oldestDate);
+     //   Log.e(TAG, "----Oldest Date----" + getOldestDateInDailyGoalRecord()+"-----oldestDate----"+previousDateOfOldestDate+"-----currentWeekDate date-----"+currentWeekDate);
 
 
-        while (!oldestDate.equals(localDate))
+        if(myUtil.convertStringToDate(currentWeekDate).before(myUtil.convertStringToDate(oldestDateInDatabase)))
         {
-            if (getDailyGoalIdOnDate(localDate) == 0)
-            {
-                localDate = myUtil.getPreviousDate(localDate);
-            }
-            else
+            map.putAll(getGoalDataOnDate(oldestDateInDatabase));
+          //  Log.e(TAG, "---------Database 1");
+
+
+        }
+        else
+        {
+            while (!previousDateOfOldestDate.equals(currentWeekDate))
             {
 
-//                Log.e(TAG, "---------Database DATA--------" + getGoalDataOnDate(localDate));
-                map.putAll(getGoalDataOnDate(localDate));
-                break;
+                if (getDailyGoalIdOnDate(currentWeekDate) == 0)
+                {
+                    currentWeekDate = myUtil.getPreviousDate(currentWeekDate);
+                   // Log.e(TAG, "---------Database 2");
+                }
+                else
+                {
+
+                  //  Log.e(TAG, "---------Database DATA--------" + getGoalDataOnDate(currentWeekDate));
+                    map.putAll(getGoalDataOnDate(currentWeekDate));
+                   // Log.e(TAG, "---------Database 3");
+                    break;
+                }
             }
+
         }
+
 
 
         return map;

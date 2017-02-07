@@ -1,7 +1,6 @@
 package com.ble.sharan.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +91,7 @@ public class MyWeekSleepAdapter extends BaseAdapter
 
             String diff = Hours + ":" + Mins; // updated value every1 second
 
-            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+            //Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
             txtv_time.setText(""+Hours +" Hrs. "+Mins+" Mins");
 
         } catch (Exception e)

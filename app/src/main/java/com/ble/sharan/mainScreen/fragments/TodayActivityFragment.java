@@ -2,6 +2,7 @@ package com.ble.sharan.mainScreen.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
@@ -59,6 +60,8 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
     MyDatabase myDatabase;
 
+    AutoRefreshTimer autoRefreshTimer;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -76,10 +79,14 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             myDatabase = new MyDatabase(getActivity());
 
 
+            autoRefreshTimer = new AutoRefreshTimer(20000, 16000);
+
+
         }
 
         return view;
     }
+
 
     private void setUpIds()
     {
@@ -117,9 +124,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
                 MyUtil.showToast(context,"Please wait... data is refreshing.");
 
-                ((MainActivityNew) context).commandToBLE(MyConstant.GET_STEPS);
-//                ((MainActivityNew) context).commandToBLE(MyConstant.GET_SLEEP);
-                //((MainActivityNew) context).TestingSleep2();
+                onRefresh();
 
                 break;
 
@@ -130,6 +135,8 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //                    public void run()
 //                    {
                 ((MainActivityNew) context).connectDisconnect();
+
+
 //                    }
 //                });
 
@@ -139,18 +146,40 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     }
 
 
+    public void onRefresh()
+    {
+        ((MainActivityNew) context).commandToBLE(MyConstant.GET_STEPS);
+    }
+
+
     @Override
     public void onResume()
     {
         super.onResume();
-
+       // Log.e(TAG, "onResume");
 
         // onRefresh get the previous Count
         calculate(((MainActivityNew) context).stepsTaken,false);
 
         bleStatus(((MainActivityNew) context).BLE_STATUS);
 
-        Log.d(TAG, "onResume");
+    }
+
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+       // Log.e(TAG, "onPause");
+        autoRefreshTimer.cancel();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+       // Log.e(TAG, "onDestroy");
+        autoRefreshTimer.cancel();
     }
 
 
@@ -189,7 +218,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         for (int i = 0; i < list.size(); i++)
         {
-            Log.e(TAG, "Ballidaku----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps()+ "----" + list.get(i).getAccess_token());
+//            Log.e(TAG, "Ballidaku----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps()+ "----" + list.get(i).getAccess_token());
 
             // myDatabase.deleteContact(list.get(i));
         }
@@ -215,7 +244,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         refreshSleepTextView();
 
 
-        if(wantToUpdate)
+        if(wantToUpdate && myUtil.checkConnection())
         {
             SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
         }
@@ -283,6 +312,12 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
             txtv_connect_disconnect.setText("Disconnect");
             linearLayout_refresh.setEnabled(true);
+
+
+            if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
+            {
+                autoRefreshTimer.start();
+            }
         }
         else if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
         {
@@ -318,12 +353,43 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             @Override
             public void onTaskCompleted(String output)
             {
-                Log.e(TAG, "OUTPUT RESPONSE-------" + output);
+//                Log.e(TAG, "OUTPUT RESPONSE-------" + output);
             }
         }, false));
 
 
     }
 
+
+
+    //**********************************************************************************************
+    // AUTOMATIC REFRESH
+    //**********************************************************************************************
+
+
+    public class AutoRefreshTimer extends CountDownTimer
+    {
+
+        public AutoRefreshTimer(long millisInFuture, long countDownInterval)
+        {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long l)
+        {
+            Log.e(TAG, "onTick");
+        }
+
+        @Override
+        public void onFinish()
+        {
+            if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
+            {
+                onRefresh();
+                autoRefreshTimer.start();
+            }
+        }
+    }
 
 }

@@ -79,6 +79,8 @@ public class MyWeekSleepFragment extends Fragment implements View.OnClickListene
         listView_weekSleepRecords = (ListView) view.findViewById(R.id.listView_weekSleepRecords);
 
 
+
+
         updateUI();
     }
 

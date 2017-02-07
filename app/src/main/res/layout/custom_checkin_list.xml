@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/_10sdp"
+              android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/circle_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:src="@mipmap/ic_steps"/>
+
+
+    <TextView
+        android:id="@+id/txtv_heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="Daily Inspiration"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/_13sdp"/>
+
+
+    <TextView
+        android:id="@+id/num_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right|center"
+        android:text="dfsdf"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:visibility="visible"/>
+
+
+</LinearLayout>

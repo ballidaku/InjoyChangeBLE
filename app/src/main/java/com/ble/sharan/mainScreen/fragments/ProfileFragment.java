@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,7 +20,6 @@ import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by brst-pc93 on 11/4/16.
@@ -33,7 +33,7 @@ public class ProfileFragment extends Fragment
     Context context;
     View view;
 
-    CircleImageView circularImageView_Profile;
+    ImageView circularImageView_Profile;
 
     TextView txtv_username;
     TextView txtv_gender;
@@ -110,7 +110,7 @@ public class ProfileFragment extends Fragment
     private void setUpIds()
     {
 
-        circularImageView_Profile = (CircleImageView) view.findViewById(R.id.circularImageView_Profile);
+        circularImageView_Profile = (ImageView) view.findViewById(R.id.circularImageView_Profile);
 
         txtv_username = (TextView) view.findViewById(R.id.txtv_username);
         txtv_gender = (TextView) view.findViewById(R.id.txtv_gender);

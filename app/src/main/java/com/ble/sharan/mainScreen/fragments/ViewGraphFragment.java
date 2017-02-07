@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,7 +133,7 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
 
 
         Calendar calendar = Calendar.getInstance();
-        Log.v("Current Week", String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR)));
+      //  Log.v("Current Week", String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR)));
 
 
         XAxis xAxis1 = mChart1.getXAxis();
@@ -165,12 +164,12 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date startDate = calendar.getTime();
         String startDateInStr = formatter.format(startDate);
-//        System.out.println("...date..." + startDateInStr);
+       // System.out.println("...date..." + startDateInStr);
 
         calendar.add(Calendar.DATE, 6);
         Date enddate = calendar.getTime();
         String endDaString = formatter.format(enddate);
-//        System.out.println("...date..." + endDaString);
+       // System.out.println("...date..." + endDaString);
 
 
 //        Log.e("Missing List", "-----" + myUtil.getDates(startDateInStr, endDaString));
@@ -183,6 +182,8 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
 
     public void setData(List<String> dates)
     {
+
+       // Log.e(TAG,"List of week days----"+dates);
 
 
         // STEPS
@@ -348,6 +349,8 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
 
     public float percentage(String type,String date, float obtained)
     {
+
+       // Log.e(TAG, "--Type---"+type+"----date---"+date+"-----obtained---=-" + obtained);
 
         HashMap<String, String> mapGoal = myDatabase.getGoalDataOnDateIfExistsOrNot(date);
 

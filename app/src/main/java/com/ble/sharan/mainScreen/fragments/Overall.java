@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +90,7 @@ public class Overall extends Fragment
 
         for (int i = 0; i < list.size(); i++)
         {
-            Log.e("Data", "----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps());
+//            Log.e("Data", "----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps());
 
             totalSteps += Long.parseLong(list.get(i).getSteps());
         }
@@ -130,7 +129,7 @@ public class Overall extends Fragment
         strideInDouble = (strideInDouble * 0.0254) * 0.001 * 0.621371;
 
 
-        Log.e(TAG, "strideInDouble-----" + strideInDouble);
+//        Log.e(TAG, "strideInDouble-----" + strideInDouble);
 
 
 //        double stride = 0.00045; //in Km
@@ -140,7 +139,7 @@ public class Overall extends Fragment
         if(MySharedPreference.getInstance().getDistanceUnit(context).equals(MyConstant.MILES))
         {
             txtv_km_milesHeading.setText("TOTAL MILES");
-            Log.e(TAG, "distance-----" + distance);
+//            Log.e(TAG, "distance-----" + distance);
             return new DecimalFormat("##.##").format(distance);
         }
         else
