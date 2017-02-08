@@ -91,6 +91,8 @@ public class MyConstant
     public static final String CHALLENGE_API = "http://hydraflow.injoyglobal.com";
 
     public static final String UPLOAD_USER_DATA = "http://hydraflow.injoyglobal.com/api/postdata";
+    public static final String SHOUT_OUT_USERS = "http://hydraflow.injoyglobal.com/api/shout_out?scroll_id=";
+    public static final String TOP_USERS = "http://hydraflow.injoyglobal.com/api/top_users";
 
 
     //API KEYS
@@ -99,6 +101,15 @@ public class MyConstant
 
 
     public static final String STATUS = "status";
+    public static final String TRUE = "True";
+    public static final String IMAGE = "image";
+    public static final String UID = "uid";
+    public static final String COMMENT = "comment";
+    public static final String TIME = "time";
+    public static final String LIKES = "Likes";
+    public static final String DATA = "data";
+    public static final String POINTS = "points";
+    public static final String TOTAL_ELEVATION_ACTIONS = "total_elevate_actions";
 
 
     public static final String ACCESS_TOKEN = "access_token";

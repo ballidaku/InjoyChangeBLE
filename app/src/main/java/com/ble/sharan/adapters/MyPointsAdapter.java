@@ -9,6 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
+import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.MyUtil;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by brst-pc93 on 2/6/17.
@@ -17,22 +22,26 @@ import com.ble.sharan.R;
 public class MyPointsAdapter  extends BaseAdapter
 {
     Context context;
-    int images[];
-    String[] names,rank,num_val;
+
     LayoutInflater inflator;
 
-    public MyPointsAdapter(Context context, int[] images, String[] names, String[] rank, String[] num_val) {
-        this.images=images;
-        this.names=names;
-        this.rank=rank;
-        this.num_val=num_val;
+    MyUtil myUtil=new MyUtil();
+
+    List<HashMap> list;
+
+
+
+
+    public MyPointsAdapter(Context context, List<HashMap> list) {
+
         this.context=context;
+        this.list=list;
         inflator=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return images.length;
+        return list.size();
     }
 
     @Override
@@ -53,19 +62,25 @@ public class MyPointsAdapter  extends BaseAdapter
             view.setBackgroundColor(context.getResources().getColor(R.color.colorGrayWhite));
         }
 
-        ImageView circle_image=(ImageView)view.findViewById(R.id.circle_image);
 
-        TextView list_tv=(TextView)view.findViewById(R.id.list_tv);
+        HashMap hashMap=list.get(i);
 
-        TextView num_tv=(TextView)view.findViewById(R.id.num_tv);
+        ImageView imgv_user=(ImageView)view.findViewById(R.id.imgv_user);
 
-        TextView rank_tv=(TextView)view.findViewById(R.id.rank_tv);
+        TextView txtv_name=(TextView)view.findViewById(R.id.txtv_name);
+
+        TextView txtv_points=(TextView)view.findViewById(R.id.txtv_points);
+
+        TextView txtv_rank=(TextView)view.findViewById(R.id.txtv_rank);
+
+        myUtil.showImageWithPicasso(context,imgv_user,hashMap.get(MyConstant.IMAGE).toString());
 
 
-        circle_image.setImageResource(images[i]);
-        list_tv.setText(names[i]);
-        num_tv.setText(num_val[i]);
-        rank_tv.setText(rank[i]);
+
+        txtv_name.setText(hashMap.get(MyConstant.NAME).toString());
+        txtv_points.setText(hashMap.get(MyConstant.POINTS).toString()+" Pts");
+
+        txtv_rank.setText("Rank "+String.valueOf(i+1));
         return view;
     }
 }

@@ -1,9 +1,7 @@
 package com.ble.sharan.mainScreen.fragments.challengeFragments;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,21 +10,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ble.sharan.R;
+import com.ble.sharan.asyncTask.Super_AsyncTask;
+import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
 import com.ble.sharan.myUtilities.EndlessAdapter;
 import com.ble.sharan.myUtilities.EndlessListView;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,10 +39,11 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
     EndlessListView endLesslistViewShoutOut;
 
-    List<HashMap> list;
 
     ImageView check1_iv, check2_iv, check3_iv;
 
+
+    EndlessAdapter endlessAdapter;
 
     int val = 0;
 
@@ -66,6 +61,8 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
             setUpIds();
 
+            GET_DATA_FROM_SERVER();
+
         }
 
         return view;
@@ -77,40 +74,39 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
         endLesslistViewShoutOut = (EndlessListView) view.findViewById(R.id.endLesslistViewShoutOut);
 
 
-
         endLesslistViewShoutOut.setLoadingView(R.layout.loading_layout);
 
-        EndlessAdapter endlessAdapter = new EndlessAdapter(context, createlist(list, val), R.layout.custom_shoutout_list);
 
-        endLesslistViewShoutOut.setAdapter(endlessAdapter);
-        endLesslistViewShoutOut.setListener(this);
+        check1_iv = (ImageView) view.findViewById(R.id.check1_iv);
 
+        check2_iv = (ImageView) view.findViewById(R.id.check2_iv);
 
-        check1_iv = (ImageView)view. findViewById(R.id.check1_iv);
-
-        check2_iv = (ImageView)view. findViewById(R.id.check2_iv);
-
-        check3_iv = (ImageView)view. findViewById(R.id.check3_iv);
+        check3_iv = (ImageView) view.findViewById(R.id.check3_iv);
 
 
-
-        check1_iv.setOnClickListener(new View.OnClickListener() {
+        check1_iv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 check1_iv.setImageResource(R.mipmap.ic_check);
             }
         });
 
-        check2_iv.setOnClickListener(new View.OnClickListener() {
+        check2_iv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 check2_iv.setImageResource(R.mipmap.ic_check);
             }
         });
 
-        check3_iv.setOnClickListener(new View.OnClickListener() {
+        check3_iv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 check3_iv.setImageResource(R.mipmap.ic_check);
             }
         });
@@ -118,39 +114,54 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
     }
 
-
-    private List<HashMap> createlist(List<HashMap> list, int val)
+    public void GET_DATA_FROM_SERVER()
     {
 
-        Log.d("val", val + "");
-        list = new ArrayList<HashMap>();
-        StrictMode.ThreadPolicy threadPolicy = new StrictMode.ThreadPolicy.Builder().build();
-        StrictMode.setThreadPolicy(threadPolicy);
-        try
+
+        MyUtil.execute(new Super_AsyncTask(context, MyConstant.SHOUT_OUT_USERS + val, new Super_AsyncTask_Interface()
         {
-
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet("http://hydraflow.injoyglobal.com/api/shout_out?scroll_id=" + val);
-            Log.d("api", val + " " + "http://hydraflow.injoyglobal.com/api/shout_out?scroll_id=" + val);
-            HttpResponse httpResponse = httpClient.execute(httpGet);
-            String str = EntityUtils.toString(httpResponse.getEntity());
-
-            if (str != null)
-
+            @Override
+            public void onTaskCompleted(String output)
             {
                 try
                 {
 
-                    JSONArray jsonArray = new JSONArray(str);
-                    for (int i = 0; i < jsonArray.length(); i++)
+                    JSONObject object = new JSONObject(output);
+
+                    String status = object.getString(MyConstant.STATUS);
+
+                    if (status.equals(MyConstant.TRUE))
                     {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        HashMap hashMap = new HashMap();
-                        hashMap.put(MyConstant.NAME, jsonObject.get("name"));
-                        hashMap.put("image", jsonObject.get("image"));
+                        List<HashMap> list = new ArrayList<>();
 
-                        list.add(hashMap);
+                        JSONArray jsonArray = object.getJSONArray(MyConstant.DATA);
+                        ;
+                        for (int i = 0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            HashMap hashMap = new HashMap();
 
+                            hashMap.put(MyConstant.ID, jsonObject.get(MyConstant.ID));
+                            hashMap.put(MyConstant.UID, jsonObject.get(MyConstant.UID));
+                            hashMap.put(MyConstant.COMMENT, jsonObject.get(MyConstant.COMMENT));
+                            hashMap.put(MyConstant.NAME, jsonObject.get(MyConstant.NAME));
+                            hashMap.put(MyConstant.IMAGE, jsonObject.get(MyConstant.IMAGE));
+                            hashMap.put(MyConstant.DATE, jsonObject.get(MyConstant.DATE));
+                            hashMap.put(MyConstant.TIME, jsonObject.get(MyConstant.TIME));
+                            hashMap.put(MyConstant.LIKES, jsonObject.get(MyConstant.LIKES));
+
+                            list.add(hashMap);
+
+                        }
+
+                        setData(list);
+
+
+                    }
+                    else
+                    {
+                        endLesslistViewShoutOut.removeFooter();
+                        MyUtil.showToast(context,"No more data");
                     }
 
 
@@ -158,15 +169,28 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
                 {
                     e.printStackTrace();
                 }
-
             }
+        }, true));
 
-        } catch (IOException e)
+
+    }
+
+    public void setData(List<HashMap> list)
+    {
+
+
+        if (val == 0)
         {
-            e.printStackTrace();
+            endlessAdapter = new EndlessAdapter(context, list, R.layout.custom_shoutout_list);
+            endLesslistViewShoutOut.setAdapter(endlessAdapter);
+            endLesslistViewShoutOut.setListener(this);
+        }
+        else
+        {
+            endLesslistViewShoutOut.addNewData(list);
         }
 
-        return list;
+
     }
 
 
@@ -174,35 +198,15 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
     public void loadData()
     {
 
-        FakeNetLoader fl = new FakeNetLoader();
+        val = val + 10;
 
-        fl.execute();
+        Log.e("VAL", "" + val);
+
+        GET_DATA_FROM_SERVER();
+
     }
 
-    private class FakeNetLoader extends AsyncTask<String, Void, List<HashMap>>
-    {
-        @Override
-        protected List<HashMap> doInBackground(String... strings)
-        {
-            val = val + 10;
-            try
-            {
-                Thread.sleep(2000);
-            } catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
 
-            return createlist(list, val);
-        }
-
-        @Override
-        protected void onPostExecute(List<HashMap> been)
-        {
-            super.onPostExecute(been);
-            endLesslistViewShoutOut.addNewData(been);
-        }
-    }
 
 
 }

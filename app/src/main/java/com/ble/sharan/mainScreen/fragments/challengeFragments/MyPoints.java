@@ -8,10 +8,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.MyPointsAdapter;
+import com.ble.sharan.asyncTask.Super_AsyncTask;
+import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by brst-pc93 on 2/6/17.
@@ -23,24 +35,12 @@ public class MyPoints extends Fragment
     Context context;
     View view;
 
+
+    TextView txtv_total;
+
     ListView listViewPoints;
 
-
-
-    int[] images = {R.mipmap.ic_imag1,
-            R.mipmap.ic_imag2,
-            R.mipmap.ic_imag3,
-            R.mipmap.ic_imag4,
-            R.mipmap.ic_imag5
-    };
-
-    String[] names = {"Victor White", "Rachal Hall", "Donald Lopez", "Paule Bell", "Shania Twain"};
-
-    String[] rank = {"Rank 1", "Rank 2", "Rank 3", "Rank 4", "Rank 5"};
-
-    String[] num_val = {"1920 Pts", "1600 Pts", "1470 Pts", "1366 Pts", "1280 Pts"};
-
-
+    MyPointsAdapter myPointsAdapter;
 
     MyUtil myUtil = new MyUtil();
 
@@ -58,6 +58,8 @@ public class MyPoints extends Fragment
 
             setUpIds();
 
+            GET_DATA_FROM_SERVER();
+
         }
 
         return view;
@@ -65,23 +67,81 @@ public class MyPoints extends Fragment
 
     private void setUpIds()
     {
-        listViewPoints = (ListView)view.findViewById(R.id.listViewPoints);
+        listViewPoints = (ListView) view.findViewById(R.id.listViewPoints);
 
-        MyPointsAdapter myPointsAdapter = new MyPointsAdapter(context, images, names, rank, num_val);
-        listViewPoints.setAdapter(myPointsAdapter);
-        myUtil.setListViewHeight(listViewPoints);
+        txtv_total = (TextView) view.findViewById(R.id.txtv_total);
 
-        listViewPoints.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        listViewPoints.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
 
-//                Intent intent = new Intent(PointsActivity.this, ShoutOutActivity.class);
-//                startActivity(intent);
+
             }
         });
 
 
+    }
+
+    public void GET_DATA_FROM_SERVER()
+    {
+
+        MyUtil.execute(new Super_AsyncTask(context, MyConstant.TOP_USERS, new Super_AsyncTask_Interface()
+        {
+            @Override
+            public void onTaskCompleted(String output)
+            {
+                try
+                {
+
+                    JSONObject object = new JSONObject(output);
+
+                    String status = object.getString(MyConstant.STATUS);
+
+                    if (status.equals(MyConstant.TRUE))
+                    {
+                        String total = object.getString(MyConstant.TOTAL_ELEVATION_ACTIONS);
+
+                        List<HashMap> list = new ArrayList<>();
+
+                        JSONArray jsonArray = object.getJSONArray(MyConstant.DATA);
+                        ;
+                        for (int i = 0; i < jsonArray.length(); i++)
+                        {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            HashMap hashMap = new HashMap();
+
+                            hashMap.put(MyConstant.UID, jsonObject.get(MyConstant.UID));
+                            hashMap.put(MyConstant.NAME, jsonObject.get(MyConstant.NAME));
+                            hashMap.put(MyConstant.IMAGE, jsonObject.get(MyConstant.IMAGE));
+                            hashMap.put(MyConstant.POINTS, jsonObject.get(MyConstant.POINTS));
+
+                            list.add(hashMap);
+                        }
+                        setData(list, total);
+                    }
+
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }, true));
+
+
+    }
+
+    private void setData(List<HashMap> list, String total)
+    {
+        myPointsAdapter = new MyPointsAdapter(context, list);
+        listViewPoints.setAdapter(myPointsAdapter);
+        myUtil.setListViewHeight(listViewPoints);
+
+        txtv_total.setText(total);
     }
 
 

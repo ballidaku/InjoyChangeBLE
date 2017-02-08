@@ -135,10 +135,11 @@
                     android:textSize="@dimen/_13sdp"/>
 
                 <TextView
+                    android:id="@+id/txtv_total"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/_15sdp"
-                    android:text="7840"
+                    android:text="0"
                     android:textColor="@color/colorOrange"
                     android:textSize="@dimen/_20sdp"
                     android:layout_marginBottom="5dp"

@@ -17,7 +17,6 @@ package com.ble.sharan.myUtilities;
  */
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,22 +52,25 @@ public class EndlessAdapter extends ArrayAdapter<HashMap> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         HashMap hashMap = itemList.get(position);
+
         convertView = inflater.inflate(R.layout.custom_shoutout_list, null);
         if (position % 2 == 0) {
             convertView.setBackgroundColor(context.getResources().getColor(R.color.colorGrayWhite));
         }
 
-        TextView shoutlist_tv = (TextView) convertView.findViewById(R.id.shoutlist_tv);
         ImageView profile_iv = (ImageView) convertView.findViewById(R.id.profile_iv);
 
-        String name = hashMap.get(MyConstant.NAME).toString();
-        String image = hashMap.get("image").toString();
+        TextView txtv_name = (TextView) convertView.findViewById(R.id.txtv_name);
+        TextView txtv_time = (TextView) convertView.findViewById(R.id.txtv_time);
+        TextView txtv_likes = (TextView) convertView.findViewById(R.id.txtv_likes);
 
-        shoutlist_tv.setText(name);
 
-        Log.d("image",image);
+        txtv_name.setText(hashMap.get(MyConstant.NAME).toString());
+        txtv_time.setText(hashMap.get(MyConstant.TIME).toString());
+        txtv_likes.setText(hashMap.get(MyConstant.LIKES).toString());
 
-//        myUtil.showImageWithPicasso(context,profile_iv,image);
+
+        myUtil.showImageWithPicasso(context,profile_iv,hashMap.get(MyConstant.IMAGE).toString());
 
 
 

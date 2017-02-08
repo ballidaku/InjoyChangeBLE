@@ -93,12 +93,19 @@ public class EndlessListView extends ListView implements OnScrollListener {
 
 	
 	public void addNewData(List<HashMap> data) {
-		
-		this.removeFooterView(footer);
-		
+
+
+		removeFooter();
+
 		adapter.addAll(data);
 		adapter.notifyDataSetChanged();
 		isLoading = false;
+	}
+
+
+	public void removeFooter()
+	{
+		this.removeFooterView(footer);
 	}
 
 	public EndlessListener setListener() {

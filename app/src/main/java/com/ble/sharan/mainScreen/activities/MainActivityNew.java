@@ -645,6 +645,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     };
 
 
+    int dateCommandresposeCount=0;
     private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver()
     {
 
@@ -782,11 +783,17 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 try
                 {
+                    Log.e(TAG,"CR---Response of Command"+ new String(txValue, "UTF-8"));
+
 
                     if (COMMAND.contains("dt"))
                     {
-                        //TODO
-                        setHeightWeightStrideDataToBLE();
+                        dateCommandresposeCount++;
+                        if(dateCommandresposeCount ==4)
+                        {
+                            //TODO
+                            setHeightWeightStrideDataToBLE();
+                        }
                     }
                     else if (COMMAND.contains("b"))
                     {
@@ -840,7 +847,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                         }
                     }
 
-                    Log.e("Response of Command", "" + new String(txValue, "UTF-8"));
+
 
 
                 } catch (Exception e)
@@ -907,6 +914,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 //Disconnect button pressed
                 if (mDevice != null)
                 {
+                    dateCommandresposeCount=0;
                     mService.disconnect();
                 }
             }
@@ -1042,7 +1050,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
 
                     Log.d(TAG, "... onActivityResultdevice.address==" + mDevice + "mserviceValue" + mService);
-                    ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName() + " - connecting");
+//                    ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName() + " - connecting");
                     mService.connect(deviceAddress);
 
 
@@ -1327,7 +1335,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         COMMAND = command;
 
 
-        Log.e(TAG, "COMMANDToBLE----" + command);
+        Log.e(TAG, "CR---COMMANDToBLE----" + command);
+
+
 
         if (COMMAND.equals(MyConstant.GET_SLEEP))
         {
@@ -1407,6 +1417,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         if (BLE_STATUS.equals(MyConstant.CONNECTED))
         {
             commandToBLE(commandToSetHeightWeightStride);
+//            commandToBLE("b15090020010");
         }
     }
 
