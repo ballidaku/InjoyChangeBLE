@@ -1,4 +1,4 @@
-package com.ble.sharan.myUtilities;
+package com.ble.sharan.adapters;
 
 /*
  * Copyright (C) 2012 Surviving with Android (http://www.survivingwithandroid.com)
@@ -25,11 +25,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
+import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.MyUtil;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class EndlessAdapter extends ArrayAdapter<HashMap> {
+public class ShoutOutEndlessAdapter extends ArrayAdapter<HashMap> {
 
     private List<HashMap> itemList;
     private Context context;
@@ -38,7 +40,7 @@ public class EndlessAdapter extends ArrayAdapter<HashMap> {
 
     MyUtil myUtil=new MyUtil();
 
-    public EndlessAdapter(Context context, List<HashMap> itemList, int layoutId) {
+    public ShoutOutEndlessAdapter(Context context, List<HashMap> itemList, int layoutId) {
         super(context, layoutId, itemList);
         this.itemList = itemList;
         this.context = context;
@@ -63,14 +65,16 @@ public class EndlessAdapter extends ArrayAdapter<HashMap> {
         TextView txtv_name = (TextView) convertView.findViewById(R.id.txtv_name);
         TextView txtv_time = (TextView) convertView.findViewById(R.id.txtv_time);
         TextView txtv_likes = (TextView) convertView.findViewById(R.id.txtv_likes);
+        TextView txtv_comment = (TextView) convertView.findViewById(R.id.txtv_comment);
 
 
         txtv_name.setText(hashMap.get(MyConstant.NAME).toString());
         txtv_time.setText(hashMap.get(MyConstant.TIME).toString());
         txtv_likes.setText(hashMap.get(MyConstant.LIKES).toString());
+        txtv_comment.setText(hashMap.get(MyConstant.OUTER_COMMENT).toString());
 
 
-        myUtil.showImageWithPicasso(context,profile_iv,hashMap.get(MyConstant.IMAGE).toString());
+        myUtil.showCircularImageWithPicasso(context,profile_iv,hashMap.get(MyConstant.IMAGE).toString());
 
 
 

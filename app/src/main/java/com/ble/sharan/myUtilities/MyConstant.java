@@ -93,6 +93,13 @@ public class MyConstant
     public static final String UPLOAD_USER_DATA = "http://hydraflow.injoyglobal.com/api/postdata";
     public static final String SHOUT_OUT_USERS = "http://hydraflow.injoyglobal.com/api/shout_out?scroll_id=";
     public static final String TOP_USERS = "http://hydraflow.injoyglobal.com/api/top_users";
+    public static final String SHARE_WIN_API = "http://hydraflow.injoyglobal.com/api/share_win";
+    public static final String SHARE_WIN_SEE_ALL_API = "http://hydraflow.injoyglobal.com/api/share_win_see_all?scroll_id=";
+    public static final String DAILY_INSPIRATION = "http://hydraflow.injoyglobal.com/api/daily_inspiration";
+    public static final String TOOL_BOX = "http://hydraflow.injoyglobal.com/api/toolbox";
+
+
+    public static final String YOU_TUBE_KEY="AIzaSyBAf3SjwZb4YAomFYzDvS03OM2AZ9JoVkg";
 
 
     //API KEYS
@@ -101,28 +108,30 @@ public class MyConstant
 
 
     public static final String STATUS = "status";
-    public static final String TRUE = "True";
+    public static final String TRUE = "true";
     public static final String IMAGE = "image";
     public static final String UID = "uid";
     public static final String COMMENT = "comment";
+    public static final String POP_UP_COMMENT = "pop_up_comment";
+    public static final String OUTER_COMMENT = "outer_comment";
     public static final String TIME = "time";
-    public static final String LIKES = "Likes";
+    public static final String LIKES = "likes";
+    public static final String TITLE = "title";
+    public static final String URL = "url";
+
+
     public static final String DATA = "data";
+    public static final String SHARE_WIN = "share_win";
+    public static final String WEEKLY_CHALLENGE = "weekly_challenge";
     public static final String POINTS = "points";
+    public static final String RANK = "rank";
     public static final String TOTAL_ELEVATION_ACTIONS = "total_elevate_actions";
+    public static final String DESCRIPTION = "description";
 
 
     public static final String ACCESS_TOKEN = "access_token";
 
 
-    //Week
-    public static final String SUNDAY = "Sunday";
-    public static final String MONDAY = "Monday";
-    public static final String TUESDAY = "Tuesday";
-    public static final String WEDNESDAY = "Wednesday";
-    public static final String THURSDAY = "Thursday";
-    public static final String FRIDAY = "Friday";
-    public static final String SATURDAY = "Saturday";
 
 
 }

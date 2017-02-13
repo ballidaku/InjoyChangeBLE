@@ -73,14 +73,14 @@ public class MyPointsAdapter  extends BaseAdapter
 
         TextView txtv_rank=(TextView)view.findViewById(R.id.txtv_rank);
 
-        myUtil.showImageWithPicasso(context,imgv_user,hashMap.get(MyConstant.IMAGE).toString());
+        myUtil.showImageWithGlide(context,imgv_user,hashMap.get(MyConstant.IMAGE).toString());
 
 
 
         txtv_name.setText(hashMap.get(MyConstant.NAME).toString());
         txtv_points.setText(hashMap.get(MyConstant.POINTS).toString()+" Pts");
 
-        txtv_rank.setText("Rank "+String.valueOf(i+1));
+        txtv_rank.setText("Rank "+hashMap.get(MyConstant.RANK));
         return view;
     }
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.asyncTask.Super_AsyncTask;
@@ -21,18 +22,22 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 /**
- * Created by brst-pc93 on 2/6/17.
+ * Created by brst-pc93 on 2/10/17.
  */
 
-public class DailyInspiration extends Fragment implements View.OnClickListener
+public class ToolBoxDetails extends Fragment
 {
 
     Context context;
     View view;
 
-    ImageView imgv_background;
 
     MyUtil myUtil = new MyUtil();
+
+
+    ImageView imgv_toolBoxDetails;
+
+    TextView txtv_description;
 
 
     @Override
@@ -43,7 +48,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
         if (view == null)
         {
-            view = inflater.inflate(R.layout.fragment_daily_inspiration, container, false);
+            view = inflater.inflate(R.layout.fragment_tool_box_details, container, false);
 
 
             setUpIds();
@@ -60,7 +65,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
     {
         super.onResume();
 
-        ((MainActivityNew) getActivity()).setTitleHeader("Daily Inspiration");
+        ((MainActivityNew) getActivity()).setTitleHeader("Tool Box");
 
 
     }
@@ -68,15 +73,16 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
     private void setUpIds()
     {
-        imgv_background = (ImageView) view.findViewById(R.id.imgv_background);
 
-        view.findViewById(R.id.txtv_seeAll).setOnClickListener(this);
+        imgv_toolBoxDetails = (ImageView) view.findViewById(R.id.imgv_toolBoxDetails);
+        txtv_description = (TextView) view.findViewById(R.id.txtv_description);
+
 
     }
 
     public void GET_DATA_FROM_SERVER()
     {
-        MyUtil.execute(new Super_AsyncTask(context, MyConstant.DAILY_INSPIRATION + "?time=" + myUtil.getCurrentTimeStamp(), new Super_AsyncTask_Interface()
+        MyUtil.execute(new Super_AsyncTask(context, MyConstant.TOOL_BOX + "?time=" + myUtil.getCurrentTimeStamp(), new Super_AsyncTask_Interface()
         {
             @Override
             public void onTaskCompleted(String output)
@@ -91,7 +97,8 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
                     {
                         HashMap<String, String> map = new HashMap<String, String>();
 
-                        map.put(MyConstant.IMAGE, object.getString(MyConstant.DATA));
+                        map.put(MyConstant.IMAGE, object.getString(MyConstant.IMAGE));
+                        map.put(MyConstant.DESCRIPTION, object.getString(MyConstant.DESCRIPTION));
 
                         setData(map);
                     }
@@ -108,22 +115,9 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
     private void setData(HashMap<String, String> map)
     {
-        myUtil.showImageWithPicasso(context, imgv_background, map.get(MyConstant.IMAGE));
-    }
+        myUtil.showCircularImageWithPicasso(context, imgv_toolBoxDetails, map.get(MyConstant.IMAGE));
 
-
-    @Override
-    public void onClick(View view)
-    {
-        switch (view.getId())
-        {
-            case R.id.txtv_seeAll:
-
-                ((MainActivityNew) getActivity()).changeFragment2(new DailyInspirationSeeAll());
-
-
-                break;
-        }
+        txtv_description.setText(map.get(MyConstant.DESCRIPTION));
     }
 
 

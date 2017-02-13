@@ -58,6 +58,17 @@ public class Challenge extends Fragment
         return view;
     }
 
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        ((MainActivityNew)getActivity()).setTitleHeader("Challenge");
+
+
+    }
+
     private void setUpIds()
     {
         listView_challenge = (ListView) view.findViewById(R.id.listView_challenge);

@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.CheckInAdapter;
+import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyUtil;
 
 /**
@@ -55,6 +56,16 @@ public class CheckIn  extends Fragment
         }
 
         return view;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        ((MainActivityNew)getActivity()).setTitleHeader("Check-In with Yourself");
+
+
     }
 
     private void setUpIds()

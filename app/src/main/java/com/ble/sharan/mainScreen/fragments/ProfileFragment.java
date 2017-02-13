@@ -286,7 +286,7 @@ public class ProfileFragment extends Fragment
     private void refreshUI()
     {
 
-        myUtil.showImageWithPicasso(context, circularImageView_Profile, MySharedPreference.getInstance().getPhoto(context));
+        myUtil.showCircularImageWithPicasso(context, circularImageView_Profile, MySharedPreference.getInstance().getPhoto(context));
 
         txtv_username.setText(MySharedPreference.getInstance().getName(context));
         txtv_gender.setText(MySharedPreference.getInstance().getGender(context));

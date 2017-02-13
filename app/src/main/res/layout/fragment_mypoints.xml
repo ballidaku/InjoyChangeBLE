@@ -1,151 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/ic_background_with_shadow">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_background_with_shadow"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/_10sdp"
+        app:cardUseCompatPadding="true"
+        card_view:cardCornerRadius="@dimen/_3sdp"
+        card_view:cardElevation="@dimen/_5sdp">
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            app:cardUseCompatPadding="true"
-            card_view:cardCornerRadius="@dimen/_3sdp"
-            card_view:cardElevation="@dimen/_5sdp">
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/circle_profile"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:src="@drawable/ic_no_user"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:gravity="center"
+                android:text="Stacy Martin"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold"/>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorGray"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/circle_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:src="@drawable/ic_no_user"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_10sdp"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Stacy Martin"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_14sdp"
-                    android:textStyle="bold"/>
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_20sdp"
+                        android:text="2980"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_17sdp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TOTAL POINTS"
+                        android:textSize="@dimen/_10sdp"/>
+                </LinearLayout>
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
                     android:background="@color/colorGray"/>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@mipmap/ic_entry"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 ENTRY"
+                        android:textSize="@dimen/_10sdp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true"
+                card_view:cardCornerRadius="@dimen/_3sdp"
+                card_view:cardElevation="@dimen/_5sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
+                    <ListView
+                        android:id="@+id/listViewPoints"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="55dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                    </ListView>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_20sdp"
-                            android:text="2980"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/_17sdp"
-                            android:textStyle="bold"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:paddingLeft="@dimen/_15sdp"
+                        android:text="Total Priority Actions Completed "
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_13sdp"/>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TOTAL POINTS"
-                            android:textSize="@dimen/_10sdp"/>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorGray"/>
-
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="55dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_20sdp"
-                            android:src="@mipmap/ic_entry"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0 ENTRY"
-                            android:textSize="@dimen/_10sdp"/>
-                    </LinearLayout>
-
+                    <TextView
+                        android:id="@+id/txtv_total"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:paddingLeft="@dimen/_15sdp"
+                        android:text="0"
+                        android:textColor="@color/colorOrange"
+                        android:textSize="@dimen/_20sdp"
+                        android:textStyle="bold"/>
                 </LinearLayout>
-            </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardUseCompatPadding="true"
-            card_view:cardCornerRadius="@dimen/_3sdp"
-            card_view:cardElevation="@dimen/_5sdp">
+</LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/listViewPoints"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </ListView>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:paddingLeft="@dimen/_15sdp"
-                    android:text="Total Priority Actions Completed "
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_13sdp"/>
-
-                <TextView
-                    android:id="@+id/txtv_total"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/_15sdp"
-                    android:text="0"
-                    android:textColor="@color/colorOrange"
-                    android:textSize="@dimen/_20sdp"
-                    android:layout_marginBottom="5dp"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
-</ScrollView>

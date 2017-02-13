@@ -25,6 +25,8 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
 
+import com.ble.sharan.adapters.ShoutOutEndlessAdapter;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class EndlessListView extends ListView implements OnScrollListener {
 	private View footer;
 	private boolean isLoading;
 	private EndlessListener listener;
-	private EndlessAdapter adapter;
+	private ShoutOutEndlessAdapter adapter;
 	
 	public EndlessListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);	
@@ -84,7 +86,7 @@ public class EndlessListView extends ListView implements OnScrollListener {
 	}
 
 	
-	public void setAdapter(EndlessAdapter adapter) {		
+	public void setAdapter(ShoutOutEndlessAdapter adapter) {
 		super.setAdapter(adapter);
 		this.adapter = adapter;
 		this.removeFooterView(footer);

@@ -1,14 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="200dp"
               android:gravity="bottom|center_horizontal">
 
     <ImageView
-        android:id="@+id/pager_images"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:background="@mipmap/ic_share_win_bg"/>
 
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/txtv_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_16sdp"
+        android:textColor="@color/colorWhite"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:padding="@dimen/_25sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:text="Hello Hello Hello Hello Hello Hello Hello Hello Hello v Hello Hello HelloHello"/>
+
+
+    <TextView
+        android:id="@+id/txtv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_10sdp"
+        android:textColor="@color/colorBlack"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="@dimen/_15sdp"
+        android:text="Balli Daku"/>
+
+
+    <ImageView
+        android:id="@+id/imgv_user"
+        android:layout_width="@dimen/_55sdp"
+        android:layout_height="@dimen/_55sdp"
+        android:scaleType="fitXY"
+        android:layout_gravity="bottom|center"/>
+
+
+
+
+</FrameLayout>

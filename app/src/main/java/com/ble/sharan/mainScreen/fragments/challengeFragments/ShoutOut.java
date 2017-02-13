@@ -12,7 +12,8 @@ import android.widget.ImageView;
 import com.ble.sharan.R;
 import com.ble.sharan.asyncTask.Super_AsyncTask;
 import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
-import com.ble.sharan.myUtilities.EndlessAdapter;
+import com.ble.sharan.adapters.ShoutOutEndlessAdapter;
+import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.EndlessListView;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyUtil;
@@ -43,7 +44,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
     ImageView check1_iv, check2_iv, check3_iv;
 
 
-    EndlessAdapter endlessAdapter;
+    ShoutOutEndlessAdapter shoutOutEndlessAdapter;
 
     int val = 0;
 
@@ -67,6 +68,17 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
         return view;
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        ((MainActivityNew) getActivity()).setTitleHeader("Shout Outs and Appreciations");
+
+
+    }
+
 
     private void setUpIds()
     {
@@ -143,7 +155,8 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
                             hashMap.put(MyConstant.ID, jsonObject.get(MyConstant.ID));
                             hashMap.put(MyConstant.UID, jsonObject.get(MyConstant.UID));
-                            hashMap.put(MyConstant.COMMENT, jsonObject.get(MyConstant.COMMENT));
+                            hashMap.put(MyConstant.POP_UP_COMMENT, jsonObject.get(MyConstant.POP_UP_COMMENT));
+                            hashMap.put(MyConstant.OUTER_COMMENT, jsonObject.get(MyConstant.OUTER_COMMENT));
                             hashMap.put(MyConstant.NAME, jsonObject.get(MyConstant.NAME));
                             hashMap.put(MyConstant.IMAGE, jsonObject.get(MyConstant.IMAGE));
                             hashMap.put(MyConstant.DATE, jsonObject.get(MyConstant.DATE));
@@ -161,7 +174,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
                     else
                     {
                         endLesslistViewShoutOut.removeFooter();
-                        MyUtil.showToast(context,"No more data");
+                        MyUtil.showToast(context, "No more data");
                     }
 
 
@@ -181,8 +194,8 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
         if (val == 0)
         {
-            endlessAdapter = new EndlessAdapter(context, list, R.layout.custom_shoutout_list);
-            endLesslistViewShoutOut.setAdapter(endlessAdapter);
+            shoutOutEndlessAdapter = new ShoutOutEndlessAdapter(context, list, R.layout.custom_shoutout_list);
+            endLesslistViewShoutOut.setAdapter(shoutOutEndlessAdapter);
             endLesslistViewShoutOut.setListener(this);
         }
         else
@@ -205,8 +218,6 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
         GET_DATA_FROM_SERVER();
 
     }
-
-
 
 
 }

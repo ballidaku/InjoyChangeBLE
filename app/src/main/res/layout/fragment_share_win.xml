@@ -83,16 +83,17 @@
                         android:src="@mipmap/ic_module_btn"/>
 
                     <TextView
-                        android:id="@+id/seeall_tv"
+                        android:id="@+id/txtv_seeAll"
                         android:layout_width="wrap_content"
                         android:layout_height="25dp"
                         android:layout_gravity="end|center"
-                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
                         android:background="@drawable/gray_background_round_corners"
                         android:gravity="center"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
-                        android:text="See All"
+                        android:clickable="true"
+                        android:text="View All"
                         android:textColor="@color/colorWhite"
                         android:textStyle="bold"/>
 
@@ -132,11 +133,23 @@
                     android:layout_height="1dp"
                     android:background="@color/colorGray"/>
 
-                <ImageView
+              <!--  <ImageView
+                    android:id="@+id/imgv_videoThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_140sdp"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/_10sdp"/>-->
+
+
+                <FrameLayout
+                    android:id="@+id/youtube_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:background="@mipmap/ic_video"/>
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_centerHorizontal="true"
+                    android:visibility="visible" />
+
 
                 <ImageView
                     android:id="@+id/btnvid_iv"

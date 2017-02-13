@@ -13,6 +13,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Editable;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 
 import com.ble.sharan.R;
 import com.ble.sharan.asyncTask.Super_AsyncTask;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -576,15 +580,46 @@ public class MyUtil
 
     // IMAGES LOADING
 
-    public void showImageWithPicasso(Context context, ImageView imageView, String url)
-    {
-//        Glide.with(context)
-//                .load(url)
-//                .centerCrop()
-//                .placeholder(R.drawable.ic_no_user)
-//                .crossFade()
-//                .into(imageView);
 
+    public void showImageWithGlide(final Context context, final ImageView imageView, String url)
+    {
+
+
+        if (url.trim().isEmpty())
+        {
+            Glide.with(context)
+                 .load("abc")
+                 .centerCrop()
+                 .placeholder(R.drawable.ic_no_user)
+                 .crossFade()
+                 .into(imageView);
+
+        }
+        else
+        {
+            Glide.with(context).load(url.trim()).asBitmap().into(new BitmapImageViewTarget(imageView)
+            {
+
+                @Override
+                protected void setResource(Bitmap resource)
+                {
+
+                    RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+
+                    circularBitmapDrawable.setCircular(true);
+
+                    imageView.setImageDrawable(circularBitmapDrawable);
+                }
+            });
+
+        }
+
+
+    }
+
+
+    public void showCircularImageWithPicasso(Context context, ImageView imageView, String url)
+    {
         if (url.trim().isEmpty())
         {
             Picasso.with(context)
@@ -603,21 +638,57 @@ public class MyUtil
                    .transform(new CircleTransform())
                    .into(imageView);
         }
+    }
 
+
+    public void showCircularImageWithPicasso(Context context, ImageView imageView, int file)
+    {
+
+
+            Picasso.with(context)
+                   .load(file)
+                   .placeholder(R.drawable.ic_no_user)
+                   .error(R.drawable.ic_no_user)
+                   .transform(new CircleTransform())
+                   .into(imageView);
 
     }
+
+    public void showImageWithPicasso(Context context, ImageView imageView, String url)
+    {
+        if (url.trim().isEmpty())
+        {
+            Picasso.with(context)
+                   .load("abc")
+                   // .placeholder(R.drawable.ic_no_user)
+                   // .error(R.drawable.ic_no_user)
+                   .into(imageView);
+        }
+        else
+        {
+
+            Picasso.with(context)
+                   .load(url.trim())
+                   // .placeholder(R.drawable.ic_no_user)
+                   // .error(R.drawable.ic_no_user)
+                   .into(imageView);
+        }
+    }
+
 
     public class CircleTransform implements Transformation
     {
         @Override
-        public Bitmap transform(Bitmap source) {
+        public Bitmap transform(Bitmap source)
+        {
             int size = Math.min(source.getWidth(), source.getHeight());
 
             int x = (source.getWidth() - size) / 2;
             int y = (source.getHeight() - size) / 2;
 
             Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
-            if (squaredBitmap != source) {
+            if (squaredBitmap != source)
+            {
                 source.recycle();
             }
 
@@ -638,7 +709,8 @@ public class MyUtil
         }
 
         @Override
-        public String key() {
+        public String key()
+        {
             return "circle";
         }
     }
@@ -746,6 +818,38 @@ public class MyUtil
         }
 
         return date;
+    }
+
+
+    // Get Current Time Stamp
+    public static String getCurrentTimeStamp(){
+        try {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentDateTime = dateFormat.format(new Date()); // Find todays date
+
+            return currentDateTime;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+
+    public String getCurrentDay()
+    {
+        try {
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE");
+            String currentDateTime = dateFormat.format(new Date()); // Find todays date
+
+            return currentDateTime;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
     }
 
 

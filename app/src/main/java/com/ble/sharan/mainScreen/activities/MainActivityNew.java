@@ -48,6 +48,7 @@ import com.ble.sharan.mainScreen.fragments.challengeFragments.DailyInspiration;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.MyPoints;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.ShareWin;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.ShoutOut;
+import com.ble.sharan.mainScreen.fragments.challengeFragments.ToolBox;
 import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
@@ -138,14 +139,14 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     TextView txtv_myinfo;
     TextView txtv_alarm;
 
-    String challengeHeadings[] = {
-            "Daily Inspiration",
-            "Check-In with Yourself",
-            "My Points",
-            "Shout Outs",
-            "Tool Box",
-            "Share A Win & Weekly Video"
-    };
+//    String challengeHeadings[] = {
+//            "Daily Inspiration",
+//            "Check-In with Yourself",
+//            "My Points",
+//            "Shout Outs",
+//            "Tool Box",
+//            "Share a Win & Weekly Video"
+//    };
 
 
     @Override
@@ -433,7 +434,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     // For Challenge Fragments
     public void displayView2(int position)
     {
-        txtv_heading.setText(challengeHeadings[position]);
+//        txtv_heading.setText(challengeHeadings[position]);
 
         Fragment myFragment = null;
 
@@ -459,7 +460,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
             case 4:
-                //  fragment = new Overall();
+                myFragment = new ToolBox();
                 break;
 
 
@@ -479,6 +480,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     }
 
+
+
+
     private void changeFragment(Fragment fragment)
     {
         if (fragment != null)
@@ -491,7 +495,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void changeFragment2(Fragment fragment)
+    public void changeFragment2(Fragment fragment)
     {
         if (fragment != null)
         {
@@ -504,30 +508,36 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    public void setTitleHeader(String text)
+    {
+        txtv_heading.setText(text);
+    }
+
+
     @Override
     public void onBackPressed()
     {
         super.onBackPressed();
 
 
-        if (fragment instanceof Challenge)
-        {
-            int count = getSupportFragmentManager().getBackStackEntryCount();
-
-            Log.e("Count", "" + count);
-
-            if (count == 0)
-            {
-                txtv_heading.setText("Challenge");
-            }
-        }
+//        if (fragment instanceof Challenge)
+//        {
+//            int count = getSupportFragmentManager().getBackStackEntryCount();
+//
+//            Log.e("Count", "" + count);
+//
+//            if (count == 0)
+//            {
+//                txtv_heading.setText("Challenge");
+//            }
+//        }
 
 
     }
 
     public void onRefreshName()
     {
-        myUtil.showImageWithPicasso(context, imgv_profile, MySharedPreference.getInstance().getPhoto(context));
+        myUtil.showCircularImageWithPicasso(context, imgv_profile, MySharedPreference.getInstance().getPhoto(context));
 
         txtv_username.setText(MySharedPreference.getInstance().getName(context));
     }
@@ -1181,7 +1191,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //                    String diff = Hours + ":" + Mins; // updated value every1 second
 
 
-                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills));
+                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills)+"----StartTime----="+startTime+"-----EndTime----="+endTime);
 
 
                     boolean isStored = false;

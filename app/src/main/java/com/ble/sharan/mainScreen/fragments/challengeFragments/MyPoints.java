@@ -14,6 +14,7 @@ import com.ble.sharan.R;
 import com.ble.sharan.adapters.MyPointsAdapter;
 import com.ble.sharan.asyncTask.Super_AsyncTask;
 import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyUtil;
 
@@ -22,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,6 +67,17 @@ public class MyPoints extends Fragment
 
         return view;
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        ((MainActivityNew)getActivity()).setTitleHeader("My Points");
+
+
+    }
+
 
     private void setUpIds()
     {
@@ -118,6 +132,7 @@ public class MyPoints extends Fragment
                             hashMap.put(MyConstant.NAME, jsonObject.get(MyConstant.NAME));
                             hashMap.put(MyConstant.IMAGE, jsonObject.get(MyConstant.IMAGE));
                             hashMap.put(MyConstant.POINTS, jsonObject.get(MyConstant.POINTS));
+                            hashMap.put(MyConstant.RANK, jsonObject.get(MyConstant.RANK));
 
                             list.add(hashMap);
                         }
@@ -137,6 +152,18 @@ public class MyPoints extends Fragment
 
     private void setData(List<HashMap> list, String total)
     {
+
+        Collections.sort(list, new Comparator<HashMap>()
+        {
+            public int compare(HashMap o1, HashMap o2)
+            {
+                if (o1.get(MyConstant.RANK) == null || o2.get(MyConstant.RANK) == null)
+                    return 0;
+                return o1.get(MyConstant.RANK).toString().compareTo(o2.get(MyConstant.RANK).toString());
+            }
+        });
+
+
         myPointsAdapter = new MyPointsAdapter(context, list);
         listViewPoints.setAdapter(myPointsAdapter);
         myUtil.setListViewHeight(listViewPoints);

@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/profile_iv"
+            android:id="@+id/imgv_user"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginRight="@dimen/_5sdp"
@@ -28,23 +28,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal">-->
 
                     <TextView
                         android:id="@+id/txtv_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_gravity="center"
                         android:layout_marginRight="@dimen/_5sdp"
                         android:text="Victor White"
                         android:textStyle="bold"
                         android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:id="@+id/txtv_time"
@@ -52,11 +53,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Apr 2, 2016 10:16am"
-                        android:textColor="@color/colorGrayDark"
-                        android:textSize="@dimen/_6sdp" />
-                </LinearLayout>
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/_8sdp" />
+              <!--  </LinearLayout>-->
 
-                <LinearLayout
+               <!-- <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -84,7 +85,7 @@
                         android:gravity="right|center"
                         android:textSize="@dimen/_8sdp"
                         android:background="@mipmap/ic_clap" />
-                </LinearLayout>
+                </LinearLayout>-->
             </LinearLayout>
 
             <TextView
@@ -93,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:text="Grateful for having a team that supports one another consistently."
                 android:textColor="@color/colorGrayDark"
-                android:textSize="@dimen/_7sdp" />
+                android:textSize="@dimen/_8sdp" />
         </LinearLayout>
 
 
