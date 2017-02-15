@@ -173,38 +173,61 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     if (object.getString(MyConstant.STATUS).equals("200"))
                     {
-                        String ACCESS_TOKEN = object.getString(MyConstant.ACCESS_TOKEN);
-
-
-                        if (!ACCESS_TOKEN.isEmpty())
-                            MySharedPreference.getInstance().saveAccessToken(context, ACCESS_TOKEN);
-
-
                         JSONObject object2 = object.getJSONObject("profile");
 
                         String name = object2.getString("fullname");
-                        String gender = object2.getString("gender");
-                        String height = object2.getString("height");
-                        String weight = object2.getString("weight");
-                        String stride = object2.getString("stride");
+                        String gender = object2.getString(MyConstant.GENDER);
+                        String height = object2.getString(MyConstant.HEIGHT);
+                        String weight = object2.getString(MyConstant.WEIGHT);
+                        String stride = object2.getString(MyConstant.STRIDE);
                         String profile_picture = object2.getString("profile_picture");
+                        String UID = object2.getString(MyConstant.UID);
 
-                        if (!name.isEmpty())
+
+                        if (!UID.isEmpty())
+                            MySharedPreference.getInstance().saveUID(context, UID);
+
+
+                        if (!name.isEmpty() && !name.equals("null"))
+                        {
                             MySharedPreference.getInstance().saveName(context, name);
+                        }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveName(context, "");
+                        }
 
                         if (!gender.isEmpty())
                             MySharedPreference.getInstance().saveGender(context, gender);
 
-                        if (!height.isEmpty())
+                        if (!height.isEmpty()  && !height.equals("null"))
+                        {
                             MySharedPreference.getInstance().saveHeight(context, height);
+                        }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveHeight(context, "0");
+                        }
 
-                        if (!weight.isEmpty())
+                        if (!weight.isEmpty() && !weight.equals("null"))
+                        {
                             MySharedPreference.getInstance().saveWeight(context, weight);
+                        }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveWeight(context, "0");
+                        }
 
-                        if (!stride.isEmpty())
+                        if (!stride.isEmpty() && !stride.equals("null"))
+                        {
                             MySharedPreference.getInstance().saveStride(context, stride);
+                        }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveStride(context, "0");
+                        }
 
-                        if (!profile_picture.isEmpty())
+                        if (!profile_picture.isEmpty() && !profile_picture.equals("null"))
                             MySharedPreference.getInstance().savePhoto(context, profile_picture);
 
 

@@ -59,6 +59,7 @@ public class MyConstant
     public static final String MILES_KM = "miles_km";
     public static final String LBS_KG = "lbs_kg";
     public static final String IN_CM = "in_cm";
+    public static final String METRIC_IMPERIAL = "metric_imperial";
 
 
     public static final String KM = "Km";
@@ -66,6 +67,8 @@ public class MyConstant
     public static final String KG = "Kg";
     public static final String IN = "In";
     public static final String CM = "Cm";
+    public static final String METRIC = "metric";
+    public static final String IMPERIAL = "imperial";
 
 
     //COMMANDS
@@ -84,19 +87,29 @@ public class MyConstant
     public static final String IS_ALARM_THIRD_ACTIVATED = "is_alarm_third_activated";
 
 
-    //APIS
-    public static final String SIGN_UP = "http://hydraflow.injoyglobal.com/user/register";
-    public static final String SIGN_IN = "http://hydraflow.injoyglobal.com/api/login-token";
-    public static final String FORGOT_PASSWORD = "http://hydraflow.injoyglobal.com/user/password";
-    public static final String CHALLENGE_API = "http://hydraflow.injoyglobal.com";
 
-    public static final String UPLOAD_USER_DATA = "http://hydraflow.injoyglobal.com/api/postdata";
-    public static final String SHOUT_OUT_USERS = "http://hydraflow.injoyglobal.com/api/shout_out?scroll_id=";
-    public static final String TOP_USERS = "http://hydraflow.injoyglobal.com/api/top_users";
-    public static final String SHARE_WIN_API = "http://hydraflow.injoyglobal.com/api/share_win";
-    public static final String SHARE_WIN_SEE_ALL_API = "http://hydraflow.injoyglobal.com/api/share_win_see_all?scroll_id=";
-    public static final String DAILY_INSPIRATION = "http://hydraflow.injoyglobal.com/api/daily_inspiration";
-    public static final String TOOL_BOX = "http://hydraflow.injoyglobal.com/api/toolbox";
+
+
+    //APIS
+
+    public static final String BASE_URL="http://hydraflow.injoyglobal.com";
+
+    public static final String SIGN_UP = BASE_URL+"/user/register";
+    public static final String SIGN_IN = BASE_URL+"/api/login-token";
+    public static final String FORGOT_PASSWORD = BASE_URL+"/user/password";
+    public static final String CHALLENGE_API = BASE_URL+"";
+
+    public static final String UPLOAD_USER_DATA = BASE_URL+"/api/postdata";
+    public static final String SHOUT_OUT_USERS = BASE_URL+"/api/shout_out?scroll_id=";
+    public static final String SHOUT_OUT_COMMENT = BASE_URL+"/api/submit_shout_out?comment=";
+    public static final String USER_POINTS = BASE_URL+"/api/user_point?uid=";
+
+
+    public static final String TOP_USERS = BASE_URL+"/api/top_users";
+    public static final String SHARE_WIN_API = BASE_URL+"/api/share_win";
+    public static final String SHARE_WIN_SEE_ALL_API = BASE_URL+"/api/share_win_see_all?scroll_id=";
+    public static final String DAILY_INSPIRATION = BASE_URL+"/api/daily_inspiration";
+    public static final String TOOL_BOX = BASE_URL+"/api/toolbox";
 
 
     public static final String YOU_TUBE_KEY="AIzaSyBAf3SjwZb4YAomFYzDvS03OM2AZ9JoVkg";
@@ -118,6 +131,9 @@ public class MyConstant
     public static final String LIKES = "likes";
     public static final String TITLE = "title";
     public static final String URL = "url";
+    public static final String COUNT = "count";
+    public static final String TOTAL_POINTS = "total_points";
+    public static final String RAFFLE_TICKET = "raffle_ticket";
 
 
     public static final String DATA = "data";
@@ -129,7 +145,6 @@ public class MyConstant
     public static final String DESCRIPTION = "description";
 
 
-    public static final String ACCESS_TOKEN = "access_token";
 
 
 

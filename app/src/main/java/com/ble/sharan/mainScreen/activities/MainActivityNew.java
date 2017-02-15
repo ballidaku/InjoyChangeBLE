@@ -34,15 +34,15 @@ import com.ble.sharan.MyUartService;
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.DrawerListAdapter;
 import com.ble.sharan.loginScreen.LoginActivity;
-import com.ble.sharan.mainScreen.fragments.AlarmFragment;
-import com.ble.sharan.mainScreen.fragments.Challenge;
-import com.ble.sharan.mainScreen.fragments.FragmentDrawer;
-import com.ble.sharan.mainScreen.fragments.HealthData;
-import com.ble.sharan.mainScreen.fragments.MyDailyGoal;
-import com.ble.sharan.mainScreen.fragments.MyWeek;
-import com.ble.sharan.mainScreen.fragments.Overall;
-import com.ble.sharan.mainScreen.fragments.ProfileFragment;
-import com.ble.sharan.mainScreen.fragments.Today;
+import com.ble.sharan.mainScreen.fragments.mainFragments.AlarmFragment;
+import com.ble.sharan.mainScreen.fragments.mainFragments.Challenge;
+import com.ble.sharan.mainScreen.fragments.mainFragments.FragmentDrawer;
+import com.ble.sharan.mainScreen.fragments.mainFragments.HealthData;
+import com.ble.sharan.mainScreen.fragments.mainFragments.MyDailyGoal;
+import com.ble.sharan.mainScreen.fragments.mainFragments.MyWeek;
+import com.ble.sharan.mainScreen.fragments.mainFragments.Overall;
+import com.ble.sharan.mainScreen.fragments.mainFragments.MyInfo;
+import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.CheckIn;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.DailyInspiration;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.MyPoints;
@@ -343,7 +343,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         {
 //            mDrawerLayout.closeDrawers();
 
-            MySharedPreference.getInstance().saveAccessToken(context, "");
+            MySharedPreference.getInstance().saveUID(context, "");
             MySharedPreference.getInstance().removeGoalKeys(context);
 
 
@@ -404,7 +404,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
             case 6:
 
-                fragment = new ProfileFragment();
+                fragment = new MyInfo();
 
                 break;
 
@@ -417,6 +417,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case 8:
 
                 fragment = new Challenge();
+
+                removeFragmentsOfChallenge();
                 break;
 
 
@@ -526,14 +528,38 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //
 //            Log.e("Count", "" + count);
 //
-//            if (count == 0)
-//            {
-//                txtv_heading.setText("Challenge");
-//            }
+////            if (count == 0)
+////            {
+////                txtv_heading.setText("Challenge");
+////            }
 //        }
 
 
     }
+
+
+    public void removeFragmentsOfChallenge()
+    {
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+//        Log.e("Count", "" + count);
+
+
+        if(count != 0)
+        {
+            while(count != 0)
+            {
+                getSupportFragmentManager().popBackStackImmediate();
+                count = getSupportFragmentManager().getBackStackEntryCount();
+
+//                Log.e("InSide Count", "" + count);
+            }
+        }
+
+
+
+    }
+
 
     public void onRefreshName()
     {
@@ -551,7 +577,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.frame_layout_profile:
 
 //                txt_titleTV.setText("Profile");
-//                fragment = new ProfileFragment();
+//                fragment = new MyInfo();
 //                changeFragment(fragment);
 
                 break;
@@ -1375,7 +1401,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         // Weight
 
         double weightInDouble = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
-        String weightUnit = MySharedPreference.getInstance().getWeightUnit(context);
+        String weightUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.WEIGHT);
 
 //        Log.e(TAG, "Weight-----" + weightInDouble + "-----Unit-----" + weightUnit);
 
@@ -1395,7 +1421,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         // Stride
 
         double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
-        String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
+        String strideUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.STRIDE);
 
 //        Log.e(TAG, "Stride-----" + strideInDouble + "-----Unit-----" + strideUnit);
 
@@ -1420,7 +1446,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         Log.e(TAG, "FinalHeight---" + finalHeight);
 
 
-        String commandToSetHeightWeightStride = "b" + finalHeight + finalWeight + finalStride + "1" + "0";
+        String commandToSetHeightWeightStride = "b" + finalHeight + finalWeight + finalStride + "1" + "1";
 //        Log.e(TAG, "commandToSetHeightWeightStride---" + commandToSetHeightWeightStride);
 
 

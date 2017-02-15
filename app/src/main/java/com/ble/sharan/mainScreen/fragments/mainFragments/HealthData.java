@@ -1,4 +1,4 @@
-package com.ble.sharan.mainScreen.fragments;
+package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
 import android.os.Bundle;

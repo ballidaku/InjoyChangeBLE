@@ -62,7 +62,6 @@ public class MySharedPreference
     }
 
 
-
     //**********************************************************************************************
     // Clear Connection Data
     //**********************************************************************************************
@@ -77,11 +76,6 @@ public class MySharedPreference
 
     //**********************************************************************************************
     //**********************************************************************************************
-
-
-
-
-
 
 
     public void saveIsManualDisconnected(Context context, boolean isTrue)
@@ -102,7 +96,7 @@ public class MySharedPreference
     //**********************************************************************************************
 
 
-    public void saveAlarm(Context context,String alarmKey, String alarm)
+    public void saveAlarm(Context context, String alarmKey, String alarm)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
 
@@ -110,26 +104,26 @@ public class MySharedPreference
 
         editor.apply();
 
-        setFalseIsAlarmActivated(context,alarmKey);
+        setFalseIsAlarmActivated(context, alarmKey, true);
 
     }
 
     // For switch
-    public void setFalseIsAlarmActivated(Context context,String alarmKey)
+    public void setFalseIsAlarmActivated(Context context, String alarmKey, boolean b)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
 
-        if(MyConstant.ALARM_FIRST.equals(alarmKey))
+        if (MyConstant.ALARM_FIRST.equals(alarmKey))
         {
-            editor.putBoolean(MyConstant.IS_ALARM_FIRST_ACTIVATED, false);
+            editor.putBoolean(MyConstant.IS_ALARM_FIRST_ACTIVATED, b);
         }
-        else if(MyConstant.ALARM_SECOND.equals(alarmKey))
+        else if (MyConstant.ALARM_SECOND.equals(alarmKey))
         {
-            editor.putBoolean(MyConstant.IS_ALARM_SECOND_ACTIVATED, false);
+            editor.putBoolean(MyConstant.IS_ALARM_SECOND_ACTIVATED, b);
         }
-        else if(MyConstant.ALARM_THIRD.equals(alarmKey))
+        else if (MyConstant.ALARM_THIRD.equals(alarmKey))
         {
-            editor.putBoolean(MyConstant.IS_ALARM_THIRD_ACTIVATED, false);
+            editor.putBoolean(MyConstant.IS_ALARM_THIRD_ACTIVATED, b);
         }
 
         editor.apply();
@@ -137,19 +131,19 @@ public class MySharedPreference
 
 
     // For switch
-    public void setTrueIsAlarmActivated(Context context,String alarmKey)
+    public void setTrueIsAlarmActivated(Context context, String alarmKey)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
 
-        if(MyConstant.ALARM_FIRST.equals(alarmKey))
+        if (MyConstant.ALARM_FIRST.equals(alarmKey))
         {
             editor.putBoolean(MyConstant.IS_ALARM_FIRST_ACTIVATED, true);
         }
-        else if(MyConstant.ALARM_SECOND.equals(alarmKey))
+        else if (MyConstant.ALARM_SECOND.equals(alarmKey))
         {
             editor.putBoolean(MyConstant.IS_ALARM_SECOND_ACTIVATED, true);
         }
-        else if(MyConstant.ALARM_THIRD.equals(alarmKey))
+        else if (MyConstant.ALARM_THIRD.equals(alarmKey))
         {
             editor.putBoolean(MyConstant.IS_ALARM_THIRD_ACTIVATED, true);
         }
@@ -160,25 +154,25 @@ public class MySharedPreference
 
     public boolean getIsAlarmActivated(Context context, String alarmNo)
     {
-       return getPreference(context).getBoolean(alarmNo,false);
+        return getPreference(context).getBoolean(alarmNo, false);
     }
 
 
     public void deleteAlarm(Context context, String alarm)
     {
-        setFalseIsAlarmActivated(context,alarm);
+        setFalseIsAlarmActivated(context, alarm, false);
 
     }
 
-    public HashMap<String,String> getAllAlarm(Context context)
+    public HashMap<String, String> getAllAlarm(Context context)
     {
-        HashMap<String,String> map=new HashMap<>();
+        HashMap<String, String> map = new HashMap<>();
 
-        map.put(MyConstant.ALARM_FIRST,getPreference(context).getString(MyConstant.ALARM_FIRST, ""));
-        map.put(MyConstant.ALARM_SECOND,getPreference(context).getString(MyConstant.ALARM_SECOND, ""));
-        map.put(MyConstant.ALARM_THIRD,getPreference(context).getString(MyConstant.ALARM_THIRD, ""));
+        map.put(MyConstant.ALARM_FIRST, getPreference(context).getString(MyConstant.ALARM_FIRST, ""));
+        map.put(MyConstant.ALARM_SECOND, getPreference(context).getString(MyConstant.ALARM_SECOND, ""));
+        map.put(MyConstant.ALARM_THIRD, getPreference(context).getString(MyConstant.ALARM_THIRD, ""));
 
-       return map;
+        return map;
     }
 
 
@@ -208,7 +202,7 @@ public class MySharedPreference
 
     public String getHeight(Context context)
     {
-        return getPreference(context).getString(MyConstant.HEIGHT, "60")+" In";
+        return getPreference(context).getString(MyConstant.HEIGHT, "60") + " In";
     }
 
 
@@ -221,7 +215,7 @@ public class MySharedPreference
 
     public String getWeight(Context context)
     {
-        return getPreference(context).getString(MyConstant.WEIGHT, "132.277")+" "+getWeightUnit(context);
+        return getPreference(context).getString(MyConstant.WEIGHT, "132.277") + " " + getUnit(context,MyConstant.WEIGHT);
     }
 
     public void saveStride(Context context, String stride)
@@ -233,8 +227,8 @@ public class MySharedPreference
 
     public String getStride(Context context)
     {
-        String abc=new DecimalFormat("##.##").format(Double.parseDouble(getPreference(context).getString(MyConstant.STRIDE, "17.7165")));
-        return abc+" "+getStrideUnit(context);
+        String abc = new DecimalFormat("##.##").format(Double.parseDouble(getPreference(context).getString(MyConstant.STRIDE, "17.7165")));
+        return abc + " " + getUnit(context,MyConstant.STRIDE);
     }
 
     public void saveGender(Context context, String gender)
@@ -277,7 +271,7 @@ public class MySharedPreference
 
     public String getDailySteps(Context context)
     {
-        return getPreference(context).getString(MyConstant.STEPS,"5000");
+        return getPreference(context).getString(MyConstant.STEPS, "5000");
     }
     //**********************************************************************************************
 
@@ -291,7 +285,7 @@ public class MySharedPreference
 
     public String getDailyMiles(Context context)
     {
-        return getPreference(context).getString(MyConstant.MILES,"2.5")+ " per day";
+        return getPreference(context).getString(MyConstant.MILES, "2.5") + " per day";
     }
     //**********************************************************************************************
 
@@ -306,7 +300,7 @@ public class MySharedPreference
 
     public String getDailyCalories(Context context)
     {
-        return getPreference(context).getString(MyConstant.CALORIES,"1000")+" per day";
+        return getPreference(context).getString(MyConstant.CALORIES, "1000") + " per day";
     }
     //**********************************************************************************************
 
@@ -320,14 +314,12 @@ public class MySharedPreference
 
     public String getDailySleep(Context context)
     {
-        return getPreference(context).getString(MyConstant.SLEEP,"9")+" hour per day";
+        return getPreference(context).getString(MyConstant.SLEEP, "9") + " hour per day";
 
     }
 
 
-
-
-   public void removeGoalKeys(Context context)
+    public void removeGoalKeys(Context context)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
         editor.remove(MyConstant.STEPS);
@@ -342,65 +334,95 @@ public class MySharedPreference
     //**********************************************************************************************
     //**********************************************************************************************
 
+    // STANDARD UNIT : METRIC OR IMPERIAL
+    public void saveStandardUnit(Context context, String standardUnit)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.METRIC_IMPERIAL, standardUnit);
+        editor.apply();
+    }
+
+    public String getStandardUnit(Context context)
+    {
+        return getPreference(context).getString(MyConstant.METRIC_IMPERIAL, MyConstant.IMPERIAL);
+
+    }
+
+
+    public String getUnit(Context context,String weightStrideDistance)
+    {
+        String standardUnit = getStandardUnit(context);
+
+        if(weightStrideDistance.equals(MyConstant.WEIGHT))
+        {
+            return standardUnit.equals(MyConstant.IMPERIAL) ? MyConstant.LBS : MyConstant.KG;
+        }
+        else if(weightStrideDistance.equals(MyConstant.STRIDE))
+        {
+            return standardUnit.equals(MyConstant.IMPERIAL) ? MyConstant.IN : MyConstant.CM;
+        }
+        else  // For Distance KM or MILES
+        {
+            return standardUnit.equals(MyConstant.IMPERIAL) ? MyConstant.MILES : MyConstant.KM;
+        }
+    }
 
 
     // DISATNCE UNIT MILES KM
-    public void saveDistanceUnit(Context context, String distanceUnit)
-    {
-        SharedPreferences.Editor editor = getPreference(context).edit();
-        editor.putString(MyConstant.MILES_KM, distanceUnit);
-        editor.apply();
-    }
-
-    public String getDistanceUnit(Context context)
-    {
-        return getPreference(context).getString(MyConstant.MILES_KM,MyConstant.KM);
-
-    }
-
-
-    public void saveWeightUnit(Context context, String weightUnit)
-    {
-        SharedPreferences.Editor editor = getPreference(context).edit();
-        editor.putString(MyConstant.LBS_KG, weightUnit);
-        editor.apply();
-    }
-
-    public String getWeightUnit(Context context)
-    {
-        return getPreference(context).getString(MyConstant.LBS_KG, MyConstant.LBS);
-    }
+//    public void saveDistanceUnit(Context context, String distanceUnit)
+//    {
+//        SharedPreferences.Editor editor = getPreference(context).edit();
+//        editor.putString(MyConstant.MILES_KM, distanceUnit);
+//        editor.apply();
+//    }
+//
+//    public String getDistanceUnit(Context context)
+//    {
+//        return getPreference(context).getString(MyConstant.MILES_KM,MyConstant.KM);
+//
+//    }
 
 
-    public void saveStrideUnit(Context context, String strideUnit)
-    {
-        SharedPreferences.Editor editor = getPreference(context).edit();
-        editor.putString(MyConstant.IN_CM, strideUnit);
-        editor.apply();
-    }
+//    public void saveWeightUnit(Context context, String weightUnit)
+//    {
+//        SharedPreferences.Editor editor = getPreference(context).edit();
+//        editor.putString(MyConstant.LBS_KG, weightUnit);
+//        editor.apply();
+//    }
+//
+//    public String getWeightUnit(Context context)
+//    {
+//        return getPreference(context).getString(MyConstant.LBS_KG, MyConstant.LBS);
+//    }
 
-    public String getStrideUnit(Context context)
-    {
-        return getPreference(context).getString(MyConstant.IN_CM, MyConstant.IN);
-    }
 
-
+//    public void saveStrideUnit(Context context, String strideUnit)
+//    {
+//        SharedPreferences.Editor editor = getPreference(context).edit();
+//        editor.putString(MyConstant.IN_CM, strideUnit);
+//        editor.apply();
+//    }
+//
+//    public String getStrideUnit(Context context)
+//    {
+//        return getPreference(context).getString(MyConstant.IN_CM, MyConstant.IN);
+//    }
 
 
     //**********************************************************************************************
     // User Details
     //**********************************************************************************************
 
-    public void saveAccessToken(Context context, String accessToken)
+    public void saveUID(Context context, String uid)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
-        editor.putString(MyConstant.ACCESS_TOKEN, accessToken);
+        editor.putString(MyConstant.UID, uid);
         editor.apply();
     }
 
-    public String getAccessToken(Context context)
+    public String getUID(Context context)
     {
-        return getPreference(context).getString(MyConstant.ACCESS_TOKEN, "");
+        return getPreference(context).getString(MyConstant.UID, "");
     }
 
 }

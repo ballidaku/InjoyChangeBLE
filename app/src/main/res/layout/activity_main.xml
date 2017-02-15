@@ -172,7 +172,7 @@
 
     <fragment
         android:id="@+id/fragment_navigation_drawer"
-        android:name="com.ble.sharan.mainScreen.fragments.FragmentDrawer"
+        android:name="com.ble.sharan.mainScreen.fragments.mainFragments.FragmentDrawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"

@@ -1,4 +1,4 @@
-package com.ble.sharan.mainScreen.fragments;
+package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -186,36 +186,40 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
     {
         Switch mySwitch;
 
+        boolean previousValue=false;
+
         public SwitchListener(Switch mySwitch)
         {
             this.mySwitch = mySwitch;
+
+            previousValue = mySwitch.isChecked();
         }
 
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b)
         {
 
-            Log.e("Hello", "Balli");
+          //  Log.e(TAG, "Balli----"+b);
 
 
-            if (!((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
+            if (!((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED) && startWork)
             {
                 MyUtil.showToast(context, "Your device is not connected yet!!");
-                mySwitch.setChecked(false);
+                mySwitch.setChecked(!b);
             }
             else if (mySwitch == switch_firstOnOff && startWork)
             {
-                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_FIRST, "");
+                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_FIRST, "00:00 AM,alm000007F1000000");
                 String[] commandString = alarm.split(",");
 
-//                Log.e("Alarm", "----" + alarm);
+              //  Log.e(TAG,"Alarm inside----" + alarm);
 
                 if (!alarm.isEmpty())
                 {
                     if (b)
                     {
                         MySharedPreference.getInstance().setTrueIsAlarmActivated(context, MyConstant.ALARM_FIRST);
-                        Log.e("commandString", "" + commandString[1]);
+                    //    Log.e(TAG,"commandString inside" + commandString[1]);
                         // To set alarm
                         setAlarm(commandString[1]);
                     }
@@ -223,12 +227,13 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
                     {
                         MySharedPreference.getInstance().deleteAlarm(context, MyConstant.ALARM_FIRST);
                         disableAlarm(commandString[1]);
+
                     }
                 }
             }
             else if (mySwitch == switch_secondOnOff && startWork)
             {
-                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_SECOND, "");
+                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_SECOND, "00:00 AM,alm100007F1000000");
                 String[] commandString = alarm.split(",");
 
                 if (!alarm.isEmpty())
@@ -237,7 +242,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
                     if (b)
                     {
                         MySharedPreference.getInstance().setTrueIsAlarmActivated(context, MyConstant.ALARM_SECOND);
-                        Log.e("commandString", "" + commandString[1]);
+                      //  Log.e(TAG,"commandString" + commandString[1]);
                         // To set alarm
                         setAlarm(commandString[1]);
                     }
@@ -250,7 +255,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             }
             else if (mySwitch == switch_thirdOnOff && startWork)
             {
-                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_THIRD, "");
+                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_THIRD, "00:00 AM,alm200007F1000000");
 
                 String[] commandString = alarm.split(",");
 
@@ -259,7 +264,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
                     if (b)
                     {
                         MySharedPreference.getInstance().setTrueIsAlarmActivated(context, MyConstant.ALARM_THIRD);
-                        Log.e("commandString", "---" + commandString[1]);
+                     //   Log.e(TAG,"commandString---" + commandString[1]);
                         // To set alarm
                         setAlarm(commandString[1]);
                     }
@@ -351,7 +356,8 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             alarmKey = "0";
 
-            switch_firstOnOff.setChecked(false);
+            //switch_firstOnOff.setChecked(false);
+            switch_firstOnOff.setChecked(true);
         }
         else if (ALARM_NUMBER.equals(MyConstant.ALARM_SECOND))
         {
@@ -361,7 +367,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             alarmKey = "1";
 
-            switch_secondOnOff.setChecked(false);
+            //switch_secondOnOff.setChecked(false);
         }
         else if (ALARM_NUMBER.equals(MyConstant.ALARM_THIRD))
         {
@@ -371,13 +377,13 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             alarmKey = "2";
 
-            switch_thirdOnOff.setChecked(false);
+            //switch_thirdOnOff.setChecked(false);
         }
 
         saveAlarm(alarmKey, showTime, alarmTime);
 
 
-        MyLog("alarmTime", "" + alarmTime + "----" + showTime);
+       // Log.e(TAG,"alarmTime---" + alarmTime + "----" + showTime);
     }
 
 
@@ -385,7 +391,11 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
     {
         String commandToSetAlarm = "alm" + alarmKey + alarmTime + "7F1000000";
 
-        MyLog("commandToSetAlarm Map", "" + commandToSetAlarm);
+     //   Log.e(TAG,"commandToSetAlarm Map" + commandToSetAlarm);
+
+
+        // BY ME NOW
+        setAlarm(commandToSetAlarm);
 
 
         MySharedPreference.getInstance().saveAlarm(context, ALARM_NUMBER, showTime + "," + commandToSetAlarm);
@@ -395,7 +405,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
     public void setAlarm(String commandToSetAlarm)
     {
-        MyLog("Command", commandToSetAlarm);
+        Log.e(TAG,"Command"+ commandToSetAlarm);
 
         ((MainActivityNew) context).commandToBLE(commandToSetAlarm);
 
@@ -408,7 +418,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
         StringBuilder stringBuilder = new StringBuilder(command);
         stringBuilder.setCharAt(10, '0');
 
-        MyLog("disableAlarm", stringBuilder.toString());
+        Log.e(TAG,"disableAlarm"+ stringBuilder.toString());
 
         ((MainActivityNew) context).commandToBLE(stringBuilder.toString());
 
@@ -586,10 +596,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 //    }
 
 
-    public void MyLog(String msg, String value)
-    {
-        Log.e(TAG, "---" + msg + "---" + value);
-    }
+
 
 
 }

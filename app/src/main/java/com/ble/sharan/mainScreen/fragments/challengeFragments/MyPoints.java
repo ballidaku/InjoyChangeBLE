@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.ble.sharan.asyncTask.Super_AsyncTask;
 import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
 import org.json.JSONArray;
@@ -38,8 +40,11 @@ public class MyPoints extends Fragment
     Context context;
     View view;
 
-
+    ImageView imgv_user;
+    TextView txtv_userName;
     TextView txtv_total;
+    TextView txtv_totalPoints;
+    TextView txtv_entry;
 
     ListView listViewPoints;
 
@@ -61,6 +66,8 @@ public class MyPoints extends Fragment
 
             setUpIds();
 
+
+            GET_USER_POINTS_DATA_FROM_SERVER();
             GET_DATA_FROM_SERVER();
 
         }
@@ -73,7 +80,7 @@ public class MyPoints extends Fragment
     {
         super.onResume();
 
-        ((MainActivityNew)getActivity()).setTitleHeader("My Points");
+        ((MainActivityNew) getActivity()).setTitleHeader("My Points");
 
 
     }
@@ -81,6 +88,16 @@ public class MyPoints extends Fragment
 
     private void setUpIds()
     {
+
+        imgv_user=(ImageView)view.findViewById(R.id.imgv_user);
+        txtv_userName=(TextView) view.findViewById(R.id.txtv_userName);
+
+        myUtil.showCircularImageWithPicasso(context,imgv_user, MySharedPreference.getInstance().getPhoto(context));
+        txtv_userName.setText(MySharedPreference.getInstance().getName(context));
+
+        txtv_totalPoints = (TextView) view.findViewById(R.id.txtv_totalPoints);
+        txtv_entry = (TextView) view.findViewById(R.id.txtv_entry);
+
         listViewPoints = (ListView) view.findViewById(R.id.listViewPoints);
 
         txtv_total = (TextView) view.findViewById(R.id.txtv_total);
@@ -146,6 +163,46 @@ public class MyPoints extends Fragment
                 }
             }
         }, true));
+
+
+    }
+
+
+
+    public void GET_USER_POINTS_DATA_FROM_SERVER()
+    {
+
+
+        MyUtil.execute(new Super_AsyncTask(context, MyConstant.USER_POINTS + MySharedPreference.getInstance().getUID(context), new Super_AsyncTask_Interface()
+        {
+            @Override
+            public void onTaskCompleted(String output)
+            {
+                try
+                {
+
+                    JSONObject object = new JSONObject(output);
+
+                    String status = object.getString(MyConstant.STATUS);
+
+                    if (status.equals(MyConstant.TRUE))
+                    {
+                        String totalPoints = object.getString(MyConstant.TOTAL_POINTS);
+                        String raffleTicket = object.getString(MyConstant.RAFFLE_TICKET);
+
+                        txtv_totalPoints.setText(totalPoints);
+                        txtv_entry.setText(raffleTicket +" ENTRY");
+
+
+                    }
+
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }, false));
 
 
     }

@@ -56,7 +56,7 @@
 
         <fragment
             android:id="@+id/fragment_activity"
-            android:name="com.ble.sharan.mainScreen.fragments.TodayActivityFragment"
+            android:name="com.ble.sharan.mainScreen.fragments.mainFragments.TodayActivityFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -72,7 +72,7 @@
 
         <fragment
             android:id="@+id/fragment_overall"
-            android:name="com.ble.sharan.mainScreen.fragments.Overall"
+            android:name="com.ble.sharan.mainScreen.fragments.mainFragments.Overall"
             android:layout_height="match_parent"
             android:layout_width="match_parent"/>
 

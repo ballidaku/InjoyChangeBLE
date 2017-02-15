@@ -193,7 +193,7 @@ public class MyUtil
         //        int weight = 60;
         double weight = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
 
-        String weightUnit = MySharedPreference.getInstance().getWeightUnit(context);
+        String weightUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.WEIGHT);
 
         if (!weightUnit.equals(MyConstant.LBS))
         {
@@ -282,7 +282,7 @@ public class MyUtil
     {
         double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
 
-        String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
+        String strideUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.STRIDE);
 
 
         if (strideUnit.equals(MyConstant.CM))
@@ -368,6 +368,39 @@ public class MyUtil
         }
 
         return remainingKm > 0 ? new DecimalFormat("##.##").format(remainingKm) : "" + 0;
+    }
+
+
+    //**********************************************************************************************
+    // SLEEP HR
+    //**********************************************************************************************
+
+    public String getSleepHr(Context context, MyDatabase myDatabase)
+    {
+        String sleepTime = "";
+
+        try
+        {
+            long millis = myDatabase.getTodaySleepTime(context);
+            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+
+            int Hours = (int) (millis / (1000 * 60 * 60));
+            int Mins = (int) (millis / (1000 * 60)) % 60;
+
+            String diff = Hours + ":" + Mins; // updated value every1 second
+
+//            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+
+            sleepTime = myFormat.format(myFormat.parse(diff));
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+        return sleepTime;
+//        Log.e("Sleep Database",""+myDatabase.getAllSleepData());
     }
 
 

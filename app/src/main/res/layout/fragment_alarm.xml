@@ -96,19 +96,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+
                     android:orientation="vertical">
 
                     <Switch
                         android:id="@+id/switch_firstOnOff"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:switchMinWidth="@dimen/_30sdp"
                         android:checked="false"
-                        android:padding="5dp"
                         android:textOff=""
                         android:textOn=""
-                        android:thumb="@mipmap/thumb_track"
-                        android:track="@mipmap/switch_bg"/>
+                        android:padding="5dp"
+                        android:switchMinWidth="40dp"
+                        android:thumb="@drawable/switch_thumb_selector"
+                        android:track="@drawable/switch_track_selector"/>
 
 
                     <TextView
@@ -190,15 +191,15 @@
 
                     <Switch
                         android:id="@+id/switch_secondOnOff"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:padding="5dp"
-                        android:switchMinWidth="@dimen/_30sdp"
                         android:textOff=""
                         android:textOn=""
-                        android:thumb="@mipmap/thumb_track"
-                        android:track="@mipmap/switch_bg"/>
+                        android:padding="5dp"
+                        android:switchMinWidth="40dp"
+                        android:thumb="@drawable/switch_thumb_selector"
+                        android:track="@drawable/switch_track_selector"/>
 
 
                     <TextView
@@ -279,15 +280,15 @@
 
                     <Switch
                         android:id="@+id/switch_thirdOnOff"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:padding="5dp"
-                        android:switchMinWidth="@dimen/_30sdp"
                         android:textOff=""
                         android:textOn=""
-                        android:thumb="@mipmap/thumb_track"
-                        android:track="@mipmap/switch_bg"/>
+                        android:padding="5dp"
+                        android:switchMinWidth="40dp"
+                        android:thumb="@drawable/switch_thumb_selector"
+                        android:track="@drawable/switch_track_selector"/>
 
 
                     <TextView

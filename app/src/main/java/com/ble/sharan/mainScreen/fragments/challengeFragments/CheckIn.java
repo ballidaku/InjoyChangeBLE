@@ -11,7 +11,11 @@ import android.widget.ListView;
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.CheckInAdapter;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
+import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyUtil;
+
+import java.util.HashMap;
 
 /**
  * Created by brst-pc93 on 2/6/17.
@@ -36,7 +40,10 @@ public class CheckIn  extends Fragment
 
     String stringvalue[] = {"STEPS", "CALORIES", "MILES", "SLEEP"};
 
-    String num_value[] = {"5800", "2240", "2.1", "4:00h"};
+//    String num_value[] = {"5800", "2240", "2.1", "4:00h"};
+
+
+    MyDatabase myDatabase;
 
 
 
@@ -51,6 +58,7 @@ public class CheckIn  extends Fragment
             view = inflater.inflate(R.layout.fragment_checkin, container, false);
 
 
+            myDatabase=new MyDatabase(context);
             setUpIds();
 
         }
@@ -70,10 +78,21 @@ public class CheckIn  extends Fragment
 
     private void setUpIds()
     {
+        int steps =myDatabase.getTodaySteps(context);
+
+        HashMap<String,String>map = new HashMap<>();
+        map.put(MyConstant.STEPS,  String.valueOf(steps));
+        map.put(MyConstant.CALORIES,  myUtil.stepsToCalories(context, steps));
+        map.put(MyConstant.DISTANCE,  myUtil.stepsToDistance(context, steps));
+        map.put(MyConstant.SLEEP,  myUtil.getSleepHr(context,myDatabase));
+
+
+
+
 
         listViewCheckIn = (ListView)view.findViewById(R.id.listViewCheckIn);
 
-        CheckInAdapter checkInAdapter = new CheckInAdapter(context, images, stringvalue, num_value);
+        CheckInAdapter checkInAdapter = new CheckInAdapter(context, images, stringvalue, map);
         listViewCheckIn.setAdapter(checkInAdapter);
 
         myUtil.setListViewHeight(listViewCheckIn);

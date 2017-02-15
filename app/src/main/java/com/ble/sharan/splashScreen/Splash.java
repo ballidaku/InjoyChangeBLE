@@ -40,7 +40,7 @@ public class Splash extends AppCompatActivity
         public void onFinish()
         {
 
-            if(MySharedPreference.getInstance().getAccessToken(context).isEmpty())
+            if(MySharedPreference.getInstance().getUID(context).isEmpty())
             {
                 Intent intent = new Intent(context, LoginActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -342,7 +342,7 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <LinearLayout
+         <!--       <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -378,37 +378,6 @@
 
 
                     </RadioGroup>
-
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:gravity="right"-->
-                        <!--android:orientation="vertical">-->
-
-                        <!--<Switch-->
-                            <!--android:id="@+id/switch_distance"-->
-                            <!--android:layout_width="100dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:checked="false"-->
-                            <!--android:padding="5dp"-->
-                            <!--android:switchMinWidth="30dp"-->
-                            <!--android:textOff=""-->
-                            <!--android:textOn=""-->
-                            <!--android:thumb="@mipmap/thumb_track"-->
-                            <!--android:track="@mipmap/switch_bg"/>-->
-
-
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:gravity="center"-->
-                            <!--android:padding="5dp"-->
-                            <!--android:text="Miles/Km"/>-->
-
-
-                    <!--</LinearLayout>-->
-
 
                 </LinearLayout>
 
@@ -456,36 +425,6 @@
 
                     </RadioGroup>
 
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:gravity="right"-->
-                        <!--android:orientation="vertical">-->
-
-                        <!--<Switch-->
-                            <!--android:id="@+id/switch_weight"-->
-                            <!--android:layout_width="100dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:checked="false"-->
-                            <!--android:padding="5dp"-->
-                            <!--android:switchMinWidth="24dp"-->
-                            <!--android:textOff=""-->
-                            <!--android:textOn=""-->
-                            <!--android:thumb="@mipmap/thumb_track"-->
-                            <!--android:track="@mipmap/switch_bg"/>-->
-
-
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:gravity="center"-->
-                            <!--android:padding="5dp"-->
-                            <!--android:text="Lbs/Kg"/>-->
-
-
-                    <!--</LinearLayout>-->
-
-
                 </LinearLayout>
 
                 <View
@@ -532,34 +471,45 @@
                     </RadioGroup>
 
 
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:gravity="right"-->
-                        <!--android:orientation="vertical">-->
-
-                        <!--<Switch-->
-                            <!--android:id="@+id/switch_stride"-->
-                            <!--android:layout_width="100dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:checked="false"-->
-                            <!--android:padding="5dp"-->
-                            <!--android:switchMinWidth="24dp"-->
-                            <!--android:textOff=""-->
-                            <!--android:textOn=""-->
-                            <!--android:thumb="@mipmap/thumb_track"-->
-                            <!--android:track="@mipmap/switch_bg"/>-->
+                </LinearLayout>-->
 
 
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:gravity="center"-->
-                            <!--android:padding="5dp"-->
-                            <!--android:text="In/Cm"/>-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_6sdp">
 
 
-                    <!--</LinearLayout>-->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Standard"
+                        android:textSize="@dimen/_16sdp"/>
+
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupStandard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radioButtonMetric"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="wrap_content"
+                            android:text="Metric"/>
+
+                        <RadioButton
+                            android:id="@+id/radioButtonImperial"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="wrap_content"
+                            android:text="Imperial"/>
+
+                    </RadioGroup>
 
 
                 </LinearLayout>

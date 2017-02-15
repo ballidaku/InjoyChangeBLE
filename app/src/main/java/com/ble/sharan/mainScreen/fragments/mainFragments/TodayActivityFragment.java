@@ -1,4 +1,4 @@
-package com.ble.sharan.mainScreen.fragments;
+package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -22,7 +22,6 @@ import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -253,38 +252,43 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
     public void refreshSleepTextView()
     {
-        txtv_sleepHour.setText(sleepTime());
+//        txtv_sleepHour.setText(sleepTime());
 
-        txtv_sleepHourToGo.setText(myUtil.sleepHrToRemainingHr(context, sleepTime()));
+
+        String sleepTime = myUtil.getSleepHr(context,myDatabase);
+
+        txtv_sleepHour.setText(sleepTime);
+
+        txtv_sleepHourToGo.setText(myUtil.sleepHrToRemainingHr(context, sleepTime));
     }
 
-    public String sleepTime()
-    {
-        String sleepTime = "";
-
-        try
-        {
-            long millis = myDatabase.getTodaySleepTime(context);
-            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
-
-            int Hours = (int) (millis / (1000 * 60 * 60));
-            int Mins = (int) (millis / (1000 * 60)) % 60;
-
-            String diff = Hours + ":" + Mins; // updated value every1 second
-
-//            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
-
-            sleepTime = myFormat.format(myFormat.parse(diff));
-
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-
-        return sleepTime;
-//        Log.e("Sleep Database",""+myDatabase.getAllSleepData());
-    }
+//    public String sleepTime()
+//    {
+//        String sleepTime = "";
+//
+//        try
+//        {
+//            long millis = myDatabase.getTodaySleepTime(context);
+//            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+//
+//            int Hours = (int) (millis / (1000 * 60 * 60));
+//            int Mins = (int) (millis / (1000 * 60)) % 60;
+//
+//            String diff = Hours + ":" + Mins; // updated value every1 second
+//
+////            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+//
+//            sleepTime = myFormat.format(myFormat.parse(diff));
+//
+//        } catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//
+//
+//        return sleepTime;
+////        Log.e("Sleep Database",""+myDatabase.getAllSleepData());
+//    }
 
 
     //**********************************************************************************************
@@ -336,11 +340,12 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     {
         String todayDate = myUtil.getTodaydate2();
         String todaySteps = String.valueOf(steps);
-        String todaySleepTime = sleepTime();
+//        String todaySleepTime = sleepTime();
+        String todaySleepTime = myUtil.getSleepHr(context,myDatabase);
 
         HashMap<String, String> map = new HashMap<>();
 
-        map.put(MyConstant.ACCESS_TOKEN, MySharedPreference.getInstance().getAccessToken(context));
+        map.put(MyConstant.UID, MySharedPreference.getInstance().getUID(context));
         map.put(MyConstant.STEPS, todaySteps);
         map.put(MyConstant.DATE, todayDate);
         map.put("sleephr", todaySleepTime);

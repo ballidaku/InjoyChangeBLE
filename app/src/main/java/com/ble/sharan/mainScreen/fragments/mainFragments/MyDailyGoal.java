@@ -1,4 +1,4 @@
-package com.ble.sharan.mainScreen.fragments;
+package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.method.KeyListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -107,7 +108,7 @@ public class MyDailyGoal extends Fragment
         edtv_sleep.setOnTouchListener(new MyTouchListerner(edtv_sleep));
 
 
-        refreshUI();
+        refreshUIData();
 
     }
 
@@ -265,12 +266,25 @@ public class MyDailyGoal extends Fragment
 
 
 
-    private void refreshUI()
+    private void refreshUIData()
     {
-        edtv_steps.setText(MySharedPreference.getInstance().getDailySteps(context));
-        edtv_miles.setText(MySharedPreference.getInstance().getDailyMiles(context));
-        edtv_calories.setText(MySharedPreference.getInstance().getDailyCalories(context));
-        edtv_sleep.setText(MySharedPreference.getInstance().getDailySleep(context));
+//        edtv_steps.setText(MySharedPreference.getInstance().getDailySteps(context));
+//        edtv_miles.setText(MySharedPreference.getInstance().getDailyMiles(context));
+//        edtv_calories.setText(MySharedPreference.getInstance().getDailyCalories(context));
+//        edtv_sleep.setText(MySharedPreference.getInstance().getDailySleep(context));
+
+        HashMap<String,String> map=myDatabase.getGoalDataOnDateIfExistsOrNot(myUtil.getTodaydate());
+
+        edtv_steps.setText(map.get(MyConstant.STEPS));
+        edtv_miles.setText(map.get(MyConstant.DISTANCE));
+        edtv_calories.setText(map.get(MyConstant.CALORIES));
+        edtv_sleep.setText(map.get(MyConstant.SLEEP));
+
+
+
+
+        Log.e(TAG,"Map----"+map);
+
 
 
     }

@@ -9,78 +9,81 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         app:cardUseCompatPadding="true"
         card_view:cardCornerRadius="@dimen/_3sdp"
         card_view:cardElevation="@dimen/_5sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/_10sdp"
-            android:paddingRight="@dimen/_10sdp">
+            android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:id="@+id/imgv_user"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_margin="@dimen/_5sdp"
                 android:background="@mipmap/ic_imag1"/>
 
-            <TextView
-                android:id="@+id/share_tv"
+            <EditText
+                android:id="@+id/editTextComment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingLeft="5dp"
-                android:text="Share what activities you've been up to"
+                android:maxLength="100"
+                android:hint="Share what activities you've been up to"
+                android:background="@null"
+                android:gravity="top"
+                android:maxLines="3"
                 android:textSize="@dimen/_10sdp"/>
 
-            <!--<ImageView-->
-            <!--android:layout_width="150dp"-->
-            <!--android:layout_height="35dp"-->
-            <!--android:background="@mipmap/ic_shout_btn" />-->
-            <FrameLayout
-                android:layout_width="150dp"
-                android:layout_height="35dp">
 
-                <TextView
+            <FrameLayout
+                android:id="@+id/frameLayoutSubmit"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_height="wrap_content">
+
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/_30sdp"
                     android:background="@drawable/blue_background_round_corners"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_8sdp"
-                    android:gravity="center_vertical">
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/_6sdp"
+                    android:paddingRight="@dimen/_6sdp"
+                    android:layout_gravity="center"
+                    android:gravity="center">
 
                     <ImageView
                         android:id="@+id/check1_iv"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
                         android:background="@mipmap/ic_white_circle"/>
 
                     <ImageView
                         android:id="@+id/check2_iv"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
                         android:background="@mipmap/ic_white_circle"/>
 
                     <ImageView
                         android:id="@+id/check3_iv"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
                         android:layout_marginRight="2dp"
                         android:background="@mipmap/ic_white_circle"/>
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="SUBMIT 30 PTS"
+                        android:text="SUBMIT 10 PTS"
                         android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_7sdp"
+                        android:textSize="@dimen/_8sdp"
                         android:textStyle="bold"/>
 
                 </LinearLayout>
@@ -99,10 +102,18 @@
         card_view:cardCornerRadius="@dimen/_3sdp"
         card_view:cardElevation="@dimen/_5sdp">
 
-        <com.ble.sharan.myUtilities.EndlessListView
-            android:id="@+id/endLesslistViewShoutOut"
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <com.ble.sharan.myUtilities.EndlessListView
+                android:id="@+id/endLesslistViewShoutOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
     </android.support.v7.widget.CardView>

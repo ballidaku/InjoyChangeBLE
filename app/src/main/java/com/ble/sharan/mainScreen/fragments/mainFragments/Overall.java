@@ -1,4 +1,4 @@
-package com.ble.sharan.mainScreen.fragments;
+package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -117,7 +117,7 @@ public class Overall extends Fragment
     {
         double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
 
-        String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
+        String strideUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.STRIDE);
 
 
         if (strideUnit.equals(MyConstant.CM))
@@ -136,7 +136,7 @@ public class Overall extends Fragment
         double distance = steps * strideInDouble;
 
 
-        if(MySharedPreference.getInstance().getDistanceUnit(context).equals(MyConstant.MILES))
+        if(MySharedPreference.getInstance().getUnit(context,MyConstant.DISTANCE).equals(MyConstant.MILES))
         {
             txtv_km_milesHeading.setText("TOTAL MILES");
 //            Log.e(TAG, "distance-----" + distance);

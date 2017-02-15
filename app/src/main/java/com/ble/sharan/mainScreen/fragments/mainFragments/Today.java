@@ -1,4 +1,4 @@
-package com.ble.sharan.mainScreen.fragments;
+package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,20 +17,24 @@ import com.ble.sharan.myUtilities.MyConstant;
  * Created by brst-pc93 on 1/4/17.
  */
 
-public class MyWeek extends Fragment implements View.OnClickListener
+public class Today extends Fragment implements View.OnClickListener
 {
+    public static final String TAG = Today.class.getSimpleName();
+
 
     Context context;
     View view;
 
 
     TextView txtv_activity;
-    TextView txtv_sleep;
-
+    TextView txtv_overall;
 
     FrameLayout framelayout_activity;
     FrameLayout framelayout_sleep;
 
+    Fragment fragment_activity;
+
+    Fragment fragment_overall;
 
 
     @Override
@@ -41,8 +45,7 @@ public class MyWeek extends Fragment implements View.OnClickListener
 
         if (view == null)
         {
-            view = inflater.inflate(R.layout.fragment_myweek, container, false);
-
+            view = inflater.inflate(R.layout.fragment_today, container, false);
 
             setUpIds();
 
@@ -54,14 +57,18 @@ public class MyWeek extends Fragment implements View.OnClickListener
     private void setUpIds()
     {
         (txtv_activity = (TextView) view.findViewById(R.id.txtv_activity)).setOnClickListener(this);
-        (txtv_sleep = (TextView) view.findViewById(R.id.txtv_sleep)).setOnClickListener(this);
+        (txtv_overall = (TextView) view.findViewById(R.id.txtv_overall)).setOnClickListener(this);
 
 
         framelayout_activity = (FrameLayout) view.findViewById(R.id.framelayout_activity);
         framelayout_sleep = (FrameLayout) view.findViewById(R.id.framelayout_sleep);
 
-        changeF("A");
 
+
+         fragment_activity = getChildFragmentManager().findFragmentById(R.id.fragment_activity);
+        fragment_overall = getChildFragmentManager().findFragmentById(R.id.fragment_overall);
+
+        changeF("A");
 
     }
 
@@ -74,19 +81,15 @@ public class MyWeek extends Fragment implements View.OnClickListener
             case R.id.txtv_activity:
 
                 change(MyConstant.ACTIVITY);
-
                 changeF("A");
-
 
                 break;
 
 
-            case R.id.txtv_sleep:
+            case R.id.txtv_overall:
 
-                change(MyConstant.SLEEP);
-
-                changeF("S");
-
+                change(MyConstant.OVERALL);
+                changeF("O");
 
                 break;
 
@@ -99,8 +102,8 @@ public class MyWeek extends Fragment implements View.OnClickListener
         txtv_activity.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
         txtv_activity.setBackgroundResource(R.drawable.left_selector_blue);
 
-        txtv_sleep.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
-        txtv_sleep.setBackgroundResource(R.drawable.right_selector_blue);
+        txtv_overall.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
+        txtv_overall.setBackgroundResource(R.drawable.right_selector_blue);
 
 
         if (fromWhere.equals(MyConstant.ACTIVITY))
@@ -110,11 +113,9 @@ public class MyWeek extends Fragment implements View.OnClickListener
         }
         else
         {
-            txtv_sleep.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
-            txtv_sleep.setBackgroundResource(R.drawable.right_selector_white);
+            txtv_overall.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
+            txtv_overall.setBackgroundResource(R.drawable.right_selector_white);
         }
-
-
     }
 
 
@@ -129,9 +130,34 @@ public class MyWeek extends Fragment implements View.OnClickListener
         {
             framelayout_sleep.setVisibility(View.VISIBLE);
             framelayout_activity.setVisibility(View.GONE);
+
+
+            ((Overall)fragment_overall).updateUI();
+
         }
 
     }
+
+
+
+    // Roots to  child fragment
+    public void bleStatus(String BLE_STATUS)
+    {
+
+        ((TodayActivityFragment) fragment_activity).bleStatus(BLE_STATUS);
+
+    }
+
+    public void calculate(int data)
+    {
+        ((TodayActivityFragment) fragment_activity).calculate(data,true);
+    }
+
+    public void sleepTime()
+    {
+        ((TodayActivityFragment) fragment_activity).refreshSleepTextView();
+    }
+
 
 
 }

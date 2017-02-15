@@ -42,7 +42,7 @@ public class MyDatabase extends SQLiteOpenHelper
     private static final String KEY_DATE = "date";
     private static final String KEY_STEPS = "steps";
     private static final String KEY_SLEEP_TIME = "sleep_time";// in millis
-    private static final String KEY_ACCESS_TOKEN = "access_token";
+    private static final String KEY_UID = "uid";
 
     private static final String KEY_DISTANCE = "distance";
     private static final String KEY_CALORIES = "calories";
@@ -61,13 +61,13 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_STEP_RECORD + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE + " TEXT,"
-                + KEY_STEPS + " TEXT," + KEY_ACCESS_TOKEN + " TEXT" + ")";
+                + KEY_STEPS + " TEXT," + KEY_UID + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
 
 
         String CREATE_SLEEP_TABLE = "CREATE TABLE " + TABLE_SLEEP_RECORD + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE + " TEXT,"
-                + KEY_SLEEP_TIME + " INTEGER," + KEY_ACCESS_TOKEN + " TEXT" + ")";
+                + KEY_SLEEP_TIME + " INTEGER," + KEY_UID + " TEXT" + ")";
         db.execSQL(CREATE_SLEEP_TABLE);
 
 
@@ -109,7 +109,7 @@ public class MyDatabase extends SQLiteOpenHelper
             ContentValues values = new ContentValues();
             values.put(KEY_DATE, beanRecords.getDate()); // Date
             values.put(KEY_STEPS, beanRecords.getSteps()); // Steps
-            values.put(KEY_ACCESS_TOKEN, MySharedPreference.getInstance().getAccessToken(context)); // Access Token
+            values.put(KEY_UID, MySharedPreference.getInstance().getUID(context)); // Access Token
 
             // Inserting Row
             db.insert(TABLE_STEP_RECORD, null, values);
@@ -129,7 +129,7 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN}, KEY_DATE + "=? AND " + KEY_ACCESS_TOKEN + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_UID}, KEY_DATE + "=? AND " + KEY_UID + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getUID(context)}, null, null, null, null);
         if (cursor != null)
         {
             cursor.moveToFirst();
@@ -169,7 +169,7 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_UID}, KEY_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
         {
             cursor.moveToFirst();
@@ -190,7 +190,7 @@ public class MyDatabase extends SQLiteOpenHelper
 
         SQLiteDatabase db = this.getWritableDatabase();
 //        Cursor cursor = db.rawQuery(selectQuery, null);
-        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_ACCESS_TOKEN}, KEY_ACCESS_TOKEN + "=?", new String[]{MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_UID}, KEY_UID + "=?", new String[]{MySharedPreference.getInstance().getUID(context)}, null, null, null, null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst())
@@ -344,7 +344,7 @@ public class MyDatabase extends SQLiteOpenHelper
 //                    ContentValues values = new ContentValues();
 //                    values.put(KEY_DATE, date); // Date
 //                    values.put(KEY_SLEEP_TIME, MILLIS);
-//                    values.put(KEY_ACCESS_TOKEN, MySharedPreference.getInstance().getAccessToken(context)); // Access Token
+//                    values.put(KEY_UID, MySharedPreference.getInstance().getAccessToken(context)); // Access Token
 //
 //                    // Inserting Row
 //                    db.insert(TABLE_SLEEP_RECORD, null, values);
@@ -374,7 +374,7 @@ public class MyDatabase extends SQLiteOpenHelper
         ContentValues values = new ContentValues();
         values.put(KEY_DATE, date); // Date
         values.put(KEY_SLEEP_TIME, MILLIS);
-        values.put(KEY_ACCESS_TOKEN, MySharedPreference.getInstance().getAccessToken(context)); // Access Token
+        values.put(KEY_UID, MySharedPreference.getInstance().getUID(context)); // Access Token
 
         // Inserting Row
         db.insert(TABLE_SLEEP_RECORD, null, values);
@@ -386,7 +386,7 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME, KEY_ACCESS_TOKEN}, KEY_DATE + "=? AND " + KEY_ACCESS_TOKEN + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME, KEY_UID}, KEY_DATE + "=? AND " + KEY_UID + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getUID(context)}, null, null, null, null);
         if (cursor != null)
         {
             cursor.moveToFirst();
@@ -506,7 +506,7 @@ public class MyDatabase extends SQLiteOpenHelper
         SQLiteDatabase db = this.getWritableDatabase();
 
 
-        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME, KEY_ACCESS_TOKEN}, KEY_ACCESS_TOKEN + "=?", new String[]{MySharedPreference.getInstance().getAccessToken(context)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME, KEY_UID}, KEY_UID + "=?", new String[]{MySharedPreference.getInstance().getUID(context)}, null, null, null, null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst())

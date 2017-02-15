@@ -18,7 +18,7 @@
             android:layout_marginBottom="@dimen/_20sdp"
             android:layout_marginLeft="@dimen/_18sdp"
             android:layout_marginRight="@dimen/_18sdp"
-            android:layout_marginTop="190dp">
+            android:layout_marginTop="@dimen/_135sdp">
 
 
             <LinearLayout
@@ -56,13 +56,14 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/circle_profile"
+                    android:id="@+id/imgv_user"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="@dimen/_50sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:src="@drawable/ic_no_user"/>
 
                 <TextView
+                    android:id="@+id/txtv_userName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -94,14 +95,15 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:padding="@dimen/_5sdp"
+                        android:padding="@dimen/_3sdp"
                         android:gravity="center"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/txtv_totalPoints"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_20sdp"
-                            android:text="2980"
+                            android:text="0"
                             android:textColor="@color/colorBlack"
                             android:textSize="@dimen/_17sdp"
                             android:textStyle="bold"/>
@@ -122,7 +124,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:padding="@dimen/_5sdp"
+                        android:padding="@dimen/_3sdp"
                         android:gravity="center"
                         android:orientation="vertical">
 
@@ -132,6 +134,7 @@
                             android:src="@mipmap/ic_entry"/>
 
                         <TextView
+                            android:id="@+id/txtv_entry"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 ENTRY"

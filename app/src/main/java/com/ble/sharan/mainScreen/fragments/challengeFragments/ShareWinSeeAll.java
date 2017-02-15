@@ -3,6 +3,7 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by brst-pc93 on 2/9/17.
  */
 
-public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessListener
+public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessListener,SwipeRefreshLayout.OnRefreshListener
 {
 
     Context context;
@@ -39,6 +40,8 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
     MyUtil myUtil = new MyUtil();
 
     EndlessListView endLessListViewShareWin;
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     ShareWinEndlessAdapter shareWinEndlessAdapter;
@@ -79,6 +82,11 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
 
     private void setUpIds()
     {
+
+        swipeRefreshLayout=(SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+
         endLessListViewShareWin = (EndlessListView) view.findViewById(R.id.endLessListViewShareWin);
         endLessListViewShareWin.setLoadingView(R.layout.loading_layout);
     }
@@ -148,6 +156,11 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
     public void setData(List<HashMap> list)
     {
 
+        if(swipeRefreshLayout.isRefreshing())
+        {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
 
         if (val == 0)
         {
@@ -174,6 +187,14 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
 
         GET_DATA_FROM_SERVER();
 
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        val=0;
+        endLessListViewShareWin.isLoading=false;
+        GET_DATA_FROM_SERVER();
     }
 
 

@@ -24,7 +24,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
-
 import com.ble.sharan.adapters.ShoutOutEndlessAdapter;
 
 import java.util.HashMap;
@@ -33,7 +32,7 @@ import java.util.List;
 public class EndlessListView extends ListView implements OnScrollListener {
 	
 	private View footer;
-	private boolean isLoading;
+	public boolean isLoading;
 	private EndlessListener listener;
 	private ShoutOutEndlessAdapter adapter;
 	
@@ -67,6 +66,8 @@ public class EndlessListView extends ListView implements OnScrollListener {
 			return ;
 		
 		int l = visibleItemCount + firstVisibleItem;
+
+//		Log.e("LLLLLLL",""+l+"---------visibleItemCount==="+visibleItemCount+"--------firstVisibleItem--"+firstVisibleItem+"---totalItemCount----"+totalItemCount);
 		if (l >= totalItemCount && !isLoading) {
 			// It is time to add new data. We call the listener
 			this.addFooterView(footer);
@@ -109,6 +110,8 @@ public class EndlessListView extends ListView implements OnScrollListener {
 	{
 		this.removeFooterView(footer);
 	}
+
+
 
 	public EndlessListener setListener() {
 		return listener;
