@@ -24,6 +24,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
+import com.ble.sharan.adapters.ShareWinEndlessAdapter;
 import com.ble.sharan.adapters.ShoutOutEndlessAdapter;
 
 import java.util.HashMap;
@@ -34,7 +35,9 @@ public class EndlessListView extends ListView implements OnScrollListener {
 	private View footer;
 	public boolean isLoading;
 	private EndlessListener listener;
-	private ShoutOutEndlessAdapter adapter;
+	private ShoutOutEndlessAdapter shoutOutEndlessAdapter;
+	ShareWinEndlessAdapter shareWinEndlessAdapter;
+
 	
 	public EndlessListView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);	
@@ -87,21 +90,31 @@ public class EndlessListView extends ListView implements OnScrollListener {
 	}
 
 	
-	public void setAdapter(ShoutOutEndlessAdapter adapter) {
+	public void setShoutOutAdapter(ShoutOutEndlessAdapter adapter) {
 		super.setAdapter(adapter);
-		this.adapter = adapter;
+		this.shoutOutEndlessAdapter = adapter;
+		this.removeFooterView(footer);
+	}
+
+	public void setShareWinAdapter(ShareWinEndlessAdapter adapter) {
+		super.setAdapter(adapter);
+		this.shareWinEndlessAdapter = adapter;
 		this.removeFooterView(footer);
 	}
 
 
 	
-	public void addNewData(List<HashMap> data) {
-
-
+	public void addShareWinNewData(List<HashMap> data) {
 		removeFooter();
+		shareWinEndlessAdapter.addAll(data);
+		shareWinEndlessAdapter.notifyDataSetChanged();
+		isLoading = false;
+	}
 
-		adapter.addAll(data);
-		adapter.notifyDataSetChanged();
+	public void addShoutOutNewData(List<HashMap> data) {
+		removeFooter();
+		shoutOutEndlessAdapter.addAll(data);
+		shoutOutEndlessAdapter.notifyDataSetChanged();
 		isLoading = false;
 	}
 

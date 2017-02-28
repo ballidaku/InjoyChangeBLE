@@ -102,12 +102,11 @@ public class Overall extends Fragment
         txtv_totalSteps.setText(yourFormattedString);
 
 
-
 //        txtv_totalKm.setText(myUtil.stepsToDistance(context, (int) totalSteps));
         txtv_totalKm.setText(stepsToDistance((int) totalSteps));
 
 
-        txtv_totalCalories.setText(myUtil.stepsToCalories(context, (int) totalSteps));
+        txtv_totalCalories.setText(String.valueOf(Math.round(Double.parseDouble(myUtil.stepsToCalories(context, (int) totalSteps)))));
 
 
     }
@@ -115,9 +114,14 @@ public class Overall extends Fragment
 
     public String stepsToDistance(int steps)
     {
+
+        // Log.e(TAG, "Steps-----" + steps);
+
         double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
 
-        String strideUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.STRIDE);
+        String strideUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.STRIDE);
+
+        //Log.e(TAG, "strideInDouble1-----" + strideInDouble);
 
 
         if (strideUnit.equals(MyConstant.CM))
@@ -125,27 +129,31 @@ public class Overall extends Fragment
             strideInDouble = new MyUtil.HeightWeightHelper().cmToInches(strideInDouble);
         }
 
+        // Log.e(TAG, "strideInDouble2-----" + strideInDouble);
+
 
         strideInDouble = (strideInDouble * 0.0254) * 0.001 * 0.621371;
 
 
-//        Log.e(TAG, "strideInDouble-----" + strideInDouble);
+        // Log.e(TAG, "strideInDouble3-----" + strideInDouble);
 
 
 //        double stride = 0.00045; //in Km
         double distance = steps * strideInDouble;
 
 
-        if(MySharedPreference.getInstance().getUnit(context,MyConstant.DISTANCE).equals(MyConstant.MILES))
+        if (MySharedPreference.getInstance().getUnit(context, MyConstant.DISTANCE).equals(MyConstant.MILES))
         {
             txtv_km_milesHeading.setText("TOTAL MILES");
-//            Log.e(TAG, "distance-----" + distance);
+            // Log.e(TAG, "distance-----" + distance);
             return new DecimalFormat("##.##").format(distance);
         }
         else
         {
             txtv_km_milesHeading.setText("TOTAL KM");
-            distance=distance*1.60934;
+            distance = distance * 1.60934;
+
+//            Log.e(TAG, "distance-----" + distance);
             return new DecimalFormat("##.##").format(distance);
 
 

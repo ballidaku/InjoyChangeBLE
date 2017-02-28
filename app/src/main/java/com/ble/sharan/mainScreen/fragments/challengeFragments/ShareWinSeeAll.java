@@ -46,6 +46,8 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
 
     ShareWinEndlessAdapter shareWinEndlessAdapter;
 
+    boolean showProgressBar = true;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -146,7 +148,7 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
                     e.printStackTrace();
                 }
             }
-        }, true));
+        }, showProgressBar));
 
 
     }
@@ -165,12 +167,12 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
         if (val == 0)
         {
             shareWinEndlessAdapter = new ShareWinEndlessAdapter(context, list, R.layout.custom_share_win_list);
-            endLessListViewShareWin.setAdapter(shareWinEndlessAdapter);
+            endLessListViewShareWin.setShareWinAdapter(shareWinEndlessAdapter);
             endLessListViewShareWin.setListener(this);
         }
         else
         {
-            endLessListViewShareWin.addNewData(list);
+            endLessListViewShareWin.addShareWinNewData(list);
         }
 
 
@@ -180,6 +182,7 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
     @Override
     public void loadData()
     {
+        showProgressBar = true;
 
         val = val + 10;
 
@@ -192,6 +195,8 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
     @Override
     public void onRefresh()
     {
+        showProgressBar = false;
+
         val=0;
         endLessListViewShareWin.isLoading=false;
         GET_DATA_FROM_SERVER();

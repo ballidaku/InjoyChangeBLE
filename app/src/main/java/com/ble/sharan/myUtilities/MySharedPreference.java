@@ -175,6 +175,43 @@ public class MySharedPreference
         return map;
     }
 
+    public void saveAlarmFirstCommand(Context context,String command)
+    {
+        getPreference(context).edit().putString(MyConstant.ALARM_FIRST_COMMAND, command).apply();
+    }
+
+    public void saveAlarmSecondCommand(Context context,String command)
+    {
+        getPreference(context).edit().putString(MyConstant.ALARM_SECOND_COMMAND, command).apply();
+    }
+
+
+    public void saveAlarmThirdCommand(Context context,String command)
+    {
+        getPreference(context).edit().putString(MyConstant.ALARM_THIRD_COMMAND, command).apply();
+    }
+
+
+
+    public String getAlarmFirstCommand(Context context)
+    {
+        return getPreference(context).getString(MyConstant.ALARM_FIRST_COMMAND, "0000000");
+    }
+
+
+    public String getAlarmSecondCommand(Context context)
+    {
+        return getPreference(context).getString(MyConstant.ALARM_SECOND_COMMAND, "0000000");
+    }
+
+    public String getAlarmThirdCommand(Context context)
+    {
+        return getPreference(context).getString(MyConstant.ALARM_THIRD_COMMAND, "0000000");
+    }
+
+
+
+
 
     //**********************************************************************************************
     // Pofile
@@ -202,7 +239,7 @@ public class MySharedPreference
 
     public String getHeight(Context context)
     {
-        return getPreference(context).getString(MyConstant.HEIGHT, "60") + " In";
+        return getPreference(context).getString(MyConstant.HEIGHT, "60") + " Inches";
     }
 
 
@@ -231,17 +268,17 @@ public class MySharedPreference
         return abc + " " + getUnit(context,MyConstant.STRIDE);
     }
 
-    public void saveGender(Context context, String gender)
-    {
-        SharedPreferences.Editor editor = getPreference(context).edit();
-        editor.putString(MyConstant.GENDER, gender);
-        editor.apply();
-    }
-
-    public String getGender(Context context)
-    {
-        return getPreference(context).getString(MyConstant.GENDER, "");
-    }
+//    public void saveGender(Context context, String gender)
+//    {
+//        SharedPreferences.Editor editor = getPreference(context).edit();
+//        editor.putString(MyConstant.GENDER, gender);
+//        editor.apply();
+//    }
+//
+//    public String getGender(Context context)
+//    {
+//        return getPreference(context).getString(MyConstant.GENDER, "");
+//    }
 
 
     public void savePhoto(Context context, String photo)
@@ -271,7 +308,7 @@ public class MySharedPreference
 
     public String getDailySteps(Context context)
     {
-        return getPreference(context).getString(MyConstant.STEPS, "5000");
+        return getPreference(context).getString(MyConstant.STEPS, "1500");
     }
     //**********************************************************************************************
 
@@ -285,7 +322,7 @@ public class MySharedPreference
 
     public String getDailyMiles(Context context)
     {
-        return getPreference(context).getString(MyConstant.MILES, "2.5") + " per day";
+        return getPreference(context).getString(MyConstant.MILES, "2.5") /*+ " miles per day"*/;
     }
     //**********************************************************************************************
 
@@ -300,7 +337,7 @@ public class MySharedPreference
 
     public String getDailyCalories(Context context)
     {
-        return getPreference(context).getString(MyConstant.CALORIES, "1000") + " per day";
+        return getPreference(context).getString(MyConstant.CALORIES, "300") /*+ " per day"*/;
     }
     //**********************************************************************************************
 
@@ -314,7 +351,7 @@ public class MySharedPreference
 
     public String getDailySleep(Context context)
     {
-        return getPreference(context).getString(MyConstant.SLEEP, "9") + " hour per day";
+        return getPreference(context).getString(MyConstant.SLEEP, "07:00") /*+ " hours per day"*/;
 
     }
 

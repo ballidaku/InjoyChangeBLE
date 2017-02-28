@@ -1,3 +1,4 @@
+<!--
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,11 +7,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true">
+-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
         <LinearLayout
@@ -39,6 +42,38 @@
             android:background="@color/colorWhite"
             android:elevation="20dp"
             android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout_data"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/view_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@color/colorBlue"/>
+
+                <ImageView
+                    android:id="@+id/imgv_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:src="@mipmap/ic_data"/>
+
+                <TextView
+                    android:id="@+id/txtv_data"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="HOME"/>
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout_challenge"
@@ -71,36 +106,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayout_data"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:orientation="vertical">
 
-                <View
-                    android:id="@+id/view_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="@color/colorBlue"/>
-
-                <ImageView
-                    android:id="@+id/imgv_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:src="@mipmap/ic_data"/>
-
-                <TextView
-                    android:id="@+id/txtv_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="DATA"/>
-
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout_myinfo"
@@ -128,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="MY INFO"/>
+                    android:text="MY PROFILE"/>
 
 
             </LinearLayout>
@@ -170,13 +176,17 @@
 
     </LinearLayout>
 
-    <fragment
+
+
+
+   <!-- <fragment
         android:id="@+id/fragment_navigation_drawer"
         android:name="com.ble.sharan.mainScreen.fragments.mainFragments.FragmentDrawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:layout="@layout/fragment_fragment_drawer"
-        tools:layout="@layout/fragment_fragment_drawer"/>
+        tools:layout="@layout/fragment_fragment_drawer"/>-->
 
-</android.support.v4.widget.DrawerLayout>
+<!--
+</android.support.v4.widget.DrawerLayout>-->

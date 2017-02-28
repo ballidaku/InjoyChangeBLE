@@ -89,8 +89,6 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
 
             if (getArguments().getString(MyConstant.FROM_WHERE).equals(MyConstant.MY_WEEK_SLEEP_FRAGMENT))
             {
-
-
                 scrollView.postDelayed(new Runnable()
                 {
                     @Override
@@ -99,10 +97,7 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
                         scrollView.fullScroll(ScrollView.FOCUS_DOWN);
                     }
                 }, 100);
-
             }
-
-
         }
 
         return view;
@@ -111,6 +106,8 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
 
     private void setUpIds()
     {
+
+        getActivity().findViewById(R.id.txtv_right).setVisibility(View.INVISIBLE);
 
         scrollView = (ScrollView) view.findViewById(R.id.scrollView);
 

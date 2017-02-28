@@ -51,7 +51,7 @@
                     android:textSize="18dp"
                     android:textStyle="bold"/>
 
-                <TextView
+               <!-- <TextView
                     android:id="@+id/txtv_gender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                     android:hint="Gender"
                     android:text=""
                     android:textColor="@color/colorBlack"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"/>-->
 
 
             </LinearLayout>
@@ -214,7 +214,7 @@
 
                 </LinearLayout>
 
-                <View
+              <!--  <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/_8sdp"
@@ -251,9 +251,9 @@
                         android:theme="@style/EditTextStyle2"/>
 
 
-                </LinearLayout>
+                </LinearLayout>-->
 
-                <View
+          <!--      <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginLeft="@dimen/_8sdp"
@@ -296,7 +296,7 @@
                         android:visibility="gone"/>
 
 
-                </LinearLayout>
+                </LinearLayout>-->
 
 
             </LinearLayout>
@@ -305,7 +305,7 @@
         </android.support.v7.widget.CardView>
 
 
-        <TextView
+       <!-- <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1.07"
@@ -319,7 +319,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_17sdp"
-            android:text="Select how you want your information display"
+            android:text="Select how you want your information displayed."
             android:textColor="@color/colorWhite"
             android:textSize="16sp"/>
 
@@ -342,7 +342,7 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-         <!--       <LinearLayout
+         &lt;!&ndash;       <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -471,7 +471,7 @@
                     </RadioGroup>
 
 
-                </LinearLayout>-->
+                </LinearLayout>&ndash;&gt;
 
 
 
@@ -487,7 +487,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Standard"
+                        android:text="Unit"
                         android:textSize="@dimen/_16sdp"/>
 
 
@@ -498,16 +498,18 @@
                         android:orientation="horizontal">
 
                         <RadioButton
+                            android:id="@+id/radioButtonImperial"
+                            android:layout_width="@dimen/_75sdp"
+                            android:layout_height="wrap_content"
+                            android:text="Standard"/>
+
+                        <RadioButton
                             android:id="@+id/radioButtonMetric"
-                            android:layout_width="@dimen/_70sdp"
+                            android:layout_width="@dimen/_60sdp"
                             android:layout_height="wrap_content"
                             android:text="Metric"/>
 
-                        <RadioButton
-                            android:id="@+id/radioButtonImperial"
-                            android:layout_width="@dimen/_70sdp"
-                            android:layout_height="wrap_content"
-                            android:text="Imperial"/>
+
 
                     </RadioGroup>
 
@@ -517,7 +519,32 @@
 
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>-->
+
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout_signOut"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/round_corner_white"
+            android:clickable="true"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:padding="@dimen/_8sdp">
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Out"
+                android:textSize="@dimen/_16sdp"
+                android:textColor="@color/colorBlue"/>
+
+        </LinearLayout>
 
 
     </LinearLayout>

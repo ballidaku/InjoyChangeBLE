@@ -115,7 +115,7 @@
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="MY WEEK"
+                android:text="THIS WEEK"
                 android:textColor="@color/colorBlack"
                 android:textSize="22sp"/>
 

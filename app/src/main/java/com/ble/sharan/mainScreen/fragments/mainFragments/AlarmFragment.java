@@ -2,13 +2,16 @@ package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -19,6 +22,7 @@ import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -54,7 +58,46 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
     String ALARM_NUMBER = "";
 
 
-    boolean startWork=false;
+    boolean startWork = false;
+
+    Drawable TOP_ICON_CHECKED;
+    Drawable TOP_ICON_UNCHECKED;
+
+
+    EditText edtv_first_monday;
+    EditText edtv_first_tuesday;
+    EditText edtv_first_wednesday;
+    EditText edtv_first_thursday;
+    EditText edtv_first_friday;
+    EditText edtv_first_saturday;
+    EditText edtv_first_sunday;
+
+
+    EditText edtv_second_monday;
+    EditText edtv_second_tuesday;
+    EditText edtv_second_wednesday;
+    EditText edtv_second_thursday;
+    EditText edtv_second_friday;
+    EditText edtv_second_saturday;
+    EditText edtv_second_sunday;
+
+
+    EditText edtv_third_monday;
+    EditText edtv_third_tuesday;
+    EditText edtv_third_wednesday;
+    EditText edtv_third_thursday;
+    EditText edtv_third_friday;
+    EditText edtv_third_saturday;
+    EditText edtv_third_sunday;
+
+
+    EditText[] editTextFirst;
+    EditText[] editTextSecond;
+    EditText[] editTextThird;
+
+    String alarm1Command = "0000000";
+    String alarm2Command = "0000000";
+    String alarm3Command = "0000000";
 
 
     @Override
@@ -67,41 +110,46 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
         {
             view = inflater.inflate(R.layout.fragment_alarm, container, false);
 
+
+            TOP_ICON_CHECKED = getContext().getResources().getDrawable(R.mipmap.ic_check_blue);
+            TOP_ICON_UNCHECKED = getContext().getResources().getDrawable(R.mipmap.ic_uncheck_blue);
+
             setUpIds();
 
-//            SimpleDateFormat mSDF1 = new SimpleDateFormat("yyMMddHHmmss");
-//            String currentDateTime = mSDF1.format(new Date());
-//
-//            MyLog("currentDateTime", currentDateTime);
-//
-//            String commandToSetDateTime = "dt" + currentDateTime;
-//
-//
-//            if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
-//            {
-//                ((MainActivityNew) context).commandToBLE(commandToSetDateTime);
-//            }
-
             ((MainActivityNew) context).setDateToBLE();
-
-
 
             getDataAndShow();
 
 
         }
 
-//          convert();
+
+        alarm1Command = MySharedPreference.getInstance().getAlarmFirstCommand(context);
+        alarm2Command = MySharedPreference.getInstance().getAlarmSecondCommand(context);
+        alarm3Command = MySharedPreference.getInstance().getAlarmThirdCommand(context);
+        setCheckedByCommand();
+
+
         return view;
     }
 
 
-    public void convert()
+    public String convertTOHEX(String command)
     {
-        int decimal = Integer.parseInt("1111111", 2);
+        int decimal = Integer.parseInt(command, 2);
         String hexStr = Integer.toString(decimal, 16);
 
-        Log.e("HelloBalli", hexStr);
+
+        StringBuilder stringBuilder = new StringBuilder(hexStr);
+
+        if (stringBuilder.length() == 1)
+        {
+            hexStr = "0" + hexStr;
+        }
+
+        //Log.e("HelloBalli", hexStr);
+
+        return hexStr;
     }
 
 
@@ -110,9 +158,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
     {
         super.onResume();
 
-        startWork=true;
-
-
+        startWork = true;
 
     }
 
@@ -120,7 +166,6 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
     private void setUpIds()
     {
         (txtv_alarmFirst = (TextView) view.findViewById(R.id.txtv_alarmFirst)).setOnClickListener(this);
-        ;
         (txtv_alarmSecond = (TextView) view.findViewById(R.id.txtv_alarmSecond)).setOnClickListener(this);
         (txtv_alarmThird = (TextView) view.findViewById(R.id.txtv_alarmThird)).setOnClickListener(this);
 
@@ -138,6 +183,77 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
         switch_secondOnOff.setOnCheckedChangeListener(new SwitchListener(switch_secondOnOff));
         switch_thirdOnOff.setOnCheckedChangeListener(new SwitchListener(switch_thirdOnOff));
 
+
+        edtv_first_monday = (EditText) view.findViewById(R.id.edtv_first_monday);
+        edtv_first_tuesday = (EditText) view.findViewById(R.id.edtv_first_tuesday);
+        edtv_first_wednesday = (EditText) view.findViewById(R.id.edtv_first_wednesday);
+        edtv_first_thursday = (EditText) view.findViewById(R.id.edtv_first_thursday);
+        edtv_first_friday = (EditText) view.findViewById(R.id.edtv_first_friday);
+        edtv_first_saturday = (EditText) view.findViewById(R.id.edtv_first_saturday);
+        edtv_first_sunday = (EditText) view.findViewById(R.id.edtv_first_sunday);
+
+
+        edtv_second_monday = (EditText) view.findViewById(R.id.edtv_second_monday);
+        edtv_second_tuesday = (EditText) view.findViewById(R.id.edtv_second_tuesday);
+        edtv_second_wednesday = (EditText) view.findViewById(R.id.edtv_second_wednesday);
+        edtv_second_thursday = (EditText) view.findViewById(R.id.edtv_second_thursday);
+        edtv_second_friday = (EditText) view.findViewById(R.id.edtv_second_friday);
+        edtv_second_saturday = (EditText) view.findViewById(R.id.edtv_second_saturday);
+        edtv_second_sunday = (EditText) view.findViewById(R.id.edtv_second_sunday);
+
+
+        edtv_third_monday = (EditText) view.findViewById(R.id.edtv_third_monday);
+        edtv_third_tuesday = (EditText) view.findViewById(R.id.edtv_third_tuesday);
+        edtv_third_wednesday = (EditText) view.findViewById(R.id.edtv_third_wednesday);
+        edtv_third_thursday = (EditText) view.findViewById(R.id.edtv_third_thursday);
+        edtv_third_friday = (EditText) view.findViewById(R.id.edtv_third_friday);
+        edtv_third_saturday = (EditText) view.findViewById(R.id.edtv_third_saturday);
+        edtv_third_sunday = (EditText) view.findViewById(R.id.edtv_third_sunday);
+
+
+        editTextFirst = new EditText[]{edtv_first_saturday, edtv_first_friday, edtv_first_thursday, edtv_first_wednesday, edtv_first_tuesday, edtv_first_monday, edtv_first_sunday};
+        editTextSecond = new EditText[]{edtv_second_saturday, edtv_second_friday, edtv_second_thursday, edtv_second_wednesday, edtv_second_tuesday, edtv_second_monday, edtv_second_sunday};
+        editTextThird = new EditText[]{edtv_third_saturday, edtv_third_friday, edtv_third_thursday, edtv_third_wednesday, edtv_third_tuesday, edtv_third_monday, edtv_third_sunday};
+
+    }
+
+    public void setListenerAndImage(EditText editText)
+    {
+        editText.setOnTouchListener(new MyTouchListerner(editText));
+        editText.setCompoundDrawablesWithIntrinsicBounds(null, TOP_ICON_UNCHECKED, null, null);
+    }
+
+
+    private void setCheckedByCommand()
+    {
+//        Log.e(TAG, "alarm1Command   " + alarm1Command);
+        StringBuilder stringBuilder1 = new StringBuilder(alarm1Command);
+        StringBuilder stringBuilder2 = new StringBuilder(alarm2Command);
+        StringBuilder stringBuilder3 = new StringBuilder(alarm3Command);
+
+        for (int i = 0; i < 7; i++)
+        {
+            //Set Listener and icons
+            setListenerAndImage(editTextFirst[i]);
+            setListenerAndImage(editTextSecond[i]);
+            setListenerAndImage(editTextThird[i]);
+
+
+            if (String.valueOf(stringBuilder1.charAt(i)).equals("1"))
+            {
+                editTextFirst[i].setCompoundDrawablesWithIntrinsicBounds(null, TOP_ICON_CHECKED, null, null);
+            }
+
+            if (String.valueOf(stringBuilder2.charAt(i)).equals("1"))
+            {
+                editTextSecond[i].setCompoundDrawablesWithIntrinsicBounds(null, TOP_ICON_CHECKED, null, null);
+            }
+
+            if (String.valueOf(stringBuilder3.charAt(i)).equals("1"))
+            {
+                editTextThird[i].setCompoundDrawablesWithIntrinsicBounds(null, TOP_ICON_CHECKED, null, null);
+            }
+        }
     }
 
 
@@ -186,7 +302,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
     {
         Switch mySwitch;
 
-        boolean previousValue=false;
+        boolean previousValue = false;
 
         public SwitchListener(Switch mySwitch)
         {
@@ -199,7 +315,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
         public void onCheckedChanged(CompoundButton compoundButton, boolean b)
         {
 
-          //  Log.e(TAG, "Balli----"+b);
+            //  Log.e(TAG, "Balli----"+b);
 
 
             if (!((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED) && startWork)
@@ -212,14 +328,14 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
                 String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_FIRST, "00:00 AM,alm000007F1000000");
                 String[] commandString = alarm.split(",");
 
-              //  Log.e(TAG,"Alarm inside----" + alarm);
+                //  Log.e(TAG,"Alarm inside----" + alarm);
 
                 if (!alarm.isEmpty())
                 {
                     if (b)
                     {
                         MySharedPreference.getInstance().setTrueIsAlarmActivated(context, MyConstant.ALARM_FIRST);
-                    //    Log.e(TAG,"commandString inside" + commandString[1]);
+                        //    Log.e(TAG,"commandString inside" + commandString[1]);
                         // To set alarm
                         setAlarm(commandString[1]);
                     }
@@ -242,7 +358,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
                     if (b)
                     {
                         MySharedPreference.getInstance().setTrueIsAlarmActivated(context, MyConstant.ALARM_SECOND);
-                      //  Log.e(TAG,"commandString" + commandString[1]);
+                        //  Log.e(TAG,"commandString" + commandString[1]);
                         // To set alarm
                         setAlarm(commandString[1]);
                     }
@@ -264,7 +380,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
                     if (b)
                     {
                         MySharedPreference.getInstance().setTrueIsAlarmActivated(context, MyConstant.ALARM_THIRD);
-                     //   Log.e(TAG,"commandString---" + commandString[1]);
+                        //   Log.e(TAG,"commandString---" + commandString[1]);
                         // To set alarm
                         setAlarm(commandString[1]);
                     }
@@ -340,13 +456,13 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
         SimpleDateFormat mSDF2 = new SimpleDateFormat("HHmm");
 
-
         String alarmTime = mSDF2.format(c.getTime());
 
         String showTime = mSDF.format(c.getTime());
 
-
         String alarmKey = "";
+
+        String weeksDaysCommand = "";
 
         if (ALARM_NUMBER.equals(MyConstant.ALARM_FIRST))
         {
@@ -356,8 +472,9 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             alarmKey = "0";
 
-            //switch_firstOnOff.setChecked(false);
             switch_firstOnOff.setChecked(true);
+
+            weeksDaysCommand = convertTOHEX(alarm1Command);
         }
         else if (ALARM_NUMBER.equals(MyConstant.ALARM_SECOND))
         {
@@ -367,7 +484,11 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             alarmKey = "1";
 
-            //switch_secondOnOff.setChecked(false);
+            switch_secondOnOff.setChecked(true);
+
+            weeksDaysCommand = convertTOHEX(alarm2Command);
+
+
         }
         else if (ALARM_NUMBER.equals(MyConstant.ALARM_THIRD))
         {
@@ -377,226 +498,232 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             alarmKey = "2";
 
-            //switch_thirdOnOff.setChecked(false);
+            switch_thirdOnOff.setChecked(true);
+
+            weeksDaysCommand = convertTOHEX(alarm3Command);
         }
 
-        saveAlarm(alarmKey, showTime, alarmTime);
+        saveAlarm(alarmKey, showTime, alarmTime, weeksDaysCommand,true);
 
 
-       // Log.e(TAG,"alarmTime---" + alarmTime + "----" + showTime);
+        Log.e(TAG, "alarmTime---" + alarmTime + "----" + showTime);
     }
 
 
-    public void saveAlarm(String alarmKey, String showTime, String alarmTime)
+    public void saveAlarm(String alarmKey, String showTime, String alarmTime, String weeksDaysCommand,boolean abc)
     {
-        String commandToSetAlarm = "alm" + alarmKey + alarmTime + "7F1000000";
+        String commandToSetAlarm = "alm" + alarmKey + alarmTime + weeksDaysCommand + "1000000";
 
-     //   Log.e(TAG,"commandToSetAlarm Map" + commandToSetAlarm);
+        Log.e(TAG, "commandToSetAlarm Map" + commandToSetAlarm + "          " + weeksDaysCommand);
 
 
-        // BY ME NOW
-        setAlarm(commandToSetAlarm);
+        if(abc)
+        {
+            // BY ME NOW
+            setAlarm(commandToSetAlarm);
+        }
 
 
         MySharedPreference.getInstance().saveAlarm(context, ALARM_NUMBER, showTime + "," + commandToSetAlarm);
+
 
     }
 
 
     public void setAlarm(String commandToSetAlarm)
     {
-        Log.e(TAG,"Command"+ commandToSetAlarm);
+        Log.e(TAG, "Command" + commandToSetAlarm);
 
         ((MainActivityNew) context).commandToBLE(commandToSetAlarm);
 
-        MyUtil.showToast(context,"Alarm is set");
+        MyUtil.showToast(context, "Alarm is set");
     }
 
     public void disableAlarm(String command)
     {
 
         StringBuilder stringBuilder = new StringBuilder(command);
+
         stringBuilder.setCharAt(10, '0');
 
-        Log.e(TAG,"disableAlarm"+ stringBuilder.toString());
+        Log.e(TAG, "disableAlarm" + stringBuilder.toString());
 
         ((MainActivityNew) context).commandToBLE(stringBuilder.toString());
 
-        MyUtil.showToast(context,"Alarm is removed");
+        MyUtil.showToast(context, "Alarm is removed");
     }
 
 
-
-/*    if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
+    class MyTouchListerner implements View.OnTouchListener
     {
-        HashMap<String, String> map = MySharedPreference.getInstance().getAlarm(context);
+        EditText editText;
 
-        String value = "";
-        for (String key : map.keySet())
+        public MyTouchListerner(EditText editText)
         {
-            value = map.get(key);
+            this.editText = editText;
+        }
 
-            if (value.isEmpty())
+        @Override
+        public boolean onTouch(View v, MotionEvent event)
+        {
+            final int DRAWABLE_LEFT = 0;
+            final int DRAWABLE_TOP = 1;
+            final int DRAWABLE_RIGHT = 2;
+            final int DRAWABLE_BOTTOM = 3;
+
+            if (event.getAction() == MotionEvent.ACTION_UP)
             {
-                alarmKey = key;
-                break;
+                if (event.getRawX() >= (editText.getTop() - editText.getCompoundDrawables()[DRAWABLE_TOP].getBounds().width()))
+                {
+                    Drawable[] drawables = editText.getCompoundDrawables();
+
+
+                    if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
+                    {
+
+
+                        int[] positionAndCommand = getPosition(editText);
+
+                        //**************************************************************************
+                        int position = positionAndCommand[0];
+
+                        String almCommand = positionAndCommand[1] == 1 ? alarm1Command : positionAndCommand[1] == 2 ? alarm2Command : alarm3Command;
+
+                        //**************************************************************************
+
+                        StringBuilder stringBuilder;
+
+
+                        if (TOP_ICON_UNCHECKED == drawables[1])
+                        {
+                            editText.setCompoundDrawablesWithIntrinsicBounds(null, TOP_ICON_CHECKED, null, null);
+
+                            stringBuilder = new StringBuilder(almCommand);
+
+                            stringBuilder.setCharAt(position, '1');
+
+                        }
+                        else
+                        {
+                            editText.setCompoundDrawablesWithIntrinsicBounds(null, TOP_ICON_UNCHECKED, null, null);
+
+                            stringBuilder = new StringBuilder(almCommand);
+
+                            stringBuilder.setCharAt(position, '0');
+                        }
+
+
+                        HashMap<String, String> map = MySharedPreference.getInstance().getAllAlarm(context);
+
+                        String firstAlarm = map.get(MyConstant.ALARM_FIRST);
+                        String secondAlarm = map.get(MyConstant.ALARM_SECOND);
+                        String thirdAlarm = map.get(MyConstant.ALARM_THIRD);
+
+
+//                        Log.e("firstAlarm", firstAlarm);
+//                        Log.e("secondAlarm", secondAlarm);
+//                        Log.e("thirdAlarm", thirdAlarm);
+
+                        String[] arrayfirst = firstAlarm.split(",");
+                        String[] arraySecond = secondAlarm.split(",");
+                        String[] arrayThird = thirdAlarm.split(",");
+
+
+                        String showtimeFirst = arrayfirst[0];
+                        String showtimeSecond = arraySecond[0];
+                        String showtimethird = arrayThird[0];
+
+                        SimpleDateFormat input = new SimpleDateFormat("hh:mm a");
+
+                        SimpleDateFormat output = new SimpleDateFormat("HHmm");
+
+                        String alarmTime1 = "";
+                        String alarmTime2 = "";
+                        String alarmTime3 = "";
+                        try
+                        {
+                            alarmTime1 = output.format(input.parse(showtimeFirst));
+                            alarmTime2 = output.format(input.parse(showtimeSecond));
+                            alarmTime3 = output.format(input.parse(showtimethird));
+
+                            Log.e(TAG, "showTime " + alarmTime1 + "-----" + alarmTime2 + "    " + alarmTime3);
+
+
+                        } catch (ParseException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+
+                        if (positionAndCommand[1] == 1)
+                        {
+                            MySharedPreference.getInstance().saveAlarmFirstCommand(context, alarm1Command = stringBuilder.toString());
+
+                            ALARM_NUMBER = MyConstant.ALARM_FIRST;
+                            saveAlarm("0", showtimeFirst, alarmTime1, alarm1Command,switch_firstOnOff.isChecked());
+
+
+
+                        }
+                        else if (positionAndCommand[1] == 2)
+                        {
+                            MySharedPreference.getInstance().saveAlarmSecondCommand(context, alarm2Command = stringBuilder.toString());
+                            ALARM_NUMBER = MyConstant.ALARM_SECOND;
+                            saveAlarm("1", showtimeSecond, alarmTime2, alarm2Command,switch_secondOnOff.isChecked());
+                        }
+                        else if (positionAndCommand[1] == 3)
+                        {
+                            MySharedPreference.getInstance().saveAlarmThirdCommand(context, alarm3Command = stringBuilder.toString());
+                            ALARM_NUMBER = MyConstant.ALARM_THIRD;
+                            saveAlarm("2", showtimethird, alarmTime3, alarm3Command,switch_thirdOnOff.isChecked());
+                        }
+
+//                        Log.e(TAG, "AlarmCommand----" + positionAndCommand[1] + "========" + stringBuilder.toString());
+
+                    }
+                    else
+                    {
+                        MyUtil.showToast(context, "Your device is not connected yet!!");
+                    }
+
+
+                    return true;
+                }
             }
+
+            return false;
         }
 
-
-        if (value.isEmpty())
-        {
-            c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            new TimePickerDialog(getActivity(), this, hour, minute, false).show();
-        }
-        else
-        {
-            MyUtil.showToast(context, "No alarm is available now.");
-        }
     }
-    else
+
+
+    private int[] getPosition(EditText editText)
     {
-        MyUtil.showToast(context, "Your device is not connected yet!!");
-    }*/
+        int[] positionAndAlarmCommand = new int[2];
 
 
-//    public void makeView()
-//    {
-//        HashMap<String, String> map = MySharedPreference.getInstance().getAllAlarm(context);
-//
-//        MyLog("Alarm Map", "" + map);
-//
-////        linearLayout_holder.removeAllViews();
-//
-//        int count = 0;
-//
-//        for (final String key : map.keySet())
-//        {
-//            final String value = map.get(key);
-//
-////            if (!value.isEmpty())
-////            {
-//            count++;
-//            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            View v = inflater.inflate(R.layout.custom_alarm, null);
-//
-//            TextView txtv_alarmTime = (TextView) v.findViewById(R.id.txtv_alarmTime);
-//
-//
-//            ImageView imgv_cross = (ImageView) v.findViewById(R.id.imgv_cross);
-//
-//            if (!value.isEmpty())
-//            {
-//
-//                imgv_cross.setVisibility(View.VISIBLE);
-//
-//                String[] showTime = value.split(",");
-//
-//                txtv_alarmTime.setText("" + count + ".   " + showTime[0]);
-//            }
-//            else
-//            {
-//                imgv_cross.setVisibility(View.INVISIBLE);
-//
-//                txtv_alarmTime.setText("" + count + ".   Set Alarm");
-//            }
-//
-//
-//            txtv_alarmTime.setOnClickListener(new View.OnClickListener()
-//            {
-//                @Override
-//                public void onClick(View view)
-//                {
-//
-////                    alarmKey = key;
-//
-//                    c = Calendar.getInstance();
-//                    int hour = c.get(Calendar.HOUR_OF_DAY);
-//                    int minute = c.get(Calendar.MINUTE);
-//
-//                    new TimePickerDialog(getActivity(), AlarmFragment.this, hour, minute, false).show();
-//                }
-//            });
-//
-//
-//            imgv_cross.setOnClickListener(new View.OnClickListener()
-//            {
-//                @Override
-//                public void onClick(View v)
-//                {
-//                    if (!value.isEmpty())
-//                    {
-//                        String[] commandTime = value.split(",");
-//
-//                        disableAlarm(commandTime[1]);
-//
-//                        MySharedPreference.getInstance().deleteAlarm(context, value);
-//
-//                        makeView();
-//                    }
-//                }
-//            });
-//
-//
-////            linearLayout_holder.addView(v);
-//        }
-//
-//
-////        }
-//    }
+        for (int i = 0; i < 7; i++)
+        {
+            if (editText == editTextFirst[i])
+            {
+                positionAndAlarmCommand[0] = i; // Specifies the editetxt of which alarm
+                positionAndAlarmCommand[1] = 1; // Specifies which alarm command we have too use
+            }
+            else if (editText == editTextSecond[i])
+            {
+                positionAndAlarmCommand[0] = i;
+                positionAndAlarmCommand[1] = 2;
+            }
+            else if (editText == editTextThird[i])
+            {
+                positionAndAlarmCommand[0] = i;
+                positionAndAlarmCommand[1] = 3;
+            }
 
+        }
 
-    //    String date = "";
-    //  String time = "";
-
-//    public void onDateSet(DatePicker view, int year, int month, int day)
-//    {
-//
-//
-//        //  String myFormat = "dd/MM/yy"; //In which you need put here
-//        //  SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-//
-//        c.set(Calendar.YEAR, year);
-//        c.set(Calendar.MONTH, month);
-//        c.set(Calendar.DAY_OF_MONTH, day);
-//
-//        SimpleDateFormat mSDF = new SimpleDateFormat("dd MMM yyyy");
-//
-//        SimpleDateFormat mSDF1 = new SimpleDateFormat("yyMMdd");
-//
-//        date = mSDF1.format(c.getTime());
-//
-//
-//        txtv_date.setText("" + mSDF.format(c.getTime()));
-//
-//        Log.e("Date", "" + date);
-//
-//    }
-
-
-//    private void setDateTime(String currentDateTime)
-//    {
-//
-//
-//        try
-//        {
-//            byte[] value = currentDateTime.getBytes("UTF-8");
-//
-//            mService.writeRXCharacteristic(value);
-//
-//
-//        } catch (UnsupportedEncodingException e)
-//        {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
-
-
+        return positionAndAlarmCommand;
+    }
 
 
 }

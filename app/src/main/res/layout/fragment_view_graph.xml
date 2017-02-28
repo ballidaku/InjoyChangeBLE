@@ -138,7 +138,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="10dp"
                                 android:gravity="center"
-                                android:text="WEEKLY AVERAGE"
+                                android:text="DAILY AVERAGE"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_6sdp"/>
                         </FrameLayout>
@@ -276,7 +276,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="10dp"
                                 android:gravity="center"
-                                android:text="WEEKLY AVERAGE"
+                                android:text="DAILY AVERAGE"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_6sdp"/>
 
@@ -416,7 +416,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="10dp"
                                 android:gravity="center"
-                                android:text="WEEKLY AVERAGE"
+                                android:text="DAILY AVERAGE"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_6sdp"/>
 
@@ -557,7 +557,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="10dp"
                                 android:gravity="center"
-                                android:text="WEEKLY AVERAGE"
+                                android:text="DAILY AVERAGE"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="@dimen/_6sdp"/>
 

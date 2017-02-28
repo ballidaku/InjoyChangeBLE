@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="@dimen/_6sdp"
+              android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_weight="0.85">
+
+        <TextView
+            android:id="@+id/txtv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_corner_orange"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Date"
+            android:textColor="@color/colorWhite"
+            android:textSize="11sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txtv_calories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:drawablePadding="5dp"
+            android:text="Calories"
+            android:textSize="14sp"
+            android:textColor="@color/colorBlack"
+            android:drawableRight="@mipmap/ic_calories_very_small"
+            android:textStyle="bold"/>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtv_steps"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:drawablePadding="5dp"
+        android:text="Steps"
+        android:textSize="14sp"
+        android:textColor="@color/colorBlack"
+        android:layout_gravity="bottom"
+        android:drawableRight="@mipmap/ic_steps_very_small"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txtv_km"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="Km"
+        android:textSize="14sp"
+        android:textColor="@color/colorBlack"
+        android:layout_gravity="bottom"
+        android:drawablePadding="2dp"
+        android:drawableRight="@mipmap/ic_km_miles_very_small"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txtv_sleep"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="0"
+        android:textSize="14sp"
+        android:drawablePadding="5dp"
+        android:textColor="@color/colorBlack"
+        android:layout_gravity="bottom"
+        android:drawableRight="@mipmap/ic_sleep_very_small"
+        android:textStyle="bold"/>
+
+
+
+</LinearLayout>

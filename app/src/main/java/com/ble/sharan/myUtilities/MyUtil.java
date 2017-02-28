@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -28,11 +29,13 @@ import android.widget.Toast;
 
 import com.ble.sharan.R;
 import com.ble.sharan.asyncTask.Super_AsyncTask;
+import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +55,8 @@ public class MyUtil
 
     public static Toast toast;
     public static Snackbar snackbar;
+
+    MyNotification myNotification=new MyNotification();
 
 
     public boolean checkConnection()
@@ -161,7 +166,7 @@ public class MyUtil
         Calendar c = Calendar.getInstance();
         //System.out.println("Current time => " + c.getTime());
 
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         return df.format(c.getTime());
     }
 
@@ -175,10 +180,13 @@ public class MyUtil
     {
         int remainingSteps = Integer.parseInt(MySharedPreference.getInstance().getDailySteps(context)) - steps;
 
-        if (remainingSteps < 0)
+        /*if (remainingSteps < 0 && MainActivityNew.shownStepsNotification)
         {
-            MyUtil.showToast(context, "Steps goal completed.");
-        }
+            MainActivityNew.shownStepsNotification=false;
+            vibrate(context);
+            myNotification.showNotification(context,"Steps goal completed successfully.",1);
+            //MyUtil.showToast(context, "Steps goal completed.");
+        }*/
 
         return remainingSteps > 0 ? String.valueOf(remainingSteps) : "" + 0;
     }
@@ -231,9 +239,13 @@ public class MyUtil
         double Calories = stepsToCaloriesFormula(context, steps);
 
         //  Log.e(TAG, "Calories-----" + Calories);
+//        Log.e(TAG,"Calories-----"+Calories+"-------------"+(int)(Calories));
 
+//        return Calories > 0 ? new DecimalFormat("##").format(Calories) : "" + 0;
+//        return Calories > 0 ? String.valueOf(round3(Calories) ): "" + 0;
 
-        return Calories > 0 ? new DecimalFormat("##.##").format(Calories) : "" + 0;
+        return Calories > 0 ? String.valueOf((int)Calories) : "" + 0;
+
 
     }
 
@@ -259,17 +271,24 @@ public class MyUtil
 
         double Calories = stepsToCaloriesFormula(context, steps);
 
-        double remainingCalories = Double.parseDouble(MySharedPreference.getInstance().getDailyCalories(context).replace("per day", "").trim()) - Calories;
+        double remainingCalories = Double.parseDouble(MySharedPreference.getInstance().getDailyCalories(context)/*.replace("per day", "")*/.trim()) - (int)Calories;
 
 
-        if (remainingCalories < 0)
+       /* if (remainingCalories < 0 && MainActivityNew.shownCaloriesNotification)
         {
-            MyUtil.showToast(context, "Calories goal completed.");
-        }
+            MainActivityNew.shownCaloriesNotification=false;
+            vibrate(context);
+            myNotification.showNotification(context,"Calories goal completed successfully.",2);
+            //MyUtil.showToast(context, "Calories goal completed.");
+        }*/
 
         //  Log.e(TAG, "remainingCalories-----" + remainingCalories);
 
-        return remainingCalories > 0 ? new DecimalFormat("##.##").format(remainingCalories) : "" + 0;
+//        Log.e(TAG,"remainingCalories-----"+Calories+"-------------"+remainingCalories);
+
+
+//        return remainingCalories > 0 ? new DecimalFormat("##.##").format(remainingCalories) : "" + 0;
+        return remainingCalories > 0 ? String.valueOf((int)remainingCalories) : "" + 0;
 
     }
 
@@ -285,89 +304,51 @@ public class MyUtil
         String strideUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.STRIDE);
 
 
+//        Log.e(TAG,"distance--strideInDouble-----"+strideInDouble);
+
         if (strideUnit.equals(MyConstant.CM))
         {
             strideInDouble = new HeightWeightHelper().cmToInches(strideInDouble);
         }
 
-
-        strideInDouble = (strideInDouble * 0.0254) * 0.001 * 0.621371;
-
-
-//        Log.e(TAG,"strideInDouble-----"+strideInDouble);
-
+        strideInDouble = ((int)strideInDouble * 0.0254) * 0.001 * 0.621371;
 
 //        double stride = 0.00045; //in Km
+
         double distance = steps * strideInDouble;
 
-//        Log.e(TAG,"distance-----"+distance);
-
         return distance;
+    }
+
+    public String twoDigitsAfterDecimalWithoutRoundOff(double value)
+    {
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.FLOOR);
+
+        return  df.format(value);
+
     }
 
 
     public String stepsToDistance(Context context, int steps)
     {
-//        double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
-//
-//        String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
-//
-//
-//        if (strideUnit.equals(MyConstant.CM))
-//        {
-//            strideInDouble =new  HeightWeightHelper().cmToInches(strideInDouble);
-//        }
-//
-//
-//        strideInDouble = (strideInDouble*0.0254)*0.001*0.621371;
-//
-//
-//        Log.e(TAG,"strideInDouble-----"+strideInDouble);
-//
-//
-////        double stride = 0.00045; //in Km
-//        double distance = steps * strideInDouble;
-//
-//        Log.e(TAG,"distance-----"+distance);
-
-        //txtv_milesKm.setText(String.format("%.2f", distance));
-
         double distance = stepsToDistanceFormula(context, steps);
 
-        return distance > 0 ? new DecimalFormat("##.##").format(distance) : "" + 0;
+//        Log.e(TAG,"distance-----1-"+distance+"-------------"+twoDigitsAfterDecimalWithoutRoundOff( distance));
+
+        return distance > 0 ?  twoDigitsAfterDecimalWithoutRoundOff(distance) : "" + 0;
     }
 
 
     public String stepsToRemainingDistance(Context context, int steps)
     {
-//        double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
-//
-//        String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
-//
-//
-//        if (strideUnit.equals(MyConstant.CM))
-//        {
-//            strideInDouble =new  HeightWeightHelper().cmToInches(strideInDouble);
-//        }
-//
-////        strideInDouble = strideInDouble/100000;
-//        strideInDouble = (strideInDouble*0.0254)*0.001*0.621371;
-//
-//
-////        double stride = 0.00045; //in Km
-//        double distance = steps * strideInDouble;
+        double distance = Double.parseDouble(twoDigitsAfterDecimalWithoutRoundOff(stepsToDistanceFormula(context, steps)));
 
+        double remainingKm = Double.parseDouble(MySharedPreference.getInstance().getDailyMiles(context).trim()) - distance;
 
-        double distance = stepsToDistanceFormula(context, steps);
+//        Log.e(TAG,"distance-----2-"+remainingKm+"-------------"+twoDigitsAfterDecimalWithoutRoundOff( remainingKm));
 
-        double remainingKm = Double.parseDouble(MySharedPreference.getInstance().getDailyMiles(context).replace("per day", "").trim()) - distance;
-
-        if (remainingKm < 0)
-        {
-            MyUtil.showToast(context, "Distance goal completed.");
-        }
-
-        return remainingKm > 0 ? new DecimalFormat("##.##").format(remainingKm) : "" + 0;
+        return remainingKm > 0 ? twoDigitsAfterDecimalWithoutRoundOff(remainingKm) : "" + 0;
     }
 
 
@@ -419,7 +400,10 @@ public class MyUtil
         {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
             startDate = simpleDateFormat.parse(sleepHr);
-            endDate = simpleDateFormat.parse(MySharedPreference.getInstance().getDailySleep(context).replace(" hour per day", "") + ":00");
+
+
+//            Log.e(TAG,"getDailySleep-----"+MySharedPreference.getInstance().getDailySleep(context));
+            endDate = simpleDateFormat.parse(MySharedPreference.getInstance().getDailySleep(context)/*.replace(" hours per day", "")*/);
 
 
         } catch (ParseException e)
@@ -438,7 +422,15 @@ public class MyUtil
         }
         else
         {
-            MyUtil.showToast(context, "Sleep goal completed.");
+            if(MainActivityNew.shownSleepNotification)
+            {
+                MainActivityNew.shownSleepNotification = false;
+                vibrate(context);
+                myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
+                        "You Hit Your Sleep Goal for Today : )\n" +
+                        "You Totally Rock!\n",4);
+            }
+
             return "00:00";
         }
     }
@@ -907,6 +899,21 @@ public class MyUtil
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+
+
+
+    //**********************************************************************************************
+    // Vibrate
+    //**********************************************************************************************
+
+    public void vibrate(Context context)
+    {
+        Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 1 seconds
+        v.vibrate(1000);
+
+    }
+
 
 
 }

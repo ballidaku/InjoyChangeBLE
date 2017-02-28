@@ -19,40 +19,38 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ble.sharan.MyUartService;
 import com.ble.sharan.R;
-import com.ble.sharan.adapters.DrawerListAdapter;
 import com.ble.sharan.loginScreen.LoginActivity;
-import com.ble.sharan.mainScreen.fragments.mainFragments.AlarmFragment;
-import com.ble.sharan.mainScreen.fragments.mainFragments.Challenge;
-import com.ble.sharan.mainScreen.fragments.mainFragments.FragmentDrawer;
-import com.ble.sharan.mainScreen.fragments.mainFragments.HealthData;
-import com.ble.sharan.mainScreen.fragments.mainFragments.MyDailyGoal;
-import com.ble.sharan.mainScreen.fragments.mainFragments.MyWeek;
-import com.ble.sharan.mainScreen.fragments.mainFragments.Overall;
-import com.ble.sharan.mainScreen.fragments.mainFragments.MyInfo;
-import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.CheckIn;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.DailyInspiration;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.MyPoints;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.ShareWin;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.ShoutOut;
 import com.ble.sharan.mainScreen.fragments.challengeFragments.ToolBox;
+import com.ble.sharan.mainScreen.fragments.mainFragments.AlarmFragment;
+import com.ble.sharan.mainScreen.fragments.mainFragments.Challenge;
+import com.ble.sharan.mainScreen.fragments.mainFragments.HealthData;
+import com.ble.sharan.mainScreen.fragments.mainFragments.MyDailyGoal;
+import com.ble.sharan.mainScreen.fragments.mainFragments.MyProfile;
+import com.ble.sharan.mainScreen.fragments.mainFragments.Overall;
+import com.ble.sharan.mainScreen.fragments.mainFragments.ThisWeek;
+import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
 import com.ble.sharan.myUtilities.BeanRecords;
+import com.ble.sharan.myUtilities.BleResponseInterface;
+import com.ble.sharan.myUtilities.GetStepsData;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyDialogs;
+import com.ble.sharan.myUtilities.MyNotification;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
@@ -86,19 +84,23 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     String sleepData = "";
 
 
-    ImageView imgv_profile;
-    TextView txtv_username;
+//    ImageView imgv_profile;
+//    TextView txtv_username;
 
     Toolbar mToolbar;
-    DrawerLayout mDrawerLayout;
-    FragmentDrawer drawerFragment;
-    ListView listv_drawer;
+
+    //DrawerLayout mDrawerLayout;
+
+    // FragmentDrawer drawerFragment;
+
+//    ListView listv_drawer;
+
     ArrayList<String> listDataHeader;
 
-    DrawerListAdapter drawer_adapter;
+    //  DrawerListAdapter drawer_adapter;
     Context context;
 
-    LinearLayout frame_layout_profile;
+    // LinearLayout frame_layout_profile;
     Fragment fragment;
 
     boolean isDisconnectedByRange = false;
@@ -139,14 +141,27 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     TextView txtv_myinfo;
     TextView txtv_alarm;
 
-//    String challengeHeadings[] = {
-//            "Daily Inspiration",
-//            "Check-In with Yourself",
-//            "My Points",
-//            "Shout Outs",
-//            "Tool Box",
-//            "Share a Win & Weekly Video"
-//    };
+//    ImageView imgv_leftArrow;
+//    ImageView imgv_rightArrow;
+
+    TextView txtv_heading;
+    TextView txtv_right;
+
+
+    public static boolean shownStepsNotification = false;
+    public static boolean shownCaloriesNotification = false;
+    public static boolean shownDistanceNotification = false;
+    public static boolean shownSleepNotification = false;
+
+    public static String todayDate = "";
+
+
+    GetStepsData getStepsData;
+
+    BleResponseInterface bleResponseInterface;
+
+
+    MyNotification myNotification = new MyNotification();
 
 
     @Override
@@ -189,11 +204,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
 
 
+        getStepsData = new GetStepsData(context);
+
+
     }
 
-    ImageView imgv_headerLogo;
-    TextView txtv_heading;
-    TextView txtv_right;
 
     private void setUpIds()
     {
@@ -202,12 +217,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 //        mToolbar.findViewById(R.id.imgv_refresh).setOnClickListener(this);
 
-        imgv_headerLogo = (ImageView) mToolbar.findViewById(R.id.imgv_headerLogo);
+//        imgv_leftArrow = (ImageView) mToolbar.findViewById(R.id.imgv_leftArrow);
+//        imgv_rightArrow = (ImageView) mToolbar.findViewById(R.id.imgv_rightArrow);
+
         txtv_heading = (TextView) mToolbar.findViewById(R.id.txtv_heading);
+        txtv_heading.setTextSize(18);
 
         (txtv_right = (TextView) mToolbar.findViewById(R.id.txtv_right)).setOnClickListener(this);
 
-        listv_drawer = (ListView) findViewById(R.id.listv_drawer);
+        /*listv_drawer = (ListView) findViewById(R.id.listv_drawer);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -220,7 +238,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         frame_layout_profile.setOnClickListener(this);
 
         drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);*/
 
 
         view_challenge = findViewById(R.id.view_challenge);
@@ -249,7 +267,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         setBottomTabSelected(view_data, imgv_data, txtv_data);
 
-        onRefreshName();
+//        onRefreshName();
 
     }
 
@@ -301,16 +319,14 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         listDataHeader = new ArrayList<>();
 
         listDataHeader.add("Health Data");
-//        listDataHeader.add("Profile");
         listDataHeader.add("Today");
-        listDataHeader.add("My Week");
-//        listDataHeader.add("Previous Week");
-        listDataHeader.add("My Daily Goal");
+        listDataHeader.add("This Week");
+        listDataHeader.add("My Daily Goals");
         listDataHeader.add("Overall");
         listDataHeader.add("Sign Out");
 
 
-        drawer_adapter = new DrawerListAdapter(context, listDataHeader, 0);
+      /*  drawer_adapter = new DrawerListAdapter(context, listDataHeader, 0);
         listv_drawer.setAdapter(drawer_adapter);
 
         listv_drawer.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -322,7 +338,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
             }
-        });
+        });*/
 
         displayView(0);
 
@@ -330,13 +346,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public void displayView(int groupPosition)
     {
-        imgv_headerLogo.setVisibility(View.GONE);
+//        imgv_headerLogo.setVisibility(View.GONE);
         txtv_right.setVisibility(View.INVISIBLE);
         txtv_heading.setVisibility(View.VISIBLE);
 
 
-        drawer_adapter.changeSelectedBackground(groupPosition);
-        drawer_adapter.notifyDataSetChanged();
+       /* drawer_adapter.changeSelectedBackground(groupPosition);
+        drawer_adapter.notifyDataSetChanged();*/
 
 
         if (groupPosition == 5)// SIGN OUT
@@ -358,7 +374,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
         else if (groupPosition == 6)
         {
-            txtv_heading.setText("My Info");
+            txtv_heading.setText("My Profile");
         }
         else if (groupPosition == 7)
         {
@@ -387,8 +403,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case 2:
-                txtv_right.setVisibility(View.VISIBLE);
-                fragment = new MyWeek();
+
+                fragment = new ThisWeek();
                 break;
 
 
@@ -404,7 +420,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
             case 6:
 
-                fragment = new MyInfo();
+                fragment = new MyProfile();
 
                 break;
 
@@ -483,8 +499,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
-
     private void changeFragment(Fragment fragment)
     {
         if (fragment != null)
@@ -493,7 +507,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();
-            mDrawerLayout.closeDrawers();
+//            mDrawerLayout.closeDrawers();
         }
     }
 
@@ -545,9 +559,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //        Log.e("Count", "" + count);
 
 
-        if(count != 0)
+        if (count != 0)
         {
-            while(count != 0)
+            while (count != 0)
             {
                 getSupportFragmentManager().popBackStackImmediate();
                 count = getSupportFragmentManager().getBackStackEntryCount();
@@ -557,16 +571,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
 
 
-
     }
 
 
-    public void onRefreshName()
+  /*  public void onRefreshName()
     {
         myUtil.showCircularImageWithPicasso(context, imgv_profile, MySharedPreference.getInstance().getPhoto(context));
 
         txtv_username.setText(MySharedPreference.getInstance().getName(context));
-    }
+    }*/
 
 
     @Override
@@ -577,7 +590,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.frame_layout_profile:
 
 //                txt_titleTV.setText("Profile");
-//                fragment = new MyInfo();
+//                fragment = new MyProfile();
 //                changeFragment(fragment);
 
                 break;
@@ -585,7 +598,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.linearLayout_challenge:
 
 
-                /*String url = MyConstant.CHALLENGE_API;
+               /* String url = MyConstant.CHALLENGE_API;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
                 startActivity(i);*/
@@ -681,7 +694,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     };
 
 
-    int dateCommandresposeCount=0;
+    int dateCommandresposeCount = 0;
     private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver()
     {
 
@@ -819,19 +832,19 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 try
                 {
-                    Log.e(TAG,"CR---Response of Command"+ new String(txValue, "UTF-8"));
+                    Log.e(TAG, "CR---Response of Command" + new String(txValue, "UTF-8"));
 
 
                     if (COMMAND.contains("dt"))
                     {
                         dateCommandresposeCount++;
-                        if(dateCommandresposeCount ==4)
+                        if (dateCommandresposeCount == 4)
                         {
                             //TODO
                             setHeightWeightStrideDataToBLE();
                         }
                     }
-                    else if (COMMAND.contains("b"))
+                    else if (COMMAND.contains("b") && COMMAND.length() != 2)
                     {
                         //TODO
                         commandToBLE(MyConstant.GET_STEPS);
@@ -846,6 +859,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                         if (new String(txValue, "UTF-8").contains("Done"))
                         {
                             TestingSleep2(sleepData);
+
+                            // To get previous days steps from memory
+                            getStepsData.count = 0;
+                            getStepsData.st();
                         }
                     }
                     else if (COMMAND.equals(MyConstant.GET_STEPS))
@@ -869,6 +886,53 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                                     Log.e("Steps", "" + new String(txValue, "UTF-8"));
 
 
+                                    //**************************************************************************
+                                    // Motification
+                                    //**************************************************************************
+
+                                    int remainingSteps = Integer.parseInt(MySharedPreference.getInstance().getDailySteps(context)) - stepsTaken;
+
+                                    if (remainingSteps <= 0 && shownStepsNotification)
+                                    {
+                                        shownStepsNotification = false;
+                                        myUtil.vibrate(context);
+                                        myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
+                                                "You Hit Your Steps Goal for Today : )\n" +
+                                                "You Totally Rock!", 1);
+                                    }
+
+                                    double Calories = myUtil.stepsToCaloriesFormula(context, stepsTaken);
+
+                                    double remainingCalories = Double.parseDouble(MySharedPreference.getInstance().getDailyCalories(context).trim()) - (int) Calories;
+
+
+                                    if (remainingCalories <= 0 && shownCaloriesNotification)
+                                    {
+                                        shownCaloriesNotification = false;
+                                        myUtil.vibrate(context);
+                                        myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
+                                                "You Hit Your Calories Goal for Today : )\n" +
+                                                "You're Amazing!", 2);
+                                    }
+
+
+                                    double distance = myUtil.stepsToDistanceFormula(context, stepsTaken);
+
+                                    double remainingKm = Double.parseDouble(MySharedPreference.getInstance().getDailyMiles(context).trim()) - distance;
+
+                                    if (remainingKm < 0 && shownDistanceNotification)
+                                    {
+                                        shownDistanceNotification = false;
+                                        myUtil.vibrate(context);
+                                        myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
+                                                "You Hit Your Miles Goal for Today : )\n" +
+                                                "You're Incredible!", 3);
+                                    }
+
+
+                                    //**************************************************************************
+                                    //**************************************************************************
+                                    //**************************************************************************
                                     // To get Sleep data********************************************************
                                     //TODO
                                     commandToBLE(MyConstant.GET_SLEEP);
@@ -882,8 +946,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                             }
                         }
                     }
-
-
+                    else if (COMMAND.contains("d") && COMMAND.length() == 2)  // To get previous steps
+                    {
+                        bleResponseInterface.onResponse(new String(txValue, "UTF-8"));
+                    }
 
 
                 } catch (Exception e)
@@ -950,7 +1016,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 //Disconnect button pressed
                 if (mDevice != null)
                 {
-                    dateCommandresposeCount=0;
+                    dateCommandresposeCount = 0;
                     mService.disconnect();
                 }
             }
@@ -1021,6 +1087,19 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             Log.i(TAG, "onResume - BT not enabled yet");
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
+
+
+        if (todayDate.isEmpty() || !todayDate.equals(myUtil.getTodaydate()))
+        {
+            todayDate = myUtil.getTodaydate();
+
+            shownStepsNotification = true;
+            shownCaloriesNotification = true;
+            shownDistanceNotification = true;
+            shownSleepNotification = true;
+
+            Log.e(TAG, "shownStepsNotification----" + shownStepsNotification);
         }
 //
 //
@@ -1217,7 +1296,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //                    String diff = Hours + ":" + Mins; // updated value every1 second
 
 
-                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills)+"----StartTime----="+startTime+"-----EndTime----="+endTime);
+                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills) + "----StartTime----=" + startTime + "-----EndTime----=" + endTime);
 
 
                     boolean isStored = false;
@@ -1304,6 +1383,16 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         commandToBLE(commandSleepTime);
 
+
+        //******************************************************************************************
+        // Notification
+        //******************************************************************************************
+
+        myUtil.sleepHrToRemainingHr(context,myUtil.convertMillisToHrMins(millis));
+
+        //******************************************************************************************
+        //******************************************************************************************
+
     }
 
 
@@ -1366,20 +1455,37 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     String COMMAND;
 
+
     public void commandToBLE(String command)
     {
         COMMAND = command;
 
-
         Log.e(TAG, "CR---COMMANDToBLE----" + command);
-
-
 
         if (COMMAND.equals(MyConstant.GET_SLEEP))
         {
             // Clear Sleep Data
             sleepData = "";
         }
+
+        try
+        {
+            byte[] value = command.getBytes("UTF-8");
+
+            mService.writeRXCharacteristic(value);
+
+        } catch (UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void commandToBLE(String command, BleResponseInterface bleResponseInterface)
+    {
+        COMMAND = command;
+        this.bleResponseInterface = bleResponseInterface;
+
+        // Log.e(TAG, "CR---COMMANDToBLE----" + command);
 
         try
         {
@@ -1401,7 +1507,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         // Weight
 
         double weightInDouble = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
-        String weightUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.WEIGHT);
+        String weightUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.WEIGHT);
 
 //        Log.e(TAG, "Weight-----" + weightInDouble + "-----Unit-----" + weightUnit);
 
@@ -1421,7 +1527,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         // Stride
 
         double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
-        String strideUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.STRIDE);
+        String strideUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.STRIDE);
 
 //        Log.e(TAG, "Stride-----" + strideInDouble + "-----Unit-----" + strideUnit);
 
@@ -1439,7 +1545,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         //Height
 
-        double heightInDouble = Double.parseDouble(MySharedPreference.getInstance().getHeight(context).replace("In", "").trim());
+        double heightInDouble = Double.parseDouble(MySharedPreference.getInstance().getHeight(context).replace("Inches", "").trim());
 
         String finalHeight = String.format("%03d", Math.round(heightInDouble));
 

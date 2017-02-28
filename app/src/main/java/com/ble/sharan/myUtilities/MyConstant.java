@@ -87,17 +87,22 @@ public class MyConstant
     public static final String IS_ALARM_THIRD_ACTIVATED = "is_alarm_third_activated";
 
 
+    public static final String ALARM_FIRST_COMMAND = "alarm_first_command";
+    public static final String ALARM_SECOND_COMMAND = "alarm_second_command";
+    public static final String ALARM_THIRD_COMMAND = "alarm_third_command";
+
+
 
 
 
     //APIS
 
-    public static final String BASE_URL="http://hydraflow.injoyglobal.com";
+    public static final String BASE_URL="https://hydraflow.injoyglobal.com";
 
     public static final String SIGN_UP = BASE_URL+"/user/register";
     public static final String SIGN_IN = BASE_URL+"/api/login-token";
     public static final String FORGOT_PASSWORD = BASE_URL+"/user/password";
-    public static final String CHALLENGE_API = BASE_URL+"";
+    public static final String CHALLENGE_API = BASE_URL+"/user/login";
 
     public static final String UPLOAD_USER_DATA = BASE_URL+"/api/postdata";
     public static final String SHOUT_OUT_USERS = BASE_URL+"/api/shout_out?scroll_id=";
@@ -134,6 +139,9 @@ public class MyConstant
     public static final String COUNT = "count";
     public static final String TOTAL_POINTS = "total_points";
     public static final String RAFFLE_TICKET = "raffle_ticket";
+    public static final String WEEKLY_COUNT = "weekly_count";
+    public static final String SHAREWIN_COUNT = "sharewin_count";
+    public static final String WEEKLY_COMMENT = "weekly_comment";
 
 
     public static final String DATA = "data";

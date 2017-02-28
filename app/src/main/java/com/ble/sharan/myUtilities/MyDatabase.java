@@ -595,6 +595,21 @@ public class MyDatabase extends SQLiteOpenHelper
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //**********************************************************************************************
     //MY GOAL FUNCTIONALITY*************************************************************************
     //**********************************************************************************************
@@ -607,9 +622,9 @@ public class MyDatabase extends SQLiteOpenHelper
         {
             HashMap<String, String> map = new HashMap<>();
             map.put(MyConstant.STEPS, MySharedPreference.getInstance().getDailySteps(context));
-            map.put(MyConstant.DISTANCE, MySharedPreference.getInstance().getDailyMiles(context).replace("per day", "").trim());
-            map.put(MyConstant.CALORIES, MySharedPreference.getInstance().getDailyCalories(context).replace("per day", "").trim());
-            map.put(MyConstant.SLEEP, MySharedPreference.getInstance().getDailySleep(context).replace("hour per day", "").trim());
+            map.put(MyConstant.DISTANCE, MySharedPreference.getInstance().getDailyMiles(context)/*.replace("miles per day", "")*/.trim());
+            map.put(MyConstant.CALORIES, MySharedPreference.getInstance().getDailyCalories(context)/*.replace("per day", "")*/.trim());
+            map.put(MyConstant.SLEEP, MySharedPreference.getInstance().getDailySleep(context)/*.replace("hours per day", "")*/.trim());
 
             addDailyGoalData(map);
         }

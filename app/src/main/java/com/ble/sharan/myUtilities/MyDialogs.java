@@ -9,12 +9,17 @@ import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -366,9 +371,11 @@ public class MyDialogs
             final TextView tvpaired = (TextView) vg.findViewById(R.id.paired);
             final TextView tvrssi = (TextView) vg.findViewById(R.id.rssi);
 
-            tvadd.setVisibility(View.GONE);
+            //tvadd.setVisibility(View.GONE);
             tvrssi.setVisibility(View.VISIBLE);
             byte rssival = (byte) devRssiValues.get(device.getAddress()).intValue();
+
+
             if (rssival != 0)
             {
                 tvrssi.setText("Rssi = " + String.valueOf(rssival));
@@ -399,6 +406,52 @@ public class MyDialogs
             return vg;
         }
     }
+
+
+
+
+
+    public EditText showShareWinDialog(Context context, String fromWhere, View.OnClickListener onClickListener)
+    {
+        dialog=new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_share_win);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        dialog.show();
+
+        TextView txtv_title=(TextView) dialog.findViewById(R.id.txtv_title);
+        TextView txtv_heading=(TextView) dialog.findViewById(R.id.txtv_heading);
+        TextView txtv_btn=(TextView) dialog.findViewById(R.id.txtv_btn);
+
+        EditText edtv_comment=(EditText)dialog.findViewById(R.id.edtv_comment);
+
+        if(fromWhere.equals("ShareWin"))
+        {
+            txtv_title.setText("SHARE A WIN");
+            txtv_heading.setText("What's one win you've had during this Challenge?");
+            txtv_btn.setText("Share a Win 10 Pts");
+        }
+        else
+        {
+            txtv_title.setText("WEEKLY VIDEO");
+            txtv_heading.setText("What's one thing that you took away from this video?");
+            txtv_btn.setText("Submit 40 Pts");
+        }
+
+
+        CardView cardViewBtn=(CardView)dialog.findViewById(R.id.cardViewBtn);
+
+        cardViewBtn.setOnClickListener(onClickListener);
+
+
+        return edtv_comment;
+
+    }
+
+
+
+
 
 
 

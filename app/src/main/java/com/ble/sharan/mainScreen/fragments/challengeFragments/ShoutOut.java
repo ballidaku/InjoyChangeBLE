@@ -223,12 +223,12 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
         if (val == 0)
         {
             shoutOutEndlessAdapter = new ShoutOutEndlessAdapter(context, list, R.layout.custom_shoutout_list);
-            endLesslistViewShoutOut.setAdapter(shoutOutEndlessAdapter);
+            endLesslistViewShoutOut.setShoutOutAdapter(shoutOutEndlessAdapter);
             endLesslistViewShoutOut.setListener(this);
         }
         else
         {
-            endLesslistViewShoutOut.addNewData(list);
+            endLesslistViewShoutOut.addShoutOutNewData(list);
         }
 
 
@@ -288,7 +288,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
     public void SEND_COMMENT_TO_SERVER(final String comment)
     {
-        String url = MyConstant.SHOUT_OUT_COMMENT + comment + "&uid=" + MySharedPreference.getInstance().getUID(context);
+        String url = MyConstant.SHOUT_OUT_COMMENT + comment + "&uid=" + MySharedPreference.getInstance().getUID(context)+"&date="+MyUtil.getCurrentTimeStamp();
         Log.e("URL", url);
         MyUtil.execute(new Super_AsyncTask(context, url, new Super_AsyncTask_Interface()
         {

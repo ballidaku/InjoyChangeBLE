@@ -78,9 +78,10 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             myDatabase = new MyDatabase(getActivity());
 
 
-            autoRefreshTimer = new AutoRefreshTimer(20000, 16000);
+            int time=10*60*1000;
+            //autoRefreshTimer = new AutoRefreshTimer(20000, 16000);
 
-
+            autoRefreshTimer = new AutoRefreshTimer(time, 300000);
         }
 
         return view;
@@ -165,7 +166,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     }
 
 
-    @Override
+    /*@Override
     public void onPause()
     {
         super.onPause();
@@ -179,7 +180,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         super.onDestroy();
        // Log.e(TAG, "onDestroy");
         autoRefreshTimer.cancel();
-    }
+    }*/
 
 
     //**********************************************************************************************
@@ -226,14 +227,23 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //        DecimalFormat formatter = new DecimalFormat("#,###,###");
 //        String yourFormattedString = formatter.format(steps);
 
+//        steps=139;
 
         txtv_steps.setText(String.valueOf(steps));
 
         txtv_stepsToGo.setText(myUtil.getRemainingSteps(context, steps));
 
-        txtv_calories.setText(todayCalories = myUtil.stepsToCalories(context, steps));
 
-        txtv_caloriesToGo.setText(myUtil.stepsToRemainingCalories(context, steps));
+//        todayCalories = String.valueOf(Math.round(Double.parseDouble(myUtil.stepsToCalories(context, steps))));
+        todayCalories = myUtil.stepsToCalories(context, steps);
+
+        //txtv_calories.setText(todayCalories = myUtil.stepsToCalories(context, steps));
+        txtv_calories.setText(todayCalories);
+
+//        String remainingCalories=String.valueOf(Math.round(Double.parseDouble(myUtil.stepsToRemainingCalories(context, steps))));
+        String remainingCalories=myUtil.stepsToRemainingCalories(context, steps);
+
+        txtv_caloriesToGo.setText(remainingCalories);
 
         txtv_milesKm.setText(todayMilesCovered = myUtil.stepsToDistance(context, steps));
 
@@ -258,6 +268,9 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         String sleepTime = myUtil.getSleepHr(context,myDatabase);
 
         txtv_sleepHour.setText(sleepTime);
+
+        Log.e(TAG,"sleepTime------"+sleepTime);
+
 
         txtv_sleepHourToGo.setText(myUtil.sleepHrToRemainingHr(context, sleepTime));
     }
@@ -339,9 +352,13 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     public void SEND_DATA_TO_SERVER(int steps, String calories, String todayMilesCovered)
     {
         String todayDate = myUtil.getTodaydate2();
+
         String todaySteps = String.valueOf(steps);
+
 //        String todaySleepTime = sleepTime();
-        String todaySleepTime = myUtil.getSleepHr(context,myDatabase);
+        String[] spltm = myUtil.getSleepHr(context,myDatabase).split(":");
+
+        String todaySleepTime=spltm[0]+"h:"+spltm[1]+"m";
 
         HashMap<String, String> map = new HashMap<>();
 
@@ -351,6 +368,9 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         map.put("sleephr", todaySleepTime);
         map.put(MyConstant.CALORIES, calories);
         map.put(MyConstant.DISTANCE, todayMilesCovered);
+
+        Log.e(TAG, "input-------" + map);
+        Log.e(TAG, "URL-------" + MyConstant.UPLOAD_USER_DATA);
 
 
         MyUtil.execute(new Super_AsyncTask(context, map, MyConstant.UPLOAD_USER_DATA, new Super_AsyncTask_Interface()

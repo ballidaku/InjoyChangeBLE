@@ -32,8 +32,8 @@
                 android:padding="13dp"
                 android:text="Set your Alarm"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                android:textSize="22sp"/>
+                android:textSize="22sp"
+                android:textStyle="bold"/>
 
             <View
                 android:layout_width="match_parent"
@@ -66,10 +66,10 @@
                             android:id="@+id/txtv_alarmFirst"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="6:05"
-                            android:textColor="@color/colorBlack"
                             android:clickable="true"
                             android:padding="5dp"
+                            android:text="6:05"
+                            android:textColor="@color/colorBlack"
                             android:textSize="20sp"
                             android:textStyle="bold"/>
 
@@ -81,13 +81,102 @@
 
                     </LinearLayout>
 
-                    <TextView
+                 <!--   <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
                         android:paddingLeft="5dp"
-                        android:text="EVERYDAY"/>
+                        android:text="EVERYDAY"
+                        android:textSize="11sp"
+                        android:textStyle="bold"/>-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/edtv_first_monday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
+                            android:background="@null"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:text="M"/>
+
+                        <EditText
+                            android:id="@+id/edtv_first_tuesday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:editable="false"
+                            android:background="@null"
+                            android:padding="@dimen/_5sdp"
+                            android:text="T"/>
+
+                        <EditText
+                            android:id="@+id/edtv_first_wednesday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="W"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_first_thursday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="T"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_first_friday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="F"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_first_saturday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="S"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_first_sunday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="S"/>
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -104,10 +193,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:textOff=""
-                        android:textOn=""
                         android:padding="5dp"
                         android:switchMinWidth="40dp"
+                        android:textOff=""
+                        android:textOn=""
                         android:thumb="@drawable/switch_thumb_selector"
                         android:track="@drawable/switch_track_selector"/>
 
@@ -123,7 +212,6 @@
 
 
             </LinearLayout>
-
 
 
             <View
@@ -157,10 +245,10 @@
                             android:id="@+id/txtv_alarmSecond"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:padding="5dp"
                             android:text="6:05"
                             android:textColor="@color/colorBlack"
-                            android:padding="5dp"
-                            android:clickable="true"
                             android:textSize="20sp"
                             android:textStyle="bold"/>
 
@@ -172,13 +260,103 @@
 
                     </LinearLayout>
 
-                    <TextView
+                   <!-- <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
                         android:paddingLeft="5dp"
-                        android:text="EVERYDAY"/>
+                        android:text="EVERYDAY"
+                        android:textSize="11sp"
+                        android:textStyle="bold"/>-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/edtv_second_monday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
+                            android:background="@null"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:text="M"/>
+
+                        <EditText
+                            android:id="@+id/edtv_second_tuesday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:editable="false"
+                            android:background="@null"
+                            android:padding="@dimen/_5sdp"
+                            android:text="T"/>
+
+                        <EditText
+                            android:id="@+id/edtv_second_wednesday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="W"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_second_thursday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="T"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_second_friday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="F"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_second_saturday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="S"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_second_sunday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="S"/>
+
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -194,10 +372,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:textOff=""
-                        android:textOn=""
                         android:padding="5dp"
                         android:switchMinWidth="40dp"
+                        android:textOff=""
+                        android:textOn=""
                         android:thumb="@drawable/switch_thumb_selector"
                         android:track="@drawable/switch_track_selector"/>
 
@@ -246,10 +424,10 @@
                             android:id="@+id/txtv_alarmThird"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="6:05"
-                            android:textColor="@color/colorBlack"
                             android:clickable="true"
                             android:padding="5dp"
+                            android:text="6:05"
+                            android:textColor="@color/colorBlack"
                             android:textSize="20sp"
                             android:textStyle="bold"/>
 
@@ -261,13 +439,103 @@
 
                     </LinearLayout>
 
-                    <TextView
+                   <!-- <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="11sp"
-                        android:textStyle="bold"
                         android:paddingLeft="5dp"
-                        android:text="EVERYDAY"/>
+                        android:text="EVERYDAY"
+                        android:textSize="11sp"
+                        android:textStyle="bold"/>-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/edtv_third_monday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
+                            android:background="@null"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:text="M"/>
+
+                        <EditText
+                            android:id="@+id/edtv_third_tuesday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:editable="false"
+                            android:background="@null"
+                            android:padding="@dimen/_5sdp"
+                            android:text="T"/>
+
+                        <EditText
+                            android:id="@+id/edtv_third_wednesday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="W"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_third_thursday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="T"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_third_friday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="F"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_third_saturday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="S"/>
+
+
+                        <EditText
+                            android:id="@+id/edtv_third_sunday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:gravity="center"
+                            android:padding="@dimen/_5sdp"
+                            android:editable="false"
+                            android:background="@null"
+                            android:text="S"/>
+
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -283,10 +551,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="false"
-                        android:textOff=""
-                        android:textOn=""
                         android:padding="5dp"
                         android:switchMinWidth="40dp"
+                        android:textOff=""
+                        android:textOn=""
                         android:thumb="@drawable/switch_thumb_selector"
                         android:track="@drawable/switch_track_selector"/>
 
