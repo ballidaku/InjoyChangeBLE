@@ -3,14 +3,26 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ble.sharan.R;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.ToolBoxModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
+import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.MyDialogs;
+import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 2/10/17.
@@ -18,6 +30,8 @@ import com.ble.sharan.myUtilities.MyUtil;
 
 public class ToolBox extends Fragment implements View.OnClickListener
 {
+
+    String TAG = ToolBox.class.getSimpleName();
 
     Context context;
     View view;
@@ -27,9 +41,20 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
 
     ImageView imgv_running;
+    ImageView check1_iv;
 
     String currentDay = "";
 
+    MyDialogs myDialogs = new MyDialogs();
+
+    String image = "";
+    String title = "";
+    String description = "";
+    int count = 0;
+
+    CardView cardViewMon;
+    CardView cardViewWed;
+    CardView cardViewFri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -46,8 +71,25 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
             currentDay = myUtil.getCurrentDay();
 
+            makeClickableOrNot();
+
 
         }
+
+        if (currentDay.equals("Monday") || currentDay.equals("Tuesday"))
+        {
+            hitDay = "Monday";
+        }
+        else if (currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
+        {
+            hitDay = "Wednesday";
+        }
+        else if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday"))
+        {
+            hitDay = "Friday";
+        }
+
+        READ_NOW_RETROFIT();
 
         return view;
     }
@@ -67,16 +109,21 @@ public class ToolBox extends Fragment implements View.OnClickListener
     {
 
         imgv_running = (ImageView) view.findViewById(R.id.imgv_running);
+        check1_iv = (ImageView) view.findViewById(R.id.check1_iv);
 
-        view.findViewById(R.id.cardViewMonday).setOnClickListener(this);
-        view.findViewById(R.id.cardViewWednesday).setOnClickListener(this);
-        view.findViewById(R.id.cardViewFriday).setOnClickListener(this);
+        (cardViewMon = (CardView) view.findViewById(R.id.cardViewMonday)).setOnClickListener(this);
+        (cardViewWed = (CardView) view.findViewById(R.id.cardViewWednesday)).setOnClickListener(this);
+        (cardViewFri = (CardView) view.findViewById(R.id.cardViewFriday)).setOnClickListener(this);
         view.findViewById(R.id.txtv_viewAll).setOnClickListener(this);
+
+
+        view.findViewById(R.id.cardViewReadNow).setOnClickListener(this);
 
 
         myUtil.showCircularImageWithPicasso(context, imgv_running, R.drawable.ic_running);
 
     }
+
 
 
     @Override
@@ -87,30 +134,26 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
             case R.id.cardViewMonday:
 
-                if (currentDay.equals("Monday") || currentDay.equals("Tuesday"))
-                {
-                    hit();
-                }
+                hitDay = "Monday";
+                READ_NOW_RETROFIT();
 
                 break;
 
 
             case R.id.cardViewWednesday:
 
-                if (currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
-                {
-                    hit();
-                }
+
+                hitDay = "Wednesday";
+                READ_NOW_RETROFIT();
 
                 break;
 
 
             case R.id.cardViewFriday:
 
-                if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday"))
-                {
-                    hit();
-                }
+
+                hitDay = "Friday";
+                READ_NOW_RETROFIT();
 
                 break;
 
@@ -121,13 +164,157 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
 
                 break;
+
+
+            case R.id.cardViewReadNow:
+
+                if (currentDay.equals("Monday") || currentDay.equals("Tuesday"))
+                {
+                    hitDay = "Monday";
+                }
+                else if (currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
+                {
+                    hitDay = "Wednesday";
+                }
+                else if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday"))
+                {
+                    hitDay = "Friday";
+                }
+
+                READ_NOW_RETROFIT();
+
+
+                break;
         }
     }
 
 
-    public void hit()
+    public void makeClickableOrNot()
     {
-        ((MainActivityNew) getActivity()).changeFragment2(new ToolBoxDetails());
+        cardViewMon.setEnabled(false);
+        cardViewWed.setEnabled(false);
+        cardViewFri.setEnabled(false);
+
+        if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday"))
+        {
+            cardViewMon.setEnabled(true);
+            cardViewWed.setEnabled(true);
+            cardViewFri.setEnabled(true);
+        }
+        else if (currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
+        {
+            cardViewMon.setEnabled(true);
+            cardViewWed.setEnabled(true);
+        }
+        else
+        {
+            cardViewMon.setEnabled(true);
+        }
+    }
+
+
+    boolean firstTimeOnly = false;
+
+    public void READ_NOW_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ToolBoxModel> call = apiService.readNowToolBox(myUtil.getCurrentTimeStamp(), hitDay, MySharedPreference.getInstance().getUID(context));
+
+        call.enqueue(new Callback<ToolBoxModel>()
+        {
+            @Override
+            public void onResponse(Call<ToolBoxModel> call, Response<ToolBoxModel> response)
+            {
+                Log.e(TAG, "Response----" + response.body());
+
+                ToolBoxModel toolBoxModel = response.body();
+
+                if (toolBoxModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    image = toolBoxModel.getImage();
+                    title = toolBoxModel.getTitle();
+                    description = toolBoxModel.getDescription();
+                    count = toolBoxModel.getCount();
+
+
+                    if (count > 0)
+                    {
+                        check1_iv.setImageResource(R.mipmap.ic_check);
+                    }
+
+
+                    if (firstTimeOnly)
+                    {
+                        if (!title.isEmpty() && !image.isEmpty() && !description.isEmpty())
+                        {
+                            myDialogs.showToolBoxDialog(context, title, image, description, onClickListener, hitDay, count);
+                        }
+                    }
+                    firstTimeOnly = true;
+
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ToolBoxModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+
+            myDialogs.dialog.dismiss();
+            SUBMIT_POINTS_RETROFIT();
+        }
+    };
+
+    String hitDay = "";
+
+    public void SUBMIT_POINTS_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ToolBoxModel> call = apiService.submitPointsToolBox(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context), hitDay);
+
+        call.enqueue(new Callback<ToolBoxModel>()
+        {
+            @Override
+            public void onResponse(Call<ToolBoxModel> call, Response<ToolBoxModel> response)
+            {
+                Log.e(TAG, "Response----" + response.body());
+
+                ToolBoxModel toolBoxModel = response.body();
+
+                if (toolBoxModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    count = toolBoxModel.getCount();
+
+                    if (count > 0)
+                    {
+                        check1_iv.setImageResource(R.mipmap.ic_check);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ToolBoxModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
     }
 
 

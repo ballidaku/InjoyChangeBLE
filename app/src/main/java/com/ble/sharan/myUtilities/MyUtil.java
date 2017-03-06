@@ -847,7 +847,7 @@ public class MyUtil
 
 
     // Get Current Time Stamp
-    public static String getCurrentTimeStamp(){
+    public  String getCurrentTimeStamp(){
         try {
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

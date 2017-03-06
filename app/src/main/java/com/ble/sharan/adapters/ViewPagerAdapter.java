@@ -14,11 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.apiModels.ShareWinModel;
 import com.ble.sharan.myUtilities.MyUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ViewPagerAdapter extends PagerAdapter
 {
@@ -26,11 +25,11 @@ public class ViewPagerAdapter extends PagerAdapter
     Context context;
     LayoutInflater inflater;
 
-    private ArrayList<HashMap> list = new ArrayList<>();
+    private ArrayList<ShareWinModel.Data.SubData> list = new ArrayList<>();
 
     MyUtil myUtil = new MyUtil();
 
-    public ViewPagerAdapter(Context context, ArrayList<HashMap> list)
+    public ViewPagerAdapter(Context context, ArrayList<ShareWinModel.Data.SubData> list)
     {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -56,17 +55,17 @@ public class ViewPagerAdapter extends PagerAdapter
     {
         View v = inflater.inflate(R.layout.custom_viewpager_item, null);
 
-        HashMap<String, String> map = list.get(position);
+        //HashMap<String, String> map = list.get(position);
 
         ImageView imgv_user = (ImageView) v.findViewById(R.id.imgv_user);
         TextView txtv_comments = (TextView) v.findViewById(R.id.txtv_comments);
         TextView txtv_name = (TextView) v.findViewById(R.id.txtv_name);
 
-        txtv_comments.setText(map.get(MyConstant.COMMENT));
-        txtv_name.setText(map.get(MyConstant.NAME));
+        txtv_comments.setText(list.get(position).getComment());
+        txtv_name.setText(list.get(position).getName());
 
 
-        myUtil.showImageWithGlide(context,imgv_user,map.get(MyConstant.IMAGE));
+        myUtil.showImageWithGlide(context,imgv_user,list.get(position).getImage());
 
         row.addView(v);
 

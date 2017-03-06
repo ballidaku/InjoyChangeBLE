@@ -1,31 +1,32 @@
 package com.ble.sharan.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.apiModels.ToolBoxModel;
+import com.ble.sharan.apiModels.CheckInModel;
 import com.ble.sharan.myUtilities.MyUtil;
 
 import java.util.ArrayList;
 
 /**
- * Created by brst-pc93 on 2/10/17.
+ * Created by brst-pc93 on 3/1/17.
  */
 
-public class ToolBoxViewAllAdapter  extends BaseAdapter
+public class CheckInCommentAdapter  extends BaseAdapter
 {
     Context context;
-    ArrayList<ToolBoxModel.SubData> list;
+    ArrayList<CheckInModel.Comment> list;
     MyUtil myUtil = new MyUtil();
 
 
-    public ToolBoxViewAllAdapter(Context context, ArrayList<ToolBoxModel.SubData> list)
+
+    public CheckInCommentAdapter(Context context, ArrayList<CheckInModel.Comment> list)
     {
         this.context = context;
         this.list = list;
@@ -57,14 +58,17 @@ public class ToolBoxViewAllAdapter  extends BaseAdapter
     {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        row = inflater.inflate(R.layout.custom_tool_box_view_all_item, parent, false);
+        row = inflater.inflate(R.layout.custom_checkin_comment_item, parent, false);
 
 
-        ImageView imgvToolBoxviewDetail=(ImageView)row.findViewById(R.id.imgvToolBoxviewDetail);
-        TextView txtvToolBoxviewDetail=(TextView)row.findViewById(R.id.txtvToolBoxviewDetail);
+        if(position%2 != 0)
+        {
+            row.setBackgroundColor(ContextCompat.getColor(context,R.color.colorGrayWhite));
+        }
 
-        myUtil.showCircularImageWithPicasso(context,imgvToolBoxviewDetail,list.get(position).getImage());
-        txtvToolBoxviewDetail.setText(list.get(position).getDescription());
+        TextView txtv_comment = (TextView) row.findViewById(R.id.txtv_comment);
+
+        txtv_comment.setText(list.get(position).getComment());
 
         return row;
     }

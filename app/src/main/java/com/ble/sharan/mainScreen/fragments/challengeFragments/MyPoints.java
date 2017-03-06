@@ -3,6 +3,7 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,22 +14,22 @@ import android.widget.TextView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.MyPointsAdapter;
-import com.ble.sharan.asyncTask.Super_AsyncTask;
-import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.DataModel;
+import com.ble.sharan.apiModels.TopUsersModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 2/6/17.
@@ -36,6 +37,8 @@ import java.util.List;
 
 public class MyPoints extends Fragment
 {
+
+    String TAG=MyPoints.class.getSimpleName();
 
     Context context;
     View view;
@@ -67,8 +70,15 @@ public class MyPoints extends Fragment
             setUpIds();
 
 
-            GET_USER_POINTS_DATA_FROM_SERVER();
-            GET_DATA_FROM_SERVER();
+//            GET_USER_POINTS_DATA_FROM_SERVER();
+            GET_USER_POINTS_DATA_FROM_SERVER_RETROFIT();
+
+
+
+
+            //GET_DATA_FROM_SERVER();
+            GET_TOP_USERS_FROM_SERVER_RETROFIT();
+
 
         }
 
@@ -117,6 +127,7 @@ public class MyPoints extends Fragment
 
     }
 
+/*
     public void GET_DATA_FROM_SERVER()
     {
 
@@ -166,14 +177,15 @@ public class MyPoints extends Fragment
 
 
     }
+*/
 
 
 
-    public void GET_USER_POINTS_DATA_FROM_SERVER()
+ /*   public void GET_USER_POINTS_DATA_FROM_SERVER()
     {
 
 
-        MyUtil.execute(new Super_AsyncTask(context, MyConstant.USER_POINTS + MySharedPreference.getInstance().getUID(context), new Super_AsyncTask_Interface()
+        MyUtil.execute(new Super_AsyncTask(context, MyConstant.USER_POINTS+myUtil.getCurrentTimeStamp()+"&uid=" + MySharedPreference.getInstance().getUID(context), new Super_AsyncTask_Interface()
         {
             @Override
             public void onTaskCompleted(String output)
@@ -205,18 +217,25 @@ public class MyPoints extends Fragment
         }, false));
 
 
-    }
+    }*/
 
-    private void setData(List<HashMap> list, String total)
+    private void setData(List<TopUsersModel.SubData> list, String total)
     {
 
-        Collections.sort(list, new Comparator<HashMap>()
+ /*       Collections.sort(list, new Comparator<TopUsersModel>()
         {
-            public int compare(HashMap o1, HashMap o2)
+            public int compare(TopUsersModel o1, TopUsersModel o2)
             {
-                if (o1.get(MyConstant.RANK) == null || o2.get(MyConstant.RANK) == null)
+                if (o1.getTopUserslList().getRank() == null || o2.SubData.getRank()  == null)
                     return 0;
-                return o1.get(MyConstant.RANK).toString().compareTo(o2.get(MyConstant.RANK).toString());
+                return o1.SubData.getRank().compareTo(o2.SubData.getRank() );
+            }
+        });*/
+
+
+        Collections.sort(list, new Comparator< TopUsersModel.SubData >() {
+            @Override public int compare(TopUsersModel.SubData p1, TopUsersModel.SubData p2) {
+                return p1.getRank()- p2.getRank(); // Ascending
             }
         });
 
@@ -227,6 +246,82 @@ public class MyPoints extends Fragment
 
         txtv_total.setText(total);
     }
+
+
+    // RETROFIT
+    public void GET_USER_POINTS_DATA_FROM_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<DataModel> call = apiService.getpoint(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
+
+        call.enqueue(new Callback<DataModel>()
+        {
+            @Override
+            public void onResponse(Call<DataModel> call, Response<DataModel> response)
+            {
+                Log.e(TAG, "Response----"+response.body());
+
+                DataModel dataModel = response.body();
+
+                if(dataModel.getStatus().equals(MyConstant.TRUE))
+                {
+
+                    String totalPoints = dataModel.getTotalPoints();
+                    String raffleTicket = dataModel.getRaffleTicket();
+
+                    txtv_totalPoints.setText(totalPoints);
+                    txtv_entry.setText(raffleTicket + " ENTRY");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<DataModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
+
+
+    // RETROFIT
+    public void GET_TOP_USERS_FROM_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<TopUsersModel> call = apiService.getTopUsers();
+
+        call.enqueue(new Callback<TopUsersModel>()
+        {
+            @Override
+            public void onResponse(Call<TopUsersModel> call, Response<TopUsersModel> response)
+            {
+                Log.e(TAG, "Response----"+response.body());
+
+                TopUsersModel topUsersModels = response.body();
+
+                if(topUsersModels.getStatus().equals(MyConstant.TRUE))
+                {
+                    setData(topUsersModels.getTopUserslList(),topUsersModels.getTopElevationActions());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<TopUsersModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
+
+
 
 
 }

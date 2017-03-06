@@ -11,20 +11,19 @@ import android.view.ViewGroup;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.ShareWinEndlessAdapter;
-import com.ble.sharan.asyncTask.Super_AsyncTask;
-import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.ShareWinSeeAllModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.EndlessListView;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 2/9/17.
@@ -32,6 +31,8 @@ import java.util.List;
 
 public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessListener,SwipeRefreshLayout.OnRefreshListener
 {
+
+    String TAG=ShareWinSeeAll.class.getSimpleName();
 
     Context context;
     View view;
@@ -63,8 +64,8 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
 
             setUpIds();
 
-            GET_DATA_FROM_SERVER();
-
+//            GET_DATA_FROM_SERVER();
+            GET_DATA_FROM_SERVER_RETROFIT();
 
         }
 
@@ -94,7 +95,7 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
     }
 
 
-    public void GET_DATA_FROM_SERVER()
+   /* public void GET_DATA_FROM_SERVER()
     {
 
 
@@ -151,11 +152,11 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
         }, showProgressBar));
 
 
-    }
+    }*/
 
     int val = 0;
 
-    public void setData(List<HashMap> list)
+    public void setData(List<ShareWinSeeAllModel.SubData> list)
     {
 
         if(swipeRefreshLayout.isRefreshing())
@@ -188,7 +189,8 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
 
         Log.e("VAL", "" + val);
 
-        GET_DATA_FROM_SERVER();
+//        GET_DATA_FROM_SERVER();
+        GET_DATA_FROM_SERVER_RETROFIT();
 
     }
 
@@ -199,7 +201,48 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
 
         val=0;
         endLessListViewShareWin.isLoading=false;
-        GET_DATA_FROM_SERVER();
+//        GET_DATA_FROM_SERVER();
+        GET_DATA_FROM_SERVER_RETROFIT();
+    }
+
+
+
+    // RETROFIT
+    public void GET_DATA_FROM_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ShareWinSeeAllModel> call = apiService.getShareWinSeeAllData(val);
+
+        call.enqueue(new Callback<ShareWinSeeAllModel>()
+        {
+            @Override
+            public void onResponse(Call<ShareWinSeeAllModel> call, Response<ShareWinSeeAllModel> response)
+            {
+                Log.e(TAG, "Response----" + response.body());
+
+                ShareWinSeeAllModel shareWinSeeAllModel = response.body();
+
+                if (shareWinSeeAllModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    setData(shareWinSeeAllModel.getShareWinList());
+
+                }
+                else
+                {
+                    endLessListViewShareWin.removeFooter();
+                    MyUtil.showToast(context,"No more data");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShareWinSeeAllModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
     }
 
 

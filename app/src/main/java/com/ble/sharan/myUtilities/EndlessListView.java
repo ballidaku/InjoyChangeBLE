@@ -26,8 +26,9 @@ import android.widget.ListView;
 
 import com.ble.sharan.adapters.ShareWinEndlessAdapter;
 import com.ble.sharan.adapters.ShoutOutEndlessAdapter;
+import com.ble.sharan.apiModels.ShareWinSeeAllModel;
+import com.ble.sharan.apiModels.ShoutOutModel;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class EndlessListView extends ListView implements OnScrollListener {
@@ -104,14 +105,14 @@ public class EndlessListView extends ListView implements OnScrollListener {
 
 
 	
-	public void addShareWinNewData(List<HashMap> data) {
+	public void addShareWinNewData(List<ShareWinSeeAllModel.SubData> data) {
 		removeFooter();
 		shareWinEndlessAdapter.addAll(data);
 		shareWinEndlessAdapter.notifyDataSetChanged();
 		isLoading = false;
 	}
 
-	public void addShoutOutNewData(List<HashMap> data) {
+	public void addShoutOutNewData(List<ShoutOutModel.SubData> data) {
 		removeFooter();
 		shoutOutEndlessAdapter.addAll(data);
 		shoutOutEndlessAdapter.notifyDataSetChanged();

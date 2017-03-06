@@ -12,22 +12,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.apiModels.ShareWinSeeAllModel;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import java.util.HashMap;
 import java.util.List;
 
-public class ShareWinEndlessAdapter extends ArrayAdapter<HashMap> {
+public class ShareWinEndlessAdapter extends ArrayAdapter<ShareWinSeeAllModel.SubData> {
 
-    private List<HashMap> itemList;
+    private List<ShareWinSeeAllModel.SubData> itemList;
     private Context context;
     private int layoutId;
     LayoutInflater inflater;
 
     MyUtil myUtil=new MyUtil();
 
-    public ShareWinEndlessAdapter(Context context, List<HashMap> itemList, int layoutId) {
+    public ShareWinEndlessAdapter(Context context, List<ShareWinSeeAllModel.SubData> itemList, int layoutId) {
         super(context, layoutId, itemList);
         this.itemList = itemList;
         this.context = context;
@@ -40,7 +39,7 @@ public class ShareWinEndlessAdapter extends ArrayAdapter<HashMap> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        HashMap hashMap = itemList.get(position);
+       // HashMap hashMap = itemList.get(position);
 
         convertView = inflater.inflate(R.layout.custom_share_win_list, null);
         if (position % 2 == 0) {
@@ -54,12 +53,12 @@ public class ShareWinEndlessAdapter extends ArrayAdapter<HashMap> {
         TextView txtv_comment = (TextView) convertView.findViewById(R.id.txtv_comment);
 
 
-        txtv_name.setText(hashMap.get(MyConstant.NAME).toString());
-        txtv_time.setText(hashMap.get(MyConstant.DATE).toString());
-        txtv_comment.setText(hashMap.get(MyConstant.COMMENT).toString());
+        txtv_name.setText(itemList.get(position).getName());
+        txtv_time.setText(itemList.get(position).getDate());
+        txtv_comment.setText(itemList.get(position).getComment());
 
 
-        myUtil.showCircularImageWithPicasso(context,imgv_user,hashMap.get(MyConstant.IMAGE).toString());
+        myUtil.showCircularImageWithPicasso(context,imgv_user,itemList.get(position).getImage());
 
 
 

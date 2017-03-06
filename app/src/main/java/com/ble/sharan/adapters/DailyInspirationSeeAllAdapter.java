@@ -8,11 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.apiModels.DailyInspirationViewAllModel;
 import com.ble.sharan.myUtilities.MyUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by brst-pc93 on 2/10/17.
@@ -24,12 +23,12 @@ public class DailyInspirationSeeAllAdapter extends BaseAdapter
 
     LayoutInflater inflator;
 
-    ArrayList<HashMap<String, String>> list;
+    ArrayList<DailyInspirationViewAllModel.Image> list;
 
 
     MyUtil myUtil=new MyUtil();
 
-    public DailyInspirationSeeAllAdapter(Context context, ArrayList<HashMap<String, String>>list)
+    public DailyInspirationSeeAllAdapter(Context context, ArrayList<DailyInspirationViewAllModel.Image>list)
     {
         this.context = context;
         this.list = list;
@@ -62,7 +61,7 @@ public class DailyInspirationSeeAllAdapter extends BaseAdapter
         final ImageView imgv_logo = (ImageView) view.findViewById(R.id.imgv_logo);
         imgv_logo.setAdjustViewBounds(true);
 
-        myUtil.showImageWithPicasso(context,imgv_logo,list.get(i).get(MyConstant.IMAGE));
+        myUtil.showImageWithPicasso(context,imgv_logo,list.get(i).getImage());
 
         return view;
     }

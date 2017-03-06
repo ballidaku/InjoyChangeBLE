@@ -25,6 +25,12 @@ public class Splash extends AppCompatActivity
         context=this;
 
 
+        /*GeometricProgressView progressView15 = (GeometricProgressView) findViewById(R.id.progressView15);
+        progressView15.setType(GeometricProgressView.TYPE.KITE);
+        progressView15.setFigurePaddingInDp(1);
+        progressView15.setNumberOfAngles(30);*/
+
+
         c.start();
 
     }

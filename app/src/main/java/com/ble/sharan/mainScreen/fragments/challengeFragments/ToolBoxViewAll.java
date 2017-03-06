@@ -3,6 +3,7 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +11,18 @@ import android.widget.ListView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.ToolBoxViewAllAdapter;
-import com.ble.sharan.asyncTask.Super_AsyncTask;
-import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.ToolBoxModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 2/10/17.
@@ -29,6 +30,8 @@ import java.util.HashMap;
 
 public class ToolBoxViewAll extends Fragment
 {
+
+    String TAG=ToolBoxViewAll.class.getSimpleName();
 
     Context context;
     View view;
@@ -51,7 +54,8 @@ public class ToolBoxViewAll extends Fragment
 
             setUpIds();
 
-            GET_DATA_FROM_SERVER();
+//            GET_DATA_FROM_SERVER();
+            GET_DATA_FROM_SERVER_RETROFIT();
         }
 
         return view;
@@ -75,7 +79,7 @@ public class ToolBoxViewAll extends Fragment
     }
 
 
-    public void GET_DATA_FROM_SERVER()
+   /* public void GET_DATA_FROM_SERVER()
     {
         MyUtil.execute(new Super_AsyncTask(context, MyConstant.TOOL_BOX, new Super_AsyncTask_Interface()
         {
@@ -117,14 +121,47 @@ public class ToolBoxViewAll extends Fragment
                 }
             }
         }, true));
-    }
+    }*/
 
-    private void setData(ArrayList<HashMap<String, String>> list)
+    private void setData(ArrayList<ToolBoxModel.SubData> toolBoxlList)
     {
-        toolBoxViewAllAdapter=new ToolBoxViewAllAdapter(context,list);
+        toolBoxViewAllAdapter=new ToolBoxViewAllAdapter(context,toolBoxlList);
 
         listViewToolBox.setAdapter(toolBoxViewAllAdapter);
     }
+
+    // RETROFIT
+    public void GET_DATA_FROM_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ToolBoxModel> call = apiService.getToolBoxAllData();
+
+        call.enqueue(new Callback<ToolBoxModel>()
+        {
+            @Override
+            public void onResponse(Call<ToolBoxModel> call, Response<ToolBoxModel> response)
+            {
+                Log.e(TAG, "Response----"+response.body());
+
+                ToolBoxModel toolBoxModel = response.body();
+
+                if(toolBoxModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    setData(toolBoxModel.getToolBoxlList());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ToolBoxModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
+
 
 
 }

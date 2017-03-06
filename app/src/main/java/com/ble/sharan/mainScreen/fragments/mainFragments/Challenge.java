@@ -3,6 +3,7 @@ package com.ble.sharan.mainScreen.fragments.mainFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +14,17 @@ import android.widget.TextView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.ChallengeAdapter;
-import com.ble.sharan.asyncTask.Super_AsyncTask;
-import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.DataModel;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 2/6/17.
@@ -29,6 +32,8 @@ import org.json.JSONObject;
 
 public class Challenge extends Fragment
 {
+
+    String TAG = Challenge.class.getSimpleName();
 
     Context context;
     View view;
@@ -43,9 +48,9 @@ public class Challenge extends Fragment
 
     String points[] = {
             "Daily Inspiration",
-            "Check-In with Yourself",
+            "Check In With Yourself",
             "My Points",
-            "Shout Outs and Appreciations",
+            "Hydraflow In Action",
             "Tool Box",
             "Share A Win & Weekly Video"
     };
@@ -53,8 +58,8 @@ public class Challenge extends Fragment
 
     MyUtil myUtil = new MyUtil();
 
-
-
+    String totalPoints="0";
+    String raffleTicket="0";
 
 
     @Override
@@ -70,9 +75,14 @@ public class Challenge extends Fragment
 
             setUpIds();
 
-            GET_DATA_FROM_SERVER();
-
+            //GET_DATA_FROM_SERVER();
+            GET_DATA_FROM_SERVER_RETROFIT();
         }
+
+        txtv_totalPoints.setText(totalPoints);
+        txtv_entry.setText(raffleTicket + " ENTRY");
+
+
 
         return view;
     }
@@ -123,11 +133,11 @@ public class Challenge extends Fragment
     }
 
 
-    public void GET_DATA_FROM_SERVER()
+/*    public void GET_DATA_FROM_SERVER()
     {
 
 
-        MyUtil.execute(new Super_AsyncTask(context, MyConstant.USER_POINTS + MySharedPreference.getInstance().getUID(context), new Super_AsyncTask_Interface()
+        MyUtil.execute(new Super_AsyncTask(context, MyConstant.USER_POINTS + myUtil.getCurrentTimeStamp() + "&uid=" + MySharedPreference.getInstance().getUID(context), new Super_AsyncTask_Interface()
         {
             @Override
             public void onTaskCompleted(String output)
@@ -141,11 +151,11 @@ public class Challenge extends Fragment
 
                     if (status.equals(MyConstant.TRUE))
                     {
-                       String totalPoints = object.getString(MyConstant.TOTAL_POINTS);
-                       String raffleTicket = object.getString(MyConstant.RAFFLE_TICKET);
+                        String totalPoints = object.getString(MyConstant.TOTAL_POINTS);
+                        String raffleTicket = object.getString(MyConstant.RAFFLE_TICKET);
 
                         txtv_totalPoints.setText(totalPoints);
-                        txtv_entry.setText(raffleTicket +" ENTRY");
+                        txtv_entry.setText(raffleTicket + " ENTRY");
 
 
                     }
@@ -159,6 +169,45 @@ public class Challenge extends Fragment
         }, false));
 
 
+    }*/
+
+
+    // RETROFIT
+    public void GET_DATA_FROM_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<DataModel> call = apiService.getpoint(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
+
+        call.enqueue(new Callback<DataModel>()
+        {
+            @Override
+            public void onResponse(Call<DataModel> call, Response<DataModel> response)
+            {
+                Log.e(TAG, "Response----"+response.body());
+
+                DataModel dataModel = response.body();
+
+                if(dataModel.getStatus().equals(MyConstant.TRUE))
+                {
+
+                    totalPoints = dataModel.getTotalPoints();
+                    raffleTicket = dataModel.getRaffleTicket();
+
+                    txtv_totalPoints.setText(totalPoints);
+                    txtv_entry.setText(raffleTicket + " ENTRY");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<DataModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
     }
 
 

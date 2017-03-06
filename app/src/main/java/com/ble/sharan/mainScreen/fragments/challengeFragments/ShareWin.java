@@ -15,8 +15,9 @@ import android.widget.Toast;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.ViewPagerAdapter;
-import com.ble.sharan.asyncTask.Super_AsyncTask;
-import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.ShareWinModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.AutoScrollViewPager;
 import com.ble.sharan.myUtilities.CirclePageIndicator;
@@ -28,12 +29,11 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 2/6/17.
@@ -41,6 +41,9 @@ import java.util.HashMap;
 
 public class ShareWin extends Fragment implements View.OnClickListener
 {
+
+
+    String TAG = ShareWin.class.getSimpleName();
 
     Context context;
     View view;
@@ -51,6 +54,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
 
 
     ImageView imgv_checkShareWin;
+    ImageView imgv_checkWeeklyVideo;
 
     CardView cardViewShareWin;
     CardView cardViewWeeklyVideo;
@@ -59,7 +63,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
 
 
     MyUtil myUtil = new MyUtil();
-    MyDialogs myDialogs=new MyDialogs();
+    MyDialogs myDialogs = new MyDialogs();
 
     int weeklyCount = 0;
     int shareWinCount = 0;
@@ -80,8 +84,8 @@ public class ShareWin extends Fragment implements View.OnClickListener
 
             setUpIds();
 
-            GET_DATA_FROM_SERVER();
-
+//            GET_DATA_FROM_SERVER();
+            GET_DATA_FROM_SERVER_RETROFIT();
 
         }
 
@@ -103,6 +107,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
         autoScrollViewPager = (AutoScrollViewPager) view.findViewById(R.id.autoScrollViewPager);
 
         imgv_checkShareWin = (ImageView) view.findViewById(R.id.imgv_checkShareWin);
+        imgv_checkWeeklyVideo = (ImageView) view.findViewById(R.id.imgv_checkWeeklyVideo);
 
         cardViewShareWin = (CardView) view.findViewById(R.id.cardViewShareWin);
         cardViewWeeklyVideo = (CardView) view.findViewById(R.id.cardViewWeeklyVideo);
@@ -124,9 +129,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
     }
 
 
-
-
-    private void setData(ArrayList<HashMap> list, final HashMap<String, String> hashMapWeeklyChallenge)
+    private void setData(ArrayList<ShareWinModel.Data.SubData> list, final String videoUrl)
     {
 
 
@@ -151,6 +154,12 @@ public class ShareWin extends Fragment implements View.OnClickListener
             imgv_checkShareWin.setImageResource(R.mipmap.ic_check);
         }
 
+        if (weeklyCount > 0)
+        {
+            imgv_checkWeeklyVideo.setImageResource(R.mipmap.ic_check);
+        }
+
+
 
         youTubePlayerFragment.initialize(MyConstant.YOU_TUBE_KEY, new YouTubePlayer.OnInitializedListener()
         {
@@ -162,7 +171,12 @@ public class ShareWin extends Fragment implements View.OnClickListener
                 if (!wasRestored)
                 {
                     player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    player.cueVideo(hashMapWeeklyChallenge.get(MyConstant.URL).replace("https://www.youtube.com/embed/", ""));
+
+                    String a = videoUrl;
+                    // Log.e(TAG,"ABC   "+a.substring(a.lastIndexOf("/")+1,a.length()));
+                    player.cueVideo(a.substring(a.lastIndexOf("/") + 1, a.length()));
+
+
 //                    player.play();
                 }
             }
@@ -197,14 +211,14 @@ public class ShareWin extends Fragment implements View.OnClickListener
             case R.id.cardViewShareWin:
 
 //                imgv_checkShareWin.setImageResource(R.mipmap.ic_check);
-                edtv_comment= myDialogs.showShareWinDialog(context,"ShareWin",onClickListenerShareWin);
+                edtv_comment = myDialogs.showShareWinCheckInDialog(context, "ShareWin", onClickListenerShareWin);
 
                 break;
 
 
             case R.id.cardViewWeeklyVideo:
 
-                edtv_comment= myDialogs.showShareWinDialog(context,"WeeklyVideo",onClickListenerWeeklyVideo);
+                edtv_comment = myDialogs.showShareWinCheckInDialog(context, "WeeklyVideo", onClickListenerWeeklyVideo);
 
                 break;
         }
@@ -213,45 +227,45 @@ public class ShareWin extends Fragment implements View.OnClickListener
 
     EditText edtv_comment;
 
-    View.OnClickListener onClickListenerShareWin=new View.OnClickListener()
+    View.OnClickListener onClickListenerShareWin = new View.OnClickListener()
     {
         @Override
         public void onClick(View view)
         {
-            String comment=edtv_comment.getText().toString().trim();
+            String comment = edtv_comment.getText().toString().trim();
 
-            if(!comment.isEmpty())
+            if (!comment.isEmpty())
             {
                 myDialogs.dialog.dismiss();
+                SHARE_COMMENT_DATA_TO_SERVER_RETROFIT(comment);
             }
             else
             {
-                MyUtil.showToast(context,"Please enter comment");
+                MyUtil.showToast(context, "Please enter comment");
             }
 
         }
     };
 
 
-    View.OnClickListener onClickListenerWeeklyVideo=new View.OnClickListener()
+    View.OnClickListener onClickListenerWeeklyVideo = new View.OnClickListener()
     {
         @Override
         public void onClick(View view)
         {
-            String comment=edtv_comment.getText().toString().trim();
+            String comment = edtv_comment.getText().toString().trim();
 
-            if(!comment.isEmpty())
+            if (!comment.isEmpty())
             {
                 myDialogs.dialog.dismiss();
+                WEEKLY_VIDEO_COMMENT_DATA_TO_SERVER_RETROFIT(comment);
             }
             else
             {
-                MyUtil.showToast(context,"Please enter comment");
+                MyUtil.showToast(context, "Please enter comment");
             }
         }
     };
-
-
 
 
     //**********************************************************************************************
@@ -261,11 +275,11 @@ public class ShareWin extends Fragment implements View.OnClickListener
     //**********************************************************************************************
 
 
-    public void GET_DATA_FROM_SERVER()
+/*    public void GET_DATA_FROM_SERVER()
     {
 
 
-        MyUtil.execute(new Super_AsyncTask(context, MyConstant.SHARE_WIN_API + "?date=" + MyUtil.getCurrentTimeStamp() + "&uid=" + MySharedPreference.getInstance().getUID(context), new Super_AsyncTask_Interface()
+        MyUtil.execute(new Super_AsyncTask(context, MyConstant.SHARE_WIN_API + "?date=" + myUtil.getCurrentTimeStamp() + "&uid=" + MySharedPreference.getInstance().getUID(context), new Super_AsyncTask_Interface()
         {
             @Override
             public void onTaskCompleted(String output)
@@ -312,7 +326,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
                         weeklyComment = object1.getString(MyConstant.WEEKLY_COMMENT);
 
 
-                        setData(list, hashMapWeeklyChallenge);
+                       // setData(list, hashMapWeeklyChallenge);
                     }
 
 
@@ -324,71 +338,121 @@ public class ShareWin extends Fragment implements View.OnClickListener
         }, true));
 
 
+    }*/
+
+    // RETROFIT
+    public void GET_DATA_FROM_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ShareWinModel> call = apiService.getShareWinData(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
+
+        call.enqueue(new Callback<ShareWinModel>()
+        {
+            @Override
+            public void onResponse(Call<ShareWinModel> call, Response<ShareWinModel> response)
+            {
+                Log.e(TAG, "Response----" + response.body());
+
+                ShareWinModel shareWinModel = response.body();
+
+                if (shareWinModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    ShareWinModel.Data data = shareWinModel.getData();
+
+
+                    weeklyCount = data.getWeeklyCount();
+                    shareWinCount = data.getShareWinCount();
+
+
+                    setData(data.getshareWinList(), data.getWeeklyChallenge().getUrl());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShareWinModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
     }
 
 
-    public void SET_COMMENT_DATA_TO_SERVER()
+    public void SHARE_COMMENT_DATA_TO_SERVER_RETROFIT(String comment)
     {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
+        Call<ShareWinModel> call = apiService.shareShareWinComment(comment, MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
 
-        MyUtil.execute(new Super_AsyncTask(context, MyConstant.SHARE_WIN_API + "?date=" + MyUtil.getCurrentTimeStamp() + "&uid=" + MySharedPreference.getInstance().getUID(context), new Super_AsyncTask_Interface()
+        call.enqueue(new Callback<ShareWinModel>()
         {
             @Override
-            public void onTaskCompleted(String output)
+            public void onResponse(Call<ShareWinModel> call, Response<ShareWinModel> response)
             {
-                try
+                Log.e(TAG, "Response----" + response.body());
+
+                ShareWinModel shareWinModel = response.body();
+
+                if (shareWinModel.getStatus().equals(MyConstant.TRUE))
                 {
-
-                    JSONObject object = new JSONObject(output);
-
-                    String status = object.getString(MyConstant.STATUS);
-
-                    if (status.equals(MyConstant.TRUE))
+                    if (shareWinModel.getCount() > 0)
                     {
-                        ArrayList<HashMap> list = new ArrayList<>();
-
-                        JSONObject object1 = object.getJSONObject(MyConstant.DATA);
-
-                        JSONArray jsonArrayShareWin = object1.getJSONArray(MyConstant.SHARE_WIN);
-
-                        for (int i = 0; i < jsonArrayShareWin.length(); i++)
-                        {
-                            JSONObject jsonObject = jsonArrayShareWin.getJSONObject(i);
-                            HashMap<String, String> hashMap = new HashMap<String, String>();
-
-                            hashMap.put(MyConstant.UID, jsonObject.getString(MyConstant.UID));
-                            hashMap.put(MyConstant.COMMENT, jsonObject.getString(MyConstant.COMMENT));
-                            hashMap.put(MyConstant.NAME, jsonObject.getString(MyConstant.NAME));
-                            hashMap.put(MyConstant.IMAGE, jsonObject.getString(MyConstant.IMAGE));
-
-                            list.add(hashMap);
-                        }
-
-                        JSONObject object2 = object1.getJSONObject(MyConstant.WEEKLY_CHALLENGE);
-
-                        HashMap<String, String> hashMapWeeklyChallenge = new HashMap<String, String>();
-
-                        hashMapWeeklyChallenge.put(MyConstant.IMAGE, object2.getString(MyConstant.IMAGE));
-                        hashMapWeeklyChallenge.put(MyConstant.TITLE, object2.getString(MyConstant.TITLE));
-                        hashMapWeeklyChallenge.put(MyConstant.URL, object2.getString(MyConstant.URL));
-
-
-                        weeklyCount = object1.getInt(MyConstant.WEEKLY_COUNT);
-                        shareWinCount = object1.getInt(MyConstant.SHAREWIN_COUNT);
-                        weeklyComment = object1.getString(MyConstant.WEEKLY_COMMENT);
-
-
-                        setData(list, hashMapWeeklyChallenge);
+                        imgv_checkWeeklyVideo.setImageResource(R.mipmap.ic_check);
                     }
 
-
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
                 }
             }
-        }, true));
+
+            @Override
+            public void onFailure(Call<ShareWinModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
 
 
+
+    public void WEEKLY_VIDEO_COMMENT_DATA_TO_SERVER_RETROFIT(String comment)
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ShareWinModel> call = apiService.shareWeeklyVideoComment(comment, MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
+
+        call.enqueue(new Callback<ShareWinModel>()
+        {
+            @Override
+            public void onResponse(Call<ShareWinModel> call, Response<ShareWinModel> response)
+            {
+                Log.e(TAG, "Response----" + response.body());
+
+                ShareWinModel shareWinModel = response.body();
+
+                if (shareWinModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    if (shareWinModel.getCount() > 0)
+                    {
+                        imgv_checkShareWin.setImageResource(R.mipmap.ic_check);
+                    }
+
+                    GET_DATA_FROM_SERVER_RETROFIT();
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShareWinModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
     }
 }

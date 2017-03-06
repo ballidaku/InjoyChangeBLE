@@ -14,21 +14,20 @@ import android.widget.ImageView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.ShoutOutEndlessAdapter;
-import com.ble.sharan.asyncTask.Super_AsyncTask;
-import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.ShoutOutModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.EndlessListView;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 2/6/17.
@@ -36,6 +35,9 @@ import java.util.List;
 
 public class ShoutOut extends Fragment implements EndlessListView.EndlessListener, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener
 {
+
+
+    String TAG=ShoutOut.class.getSimpleName();
 
     Context context;
     View view;
@@ -77,7 +79,8 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
             setUpIds();
 
-            GET_DATA_FROM_SERVER();
+           // GET_DATA_FROM_SERVER();
+            GET_DATA_FROM_SERVER_RETROFIT();
 
         }
 
@@ -89,7 +92,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
     {
         super.onResume();
 
-        ((MainActivityNew) getActivity()).setTitleHeader("Shout Outs and Appreciations");
+        ((MainActivityNew) getActivity()).setTitleHeader("Hydraflow In Action");
 
 
     }
@@ -152,11 +155,11 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
     }
 
-    public void GET_DATA_FROM_SERVER()
+/*    public void GET_DATA_FROM_SERVER()
     {
 
 
-        MyUtil.execute(new Super_AsyncTask(context, MyConstant.SHOUT_OUT_USERS + val, new Super_AsyncTask_Interface()
+        MyUtil.execute(new Super_AsyncTask(context, MyConstant.SHOUT_OUT_USERS +myUtil.getCurrentTimeStamp()+"&uid=" + MySharedPreference.getInstance().getUID(context)+"&scroll_id="+val, new Super_AsyncTask_Interface()
         {
             @Override
             public void onTaskCompleted(String output)
@@ -192,6 +195,24 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
                             list.add(hashMap);
 
                         }
+
+                        Log.e("TAG","SHOUT_OUT_COUNT"+object.getInt(MyConstant.SHOUT_OUT_COUNT));
+
+                        if(object.getInt(MyConstant.SHOUT_OUT_COUNT)>=3)
+                        {
+                            check1_iv.setImageResource(R.mipmap.ic_check);
+                            check2_iv.setImageResource(R.mipmap.ic_check);
+                            check3_iv.setImageResource(R.mipmap.ic_check);
+                        }
+                        else if(object.getInt(MyConstant.SHOUT_OUT_COUNT) == 1)
+                        {
+                            check1_iv.setImageResource(R.mipmap.ic_check);
+                        }
+                        else if(object.getInt(MyConstant.SHOUT_OUT_COUNT) == 2)
+                        {
+                            check1_iv.setImageResource(R.mipmap.ic_check);
+                            check2_iv.setImageResource(R.mipmap.ic_check);
+                        }
                         setData(list);
                     }
                     else
@@ -209,9 +230,9 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
         }, showProgressBar));
 
 
-    }
+    }*/
 
-    public void setData(List<HashMap> list)
+    public void setData(List<ShoutOutModel.SubData> list)
     {
         //Log.e("Refreshing",""+swipeRefreshLayout.isRefreshing());
         if (swipeRefreshLayout.isRefreshing())
@@ -244,7 +265,8 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
         Log.e("VAL", "" + val);
 
-        GET_DATA_FROM_SERVER();
+        //GET_DATA_FROM_SERVER();
+        GET_DATA_FROM_SERVER_RETROFIT();
 
     }
 
@@ -255,7 +277,8 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
         showProgressBar = false;
         val = 0;
         endLesslistViewShoutOut.isLoading = false;
-        GET_DATA_FROM_SERVER();
+       // GET_DATA_FROM_SERVER();
+        GET_DATA_FROM_SERVER_RETROFIT();
     }
 
     @Override
@@ -281,11 +304,13 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
         }
         else
         {
-            SEND_COMMENT_TO_SERVER(comment);
+            //SEND_COMMENT_TO_SERVER(comment);
+            SEND_COMMENT_TO_SERVER_RETROFIT(comment);
         }
     }
 
 
+/*
     public void SEND_COMMENT_TO_SERVER(final String comment)
     {
         String url = MyConstant.SHOUT_OUT_COMMENT + comment + "&uid=" + MySharedPreference.getInstance().getUID(context)+"&date="+MyUtil.getCurrentTimeStamp();
@@ -328,7 +353,8 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
                         }
 
                         editTextComment.setText("");
-                        GET_DATA_FROM_SERVER();
+                       // GET_DATA_FROM_SERVER();
+                        GET_DATA_FROM_SERVER_RETROFIT();
                     }
 //                    else
 //                    {
@@ -344,4 +370,124 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
             }
         }, true));
     }
+*/
+
+
+
+    public void SEND_COMMENT_TO_SERVER_RETROFIT(final String comment)
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ShoutOutModel> call = apiService.addShoutOutComment(comment,MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
+
+        call.enqueue(new Callback<ShoutOutModel>()
+        {
+            @Override
+            public void onResponse(Call<ShoutOutModel> call, Response<ShoutOutModel> response)
+            {
+                Log.e(TAG, "Response----"+response.body());
+
+                ShoutOutModel shoutOutModel = response.body();
+
+                if(shoutOutModel.getStatus().equals(MyConstant.TRUE))
+                {
+
+                    int count=shoutOutModel.getCount();
+
+                    if(count>0)
+                    {
+                        if(count == 1)
+                        {
+                            check1_iv.setImageResource(R.mipmap.ic_check);
+                        }
+                        else if(count == 2)
+                        {
+                            check1_iv.setImageResource(R.mipmap.ic_check);
+                            check2_iv.setImageResource(R.mipmap.ic_check);
+                        }
+                        else
+                        {
+                            check1_iv.setImageResource(R.mipmap.ic_check);
+                            check2_iv.setImageResource(R.mipmap.ic_check);
+                            check3_iv.setImageResource(R.mipmap.ic_check);
+
+//                            frameLayoutSubmit.setEnabled(false);
+                        }
+                    }
+
+                    editTextComment.setText("");
+                    // GET_DATA_FROM_SERVER();
+                    GET_DATA_FROM_SERVER_RETROFIT();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ShoutOutModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
+
+
+
+    // RETROFIT
+    public void GET_DATA_FROM_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ShoutOutModel> call = apiService.getShoutOutData(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context),val);
+
+        call.enqueue(new Callback<ShoutOutModel>()
+        {
+            @Override
+            public void onResponse(Call<ShoutOutModel> call, Response<ShoutOutModel> response)
+            {
+                Log.e(TAG, "Response----"+response.body());
+
+                ShoutOutModel shoutOutModel = response.body();
+
+                if(shoutOutModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    if(shoutOutModel.getShoutOutCount() >= 3)
+                    {
+                        check1_iv.setImageResource(R.mipmap.ic_check);
+                        check2_iv.setImageResource(R.mipmap.ic_check);
+                        check3_iv.setImageResource(R.mipmap.ic_check);
+                    }
+                    else if(shoutOutModel.getShoutOutCount() == 1)
+                    {
+                        check1_iv.setImageResource(R.mipmap.ic_check);
+                    }
+                    else if(shoutOutModel.getShoutOutCount() == 2)
+                    {
+                        check1_iv.setImageResource(R.mipmap.ic_check);
+                        check2_iv.setImageResource(R.mipmap.ic_check);
+                    }
+
+                    setData(shoutOutModel.getShoutOutList());
+
+                }
+                else
+                {
+                    endLesslistViewShoutOut.removeFooter();
+                    MyUtil.showToast(context, "No more data");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ShoutOutModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
+
 }

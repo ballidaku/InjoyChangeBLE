@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:maxLength="100"
-                android:hint="Share what activities you've been up to"
+                android:hint="Share how you've been active today."
                 android:background="@null"
                 android:gravity="top"
                 android:maxLines="3"
@@ -44,6 +44,7 @@
                 android:id="@+id/frameLayoutSubmit"
                 android:layout_width="@dimen/_120sdp"
                 android:layout_margin="@dimen/_5sdp"
+                android:clickable="true"
                 android:layout_height="wrap_content">
 
                 <View

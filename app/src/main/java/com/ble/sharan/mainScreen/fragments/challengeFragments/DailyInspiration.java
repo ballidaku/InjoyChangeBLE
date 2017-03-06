@@ -3,22 +3,25 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.asyncTask.Super_AsyncTask;
-import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.DataModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.MyDialogs;
+import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 2/6/17.
@@ -27,12 +30,19 @@ import java.util.HashMap;
 public class DailyInspiration extends Fragment implements View.OnClickListener
 {
 
+    String TAG = DailyInspiration.class.getSimpleName();
+
     Context context;
     View view;
 
-    ImageView imgv_background;
+    ImageView check1_iv;
 
     MyUtil myUtil = new MyUtil();
+    MyDialogs myDialogs = new MyDialogs();
+
+    String imageUrl = "";
+
+    int count = 0;
 
 
     @Override
@@ -48,8 +58,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
             setUpIds();
 
-            GET_DATA_FROM_SERVER();
-
+            GET_DATA_FROM_SERVER_RETROFIT();
         }
 
         return view;
@@ -68,47 +77,11 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
     private void setUpIds()
     {
-        imgv_background = (ImageView) view.findViewById(R.id.imgv_background);
+        check1_iv = (ImageView) view.findViewById(R.id.check1_iv);
 
         view.findViewById(R.id.txtv_seeAll).setOnClickListener(this);
+        view.findViewById(R.id.cardViewReadNow).setOnClickListener(this);
 
-    }
-
-    public void GET_DATA_FROM_SERVER()
-    {
-        MyUtil.execute(new Super_AsyncTask(context, MyConstant.DAILY_INSPIRATION + "?time=" + myUtil.getCurrentTimeStamp(), new Super_AsyncTask_Interface()
-        {
-            @Override
-            public void onTaskCompleted(String output)
-            {
-                try
-                {
-                    JSONObject object = new JSONObject(output);
-
-                    String status = object.getString(MyConstant.STATUS);
-
-                    if (status.equals(MyConstant.TRUE))
-                    {
-                        HashMap<String, String> map = new HashMap<String, String>();
-
-                        map.put(MyConstant.IMAGE, object.getString(MyConstant.DATA));
-
-                        setData(map);
-                    }
-
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }, true));
-
-
-    }
-
-    private void setData(HashMap<String, String> map)
-    {
-        myUtil.showImageWithPicasso(context, imgv_background, map.get(MyConstant.IMAGE));
     }
 
 
@@ -121,9 +94,109 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
                 ((MainActivityNew) getActivity()).changeFragment2(new DailyInspirationSeeAll());
 
+                break;
+
+            case R.id.cardViewReadNow:
+
+                if (!imageUrl.isEmpty())
+                {
+                    myDialogs.showDailyInspirationDialog(context, "DailyInspiration", imageUrl, count,submitPointsClickListener);
+                }
 
                 break;
         }
+    }
+
+
+    View.OnClickListener submitPointsClickListener=new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View view)
+        {
+            myDialogs.dialog.dismiss();
+            SUBMIT_POINTS_TO_SERVER_RETROFIT();
+        }
+    };
+
+
+    // RETROFIT
+    public void GET_DATA_FROM_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<DataModel> call = apiService.getDailyInspiration(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
+
+        call.enqueue(new Callback<DataModel>()
+        {
+            @Override
+            public void onResponse(Call<DataModel> call, Response<DataModel> response)
+            {
+                Log.e(TAG, "Response----" + response.body());
+
+                DataModel dataModel = response.body();
+
+                if (dataModel.getStatus().equals(MyConstant.TRUE))
+                {
+
+                    imageUrl = dataModel.getData();
+                    count = dataModel.getCount();
+
+                    //Log.e("ImageUrl",imageUrl);
+                    if (count > 0)
+                    {
+                        check1_iv.setImageResource(R.mipmap.ic_check);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<DataModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
+
+
+
+    public void SUBMIT_POINTS_TO_SERVER_RETROFIT()
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<DataModel> call = apiService.submitDailyInspirationPoints(MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
+
+        call.enqueue(new Callback<DataModel>()
+        {
+            @Override
+            public void onResponse(Call<DataModel> call, Response<DataModel> response)
+            {
+                Log.e(TAG, "Response----" + response.body());
+
+                DataModel dataModel = response.body();
+
+                if (dataModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    count = dataModel.getCount();
+
+                    if (count > 0)
+                    {
+                        check1_iv.setImageResource(R.mipmap.ic_check);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<DataModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
     }
 
 

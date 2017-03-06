@@ -19,6 +19,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -65,10 +66,11 @@ public class MyDialogs
 
     Context context;
 
+    MyUtil myUtil = new MyUtil();
+
 
     public void bleDeviceAvailable(Context context, AdapterView.OnItemClickListener mDeviceClickListener)
     {
-
 
 
         this.context = context;
@@ -148,7 +150,6 @@ public class MyDialogs
         dialog.show();
 
 
-
         onStart();
 
 
@@ -161,7 +162,6 @@ public class MyDialogs
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
     }
-
 
 
     private void populateList()
@@ -298,7 +298,7 @@ public class MyDialogs
 
                     txtv_close.setText(R.string.scan);
 
-                    if(deviceList.size()==0)
+                    if (deviceList.size() == 0)
                     {
                         txtv_noDevice.setText("No Device Found");
                     }
@@ -381,7 +381,7 @@ public class MyDialogs
                 tvrssi.setText("Rssi = " + String.valueOf(rssival));
             }
 
-            tvname.setText(device.getName()== null? "No Device" : device.getName().equals("Prime") ? "InjoyHealth" : device.getName());
+            tvname.setText(device.getName() == null ? "No Device" : device.getName().equals("Prime") ? "InjoyHealth" : device.getName());
             tvadd.setText(device.getAddress());
             if (device.getBondState() == BluetoothDevice.BOND_BONDED)
             {
@@ -408,31 +408,34 @@ public class MyDialogs
     }
 
 
-
-
-
-    public EditText showShareWinDialog(Context context, String fromWhere, View.OnClickListener onClickListener)
+    public EditText showShareWinCheckInDialog(Context context, String fromWhere, View.OnClickListener onClickListener)
     {
-        dialog=new Dialog(context);
+        dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_share_win);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         dialog.show();
 
-        TextView txtv_title=(TextView) dialog.findViewById(R.id.txtv_title);
-        TextView txtv_heading=(TextView) dialog.findViewById(R.id.txtv_heading);
-        TextView txtv_btn=(TextView) dialog.findViewById(R.id.txtv_btn);
+        TextView txtv_title = (TextView) dialog.findViewById(R.id.txtv_title);
+        TextView txtv_heading = (TextView) dialog.findViewById(R.id.txtv_heading);
+        TextView txtv_btn = (TextView) dialog.findViewById(R.id.txtv_btn);
 
-        EditText edtv_comment=(EditText)dialog.findViewById(R.id.edtv_comment);
+        EditText edtv_comment = (EditText) dialog.findViewById(R.id.edtv_comment);
 
-        if(fromWhere.equals("ShareWin"))
+        if (fromWhere.equals("CheckIn"))
+        {
+            txtv_title.setText("CHECK-IN WITH YOURSELF");
+            txtv_heading.setText("How did you use one of the values today?");
+            txtv_btn.setText("Submit 20 Pts");
+        }
+        else if (fromWhere.equals("ShareWin"))
         {
             txtv_title.setText("SHARE A WIN");
             txtv_heading.setText("What's one win you've had during this Challenge?");
             txtv_btn.setText("Share a Win 10 Pts");
         }
-        else
+        else if (fromWhere.equals("WeeklyVideo"))
         {
             txtv_title.setText("WEEKLY VIDEO");
             txtv_heading.setText("What's one thing that you took away from this video?");
@@ -440,7 +443,7 @@ public class MyDialogs
         }
 
 
-        CardView cardViewBtn=(CardView)dialog.findViewById(R.id.cardViewBtn);
+        CardView cardViewBtn = (CardView) dialog.findViewById(R.id.cardViewBtn);
 
         cardViewBtn.setOnClickListener(onClickListener);
 
@@ -450,13 +453,99 @@ public class MyDialogs
     }
 
 
+    public void showToolBoxDialog(Context context, String heading, String image, String description, View.OnClickListener onClickListener, String day, int count)
+    {
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_tool_box);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        dialog.show();
+
+        TextView txtv_title = (TextView) dialog.findViewById(R.id.txtv_title);
+        TextView txtv_heading = (TextView) dialog.findViewById(R.id.txtv_heading);
+
+        ImageView imgv_toolbox = (ImageView) dialog.findViewById(R.id.imgv_toolbox);
+
+        TextView txtv_description = (TextView) dialog.findViewById(R.id.txtv_description);
+        TextView txtv_btn = (TextView) dialog.findViewById(R.id.txtv_btn);
+
+
+        /*if(fromWhere.equals("ToolBoxReadNow"))
+        {*/
+        txtv_title.setText("TOOLBOX");
+
+        //}
+        txtv_heading.setText(heading);
+
+        myUtil.showImageWithPicasso(context, imgv_toolbox, image);
+
+        txtv_description.setText(description);
+
+        txtv_btn.setText("Submit 10 Pts");
+
+
+        CardView cardViewBtn = (CardView) dialog.findViewById(R.id.cardViewBtn);
+
+        cardViewBtn.setOnClickListener(onClickListener);
+
+
+        if (day.equals(myUtil.getCurrentDay()) && count == 0)
+        {
+            cardViewBtn.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            cardViewBtn.setVisibility(View.GONE);
+        }
+
+
+    }
+
+
+    public void showDailyInspirationDialog(Context context, String fromWhere,String image,int count, View.OnClickListener onClickListener)
+    {
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_daily_inspiration);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        dialog.show();
+
+        TextView txtv_title = (TextView) dialog.findViewById(R.id.txtv_title);
+
+        ImageView imgvCenter = (ImageView) dialog.findViewById(R.id.imgvCenter);
+
+        TextView txtv_btn = (TextView) dialog.findViewById(R.id.txtv_btn);
+
+
+        if (fromWhere.equals("DailyInspiration"))
+        {
+            txtv_title.setText("DAILY INSPIRATION");
+            txtv_btn.setText("Submit 10 Pts");
+
+        }
+
+        myUtil.showImageWithPicasso(context, imgvCenter, image);
 
 
 
+        CardView cardViewBtn = (CardView) dialog.findViewById(R.id.cardViewBtn);
+
+        cardViewBtn.setOnClickListener(onClickListener);
 
 
+        if (count == 0)
+        {
+            cardViewBtn.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            cardViewBtn.setVisibility(View.GONE);
+        }
 
 
+    }
 
 
 }

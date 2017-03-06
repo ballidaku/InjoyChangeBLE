@@ -17,6 +17,7 @@ package com.ble.sharan.adapters;
  */
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,22 +26,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.ShoutOutModel;
 import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import java.util.HashMap;
 import java.util.List;
 
-public class ShoutOutEndlessAdapter extends ArrayAdapter<HashMap> {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private List<HashMap> itemList;
+public class ShoutOutEndlessAdapter extends ArrayAdapter<ShoutOutModel.SubData> {
+
+    String TAG =ShoutOutEndlessAdapter.class.getSimpleName();
+
+    private List<ShoutOutModel.SubData> itemList;
     private Context context;
     private int layoutId;
     LayoutInflater inflater;
 
     MyUtil myUtil=new MyUtil();
 
-    public ShoutOutEndlessAdapter(Context context, List<HashMap> itemList, int layoutId) {
+    public ShoutOutEndlessAdapter(Context context, List<ShoutOutModel.SubData> itemList, int layoutId) {
         super(context, layoutId, itemList);
         this.itemList = itemList;
         this.context = context;
@@ -51,9 +61,9 @@ public class ShoutOutEndlessAdapter extends ArrayAdapter<HashMap> {
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
-        HashMap hashMap = itemList.get(position);
+        final ShoutOutModel.SubData subData = itemList.get(position);
 
         convertView = inflater.inflate(R.layout.custom_shoutout_list, null);
         if (position % 2 == 0) {
@@ -66,20 +76,74 @@ public class ShoutOutEndlessAdapter extends ArrayAdapter<HashMap> {
         TextView txtv_time = (TextView) convertView.findViewById(R.id.txtv_time);
         TextView txtv_likes = (TextView) convertView.findViewById(R.id.txtv_likes);
         TextView txtv_comment = (TextView) convertView.findViewById(R.id.txtv_comment);
+        TextView txtv_highFive = (TextView) convertView.findViewById(R.id.txtv_highFive);
 
 
-        txtv_name.setText(hashMap.get(MyConstant.NAME).toString());
-        txtv_time.setText(hashMap.get(MyConstant.TIME).toString());
-        txtv_likes.setText(hashMap.get(MyConstant.LIKES).toString());
-        txtv_comment.setText(hashMap.get(MyConstant.OUTER_COMMENT).toString());
+        txtv_name.setText(subData.getName());
+        txtv_time.setText(subData.getTime());
+        txtv_likes.setText(String.valueOf(subData.getLikes()));
+        txtv_comment.setText(subData.getOuterComment());
+
+        final String highFive=subData.getHighFiveStatus();
+        if(highFive.equals(MyConstant.TRUE))
+        {
+            txtv_highFive.setBackgroundResource(R.drawable.blue_background_round_corners);
+        }
 
 
-        myUtil.showCircularImageWithPicasso(context,profile_iv,hashMap.get(MyConstant.IMAGE).toString());
+        myUtil.showCircularImageWithPicasso(context,profile_iv,subData.getImage());
 
+
+        txtv_highFive.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(!highFive.equals(MyConstant.TRUE))
+                {
+                    ADD_HIGH_FIVE_RETROFIT(subData.getId(),position);
+                }
+            }
+        });
 
 
         return convertView;
 
+    }
+
+
+    // RETROFIT
+    public void ADD_HIGH_FIVE_RETROFIT(String id,final int position)
+    {
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ShoutOutModel> call = apiService.submitHighFive(myUtil.getCurrentTimeStamp(),id, MySharedPreference.getInstance().getUID(context));
+
+        call.enqueue(new Callback<ShoutOutModel>()
+        {
+            @Override
+            public void onResponse(Call<ShoutOutModel> call, Response<ShoutOutModel> response)
+            {
+                Log.e(TAG, "Response----"+response.body());
+
+                ShoutOutModel shoutOutModel = response.body();
+
+                if(shoutOutModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    itemList.get(position).setHighFiveStatus(MyConstant.TRUE);
+                    itemList.get(position).addLikes(shoutOutModel.getLikes());
+                    notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShoutOutModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
     }
 }
 

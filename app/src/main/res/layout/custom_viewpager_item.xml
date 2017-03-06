@@ -16,7 +16,7 @@
         android:id="@+id/txtv_comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_16sdp"
+        android:textSize="@dimen/_12sdp"
         android:textColor="@color/colorWhite"
         android:gravity="center"
         android:layout_gravity="center"

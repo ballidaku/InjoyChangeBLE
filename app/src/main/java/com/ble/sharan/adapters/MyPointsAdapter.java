@@ -9,10 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.apiModels.TopUsersModel;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,12 +26,12 @@ public class MyPointsAdapter  extends BaseAdapter
 
     MyUtil myUtil=new MyUtil();
 
-    List<HashMap> list;
+    List<TopUsersModel.SubData> list;
 
 
 
 
-    public MyPointsAdapter(Context context, List<HashMap> list) {
+    public MyPointsAdapter(Context context, List<TopUsersModel.SubData> list) {
 
         this.context=context;
         this.list=list;
@@ -63,7 +62,7 @@ public class MyPointsAdapter  extends BaseAdapter
         }
 
 
-        HashMap hashMap=list.get(i);
+        TopUsersModel.SubData subData=list.get(i);
 
         ImageView imgv_user=(ImageView)view.findViewById(R.id.imgv_user);
 
@@ -73,14 +72,14 @@ public class MyPointsAdapter  extends BaseAdapter
 
         TextView txtv_rank=(TextView)view.findViewById(R.id.txtv_rank);
 
-        myUtil.showImageWithGlide(context,imgv_user,hashMap.get(MyConstant.IMAGE).toString());
+        myUtil.showImageWithGlide(context,imgv_user,subData.getImage());
 
 
 
-        txtv_name.setText(hashMap.get(MyConstant.NAME).toString());
-        txtv_points.setText(hashMap.get(MyConstant.POINTS).toString()+" Pts");
+        txtv_name.setText(subData.getName());
+        txtv_points.setText(subData.getPoints()+" Pts");
 
-        txtv_rank.setText("Rank "+hashMap.get(MyConstant.RANK));
+        txtv_rank.setText("Rank "+subData.getRank());
         return view;
     }
 }

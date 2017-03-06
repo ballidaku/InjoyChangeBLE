@@ -59,7 +59,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/sbtn_tv"
+                    android:id="@+id/txtv_highFive"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/_5sdp"

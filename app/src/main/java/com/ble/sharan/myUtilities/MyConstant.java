@@ -105,9 +105,9 @@ public class MyConstant
     public static final String CHALLENGE_API = BASE_URL+"/user/login";
 
     public static final String UPLOAD_USER_DATA = BASE_URL+"/api/postdata";
-    public static final String SHOUT_OUT_USERS = BASE_URL+"/api/shout_out?scroll_id=";
+    public static final String SHOUT_OUT_USERS = BASE_URL+"/api/shout_out?date=";
     public static final String SHOUT_OUT_COMMENT = BASE_URL+"/api/submit_shout_out?comment=";
-    public static final String USER_POINTS = BASE_URL+"/api/user_point?uid=";
+    public static final String USER_POINTS = BASE_URL+"/api/user_point?date=";
 
 
     public static final String TOP_USERS = BASE_URL+"/api/top_users";
@@ -151,6 +151,9 @@ public class MyConstant
     public static final String RANK = "rank";
     public static final String TOTAL_ELEVATION_ACTIONS = "total_elevate_actions";
     public static final String DESCRIPTION = "description";
+    public static final String SHOUT_OUT_COUNT = "shout_out_count";
+    public static final String HIGH_FIVE_STATUS = "high_five_status";
+    public static final String DAY = "day";
 
 
 
