@@ -52,8 +52,8 @@ public class ToolBox extends Fragment implements View.OnClickListener
     String description = "";
     int count = 0;
 
-    CardView cardViewMon;
-    CardView cardViewWed;
+
+    CardView cardViewTues;
     CardView cardViewFri;
 
     @Override
@@ -76,15 +76,11 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
         }
 
-        if (currentDay.equals("Monday") || currentDay.equals("Tuesday"))
+        if (currentDay.equals("Tuesday") ||currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
         {
-            hitDay = "Monday";
+            hitDay = "Tuesday";
         }
-        else if (currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
-        {
-            hitDay = "Wednesday";
-        }
-        else if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday"))
+        else if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday") || currentDay.equals("Monday") )
         {
             hitDay = "Friday";
         }
@@ -111,8 +107,7 @@ public class ToolBox extends Fragment implements View.OnClickListener
         imgv_running = (ImageView) view.findViewById(R.id.imgv_running);
         check1_iv = (ImageView) view.findViewById(R.id.check1_iv);
 
-        (cardViewMon = (CardView) view.findViewById(R.id.cardViewMonday)).setOnClickListener(this);
-        (cardViewWed = (CardView) view.findViewById(R.id.cardViewWednesday)).setOnClickListener(this);
+        (cardViewTues = (CardView) view.findViewById(R.id.cardViewTuesday)).setOnClickListener(this);
         (cardViewFri = (CardView) view.findViewById(R.id.cardViewFriday)).setOnClickListener(this);
         view.findViewById(R.id.txtv_viewAll).setOnClickListener(this);
 
@@ -132,18 +127,18 @@ public class ToolBox extends Fragment implements View.OnClickListener
         switch (view.getId())
         {
 
-            case R.id.cardViewMonday:
+            /*case R.id.cardViewMonday:
 
                 hitDay = "Monday";
                 READ_NOW_RETROFIT();
 
-                break;
+                break;*/
 
 
-            case R.id.cardViewWednesday:
+            case R.id.cardViewTuesday:
 
 
-                hitDay = "Wednesday";
+                hitDay = "Tuesday";
                 READ_NOW_RETROFIT();
 
                 break;
@@ -159,6 +154,7 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
 
             case R.id.txtv_viewAll:
+                firstTimeOnly=false;
 
                 ((MainActivityNew) getActivity()).changeFragment2(new ToolBoxViewAll());
 
@@ -168,15 +164,11 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
             case R.id.cardViewReadNow:
 
-                if (currentDay.equals("Monday") || currentDay.equals("Tuesday"))
+                if (currentDay.equals("Tuesday") ||currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
                 {
-                    hitDay = "Monday";
+                    hitDay = "Tuesday";
                 }
-                else if (currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
-                {
-                    hitDay = "Wednesday";
-                }
-                else if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday"))
+                else if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday") || currentDay.equals("Monday") )
                 {
                     hitDay = "Friday";
                 }
@@ -191,25 +183,22 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
     public void makeClickableOrNot()
     {
-        cardViewMon.setEnabled(false);
-        cardViewWed.setEnabled(false);
+//        cardViewMon.setEnabled(false);
+        cardViewTues.setEnabled(false);
         cardViewFri.setEnabled(false);
 
-        if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday"))
+        if (currentDay.equals("Friday") || currentDay.equals("Saturday") || currentDay.equals("Sunday") || currentDay.equals("Monday"))
         {
-            cardViewMon.setEnabled(true);
-            cardViewWed.setEnabled(true);
+//            cardViewMon.setEnabled(true);
+//            cardViewTues.setEnabled(true);
             cardViewFri.setEnabled(true);
         }
-        else if (currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
+        else if (currentDay.equals("Tuesday") || currentDay.equals("Wednesday") || currentDay.equals("Thursday"))
         {
-            cardViewMon.setEnabled(true);
-            cardViewWed.setEnabled(true);
+//            cardViewMon.setEnabled(true);
+            cardViewTues.setEnabled(true);
         }
-        else
-        {
-            cardViewMon.setEnabled(true);
-        }
+
     }
 
 
@@ -217,6 +206,9 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
     public void READ_NOW_RETROFIT()
     {
+
+        myUtil.showProgressDialog(context);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ToolBoxModel> call = apiService.readNowToolBox(myUtil.getCurrentTimeStamp(), hitDay, MySharedPreference.getInstance().getUID(context));
@@ -226,6 +218,9 @@ public class ToolBox extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<ToolBoxModel> call, Response<ToolBoxModel> response)
             {
+
+                myUtil.hideProgressDialog();
+
                 Log.e(TAG, "Response----" + response.body());
 
                 ToolBoxModel toolBoxModel = response.body();
@@ -261,8 +256,9 @@ public class ToolBox extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<ToolBoxModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });
@@ -283,6 +279,8 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
     public void SUBMIT_POINTS_RETROFIT()
     {
+        myUtil.showProgressDialog(context);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ToolBoxModel> call = apiService.submitPointsToolBox(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context), hitDay);
@@ -292,6 +290,9 @@ public class ToolBox extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<ToolBoxModel> call, Response<ToolBoxModel> response)
             {
+
+                myUtil.hideProgressDialog();
+
                 Log.e(TAG, "Response----" + response.body());
 
                 ToolBoxModel toolBoxModel = response.body();
@@ -310,8 +311,9 @@ public class ToolBox extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<ToolBoxModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ble.sharan.R;
+import com.ble.sharan.myUtilities.GeometricProgressView;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyUtil;
 
@@ -90,6 +91,12 @@ public class Super_AsyncTask extends AsyncTask<Void, Void, String>
             dialog = ProgressDialog.show(context, "", "");
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.setContentView(R.layout.progress_dialog);
+
+            GeometricProgressView progressView15 = (GeometricProgressView)dialog.findViewById(R.id.progressView15);
+            progressView15.setType(GeometricProgressView.TYPE.KITE);
+            progressView15.setFigurePaddingInDp(1);
+            progressView15.setNumberOfAngles(30);
+
             dialog.show();
         }
 

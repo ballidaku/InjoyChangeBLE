@@ -154,6 +154,9 @@ public class MyConstant
     public static final String SHOUT_OUT_COUNT = "shout_out_count";
     public static final String HIGH_FIVE_STATUS = "high_five_status";
     public static final String DAY = "day";
+    public static final String PROFILE = "profile";
+    public static final String FULLNAME = "fullname";
+    public static final String PROFILE_PICTURE = "profile_picture";
 
 
 

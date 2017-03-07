@@ -210,6 +210,12 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
     // RETROFIT
     public void GET_DATA_FROM_SERVER_RETROFIT()
     {
+
+        if(showProgressBar)
+        {
+            myUtil.showProgressDialog(context);
+        }
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ShareWinSeeAllModel> call = apiService.getShareWinSeeAllData(val);
@@ -219,6 +225,8 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
             @Override
             public void onResponse(Call<ShareWinSeeAllModel> call, Response<ShareWinSeeAllModel> response)
             {
+
+                myUtil.hideProgressDialog();
                 Log.e(TAG, "Response----" + response.body());
 
                 ShareWinSeeAllModel shareWinSeeAllModel = response.body();
@@ -238,8 +246,9 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
             @Override
             public void onFailure(Call<ShareWinSeeAllModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });

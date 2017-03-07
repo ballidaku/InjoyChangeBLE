@@ -251,6 +251,8 @@ public class MyPoints extends Fragment
     // RETROFIT
     public void GET_USER_POINTS_DATA_FROM_SERVER_RETROFIT()
     {
+
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<DataModel> call = apiService.getpoint(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
@@ -280,7 +282,7 @@ public class MyPoints extends Fragment
             public void onFailure(Call<DataModel> call, Throwable t)
             {
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });
@@ -290,6 +292,8 @@ public class MyPoints extends Fragment
     // RETROFIT
     public void GET_TOP_USERS_FROM_SERVER_RETROFIT()
     {
+        myUtil.showProgressDialog(context);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<TopUsersModel> call = apiService.getTopUsers();
@@ -299,6 +303,8 @@ public class MyPoints extends Fragment
             @Override
             public void onResponse(Call<TopUsersModel> call, Response<TopUsersModel> response)
             {
+                myUtil.hideProgressDialog();
+
                 Log.e(TAG, "Response----"+response.body());
 
                 TopUsersModel topUsersModels = response.body();
@@ -314,8 +320,9 @@ public class MyPoints extends Fragment
             @Override
             public void onFailure(Call<TopUsersModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });

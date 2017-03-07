@@ -24,6 +24,9 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener/*, ConnectivityReceiver.ConnectivityReceiverListener*/
 {
 
+    String TAG=LoginActivity.class.getSimpleName();
+
+
     View view;
 
     Context context;
@@ -83,7 +86,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 //                startActivity(new Intent(context, MainActivityNew.class));
 //                finish();
-
 //                TestingSleep2();
 
 
@@ -145,6 +147,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
             LoginService(map);
+
+//            LOGIN(userName,password);
         }
 
 
@@ -176,7 +180,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         JSONObject object2 = object.getJSONObject("profile");
 
                         String name = object2.getString("fullname");
-                       // String gender = object2.getString(MyConstant.GENDER);
+                        // String gender = object2.getString(MyConstant.GENDER);
                         String height = object2.getString(MyConstant.HEIGHT);
                         String weight = object2.getString(MyConstant.WEIGHT);
                         String stride = object2.getString(MyConstant.STRIDE);
@@ -185,25 +189,43 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                         if (!UID.isEmpty())
+                        {
                             MySharedPreference.getInstance().saveUID(context, UID);
+                        }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveUID(context, "");
+                        }
 
 
                         if (!name.isEmpty() && !name.equals("null"))
                         {
                             MySharedPreference.getInstance().saveName(context, name);
                         }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveName(context, "");
+                        }
 
 //                        if (!gender.isEmpty())
 //                            MySharedPreference.getInstance().saveGender(context, gender);
 
-                        if (!height.isEmpty()  && !height.equals("null"))
+                        if (!height.isEmpty() && !height.equals("null"))
                         {
                             MySharedPreference.getInstance().saveHeight(context, height);
+                        }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveHeight(context, "");
                         }
 
                         if (!weight.isEmpty() && !weight.equals("null"))
                         {
                             MySharedPreference.getInstance().saveWeight(context, weight);
+                        }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveWeight(context, "");
                         }
 
 
@@ -211,11 +233,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         {
                             MySharedPreference.getInstance().saveStride(context, stride);
                         }
+                        else
+                        {
+                            MySharedPreference.getInstance().saveStride(context, "");
+                        }
 
 
                         if (!profile_picture.isEmpty() && !profile_picture.equals("null"))
+                        {
                             MySharedPreference.getInstance().savePhoto(context, profile_picture);
-
+                        }
+                        else
+                        {
+                            MySharedPreference.getInstance().savePhoto(context, "");
+                        }
 
                         Intent intent = new Intent(context, MainActivityNew.class);
 //                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -238,12 +269,111 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }, true));
     }
 
-   /* @Override
-    public void onNetworkConnectionChanged(boolean isConnected)
+    /*Retrofit retrofit = null;
+
+    public class ServiceGenerator {
+
+
+        private  OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        private  Retrofit.Builder builder =
+                new Retrofit.Builder()
+                        .baseUrl(MyConstant.BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create());
+
+        public  <S> S createService(Class<S> serviceClass) {
+            return createService(serviceClass, null, null);
+        }
+
+        public  <S> S createService(
+                Class<S> serviceClass, String username, String password) {
+            if (!TextUtils.isEmpty(username)
+                    && !TextUtils.isEmpty(password)) {
+                String authToken = Credentials.basic(username, password);
+                return createService(serviceClass, authToken);
+            }
+
+            return createService(serviceClass, null, null);
+        }
+
+        public  <S> S createService(
+                Class<S> serviceClass, final String authToken) {
+            if (!TextUtils.isEmpty(authToken)) {
+                AuthenticationInterceptor interceptor =
+                        new AuthenticationInterceptor(authToken);
+
+                if (!httpClient.interceptors().contains(interceptor)) {
+                    httpClient.addInterceptor(interceptor);
+
+                    builder.client(httpClient.build());
+                    retrofit = builder.build();
+                }
+            }
+
+            return retrofit.create(serviceClass);
+        }
+    }
+
+    public class AuthenticationInterceptor implements Interceptor
     {
 
-    }*/
+        private String authToken;
 
+        public AuthenticationInterceptor(String token) {
+            this.authToken = token;
+        }
+
+        @Override
+        public Response intercept(Chain chain) throws IOException
+        {
+            Request original = chain.request();
+
+            Request.Builder builder = original.newBuilder()
+                                              .header("Authorization", authToken);
+
+            Request request = builder.build();
+            return chain.proceed(request);
+        }
+    }
+
+
+
+
+
+
+
+
+    public void LOGIN(String userName, String password)
+    {
+        ServiceGenerator serviceGenerator=new ServiceGenerator();
+        ApiInterface loginService = serviceGenerator.createService(ApiInterface.class, userName, password);
+        Call<LoginModel> call = loginService.basicLogin();
+
+        call.enqueue(new Callback<LoginModel>()
+        {
+            @Override
+            public void onResponse(Call<LoginModel> call, retrofit2.Response<LoginModel> response)
+            {
+                Log.e(TAG, "Response----" + response.isSuccessful());
+                Log.e(TAG, "Response----" + response.message());
+                Log.e(TAG, "Response----" + response.raw());
+
+                *//*LoginModel loginModel = response.body();
+
+                if (loginModel.getStatus().equals("200"))
+                {
+                    Log.e(TAG, "NAME----" + loginModel.getProfile().getFullName());
+                }*//*
+            }
+
+            @Override
+            public void onFailure(Call<LoginModel> call, Throwable t)
+            {
+                // something went completely south (like no internet connection)
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }*/
 
 
 }

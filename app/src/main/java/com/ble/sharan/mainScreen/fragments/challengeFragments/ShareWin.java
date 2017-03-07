@@ -343,6 +343,9 @@ public class ShareWin extends Fragment implements View.OnClickListener
     // RETROFIT
     public void GET_DATA_FROM_SERVER_RETROFIT()
     {
+
+        myUtil.showProgressDialog(context);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ShareWinModel> call = apiService.getShareWinData(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
@@ -352,6 +355,9 @@ public class ShareWin extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<ShareWinModel> call, Response<ShareWinModel> response)
             {
+
+                myUtil.hideProgressDialog();
+
                 Log.e(TAG, "Response----" + response.body());
 
                 ShareWinModel shareWinModel = response.body();
@@ -365,6 +371,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
                     shareWinCount = data.getShareWinCount();
 
 
+                    if(data.getshareWinList() != null)
                     setData(data.getshareWinList(), data.getWeeklyChallenge().getUrl());
 
                 }
@@ -373,8 +380,9 @@ public class ShareWin extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<ShareWinModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+             //   MyUtil.showToast(context, "Server side error");
 
             }
         });
@@ -383,46 +391,11 @@ public class ShareWin extends Fragment implements View.OnClickListener
 
     public void SHARE_COMMENT_DATA_TO_SERVER_RETROFIT(String comment)
     {
+
+        myUtil.hide_keyboard2(view);
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ShareWinModel> call = apiService.shareShareWinComment(comment, MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
-
-        call.enqueue(new Callback<ShareWinModel>()
-        {
-            @Override
-            public void onResponse(Call<ShareWinModel> call, Response<ShareWinModel> response)
-            {
-                Log.e(TAG, "Response----" + response.body());
-
-                ShareWinModel shareWinModel = response.body();
-
-                if (shareWinModel.getStatus().equals(MyConstant.TRUE))
-                {
-                    if (shareWinModel.getCount() > 0)
-                    {
-                        imgv_checkWeeklyVideo.setImageResource(R.mipmap.ic_check);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ShareWinModel> call, Throwable t)
-            {
-                Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
-
-            }
-        });
-    }
-
-
-
-    public void WEEKLY_VIDEO_COMMENT_DATA_TO_SERVER_RETROFIT(String comment)
-    {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-
-        Call<ShareWinModel> call = apiService.shareWeeklyVideoComment(comment, MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
 
         call.enqueue(new Callback<ShareWinModel>()
         {
@@ -442,6 +415,47 @@ public class ShareWin extends Fragment implements View.OnClickListener
 
                     GET_DATA_FROM_SERVER_RETROFIT();
 
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ShareWinModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+              //  MyUtil.showToast(context, "Server side error");
+
+            }
+        });
+    }
+
+
+
+    public void WEEKLY_VIDEO_COMMENT_DATA_TO_SERVER_RETROFIT(String comment)
+    {
+        myUtil.hide_keyboard2(view);
+
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ShareWinModel> call = apiService.shareWeeklyVideoComment(comment, MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
+
+        call.enqueue(new Callback<ShareWinModel>()
+        {
+            @Override
+            public void onResponse(Call<ShareWinModel> call, Response<ShareWinModel> response)
+            {
+                Log.e(TAG, "Response----" + response.body());
+
+                ShareWinModel shareWinModel = response.body();
+
+                if (shareWinModel.getStatus().equals(MyConstant.TRUE))
+                {
+                    if (shareWinModel.getCount() > 0)
+                    {
+                        imgv_checkWeeklyVideo.setImageResource(R.mipmap.ic_check);
+                    }
+
+                    GET_DATA_FROM_SERVER_RETROFIT();
+
 
                 }
             }
@@ -450,7 +464,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
             public void onFailure(Call<ShareWinModel> call, Throwable t)
             {
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+              //  MyUtil.showToast(context, "Server side error");
 
             }
         });

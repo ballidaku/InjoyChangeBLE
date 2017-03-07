@@ -306,6 +306,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
         {
             //SEND_COMMENT_TO_SERVER(comment);
             SEND_COMMENT_TO_SERVER_RETROFIT(comment);
+            editTextComment.setText("");
         }
     }
 
@@ -376,6 +377,9 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
     public void SEND_COMMENT_TO_SERVER_RETROFIT(final String comment)
     {
+
+        myUtil.hide_keyboard2(view);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ShoutOutModel> call = apiService.addShoutOutComment(comment,MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
@@ -415,7 +419,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
                         }
                     }
 
-                    editTextComment.setText("");
+
                     // GET_DATA_FROM_SERVER();
                     GET_DATA_FROM_SERVER_RETROFIT();
 
@@ -427,7 +431,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
             public void onFailure(Call<ShoutOutModel> call, Throwable t)
             {
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });
@@ -438,6 +442,12 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
     // RETROFIT
     public void GET_DATA_FROM_SERVER_RETROFIT()
     {
+
+        if(showProgressBar)
+        {
+            myUtil.showProgressDialog(context);
+        }
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ShoutOutModel> call = apiService.getShoutOutData(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context),val);
@@ -447,6 +457,9 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
             @Override
             public void onResponse(Call<ShoutOutModel> call, Response<ShoutOutModel> response)
             {
+
+                myUtil.hideProgressDialog();
+
                 Log.e(TAG, "Response----"+response.body());
 
                 ShoutOutModel shoutOutModel = response.body();
@@ -483,8 +496,9 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
             @Override
             public void onFailure(Call<ShoutOutModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });

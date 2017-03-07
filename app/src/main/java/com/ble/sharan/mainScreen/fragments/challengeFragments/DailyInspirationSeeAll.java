@@ -40,6 +40,8 @@ public class DailyInspirationSeeAll extends Fragment
 
     DailyInspirationSeeAllAdapter dailyInspirationSeeAllAdapter;
 
+    MyUtil myUtil=new MyUtil();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -133,6 +135,9 @@ public class DailyInspirationSeeAll extends Fragment
     // RETROFIT
     public void GET_DATA_FROM_SERVER_RETROFIT()
     {
+
+        myUtil.showProgressDialog(context);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<DailyInspirationViewAllModel> call = apiService.getDailyInspirationViewAll();
@@ -142,6 +147,8 @@ public class DailyInspirationSeeAll extends Fragment
             @Override
             public void onResponse(Call<DailyInspirationViewAllModel> call, Response<DailyInspirationViewAllModel> response)
             {
+
+                myUtil.hideProgressDialog();
                 Log.e(TAG, "Response----"+response.body());
 
                 DailyInspirationViewAllModel dailyInspirationViewAllModel = response.body();
@@ -165,6 +172,7 @@ public class DailyInspirationSeeAll extends Fragment
             @Override
             public void onFailure(Call<DailyInspirationViewAllModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
                 MyUtil.showToast(context, "Server side error");
 

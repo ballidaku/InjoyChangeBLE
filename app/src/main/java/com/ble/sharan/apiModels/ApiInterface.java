@@ -3,7 +3,10 @@ package com.ble.sharan.apiModels;
 import com.ble.sharan.myUtilities.MyConstant;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -12,6 +15,10 @@ import retrofit2.http.Query;
 
 public interface ApiInterface
 {
+
+
+    @POST("/api/login-token")
+    Call<LoginModel> basicLogin();
 
     @GET("/api/user_point")
     Call<DataModel> getpoint(@Query(MyConstant.DATE) String date, @Query(MyConstant.UID) String uid);
@@ -78,4 +85,14 @@ public interface ApiInterface
     Call<ShareWinModel> shareWeeklyVideoComment(@Query(MyConstant.COMMENT) String comment, @Query(MyConstant.UID) String uid, @Query(MyConstant.DATE) String date);
 
 
+
+
+    @POST("/api/postdata")
+    @FormUrlEncoded
+    Call<UploadDataModel> postData(@Field(MyConstant.DATE) String date,
+                                 @Field(MyConstant.STEPS) String steps,
+                                 @Field(MyConstant.CALORIES) String calories,
+                                 @Field("sleephr") String sleephr,
+                                 @Field(MyConstant.DISTANCE) String distance,
+                                 @Field(MyConstant.UID) String uid);
 }

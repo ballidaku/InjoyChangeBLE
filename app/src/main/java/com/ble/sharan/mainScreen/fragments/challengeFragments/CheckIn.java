@@ -43,13 +43,10 @@ import retrofit2.Response;
 public class CheckIn extends Fragment implements View.OnClickListener
 {
 
-    String TAG=CheckIn.class.getSimpleName();
+    String TAG = CheckIn.class.getSimpleName();
 
     Context context;
     View view;
-
-
-
 
 
     int images[] = {
@@ -80,11 +77,10 @@ public class CheckIn extends Fragment implements View.OnClickListener
 
     FrameLayout frameLayoutSubmit;
 
-    MyDialogs myDialogs=new MyDialogs();
+    MyDialogs myDialogs = new MyDialogs();
 
 
-   int commentCount=0;
-
+    int commentCount = 0;
 
 
     @Override
@@ -138,10 +134,10 @@ public class CheckIn extends Fragment implements View.OnClickListener
         listViewCheckInComment = (ListView) view.findViewById(R.id.listViewCheckInComment);
 
 
-        check1_iv=(ImageView)view.findViewById(R.id.check1_iv);
-        check2_iv=(ImageView)view.findViewById(R.id.check2_iv);
+        check1_iv = (ImageView) view.findViewById(R.id.check1_iv);
+        check2_iv = (ImageView) view.findViewById(R.id.check2_iv);
 
-        frameLayoutSubmit=(FrameLayout)view.findViewById(R.id.frameLayoutSubmit);
+        frameLayoutSubmit = (FrameLayout) view.findViewById(R.id.frameLayoutSubmit);
 
         frameLayoutSubmit.setOnClickListener(this);
 
@@ -165,21 +161,21 @@ public class CheckIn extends Fragment implements View.OnClickListener
         {
             case R.id.frameLayoutSubmit:
 
-                if(commentCount>0)
+                if (commentCount > 0)
                 {
                     edtv_comment = myDialogs.showShareWinCheckInDialog(context, "CheckIn", onClickListenerShareWin);
                 }
                 else
                 {
-                   String comm= edtv_checkIn.getText().toString().trim();
+                    String comm = edtv_checkIn.getText().toString().trim();
 
-                    if(!comm.isEmpty())
+                    if (!comm.isEmpty())
                     {
                         ADD_COMMENT_RETROFIT(comm);
                     }
                     else
                     {
-                        MyUtil.showToast(context,"Please enter comment");
+                        MyUtil.showToast(context, "Please enter comment");
                     }
                 }
 
@@ -189,21 +185,23 @@ public class CheckIn extends Fragment implements View.OnClickListener
 
     EditText edtv_comment;
 
-    View.OnClickListener onClickListenerShareWin=new View.OnClickListener()
+    View.OnClickListener onClickListenerShareWin = new View.OnClickListener()
     {
         @Override
         public void onClick(View view)
         {
-            String comment=edtv_comment.getText().toString().trim();
+            String comment = edtv_comment.getText().toString().trim();
 
-            if(!comment.isEmpty())
+            if (!comment.isEmpty())
             {
-                ADD_COMMENT_RETROFIT(comment);
+
                 myDialogs.dialog.dismiss();
+                ADD_COMMENT_RETROFIT(comment);
+
             }
             else
             {
-                MyUtil.showToast(context,"Please enter comment");
+                MyUtil.showToast(context, "Please enter comment");
             }
 
         }
@@ -211,14 +209,17 @@ public class CheckIn extends Fragment implements View.OnClickListener
 
     private void setData(ArrayList<CheckInModel.Comment> list)
     {
-        CheckInCommentAdapter checkInCommentAdapter=new CheckInCommentAdapter(context,list);
+        CheckInCommentAdapter checkInCommentAdapter = new CheckInCommentAdapter(context, list);
         listViewCheckInComment.setAdapter(checkInCommentAdapter);
 
-        listViewCheckInComment.setOnTouchListener(new ListView.OnTouchListener() {
+        listViewCheckInComment.setOnTouchListener(new ListView.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
                 int action = event.getAction();
-                switch (action) {
+                switch (action)
+                {
                     case MotionEvent.ACTION_DOWN:
 
                         v.getParent().requestDisallowInterceptTouchEvent(true);
@@ -239,12 +240,12 @@ public class CheckIn extends Fragment implements View.OnClickListener
     }
 
 
-
-
-
     // RETROFIT
     public void GET_DATA_FROM_SERVER_RETROFIT()
     {
+
+
+        myUtil.showProgressDialog(context);
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<CheckInModel> call = apiService.getCheckInComment(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
@@ -254,33 +255,35 @@ public class CheckIn extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<CheckInModel> call, Response<CheckInModel> response)
             {
-                Log.e(TAG, "Response----"+response.body());
+
+                myUtil.hideProgressDialog();
+                Log.e(TAG, "Response----" + response.body());
 
                 CheckInModel checkInModel = response.body();
 
 
                 //Log.e("checkInModel.getStatus()",""+checkInModel.getStatus());
-                if(checkInModel.getStatus().equals(MyConstant.TRUE))
+                if (checkInModel.getStatus().equals(MyConstant.TRUE))
                 {
 
                     edtv_checkIn.setVisibility(View.GONE);
 
-                    commentCount= checkInModel.getCount();
+                    commentCount = checkInModel.getCount();
 
-                    if(commentCount>=2)
+                    if (commentCount >= 2)
                     {
                         check1_iv.setImageResource(R.mipmap.ic_check);
                         check2_iv.setImageResource(R.mipmap.ic_check);
 
                         txtv_submit.setText("Add More");
                     }
-                    else if(commentCount == 1)
+                    else if (commentCount == 1)
                     {
                         check1_iv.setImageResource(R.mipmap.ic_check);
                     }
 
 
-                    ArrayList<CheckInModel.Comment> list= checkInModel.getCheckInCommentList();
+                    ArrayList<CheckInModel.Comment> list = checkInModel.getCheckInCommentList();
 
                     setData(list);
 
@@ -294,43 +297,45 @@ public class CheckIn extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<CheckInModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });
     }
 
 
-
-
     // RETROFIT
     public void ADD_COMMENT_RETROFIT(String comment)
     {
+
+        myUtil.hide_keyboard2(view);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<CheckInModel> call = apiService.addCheckInComment(comment,myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
+        Call<CheckInModel> call = apiService.addCheckInComment(comment, myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
 
         call.enqueue(new Callback<CheckInModel>()
         {
             @Override
             public void onResponse(Call<CheckInModel> call, Response<CheckInModel> response)
             {
-                Log.e(TAG, "Response----"+response.body());
+                Log.e(TAG, "Response----" + response.body());
 
                 CheckInModel checkInModel = response.body();
 
-                if(checkInModel.getStatus().equals(MyConstant.TRUE))
+                if (checkInModel.getStatus().equals(MyConstant.TRUE))
                 {
 
-                    commentCount= checkInModel.getCount();
+                    commentCount = checkInModel.getCount();
 
-                    if(commentCount>=2)
+                    if (commentCount >= 2)
                     {
                         check1_iv.setImageResource(R.mipmap.ic_check);
                         check2_iv.setImageResource(R.mipmap.ic_check);
                     }
-                    else if(commentCount == 1)
+                    else if (commentCount == 1)
                     {
                         check1_iv.setImageResource(R.mipmap.ic_check);
                     }
@@ -344,15 +349,13 @@ public class CheckIn extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<CheckInModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });
     }
-
-
-
 
 
 }

@@ -122,6 +122,9 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
     // RETROFIT
     public void GET_DATA_FROM_SERVER_RETROFIT()
     {
+
+        myUtil.showProgressDialog(context);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<DataModel> call = apiService.getDailyInspiration(myUtil.getCurrentTimeStamp(), MySharedPreference.getInstance().getUID(context));
@@ -131,6 +134,8 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<DataModel> call, Response<DataModel> response)
             {
+                myUtil.hideProgressDialog();
+
                 Log.e(TAG, "Response----" + response.body());
 
                 DataModel dataModel = response.body();
@@ -153,6 +158,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<DataModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
                 MyUtil.showToast(context, "Server side error");
 
@@ -164,6 +170,8 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
     public void SUBMIT_POINTS_TO_SERVER_RETROFIT()
     {
+        myUtil.showProgressDialog(context);
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<DataModel> call = apiService.submitDailyInspirationPoints(MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
@@ -173,6 +181,9 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<DataModel> call, Response<DataModel> response)
             {
+
+                myUtil.hideProgressDialog();
+
                 Log.e(TAG, "Response----" + response.body());
 
                 DataModel dataModel = response.body();
@@ -192,8 +203,9 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<DataModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+               // MyUtil.showToast(context, "Server side error");
 
             }
         });

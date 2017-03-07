@@ -482,7 +482,7 @@ public class MyDialogs
 
         txtv_description.setText(description);
 
-        txtv_btn.setText("Submit 10 Pts");
+        txtv_btn.setText("Submit 15 Pts");
 
 
         CardView cardViewBtn = (CardView) dialog.findViewById(R.id.cardViewBtn);

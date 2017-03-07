@@ -13,8 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
-import com.ble.sharan.asyncTask.Super_AsyncTask;
-import com.ble.sharan.asyncTask.Super_AsyncTask_Interface;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.UploadDataModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyConstant;
@@ -22,8 +23,11 @@ import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import java.util.HashMap;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by brst-pc93 on 1/11/17.
@@ -255,7 +259,9 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         if(wantToUpdate && myUtil.checkConnection())
         {
-            SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
+//            SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
+            POST_DATA_TO_SERVER_RETROFIT(steps, todayCalories, todayMilesCovered);
+
         }
 
     }
@@ -349,7 +355,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     // API TO UPLOAD DATA TO SERVER
     //**********************************************************************************************
 
-    public void SEND_DATA_TO_SERVER(int steps, String calories, String todayMilesCovered)
+   /* public void SEND_DATA_TO_SERVER(int steps, String calories, String todayMilesCovered)
     {
         String todayDate = myUtil.getTodaydate2();
 
@@ -383,7 +389,50 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         }, false));
 
 
+    }*/
+
+    // RETROFIT
+    public void POST_DATA_TO_SERVER_RETROFIT(int steps, String calories, String todayMilesCovered)
+    {
+        String todayDate = myUtil.getTodaydate2();
+
+        String todaySteps = String.valueOf(steps);
+
+        String[] spltm = myUtil.getSleepHr(context,myDatabase).split(":");
+
+        String todaySleepTime=spltm[0]+"h:"+spltm[1]+"m";
+
+
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<UploadDataModel> call = apiService.postData(todayDate,todaySteps,calories,todaySleepTime,todayMilesCovered,MySharedPreference.getInstance().getUID(context));
+
+        call.enqueue(new Callback<UploadDataModel>()
+        {
+            @Override
+            public void onResponse(Call<UploadDataModel> call, Response<UploadDataModel> response)
+            {
+               // Log.e(TAG, "Response----"+response.body());
+
+                UploadDataModel uploadDataModel = response.body();
+
+                if(uploadDataModel.getStatus().equals("200"))
+                {
+
+                  //  Log.e(TAG,"Upload Response ---"+uploadDataModel.getData());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadDataModel> call, Throwable t)
+            {
+                Log.e(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
+
+            }
+        });
     }
+
 
 
 

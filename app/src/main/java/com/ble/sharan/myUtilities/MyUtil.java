@@ -1,6 +1,7 @@
 package com.ble.sharan.myUtilities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -56,7 +57,7 @@ public class MyUtil
     public static Toast toast;
     public static Snackbar snackbar;
 
-    MyNotification myNotification=new MyNotification();
+    MyNotification myNotification = new MyNotification();
 
 
     public boolean checkConnection()
@@ -201,7 +202,7 @@ public class MyUtil
         //        int weight = 60;
         double weight = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
 
-        String weightUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.WEIGHT);
+        String weightUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.WEIGHT);
 
         if (!weightUnit.equals(MyConstant.LBS))
         {
@@ -244,7 +245,7 @@ public class MyUtil
 //        return Calories > 0 ? new DecimalFormat("##").format(Calories) : "" + 0;
 //        return Calories > 0 ? String.valueOf(round3(Calories) ): "" + 0;
 
-        return Calories > 0 ? String.valueOf((int)Calories) : "" + 0;
+        return Calories > 0 ? String.valueOf((int) Calories) : "" + 0;
 
 
     }
@@ -271,7 +272,7 @@ public class MyUtil
 
         double Calories = stepsToCaloriesFormula(context, steps);
 
-        double remainingCalories = Double.parseDouble(MySharedPreference.getInstance().getDailyCalories(context)/*.replace("per day", "")*/.trim()) - (int)Calories;
+        double remainingCalories = Double.parseDouble(MySharedPreference.getInstance().getDailyCalories(context)/*.replace("per day", "")*/.trim()) - (int) Calories;
 
 
        /* if (remainingCalories < 0 && MainActivityNew.shownCaloriesNotification)
@@ -288,7 +289,7 @@ public class MyUtil
 
 
 //        return remainingCalories > 0 ? new DecimalFormat("##.##").format(remainingCalories) : "" + 0;
-        return remainingCalories > 0 ? String.valueOf((int)remainingCalories) : "" + 0;
+        return remainingCalories > 0 ? String.valueOf((int) remainingCalories) : "" + 0;
 
     }
 
@@ -301,7 +302,7 @@ public class MyUtil
     {
         double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
 
-        String strideUnit = MySharedPreference.getInstance().getUnit(context,MyConstant.STRIDE);
+        String strideUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.STRIDE);
 
 
 //        Log.e(TAG,"distance--strideInDouble-----"+strideInDouble);
@@ -311,7 +312,7 @@ public class MyUtil
             strideInDouble = new HeightWeightHelper().cmToInches(strideInDouble);
         }
 
-        strideInDouble = ((int)strideInDouble * 0.0254) * 0.001 * 0.621371;
+        strideInDouble = ((int) strideInDouble * 0.0254) * 0.001 * 0.621371;
 
 //        double stride = 0.00045; //in Km
 
@@ -325,7 +326,7 @@ public class MyUtil
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.FLOOR);
 
-        return  df.format(value);
+        return df.format(value);
 
     }
 
@@ -336,7 +337,7 @@ public class MyUtil
 
 //        Log.e(TAG,"distance-----1-"+distance+"-------------"+twoDigitsAfterDecimalWithoutRoundOff( distance));
 
-        return distance > 0 ?  twoDigitsAfterDecimalWithoutRoundOff(distance) : "" + 0;
+        return distance > 0 ? twoDigitsAfterDecimalWithoutRoundOff(distance) : "" + 0;
     }
 
 
@@ -422,13 +423,13 @@ public class MyUtil
         }
         else
         {
-            if(MainActivityNew.shownSleepNotification)
+            if (MainActivityNew.shownSleepNotification)
             {
                 MainActivityNew.shownSleepNotification = false;
                 vibrate(context);
                 myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
                         "You Hit Your Sleep Goal for Today : )\n" +
-                        "You Totally Rock!\n",4);
+                        "You Totally Rock!\n", 4);
             }
 
             return "00:00";
@@ -586,8 +587,10 @@ public class MyUtil
 
 
     // To hide Keyboard *************************************************************************************************
-    public void hide_keyboard(Context con)
+    public void hide_keyboard(final Context con)
     {
+
+
         try
         {
             InputMethodManager inputMethodManager = (InputMethodManager) con.getSystemService(con.INPUT_METHOD_SERVICE);
@@ -600,6 +603,20 @@ public class MyUtil
             e.printStackTrace();
         }
 
+
+    }
+
+    public void hide_keyboard2(final View view)
+    {
+
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                 imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+            }
+        }, 1);
     }
 
 
@@ -645,7 +662,7 @@ public class MyUtil
 
     public void showCircularImageWithPicasso(Context context, ImageView imageView, String url)
     {
-        if (url.trim().isEmpty())
+        if (url.trim().isEmpty() || url.equals("null") )
         {
             Picasso.with(context)
                    .load("abc")
@@ -670,12 +687,12 @@ public class MyUtil
     {
 
 
-            Picasso.with(context)
-                   .load(file)
-                   .placeholder(R.drawable.ic_no_user)
-                   .error(R.drawable.ic_no_user)
-                   .transform(new CircleTransform())
-                   .into(imageView);
+        Picasso.with(context)
+               .load(file)
+               .placeholder(R.drawable.ic_no_user)
+               .error(R.drawable.ic_no_user)
+               .transform(new CircleTransform())
+               .into(imageView);
 
     }
 
@@ -847,14 +864,17 @@ public class MyUtil
 
 
     // Get Current Time Stamp
-    public  String getCurrentTimeStamp(){
-        try {
+    public String getCurrentTimeStamp()
+    {
+        try
+        {
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String currentDateTime = dateFormat.format(new Date()); // Find todays date
 
             return currentDateTime;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
 
             return null;
@@ -864,13 +884,15 @@ public class MyUtil
 
     public String getCurrentDay()
     {
-        try {
+        try
+        {
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE");
             String currentDateTime = dateFormat.format(new Date()); // Find todays date
 
             return currentDateTime;
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
 
             return null;
@@ -901,7 +923,6 @@ public class MyUtil
     }
 
 
-
     //**********************************************************************************************
     // Vibrate
     //**********************************************************************************************
@@ -914,6 +935,31 @@ public class MyUtil
 
     }
 
+
+    ProgressDialog progressDialog;
+
+    public void showProgressDialog(Context context)
+    {
+        progressDialog = ProgressDialog.show(context, "", "");
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        progressDialog.setContentView(R.layout.progress_dialog);
+
+        GeometricProgressView progressView15 = (GeometricProgressView) progressDialog.findViewById(R.id.progressView15);
+        progressView15.setType(GeometricProgressView.TYPE.KITE);
+        progressView15.setFigurePaddingInDp(1);
+        progressView15.setNumberOfAngles(30);
+
+        progressDialog.show();
+    }
+
+
+    public void hideProgressDialog()
+    {
+        if (progressDialog.isShowing())
+        {
+            progressDialog.dismiss();
+        }
+    }
 
 
 }

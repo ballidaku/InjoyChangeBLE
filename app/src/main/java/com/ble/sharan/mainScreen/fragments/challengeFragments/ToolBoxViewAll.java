@@ -40,6 +40,8 @@ public class ToolBoxViewAll extends Fragment
 
     ToolBoxViewAllAdapter toolBoxViewAllAdapter;
 
+    MyUtil myUtil=new MyUtil();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -133,6 +135,7 @@ public class ToolBoxViewAll extends Fragment
     // RETROFIT
     public void GET_DATA_FROM_SERVER_RETROFIT()
     {
+        myUtil.showProgressDialog(context);
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<ToolBoxModel> call = apiService.getToolBoxAllData();
@@ -142,6 +145,7 @@ public class ToolBoxViewAll extends Fragment
             @Override
             public void onResponse(Call<ToolBoxModel> call, Response<ToolBoxModel> response)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, "Response----"+response.body());
 
                 ToolBoxModel toolBoxModel = response.body();
@@ -155,8 +159,9 @@ public class ToolBoxViewAll extends Fragment
             @Override
             public void onFailure(Call<ToolBoxModel> call, Throwable t)
             {
+                myUtil.hideProgressDialog();
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+//                MyUtil.showToast(context, "Server side error");
 
             }
         });
