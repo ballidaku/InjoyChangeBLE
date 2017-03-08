@@ -83,7 +83,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
 
             int time=10*60*1000;
-            //autoRefreshTimer = new AutoRefreshTimer(20000, 16000);
+//            autoRefreshTimer = new AutoRefreshTimer(50000, 40000);
 
             autoRefreshTimer = new AutoRefreshTimer(time, 300000);
         }
@@ -315,38 +315,45 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     //**********************************************************************************************
 
 
+
+
+
     public void bleStatus(String BLE_STATUS)
     {
         // String deviceName = ((MainActivityNew) context).deviceName;
 
-        if (BLE_STATUS.equals(MyConstant.CONNECTING))
+        if(isAdded())
         {
-            txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
-            txtv_connect_disconnect.setText("Connecting");
-        }
-        else if (BLE_STATUS.equals(MyConstant.DISCONNECTING))
-        {
-            txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._14sdp));
-            txtv_connect_disconnect.setText("Disconnecting");
 
-        }
-        else if (BLE_STATUS.equals(MyConstant.CONNECTED))
-        {
-            txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
-            txtv_connect_disconnect.setText("Disconnect");
-            linearLayout_refresh.setEnabled(true);
-
-
-            if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
+            if (BLE_STATUS.equals(MyConstant.CONNECTING))
             {
-                autoRefreshTimer.start();
+                txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
+                txtv_connect_disconnect.setText("Connecting");
             }
-        }
-        else if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
-        {
-            txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
-            txtv_connect_disconnect.setText("Connect");
-            linearLayout_refresh.setEnabled(false);
+            else if (BLE_STATUS.equals(MyConstant.DISCONNECTING))
+            {
+                txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._14sdp));
+                txtv_connect_disconnect.setText("Disconnecting");
+
+            }
+            else if (BLE_STATUS.equals(MyConstant.CONNECTED))
+            {
+                txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
+                txtv_connect_disconnect.setText("Disconnect");
+                linearLayout_refresh.setEnabled(true);
+
+
+                if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
+                {
+                    autoRefreshTimer.start();
+                }
+            }
+            else if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
+            {
+                txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
+                txtv_connect_disconnect.setText("Connect");
+                linearLayout_refresh.setEnabled(false);
+            }
         }
     }
 
@@ -458,10 +465,15 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         @Override
         public void onFinish()
         {
+            Log.e("BLE STATUS",""+((MainActivityNew) context).BLE_STATUS);
             if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
             {
                 onRefresh();
                 autoRefreshTimer.start();
+            }
+            else
+            {
+                autoRefreshTimer.cancel();
             }
         }
     }

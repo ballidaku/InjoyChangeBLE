@@ -31,11 +31,11 @@
         <android.support.v7.widget.CardView
             android:id="@+id/cardViewReadNow"
             android:layout_width="@dimen/_180sdp"
-            android:layout_height="70dp"
+            android:layout_height="@dimen/_55sdp"
             android:layout_gravity="center|bottom"
             app:cardBackgroundColor="@color/colorBlue"
             app:cardUseCompatPadding="true"
-            card_view:cardCornerRadius="@dimen/_18sdp"
+            card_view:cardCornerRadius="@dimen/_15sdp"
             card_view:cardElevation="@dimen/_5sdp">
 
 

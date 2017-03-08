@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -122,7 +123,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     MyUtil myUtil = new MyUtil();
 
 
-    //    Bottom Tabs actuallt button
+    //    Bottom Tabs actuallt butto01n
 
     View view_challenge;
     View view_data;
@@ -533,23 +534,34 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
+        // super.onBackPressed();
 
 
-//        if (fragment instanceof Challenge)
-//        {
-//            int count = getSupportFragmentManager().getBackStackEntryCount();
-//
-//            Log.e("Count", "" + count);
-//
-////            if (count == 0)
-////            {
-////                txtv_heading.setText("Challenge");
-////            }
-//        }
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        Log.e("onBackPressedCount", "" + count);
+
+
+        if (count == 0)
+        {
+            myDialogs.showExitDialog(context, onBackPressedClickListener);
+        }
+        else
+        {
+            super.onBackPressed();
+        }
 
 
     }
+
+    DialogInterface.OnClickListener onBackPressedClickListener = new DialogInterface.OnClickListener()
+    {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i)
+        {
+            finish();
+        }
+    };
 
 
     public void removeFragmentsOfChallenge()
@@ -598,14 +610,14 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.linearLayout_challenge:
 
 
-               /* String url = MyConstant.CHALLENGE_API;
+                String url = MyConstant.CHALLENGE_API;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
-                startActivity(i);*/
+                startActivity(i);
 
-                setBottomTabSelected(view_challenge, imgv_challenge, txtv_challenge);
+                /*setBottomTabSelected(view_challenge, imgv_challenge, txtv_challenge);
 
-                displayView(8);
+                displayView(8);*/
 
 
                 break;
@@ -975,16 +987,16 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
 
-            String deviceAddress = ((TextView) view.findViewById(R.id.address)).getText().toString();
+            String deviceAddress = ((TextView) view.findViewById(R.id.address)).getText().toString().trim();
             deviceName = ((TextView) view.findViewById(R.id.name)).getText().toString();
 
             mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
 
-            MySharedPreference.getInstance().saveDeviceAddress(context, deviceAddress);
 
             // Log.e("Device Address ", "--" + deviceAddress);
             if (!deviceAddress.isEmpty() && !deviceName.isEmpty())
             {
+                MySharedPreference.getInstance().saveDeviceAddress(context, deviceAddress);
                 mService.connect(deviceAddress);
             }
             myDialogs.dialog.dismiss();
@@ -1065,10 +1077,20 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onTick(long millisUntilFinished)
         {
-            mService.connect(MySharedPreference.getInstance().getDeviceAddress(context));
-
-            //  MyUtil.showToast(context, "Searching...");
-            Log.e(TAG, "Searching...");
+            // this try catch is due to crash in some devices showd in fabric
+            try
+            {
+                String address = MySharedPreference.getInstance().getDeviceAddress(context).trim();
+                if (!address.isEmpty())
+                {
+                    mService.connect(address);
+                }
+                //  MyUtil.showToast(context, "Searching...");
+                Log.e(TAG, "Searching...");
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1128,6 +1150,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         // sharan Work for reconnection
         reconnectTimer.cancel();
 
+        BLE_STATUS = MyConstant.DISCONNECTED;
         MySharedPreference.getInstance().clearConnectionData(context);
 
 
@@ -1161,12 +1184,17 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 //When the DeviceListActivity return, with the selected device address
                 if (resultCode == Activity.RESULT_OK && data != null)
                 {
-                    String deviceAddress = data.getStringExtra(BluetoothDevice.EXTRA_DEVICE);
+                    String deviceAddress = data.getStringExtra(BluetoothDevice.EXTRA_DEVICE).trim();
                     mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
 
                     Log.d(TAG, "... onActivityResultdevice.address==" + mDevice + "mserviceValue" + mService);
 //                    ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName() + " - connecting");
-                    mService.connect(deviceAddress);
+//                    mService.connect(deviceAddress);
+
+                    if (!deviceAddress.isEmpty())
+                    {
+                        mService.connect(deviceAddress);
+                    }
 
 
                 }
@@ -1388,7 +1416,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         // Notification
         //******************************************************************************************
 
-        myUtil.sleepHrToRemainingHr(context,myUtil.convertMillisToHrMins(millis));
+        myUtil.sleepHrToRemainingHr(context, myUtil.convertMillisToHrMins(millis));
 
         //******************************************************************************************
         //******************************************************************************************
@@ -1470,14 +1498,18 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         try
         {
-            byte[] value = command.getBytes("UTF-8");
+            if (!command.isEmpty() && command != null)
+            {
+                byte[] value = command.getBytes("UTF-8");
 
-            mService.writeRXCharacteristic(value);
+                mService.writeRXCharacteristic(value);
+            }
 
-        } catch (UnsupportedEncodingException e)
+        } catch (NullPointerException | UnsupportedEncodingException e)
         {
             e.printStackTrace();
         }
+
     }
 
     public void commandToBLE(String command, BleResponseInterface bleResponseInterface)
@@ -1485,15 +1517,18 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         COMMAND = command;
         this.bleResponseInterface = bleResponseInterface;
 
-        // Log.e(TAG, "CR---COMMANDToBLE----" + command);
+        Log.e(TAG, "CR---COMMANDToBLE----" + command);
 
         try
         {
-            byte[] value = command.getBytes("UTF-8");
+            if (!command.isEmpty() && command != null)
+            {
+                byte[] value = command.getBytes("UTF-8");
 
-            mService.writeRXCharacteristic(value);
+                mService.writeRXCharacteristic(value);
+            }
 
-        } catch (UnsupportedEncodingException e)
+        } catch (NullPointerException | UnsupportedEncodingException e)
         {
             e.printStackTrace();
         }

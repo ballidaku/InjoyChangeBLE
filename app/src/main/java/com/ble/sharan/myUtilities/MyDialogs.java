@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -373,12 +374,16 @@ public class MyDialogs
 
             //tvadd.setVisibility(View.GONE);
             tvrssi.setVisibility(View.VISIBLE);
-            byte rssival = (byte) devRssiValues.get(device.getAddress()).intValue();
-
-
-            if (rssival != 0)
+            try
             {
+                byte rssival = (byte) devRssiValues.get(device.getAddress()).intValue();
+
                 tvrssi.setText("Rssi = " + String.valueOf(rssival));
+
+
+            } catch (Exception e)
+            {
+                e.printStackTrace();
             }
 
             tvname.setText(device.getName() == null ? "No Device" : device.getName().equals("Prime") ? "InjoyHealth" : device.getName());
@@ -545,6 +550,23 @@ public class MyDialogs
         }
 
 
+    }
+
+
+
+    public void showExitDialog(Context context, DialogInterface.OnClickListener onClickListener)
+    {
+        new AlertDialog.Builder(context)
+                .setTitle("Close Confirmation")
+                .setMessage("Are you sure you want to close app?")
+                .setPositiveButton("CLOSE", onClickListener)
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(R.mipmap.ic_alert)
+                .show();
     }
 
 
