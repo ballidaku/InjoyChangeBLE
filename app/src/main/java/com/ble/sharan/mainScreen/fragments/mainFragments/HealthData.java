@@ -31,6 +31,12 @@ public class HealthData extends Fragment implements View.OnClickListener
     View view;
 
     @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
 
@@ -47,6 +53,12 @@ public class HealthData extends Fragment implements View.OnClickListener
         return view;
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        ((MainActivityNew) getActivity()).setTitleHeader("Health Data");
+    }
 
     private void setUpIds()
     {

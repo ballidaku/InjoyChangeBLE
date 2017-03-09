@@ -306,14 +306,21 @@ public class MyUartService extends Service
      */
     public void close()
     {
-        if (mBluetoothGatt == null)
+        try
         {
-            return;
+            if (mBluetoothGatt == null)
+            {
+                return;
+            }
+            Log.w(TAG, "mBluetoothGatt closed");
+            mBluetoothDeviceAddress = null;
+            mBluetoothGatt.close();
+            mBluetoothGatt = null;
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
-        Log.w(TAG, "mBluetoothGatt closed");
-        mBluetoothDeviceAddress = null;
-        mBluetoothGatt.close();
-        mBluetoothGatt = null;
     }
 
     /**

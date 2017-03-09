@@ -507,7 +507,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
-            fragmentTransaction.commit();
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commitAllowingStateLoss();
 //            mDrawerLayout.closeDrawers();
         }
     }
@@ -520,7 +521,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            fragmentTransaction.commitAllowingStateLoss();
         }
     }
 
@@ -542,7 +543,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         Log.e("onBackPressedCount", "" + count);
 
 
-        if (count == 0)
+        if (count == 1)
         {
             myDialogs.showExitDialog(context, onBackPressedClickListener);
         }
@@ -624,9 +625,14 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
             case R.id.linearLayout_data:
 
-                setBottomTabSelected(view_data, imgv_data, txtv_data);
 
-                displayView(0);
+                if(!(fragment instanceof  HealthData))
+                {
+                    removeFragmentsOfChallenge();
+                    setBottomTabSelected(view_data, imgv_data, txtv_data);
+
+                    displayView(0);
+                }
 
                 break;
 
@@ -802,6 +808,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 // If Connection Lost
                 MySharedPreference.getInstance().saveIsConnectedNow(context, false);
 
+                reconnectTimer.cancel();
                 reconnectTimer.start();
             }
             else if (action.equals(MyUartService.ACTION_GATT_DISCONNECTED))
@@ -872,9 +879,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                         {
                             TestingSleep2(sleepData);
 
-                            // To get previous days steps from memory
-                            getStepsData.count = 0;
-                            getStepsData.st();
+
                         }
                     }
                     else if (COMMAND.equals(MyConstant.GET_STEPS))
@@ -957,6 +962,12 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                                 e.printStackTrace();
                             }
                         }
+                    }
+                    else if (COMMAND.contains("setslptm"))
+                    {
+                        // To get previous days steps from memory
+                        getStepsData.count = 0;
+                        getStepsData.st();
                     }
                     else if (COMMAND.contains("d") && COMMAND.length() == 2)  // To get previous steps
                     {
