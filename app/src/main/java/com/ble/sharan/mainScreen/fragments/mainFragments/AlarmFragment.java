@@ -266,9 +266,9 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
         String thirdAlarm = map.get(MyConstant.ALARM_THIRD);
 
 
-//        Log.e("firstAlarm",firstAlarm);
-//        Log.e("secondAlarm",secondAlarm);
-//        Log.e("thirdAlarm",thirdAlarm);
+        Log.e("firstAlarm",firstAlarm);
+        Log.e("secondAlarm",secondAlarm);
+        Log.e("thirdAlarm",thirdAlarm);
 
         String[] arrayfirst = firstAlarm.split(",");
         String[] arraySecond = secondAlarm.split(",");

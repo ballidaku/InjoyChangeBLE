@@ -127,6 +127,8 @@ public class MyDatabase extends SQLiteOpenHelper
 
     public int getStepIdOnDate(Context context, String date)
     {
+
+        int id=0;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_UID}, KEY_DATE + "=? AND " + KEY_UID + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getUID(context)}, null, null, null, null);
@@ -136,14 +138,17 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (cursor.getCount() > 0)
+        if (cursor!= null && cursor.getCount() > 0)
         {
-            return Integer.parseInt(cursor.getString(0));
+            id = Integer.parseInt(cursor.getString(0));
+
+            cursor.close();
         }
-        else
-        {
-            return 0;
-        }
+
+        db.close();
+
+        return id;
+
     }
 
 
@@ -176,6 +181,9 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
         BeanRecords beanRecords = new BeanRecords(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3));
+
+        cursor.close();
+        db.close();
 
         return beanRecords;
     }
@@ -272,6 +280,9 @@ public class MyDatabase extends SQLiteOpenHelper
             });
         }
 
+        cursor.close();
+        db.close();
+
 
         // return contact list
         return stepsList;
@@ -284,15 +295,18 @@ public class MyDatabase extends SQLiteOpenHelper
         String countQuery = "SELECT  * FROM " + TABLE_STEP_RECORD;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+
+        int count = cursor.getCount();
         cursor.close();
+        db.close();
 
         // return count
-        return cursor.getCount();
+        return count;
     }
 
 
     // Updating single contact
-    public int updateStepRecord(BeanRecords beanRecords)
+    public void updateStepRecord(BeanRecords beanRecords)
     {
 
 
@@ -303,7 +317,9 @@ public class MyDatabase extends SQLiteOpenHelper
         values.put(KEY_STEPS, beanRecords.getSteps());
 
         // updating row
-        return db.update(TABLE_STEP_RECORD, values, KEY_ID + " = ?", new String[]{String.valueOf(beanRecords.getID())});
+        db.update(TABLE_STEP_RECORD, values, KEY_ID + " = ?", new String[]{String.valueOf(beanRecords.getID())});
+
+        db.close();
     }
 
 
@@ -350,7 +366,7 @@ public class MyDatabase extends SQLiteOpenHelper
 //                    db.insert(TABLE_SLEEP_RECORD, null, values);
 //                    db.close(); // Closing database connection
 
-                    addSleepDataOnDate(context,date,MILLIS);
+                    addSleepDataOnDate(context, date, MILLIS);
 
                 }
                 else
@@ -384,6 +400,8 @@ public class MyDatabase extends SQLiteOpenHelper
 
     public int getSleepIdOnDate(Context context, String date)
     {
+
+        int id=0;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME, KEY_UID}, KEY_DATE + "=? AND " + KEY_UID + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getUID(context)}, null, null, null, null);
@@ -393,18 +411,20 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (cursor.getCount() > 0)
+        if (cursor!=null && cursor.getCount() > 0)
         {
-            return Integer.parseInt(cursor.getString(0));
+            id = Integer.parseInt(cursor.getString(0));
+            cursor.close();
         }
-        else
-        {
-            return 0;
-        }
+
+        db.close();
+
+        return id;
     }
 
     public long getSleepMillisOnDate(String date)
     {
+        long sleepMillis=0;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME}, KEY_DATE + "=?", new String[]{String.valueOf(date)}, null, null, null, null);
@@ -414,14 +434,15 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (cursor.getCount() > 0)
+        if (cursor !=null && cursor.getCount() > 0)
         {
-            return Long.parseLong(cursor.getString(2));
+            sleepMillis = Long.parseLong(cursor.getString(2));
+            cursor.close();
         }
-        else
-        {
-            return 0;
-        }
+
+        db.close();
+
+        return sleepMillis;
     }
 
 
@@ -445,7 +466,7 @@ public class MyDatabase extends SQLiteOpenHelper
 
 
     // Updating sleep Data
-    public int updateSleepData(int ID, String date, long MILLIS)
+    public void updateSleepData(int ID, String date, long MILLIS)
     {
 
 
@@ -456,12 +477,14 @@ public class MyDatabase extends SQLiteOpenHelper
         values.put(KEY_SLEEP_TIME, MILLIS);
 
         // updating row
-        return db.update(TABLE_SLEEP_RECORD, values, KEY_ID + " = ?", new String[]{String.valueOf(ID)});
+        db.update(TABLE_SLEEP_RECORD, values, KEY_ID + " = ?", new String[]{String.valueOf(ID)});
+
+        db.close();
     }
 
 
     // Updating sleep Data
-    public int updateSleepMillisOnDate(String date, long MILLIS)
+    public void updateSleepMillisOnDate(String date, long MILLIS)
     {
 
 
@@ -471,7 +494,9 @@ public class MyDatabase extends SQLiteOpenHelper
         values.put(KEY_SLEEP_TIME, MILLIS);
 
         // updating row
-        return db.update(TABLE_SLEEP_RECORD, values, KEY_DATE + " = ?", new String[]{String.valueOf(date)});
+        db.update(TABLE_SLEEP_RECORD, values, KEY_DATE + " = ?", new String[]{String.valueOf(date)});
+
+        db.close();
     }
 
 
@@ -485,7 +510,12 @@ public class MyDatabase extends SQLiteOpenHelper
             cursor.moveToFirst();
 
 
-        return Long.parseLong(cursor.getString(2));
+        long sleepTime = Long.parseLong(cursor.getString(2));
+
+        cursor.close();
+        db.close();
+
+        return sleepTime;
     }
 
 
@@ -497,9 +527,9 @@ public class MyDatabase extends SQLiteOpenHelper
 
 
         // If there is no sleep data of Today date
-        if(getSleepIdOnDate(context,myUtil.getTodaydate()) == 0)
+        if (getSleepIdOnDate(context, myUtil.getTodaydate()) == 0)
         {
-            addSleepDataOnDate(context,myUtil.getTodaydate(),0);
+            addSleepDataOnDate(context, myUtil.getTodaydate(), 0);
         }
 
 
@@ -567,15 +597,10 @@ public class MyDatabase extends SQLiteOpenHelper
                     list.add(map);
 
 
-                   // Log.e(TAG, "--MissingDate---" + date);
+                    // Log.e(TAG, "--MissingDate---" + date);
                 }
             }
         }
-
-
-
-
-
 
 
         if (list.size() > 1)
@@ -591,23 +616,11 @@ public class MyDatabase extends SQLiteOpenHelper
             });
         }
 
+        cursor.close();
+        db.close();
+
         return list;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     //**********************************************************************************************
@@ -618,7 +631,7 @@ public class MyDatabase extends SQLiteOpenHelper
     public void addDailyGoalDataFirstTime(Context context)
     {
 
-        if(getAllGoalData().size()==0)
+        if (getAllGoalData().size() == 0)
         {
             HashMap<String, String> map = new HashMap<>();
             map.put(MyConstant.STEPS, MySharedPreference.getInstance().getDailySteps(context));
@@ -629,10 +642,6 @@ public class MyDatabase extends SQLiteOpenHelper
             addDailyGoalData(map);
         }
     }
-
-
-
-
 
 
     public void addDailyGoalData(HashMap<String, String> map)
@@ -672,7 +681,9 @@ public class MyDatabase extends SQLiteOpenHelper
     public int getDailyGoalIdOnDate(String date)
     {
 
-       // Log.e(TAG,"-----getDailyGoalIdOnDate------DATE-----"+date);
+        // Log.e(TAG,"-----getDailyGoalIdOnDate------DATE-----"+date);
+
+        int id=0;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -683,14 +694,17 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (cursor.getCount() > 0)
+        if (cursor!=null &&  cursor.getCount() > 0)
         {
-            return Integer.parseInt(cursor.getString(0));
+            id= Integer.parseInt(cursor.getString(0));
+            cursor.close();
         }
-        else
-        {
-            return 0;
-        }
+
+
+        db.close();
+
+        return id;
+
     }
 
     // Getting  Goal Data on date
@@ -719,6 +733,10 @@ public class MyDatabase extends SQLiteOpenHelper
             } while (cursor.moveToNext());
         }
 
+
+        cursor.close();
+        db.close();
+
         return map;
 
     }
@@ -733,16 +751,16 @@ public class MyDatabase extends SQLiteOpenHelper
 
 
         // Previous date of the oldest date if previous date equals to oldest date i.e we get
-        String oldestDateInDatabase=getOldestDateInDailyGoalRecord();
+        String oldestDateInDatabase = getOldestDateInDailyGoalRecord();
         String previousDateOfOldestDate = myUtil.getPreviousDate(oldestDateInDatabase);
 
-     //   Log.e(TAG, "----Oldest Date----" + getOldestDateInDailyGoalRecord()+"-----oldestDate----"+previousDateOfOldestDate+"-----currentWeekDate date-----"+currentWeekDate);
+        //   Log.e(TAG, "----Oldest Date----" + getOldestDateInDailyGoalRecord()+"-----oldestDate----"+previousDateOfOldestDate+"-----currentWeekDate date-----"+currentWeekDate);
 
 
-        if(myUtil.convertStringToDate(currentWeekDate).before(myUtil.convertStringToDate(oldestDateInDatabase)))
+        if (myUtil.convertStringToDate(currentWeekDate).before(myUtil.convertStringToDate(oldestDateInDatabase)))
         {
             map.putAll(getGoalDataOnDate(oldestDateInDatabase));
-          //  Log.e(TAG, "---------Database 1");
+            //  Log.e(TAG, "---------Database 1");
 
 
         }
@@ -754,20 +772,19 @@ public class MyDatabase extends SQLiteOpenHelper
                 if (getDailyGoalIdOnDate(currentWeekDate) == 0)
                 {
                     currentWeekDate = myUtil.getPreviousDate(currentWeekDate);
-                   // Log.e(TAG, "---------Database 2");
+                    // Log.e(TAG, "---------Database 2");
                 }
                 else
                 {
 
-                  //  Log.e(TAG, "---------Database DATA--------" + getGoalDataOnDate(currentWeekDate));
+                    //  Log.e(TAG, "---------Database DATA--------" + getGoalDataOnDate(currentWeekDate));
                     map.putAll(getGoalDataOnDate(currentWeekDate));
-                   // Log.e(TAG, "---------Database 3");
+                    // Log.e(TAG, "---------Database 3");
                     break;
                 }
             }
 
         }
-
 
 
         return map;
@@ -805,6 +822,10 @@ public class MyDatabase extends SQLiteOpenHelper
 
             } while (cursor.moveToNext());
         }
+
+
+        cursor.close();
+        db.close();
 
         return list;
 

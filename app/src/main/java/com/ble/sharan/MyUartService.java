@@ -353,13 +353,12 @@ public class MyUartService extends Service
      */
     public void enableTXNotification()
     { 
-        /*
-        if (mBluetoothGatt == null) {
+        /*if (mBluetoothGatt == null) {
     		showMessage("mBluetoothGatt null" + mBluetoothGatt);
     		broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
     		return;
-    	}
-    		*/
+    	}*/
+
         BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
         if (RxService == null)
         {

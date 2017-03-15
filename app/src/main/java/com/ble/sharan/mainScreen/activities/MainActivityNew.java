@@ -1406,6 +1406,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             }
 
         }
+        else
+        {
+            processingSleeptimeForSetting((long) 0);
+        }
 
         if (fragment instanceof Today)
         {
@@ -1419,7 +1423,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         String time = myUtil.convertMillisToHrMins(millis).replace(":", "");
 //        Log.e(TAG,"----Time----"+time);
         String commandSleepTime = "setslptm" + time;
-
+      //  Log.e(TAG,"----commandSleepTime----"+time);
         commandToBLE(commandSleepTime);
 
 

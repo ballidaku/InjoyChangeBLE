@@ -60,7 +60,7 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
     MyUtil myUtil = new MyUtil();
 
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Calendar.getInstance(Locale.GERMANY);
 
     final int currentWeekFinal = calendar.get(Calendar.WEEK_OF_YEAR);
 
@@ -254,9 +254,15 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
         int YEAR = calendar.get(Calendar.YEAR);
 
-      //  Log.e(TAG, "refresh----currentWeek" + currentWeek);
+//        Log.e(TAG, "refresh----currentWeek   " + currentWeek);
 
         String[] startEndDates= getStartEndOFWeek(currentWeek, YEAR).split(":");
+
+//        for (int i = 0; i <startEndDates.length ; i++)
+//        {
+//            Log.e(TAG, "refresh----startEndDates   " + startEndDates[i]);
+//        }
+
 
         // Data which we are ghoing to show
         ArrayList<HashMap<String, String>> finalList=  getDataList(myUtil.getDates(startEndDates[0], startEndDates[1]));
