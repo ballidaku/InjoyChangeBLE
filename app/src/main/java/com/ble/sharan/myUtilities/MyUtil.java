@@ -366,7 +366,7 @@ public class MyUtil
             long millis = myDatabase.getTodaySleepTime(context);
             SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
 
-            int Hours = (int) (millis / (1000 * 60 * 60));
+            int Hours = (int)((millis / (1000*60*60)) % 24);
             int Mins = (int) (millis / (1000 * 60)) % 60;
 
             String diff = Hours + ":" + Mins; // updated value every1 second
@@ -442,9 +442,10 @@ public class MyUtil
         String time = "";
         try
         {
+//            Log.e(TAG,"millis        "+millis);
             SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
 
-            int Hours = (int) (millis / (1000 * 60 * 60));
+            int Hours = (int)((millis / (1000*60*60)) % 24);
             int Mins = (int) (millis / (1000 * 60)) % 60;
 
             String diff = Hours + ":" + Mins;
@@ -454,7 +455,6 @@ public class MyUtil
         {
             e.printStackTrace();
         }
-
         return time;
     }
 

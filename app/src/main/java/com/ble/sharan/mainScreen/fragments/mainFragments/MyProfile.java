@@ -1,6 +1,7 @@
 package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,8 @@ import com.ble.sharan.R;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+
+import no.nordicsemi.android.nrftoolbox.dfu.DfuActivity;
 
 
 /**
@@ -56,9 +59,6 @@ public class MyProfile extends Fragment implements View.OnClickListener
     Drawable EDIT_ICON;
 
 
-
-
-
 //    RadioGroup radioGroupDistance;
 //    RadioGroup radioGroupWeight;
 //    RadioGroup radioGroupStride;
@@ -95,9 +95,6 @@ public class MyProfile extends Fragment implements View.OnClickListener
     }
 
 
-
-
-
     @Override
     public void onResume()
     {
@@ -130,7 +127,7 @@ public class MyProfile extends Fragment implements View.OnClickListener
         edtv_weight.setKeyListener(null);
 
 
-
+        view.findViewById(R.id.linearLayout_update).setOnClickListener(this);
         view.findViewById(R.id.linearLayout_signOut).setOnClickListener(this);
 
 
@@ -172,21 +169,16 @@ public class MyProfile extends Fragment implements View.OnClickListener
 //        radioGroupStandard = (RadioGroup) view.findViewById(R.id.radioGroupStandard);
 
 
-
-
 //        String distanceUnit = MySharedPreference.getInstance().getDistanceUnit(context);
 //        String weightUnit = MySharedPreference.getInstance().getWeightUnit(context);
 //        String strideUnit = MySharedPreference.getInstance().getStrideUnit(context);
 //        String standardUnit = MySharedPreference.getInstance().getStandardUnit(context);
 
 
-
 //        radioGroupDistance.setOnCheckedChangeListener(new RadioGroupListener(radioGroupDistance));
 //        radioGroupWeight.setOnCheckedChangeListener(new RadioGroupListener(radioGroupWeight));
 //        radioGroupStride.setOnCheckedChangeListener(new RadioGroupListener(radioGroupStride));
 //        radioGroupStandard.setOnCheckedChangeListener(new RadioGroupListener(radioGroupStandard));
-
-
 
 
 //        radioGroupDistance.check(distanceUnit.equals(MyConstant.KM) ? R.id.radioButtonKm : R.id.radioButtonMiles);
@@ -203,13 +195,30 @@ public class MyProfile extends Fragment implements View.OnClickListener
     public void onClick(View view)
     {
         switch (view.getId())
-            {
-                case R.id.linearLayout_signOut:
+        {
+            case R.id.linearLayout_signOut:
 
-                    ((MainActivityNew)getActivity()).displayView(5);
+                ((MainActivityNew) getActivity()).displayView(5);
 
-                    break;
-            }
+                break;
+
+
+            case R.id.linearLayout_update:
+
+
+               /* if (((MainActivityNew) getActivity()).BLE_STATUS.equals(MyConstant.CONNECTED))
+                {*/
+                    Intent intent=new Intent(context, DfuActivity.class);
+                   /* intent.putExtra(MyConstant.DEVICE_ADDRESS,((MainActivityNew) getActivity()).mDevice.getAddress());
+                    intent.putExtra(MyConstant.DEVICE_NAME,((MainActivityNew) getActivity()).mDevice.getName());*/
+                    startActivity(intent);
+
+                getActivity().overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_left);
+//                }
+
+
+                break;
+        }
     }
 
 
@@ -220,7 +229,7 @@ public class MyProfile extends Fragment implements View.OnClickListener
 
         RadioGroupListener(RadioGroup radioGroup)
         {
-            this.radioGroup=radioGroup;
+            this.radioGroup = radioGroup;
         }
 
         @Override
@@ -335,8 +344,6 @@ public class MyProfile extends Fragment implements View.OnClickListener
             }*/
         }
     }
-
-
 
 
     private void refreshUI()

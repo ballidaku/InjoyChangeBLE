@@ -46,7 +46,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="ALARM"
+                android:text=""
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/_16sdp"
                 android:textStyle="bold"/>
@@ -74,7 +74,7 @@
             android:padding="3dp"
             android:text="Overall"
             android:textColor="@color/colorBlue"
-            android:visibility="visible"/>
+            android:visibility="gone"/>
 
     </FrameLayout>
 

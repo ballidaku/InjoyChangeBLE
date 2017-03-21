@@ -112,7 +112,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     //Bluetooth
     private MyUartService mService = null;
-    private BluetoothDevice mDevice = null;
+    public BluetoothDevice mDevice = null;
     private BluetoothAdapter mBtAdapter = null;
 
 
@@ -873,10 +873,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                         String hex = MyUtil.bytesToHex(txValue);
                         sleepData += hex.substring(8, hex.length());
 
-                        Log.e("remaining", "" + sleepData);
+//                        Log.e("remaining", "" + sleepData);
 
                         if (new String(txValue, "UTF-8").contains("Done"))
                         {
+                            Log.e("Total Sleep String", "" + sleepData);
                             TestingSleep2(sleepData);
 
 
@@ -1255,7 +1256,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             {
                 String realData = remaining.substring(10, remaining.length());
 
-                //Log.e("realData", realData);
+               // Log.e(TAG,"Reamining Total String  "+ realData);
 
 
                 String date = "";
@@ -1266,21 +1267,24 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 date = hTD(realData.substring(0, 2)) + "-" + hTD(realData.substring(2, 4)) + "-" + hTD(realData.substring(4, 6));
                 startTime = hTD(realData.substring(6, 8)) + ":" + hTD(realData.substring(8, 10));
-                totalBytes = Integer.parseInt(realData.substring(10, 12), 16) + Integer.parseInt(realData.substring(12, 14), 16);
 
-                // Log.e("date", "---"+date);
-                // Log.e("startTime", "---"+startTime);
-//                Log.e("totalBytes", "---" + totalBytes);
 
+                //Log.e(TAG, "My Bytes  "+hTD(realData.substring(10, 12))+"    "+hTD(realData.substring(12, 14)));
+               // Log.e(TAG, "My Bytes  "+hTD("010C"));
+
+//                totalBytes = Integer.parseInt(realData.substring(10, 12), 16) + Integer.parseInt(realData.substring(12, 14), 16);
+                totalBytes = Integer.parseInt(realData.substring(10, 14), 16);
+
+                // Log.e(TAG,"Date   "+date+"  StartTime  "+startTime+"   totalBytes   "+totalBytes);
 
                 int last = totalBytes * 2;
                 String remainingLast = realData.substring(14, 14 + last);
 
-                //Log.e("remainingLast", "" + remainingLast);
+              //  Log.e("remainingLast", "" + remainingLast);
 
                 int f = last + 24;
 
-//                Log.e("fffffffffffff", "" + f + "--------" + remaining.substring(0, f));
+                //Log.e("fffffffffffff", "" + f + "--------" + remaining.substring(0, f));
 
                 int count = 0;
 
@@ -1292,7 +1296,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                     String str = remainingLast.substring(i, i + 2);
 
-//                    Log.e("Inside", "" + count + "---" + str);
+                   // Log.e("Inside", "" + count + "---" + str);
 
                     int value = Integer.parseInt(str, 16);
 
@@ -1307,7 +1311,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     }
                 }
 
-                //Log.e("endTime", endTime);
+               // Log.e("endTime", endTime);
 
 //                Log.e("remaining", "" + remaining);
 //                Log.e("String to be cut", remaining.substring(0, f));
@@ -1362,7 +1366,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     if (!isStored)
                     {
                         HashMap<String, Long> map = new HashMap<>();
-                        map.put(parseDateToddMMyyyy(date), mills);
+                        map.put(parseDateToddMMyyyy(date),mills);
                         list.add(map);
                     }
 
