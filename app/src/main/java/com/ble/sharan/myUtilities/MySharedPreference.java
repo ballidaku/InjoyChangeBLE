@@ -62,6 +62,20 @@ public class MySharedPreference
     }
 
 
+
+    public void saveFirmwareVersion(Context context, String version)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.Firmware_Version, version);
+        editor.apply();
+    }
+
+    public String getFirmwareVersion(Context context)
+    {
+        return getPreference(context).getString(MyConstant.Firmware_Version, "");
+    }
+
+
     //**********************************************************************************************
     // Clear Connection Data
     //**********************************************************************************************

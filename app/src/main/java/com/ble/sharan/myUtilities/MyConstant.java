@@ -19,6 +19,7 @@ public class MyConstant
     public static final String DEVICE_ADDRESS = "device_address";
     public static final String DEVICE_NAME = "device_name";
     public static final String IS_CONNECTED = "is_connected";
+    public static final String Firmware_Version = "firmware_version";
     public static final String IS_MANUAL_DISCONNECTED = "is_manual_disconnected";
 
     public static final String ID = "id";

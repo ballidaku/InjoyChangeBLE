@@ -1,17 +1,19 @@
 package com.ble.sharan.mainScreen.fragments.mainFragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.method.KeyListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
@@ -44,6 +46,8 @@ public class MyProfile extends Fragment implements View.OnClickListener
     EditText edtv_weight;
     //EditText edtv_stride;
 
+    LinearLayout linearLayout_update;
+
 
 //    Spinner spinner_gender;
 //    TextView txtv_gender_temp;
@@ -72,6 +76,8 @@ public class MyProfile extends Fragment implements View.OnClickListener
 
 
     boolean startWork = false;
+    MyProfile myProfile;
+
 
 
     @Override
@@ -79,6 +85,7 @@ public class MyProfile extends Fragment implements View.OnClickListener
     {
 
         context = getActivity();
+        myProfile=this;
 
         if (view == null)
         {
@@ -91,7 +98,17 @@ public class MyProfile extends Fragment implements View.OnClickListener
         }
 
 
+
+
         return view;
+    }
+
+
+    int getVersion(String firmwareVersion)
+    {
+        int length = firmwareVersion.length();
+
+        return Integer.parseInt(firmwareVersion.substring(length - 2, length).trim());
     }
 
 
@@ -101,6 +118,20 @@ public class MyProfile extends Fragment implements View.OnClickListener
         super.onResume();
 
         startWork = true;
+
+
+        String firmwareVersionFromBand = MySharedPreference.getInstance().getFirmwareVersion(context);
+
+        Log.e("firmwareVersionFromBand", "" + firmwareVersionFromBand);
+
+        if(firmwareVersionFromBand.isEmpty())
+        {
+           // linearLayout_update.setVisibility(View.GONE);
+        }
+        else if(getVersion(firmwareVersionFromBand)==32)
+        {
+            linearLayout_update.setVisibility(View.GONE);
+        }
     }
 
     private void setUpIds()
@@ -127,7 +158,7 @@ public class MyProfile extends Fragment implements View.OnClickListener
         edtv_weight.setKeyListener(null);
 
 
-        view.findViewById(R.id.linearLayout_update).setOnClickListener(this);
+        ( linearLayout_update=(LinearLayout) view.findViewById(R.id.linearLayout_update)).setOnClickListener(this);
         view.findViewById(R.id.linearLayout_signOut).setOnClickListener(this);
 
 
@@ -208,12 +239,13 @@ public class MyProfile extends Fragment implements View.OnClickListener
 
                /* if (((MainActivityNew) getActivity()).BLE_STATUS.equals(MyConstant.CONNECTED))
                 {*/
-                    Intent intent=new Intent(context, DfuActivity.class);
+                Intent intent = new Intent(context, DfuActivity.class);
                    /* intent.putExtra(MyConstant.DEVICE_ADDRESS,((MainActivityNew) getActivity()).mDevice.getAddress());
                     intent.putExtra(MyConstant.DEVICE_NAME,((MainActivityNew) getActivity()).mDevice.getName());*/
-                    startActivity(intent);
+               // startActivity(intent);
+                startActivityForResult(intent, 1390);
 
-                getActivity().overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_left);
+                getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
 //                }
 
 
@@ -221,8 +253,60 @@ public class MyProfile extends Fragment implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    public class RadioGroupListener implements RadioGroup.OnCheckedChangeListener
+        if (requestCode == 1390) {
+            if(resultCode == Activity.RESULT_OK){
+                boolean result=data.getBooleanExtra("result",false);
+                Log.e(TAG,"Result    "+result);
+
+                if(result)
+                {
+                     MySharedPreference.getInstance().saveFirmwareVersion(context,"CS11753b32");
+                }
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
+
+
+    private void refreshUI()
+    {
+
+        myUtil.showCircularImageWithPicasso(context, circularImageView_Profile, MySharedPreference.getInstance().getPhoto(context));
+
+        txtv_username.setText(MySharedPreference.getInstance().getName(context));
+//        txtv_gender.setText(MySharedPreference.getInstance().getGender(context));
+
+        edtv_name.setText(MySharedPreference.getInstance().getName(context));
+        edtv_height.setText(MySharedPreference.getInstance().getHeight(context));
+        edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
+//        edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
+
+//        String gender = MySharedPreference.getInstance().getGender(context);
+//        if (gender.isEmpty())
+//        {
+//            spinner_gender.setSelection(0);
+//        }
+//        else if (gender.equalsIgnoreCase("MALE"))
+//        {
+//            spinner_gender.setSelection(1);
+//            txtv_gender_temp.setText("Male");
+//        }
+//        else
+//        {
+//            spinner_gender.setSelection(2);
+//            txtv_gender_temp.setText("Female");
+//        }
+    }
+
+
+
+
+    /*public class RadioGroupListener implements RadioGroup.OnCheckedChangeListener
     {
 
         RadioGroup radioGroup;
@@ -236,7 +320,7 @@ public class MyProfile extends Fragment implements View.OnClickListener
         public void onCheckedChanged(RadioGroup radioGroup, int checkedId)
         {
 
-           /* if(radioGroup == radioGroupStandard && startWork)
+           *//* if(radioGroup == radioGroupStandard && startWork)
             {
                 MySharedPreference.getInstance().saveStandardUnit(context, checkedId == R.id.radioButtonImperial? MyConstant.IMPERIAL : MyConstant.METRIC);
 
@@ -284,10 +368,10 @@ public class MyProfile extends Fragment implements View.OnClickListener
 
 
 
-            }*/
+            }*//*
 
 
-            /*if (radioGroup == radioGroupDistance && startWork)
+            *//*if (radioGroup == radioGroupDistance && startWork)
             {
                 MySharedPreference.getInstance().saveDistanceUnit(context, checkedId == R.id.radioButtonKm ? MyConstant.KM : MyConstant.MILES);
 
@@ -341,38 +425,9 @@ public class MyProfile extends Fragment implements View.OnClickListener
                 edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
 
                 MyUtil.showToast(context,"Stride Measurement unit changed.");
-            }*/
+            }*//*
         }
-    }
+    }*/
 
 
-    private void refreshUI()
-    {
-
-        myUtil.showCircularImageWithPicasso(context, circularImageView_Profile, MySharedPreference.getInstance().getPhoto(context));
-
-        txtv_username.setText(MySharedPreference.getInstance().getName(context));
-//        txtv_gender.setText(MySharedPreference.getInstance().getGender(context));
-
-        edtv_name.setText(MySharedPreference.getInstance().getName(context));
-        edtv_height.setText(MySharedPreference.getInstance().getHeight(context));
-        edtv_weight.setText(MySharedPreference.getInstance().getWeight(context));
-//        edtv_stride.setText(MySharedPreference.getInstance().getStride(context));
-
-//        String gender = MySharedPreference.getInstance().getGender(context);
-//        if (gender.isEmpty())
-//        {
-//            spinner_gender.setSelection(0);
-//        }
-//        else if (gender.equalsIgnoreCase("MALE"))
-//        {
-//            spinner_gender.setSelection(1);
-//            txtv_gender_temp.setText("Male");
-//        }
-//        else
-//        {
-//            spinner_gender.setSelection(2);
-//            txtv_gender_temp.setText("Female");
-//        }
-    }
 }

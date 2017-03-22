@@ -540,7 +540,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        Log.e("onBackPressedCount", "" + count);
+       // Log.e("onBackPressedCount", "" + count);
 
 
         if (count == 1)
@@ -713,6 +713,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
     int dateCommandresposeCount = 0;
+    int fiemwareCommandResposeCount = 0;
     private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver()
     {
 
@@ -966,9 +967,25 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     }
                     else if (COMMAND.contains("setslptm"))
                     {
-                        // To get previous days steps from memory
-                        getStepsData.count = 0;
-                        getStepsData.st();
+                        //To get the fiemware version
+                        commandToBLE("fw");
+                    }
+                    else if (COMMAND.contains("fw"))
+                    {
+                        Log.e("Firmware Version", "" + new String(txValue, "UTF-8"));
+
+                        fiemwareCommandResposeCount++;
+                        //TODO
+                        if(fiemwareCommandResposeCount==1)
+                        {
+                            MySharedPreference.getInstance().saveFirmwareVersion(context,new String(txValue, "UTF-8").replace("FW:",""));
+                        }
+                        if(fiemwareCommandResposeCount==2)
+                        {
+                            // To get previous days steps from memory
+                            getStepsData.count = 0;
+                            getStepsData.st();
+                        }
                     }
                     else if (COMMAND.contains("d") && COMMAND.length() == 2)  // To get previous steps
                     {
@@ -1188,6 +1205,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        Log.e(TAG,"RequestCode   "+requestCode);
+
         switch (requestCode)
         {
 
