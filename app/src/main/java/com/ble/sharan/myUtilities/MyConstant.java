@@ -76,6 +76,7 @@ public class MyConstant
     //COMMANDS
     public static final String GET_STEPS = "stepR";
     public static final String GET_SLEEP = "mSlp";
+    public static final String CLEAR_SLEEP = "clrSleep";
 
 
     //ALARM

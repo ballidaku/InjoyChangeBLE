@@ -48,6 +48,7 @@ import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
 import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.BleResponseInterface;
 import com.ble.sharan.myUtilities.GetStepsData;
+import com.ble.sharan.myUtilities.ManupulateSleepdata;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyDialogs;
@@ -56,11 +57,9 @@ import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
 import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  * Created by brst-pc93 on 12/27/16.
@@ -102,7 +101,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     Context context;
 
     // LinearLayout frame_layout_profile;
-    Fragment fragment;
+    public Fragment fragment;
 
     boolean isDisconnectedByRange = false;
 
@@ -717,7 +716,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver()
     {
 
-        public void onReceive(final Context context, Intent intent)
+        public void onReceive(final Context mcontext, Intent intent)
         {
             String action = intent.getAction();
 
@@ -869,22 +868,24 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                         //TODO
                         commandToBLE(MyConstant.GET_STEPS);
                     }
-                    else if (COMMAND.equals(MyConstant.GET_SLEEP))
+                    else if (COMMAND.equals(MyConstant.GET_SLEEP)) //After getting all the sleep data
                     {
                         String hex = MyUtil.bytesToHex(txValue);
                         sleepData += hex.substring(8, hex.length());
 
 //                        Log.e("remaining", "" + sleepData);
 
-                        if (new String(txValue, "UTF-8").contains("Done"))
+                        if (new String(txValue, "UTF-8").contains("Done")) // After getting all the sleep data
                         {
                             Log.e("Total Sleep String", "" + sleepData);
-                            TestingSleep2(sleepData);
+                           // TestingSleep2(sleepData);
 
+                            ManupulateSleepdata manupulateSleepdata =new ManupulateSleepdata();
 
+                            manupulateSleepdata.gettingSleepData(context,sleepData,myDatabase);
                         }
                     }
-                    else if (COMMAND.equals(MyConstant.GET_STEPS))
+                    else if (COMMAND.equals(MyConstant.GET_STEPS))// After getting the steps
                     {
 
                         if (fragment instanceof Today)
@@ -965,12 +966,19 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                             }
                         }
                     }
-                    else if (COMMAND.contains("setslptm"))
+                    else if (COMMAND.contains("setslptm")) //After setting the sleep time to band
+                    {
+                        //To get the fiemware version
+                        //commandToBLE("fw");
+
+                        commandToBLE(MyConstant.CLEAR_SLEEP);
+                    }
+                    else if (COMMAND.contains(MyConstant.CLEAR_SLEEP)) // After clearing the sleep data
                     {
                         //To get the fiemware version
                         commandToBLE("fw");
                     }
-                    else if (COMMAND.contains("fw"))
+                    else if (COMMAND.contains("fw")) // After gettting the band firmware version
                     {
                         Log.e("Firmware Version", "" + new String(txValue, "UTF-8"));
 
@@ -1254,13 +1262,13 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public String hTD(String hex)
+    /*public String hTD(String hex)
     {
         return String.valueOf(Integer.parseInt(hex, 16));
-    }
+    }*/
 
 
-    public void TestingSleep2(String remaining)
+   /* public void TestingSleep2(String remaining)
     {
 
 
@@ -1442,9 +1450,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             ((Today) fragment).sleepTime();
         }
 
-    }
+    }*/
 
-    public void processingSleeptimeForSetting(Long millis)
+/*    public void processingSleeptimeForSetting(Long millis)
     {
         String time = myUtil.convertMillisToHrMins(millis).replace(":", "");
 //        Log.e(TAG,"----Time----"+time);
@@ -1453,19 +1461,19 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         commandToBLE(commandSleepTime);
 
 
-        //******************************************************************************************
+        /*//******************************************************************************************
         // Notification
-        //******************************************************************************************
+        /*//******************************************************************************************
 
         myUtil.sleepHrToRemainingHr(context, myUtil.convertMillisToHrMins(millis));
 
-        //******************************************************************************************
-        //******************************************************************************************
+        /*//******************************************************************************************
+        /*//******************************************************************************************
 
-    }
+    }*/
 
 
-    public String parseDateToddMMyyyy(String time)
+ /*   public String parseDateToddMMyyyy(String time)
     {
         String inputPattern = "yy-MM-dd";
         String outputPattern = "dd-MM-yyyy";
@@ -1485,7 +1493,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
         return str;
     }
-
+*/
 
     public void oneTimeDialogToConnect(Context context)
     {
