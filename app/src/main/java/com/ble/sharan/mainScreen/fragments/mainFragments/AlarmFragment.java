@@ -325,7 +325,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             }
             else if (mySwitch == switch_firstOnOff && startWork)
             {
-                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_FIRST, "00:00 AM,alm000007F1000000");
+                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_FIRST, "00:00 am,alm000007F1000000");
                 String[] commandString = alarm.split(",");
 
                 //  Log.e(TAG,"Alarm inside----" + alarm);
@@ -349,7 +349,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             }
             else if (mySwitch == switch_secondOnOff && startWork)
             {
-                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_SECOND, "00:00 AM,alm100007F1000000");
+                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_SECOND, "00:00 am,alm100007F1000000");
                 String[] commandString = alarm.split(",");
 
                 if (!alarm.isEmpty())
@@ -371,7 +371,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             }
             else if (mySwitch == switch_thirdOnOff && startWork)
             {
-                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_THIRD, "00:00 AM,alm200007F1000000");
+                String alarm = MySharedPreference.getInstance().getPreference(context).getString(MyConstant.ALARM_THIRD, "00:00 am,alm200007F1000000");
 
                 String[] commandString = alarm.split(",");
 
@@ -510,21 +510,21 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
     }
 
 
-    public void saveAlarm(String alarmKey, String showTime, String alarmTime, String weeksDaysCommand,boolean abc)
+    public void saveAlarm(String alarmKey, String showTime, String alarmTime, String weeksDaysCommand,boolean isSwitchOn)
     {
         String commandToSetAlarm = "alm" + alarmKey + alarmTime + weeksDaysCommand + "1000000";
 
         Log.e(TAG, "commandToSetAlarm Map" + commandToSetAlarm + "          " + weeksDaysCommand);
 
 
-        if(abc)
+        if(isSwitchOn)
         {
             // BY ME NOW
             setAlarm(commandToSetAlarm);
         }
 
 
-        MySharedPreference.getInstance().saveAlarm(context, ALARM_NUMBER, showTime + "," + commandToSetAlarm);
+        MySharedPreference.getInstance().saveAlarm(context, ALARM_NUMBER, showTime + "," + commandToSetAlarm,isSwitchOn);
 
 
     }

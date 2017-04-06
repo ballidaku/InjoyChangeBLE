@@ -110,7 +110,7 @@ public class MySharedPreference
     //**********************************************************************************************
 
 
-    public void saveAlarm(Context context, String alarmKey, String alarm)
+    public void saveAlarm(Context context, String alarmKey, String alarm,boolean isSwitchOn)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
 
@@ -118,7 +118,8 @@ public class MySharedPreference
 
         editor.apply();
 
-        setFalseIsAlarmActivated(context, alarmKey, true);
+        //setFalseIsAlarmActivated(context, alarmKey, true);
+        setFalseIsAlarmActivated(context, alarmKey, isSwitchOn);
 
     }
 
@@ -182,9 +183,9 @@ public class MySharedPreference
     {
         HashMap<String, String> map = new HashMap<>();
 
-        map.put(MyConstant.ALARM_FIRST, getPreference(context).getString(MyConstant.ALARM_FIRST, ""));
-        map.put(MyConstant.ALARM_SECOND, getPreference(context).getString(MyConstant.ALARM_SECOND, ""));
-        map.put(MyConstant.ALARM_THIRD, getPreference(context).getString(MyConstant.ALARM_THIRD, ""));
+        map.put(MyConstant.ALARM_FIRST, getPreference(context).getString(MyConstant.ALARM_FIRST, "00:00 am,alm000007F1000000"));
+        map.put(MyConstant.ALARM_SECOND, getPreference(context).getString(MyConstant.ALARM_SECOND, "00:00 am,alm000007F1000000"));
+        map.put(MyConstant.ALARM_THIRD, getPreference(context).getString(MyConstant.ALARM_THIRD, "00:00 am,alm000007F1000000"));
 
         return map;
     }

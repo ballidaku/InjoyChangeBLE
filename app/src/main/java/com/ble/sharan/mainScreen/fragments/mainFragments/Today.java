@@ -64,8 +64,7 @@ public class Today extends Fragment implements View.OnClickListener
         framelayout_sleep = (FrameLayout) view.findViewById(R.id.framelayout_sleep);
 
 
-
-         fragment_activity = getChildFragmentManager().findFragmentById(R.id.fragment_activity);
+        fragment_activity = getChildFragmentManager().findFragmentById(R.id.fragment_activity);
         fragment_overall = getChildFragmentManager().findFragmentById(R.id.fragment_overall);
 
         changeF("A");
@@ -132,12 +131,11 @@ public class Today extends Fragment implements View.OnClickListener
             framelayout_activity.setVisibility(View.GONE);
 
 
-            ((Overall)fragment_overall).updateUI();
+            ((Overall) fragment_overall).updateUI();
 
         }
 
     }
-
 
 
     // Roots to  child fragment
@@ -150,14 +148,13 @@ public class Today extends Fragment implements View.OnClickListener
 
     public void calculate(int data)
     {
-        ((TodayActivityFragment) fragment_activity).calculate(data,true);
+        ((TodayActivityFragment) fragment_activity).calculate(data, true);
     }
 
     public void sleepTime()
     {
         ((TodayActivityFragment) fragment_activity).refreshSleepTextView();
     }
-
 
 
 }

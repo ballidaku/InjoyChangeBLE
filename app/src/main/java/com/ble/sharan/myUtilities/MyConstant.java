@@ -7,6 +7,12 @@ package com.ble.sharan.myUtilities;
 public class MyConstant
 {
 
+    public static final String MUSIC_PLAY = "mu9990100";
+    public static final String MUSIC_PAUSE = "mu9990200";
+    public static final String MUSIC_PREVIOUS = "mu9990101";
+    public static final String MUSIC_NEXT = "mu9990110";
+
+
     public static final String FROM_WHERE = "from_where";
     public static final String MY_WEEK_SLEEP_FRAGMENT = "MyWeekSleepFragment";
     public static final String MY_WEEK_ACTIVITY_FRAGMENT = "MyWeekActivityFragment";

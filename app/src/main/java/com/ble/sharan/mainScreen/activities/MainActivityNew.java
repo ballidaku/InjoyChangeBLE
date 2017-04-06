@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ble.sharan.MusicPlayer;
 import com.ble.sharan.MyUartService;
 import com.ble.sharan.R;
 import com.ble.sharan.loginScreen.LoginActivity;
@@ -539,7 +540,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-       // Log.e("onBackPressedCount", "" + count);
+        // Log.e("onBackPressedCount", "" + count);
 
 
         if (count == 1)
@@ -625,7 +626,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             case R.id.linearLayout_data:
 
 
-                if(!(fragment instanceof  HealthData))
+                if (!(fragment instanceof HealthData))
                 {
                     removeFragmentsOfChallenge();
                     setBottomTabSelected(view_data, imgv_data, txtv_data);
@@ -851,10 +852,24 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 try
                 {
-                    Log.e(TAG, "CR---Response of Command" + new String(txValue, "UTF-8"));
+                    Log.e(TAG, "CR---Response of Command   " + new String(txValue, "UTF-8"));
 
 
-                    if (COMMAND.contains("dt"))
+
+                    // IN MUSIC CASE, TO PLAY MUSIC
+                    if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PLAY) || new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PAUSE))
+                    {
+                        MusicPlayer.getInstance().playPause(context);
+                    }
+                    else if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PREVIOUS))
+                    {
+                        MusicPlayer.getInstance().previous(context);
+                    }
+                    else if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_NEXT))
+                    {
+                        MusicPlayer.getInstance().next(context);
+                    }
+                    else if (COMMAND.contains("dt"))
                     {
                         dateCommandresposeCount++;
                         if (dateCommandresposeCount == 4)
@@ -878,11 +893,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                         if (new String(txValue, "UTF-8").contains("Done")) // After getting all the sleep data
                         {
                             Log.e("Total Sleep String", "" + sleepData);
-                           // TestingSleep2(sleepData);
+                            // TestingSleep2(sleepData);
 
-                            ManupulateSleepdata manupulateSleepdata =new ManupulateSleepdata();
+                            ManupulateSleepdata manupulateSleepdata = new ManupulateSleepdata();
 
-                            manupulateSleepdata.gettingSleepData(context,sleepData,myDatabase);
+                            manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);
                         }
                     }
                     else if (COMMAND.equals(MyConstant.GET_STEPS))// After getting the steps
@@ -984,11 +999,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                         fiemwareCommandResposeCount++;
                         //TODO
-                        if(fiemwareCommandResposeCount==1)
+                        if (fiemwareCommandResposeCount == 1)
                         {
-                            MySharedPreference.getInstance().saveFirmwareVersion(context,new String(txValue, "UTF-8").replace("FW:",""));
+                            MySharedPreference.getInstance().saveFirmwareVersion(context, new String(txValue, "UTF-8").replace("FW:", ""));
                         }
-                        if(fiemwareCommandResposeCount==2)
+                        if (fiemwareCommandResposeCount == 2)
                         {
                             // To get previous days steps from memory
                             getStepsData.count = 0;
@@ -1013,6 +1028,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 MyUtil.showToast(context, "Device doesn't support UART. Disconnecting");
                 mService.disconnect();
             }
+
         }
     };
 
@@ -1216,7 +1232,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        Log.e(TAG,"RequestCode   "+requestCode);
+        Log.e(TAG, "RequestCode   " + requestCode);
 
         switch (requestCode)
         {
@@ -1462,15 +1478,16 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
 
         /*//******************************************************************************************
-        // Notification
-        /*//******************************************************************************************
+ // Notification
+ /*//******************************************************************************************
 
-        myUtil.sleepHrToRemainingHr(context, myUtil.convertMillisToHrMins(millis));
+ myUtil.sleepHrToRemainingHr(context, myUtil.convertMillisToHrMins(millis));
 
-        /*//******************************************************************************************
-        /*//******************************************************************************************
+ /*//******************************************************************************************
+ /*/
+    /******************************************************************************************
 
-    }*/
+     }*/
 
 
  /*   public String parseDateToddMMyyyy(String time)
@@ -1494,7 +1511,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         return str;
     }
 */
-
     public void oneTimeDialogToConnect(Context context)
     {
 
@@ -1663,6 +1679,55 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             commandToBLE(commandToSetDateTime);
         }
     }
+
+
+
+    /*public void stopPlaying()
+    {
+        AudioManager mAudioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+
+        if (mAudioManager.isMusicActive()) {
+
+            *//*Intent i = new Intent("com.android.music.musicservicecommand");
+
+            i.putExtra("command", "pause");
+
+//            Intent i = new Intent();
+//            i.setAction("com.android.music.musicservicecommand.pause");
+//            i.putExtra("command", "pause");
+
+            MainActivityNew.this.sendBroadcast(i);*//*
+//            mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+            sendMediaButton(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_PAUSE);
+
+        }
+
+       // long eventtime = SystemClock.uptimeMillis();
+
+        *//*Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+        KeyEvent downEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_DOWN,   KeyEvent.KEYCODE_MEDIA_NEXT, 0);
+        downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
+        sendOrderedBroadcast(downIntent, null);*//*
+
+        *//*Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+        KeyEvent upEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, 0);
+        upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
+        sendOrderedBroadcast(upIntent, null);*//*
+
+
+    }
+
+    private static void sendMediaButton(Context context, int keyCode) {
+        KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
+        Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
+        context.sendOrderedBroadcast(intent,null);
+
+        keyEvent = new KeyEvent(KeyEvent.ACTION_UP, keyCode);
+        intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
+        context.sendOrderedBroadcast(intent,null);
+    }*/
 
 
 }
