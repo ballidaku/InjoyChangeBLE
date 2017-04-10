@@ -33,7 +33,7 @@ public class HealthData extends Fragment implements View.OnClickListener
 
 
 
-    public static final String SERVICECMD = "com.android.music.musicservicecommand";
+/*    public static final String SERVICECMD = "com.android.music.musicservicecommand";
     public static final String CMDNAME = "command";
     public static final String CMDTOGGLEPAUSE = "togglepause";
     public static final String CMDSTOP = "stop";
@@ -43,7 +43,7 @@ public class HealthData extends Fragment implements View.OnClickListener
     public static final String TOGGLEPAUSE_ACTION = "com.android.music.musicservicecommand.togglepause";
     public static final String PAUSE_ACTION = "com.android.music.musicservicecommand.pause";
     public static final String PREVIOUS_ACTION = "com.android.music.musicservicecommand.previous";
-    public static final String NEXT_ACTION = "com.android.music.musicservicecommand.next";
+    public static final String NEXT_ACTION = "com.android.music.musicservicecommand.next"*/;
 
 
 
