@@ -1,6 +1,7 @@
 package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -15,11 +16,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.ble.sharan.R;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import no.nordicsemi.android.nrftoolbox.dfu.DfuActivity;
 
@@ -28,7 +33,7 @@ import no.nordicsemi.android.nrftoolbox.dfu.DfuActivity;
  * Created by brst-pc93 on 11/4/16.
  */
 
-public class MyProfile extends Fragment implements View.OnClickListener
+public class MyProfile extends Fragment implements View.OnClickListener, TimePickerDialog.OnTimeSetListener
 {
 
     String TAG = MyProfile.class.getSimpleName();
@@ -39,6 +44,8 @@ public class MyProfile extends Fragment implements View.OnClickListener
     ImageView circularImageView_Profile;
 
     TextView txtv_username;
+    TextView txtv_StartTime;
+    TextView txtv_EndTime;
 //    TextView txtv_gender;
 
     EditText edtv_name;
@@ -78,6 +85,9 @@ public class MyProfile extends Fragment implements View.OnClickListener
     boolean startWork = false;
     MyProfile myProfile;
 
+    Calendar calendar;
+
+    int START_END_TIME = 0;
 
 
     @Override
@@ -85,7 +95,7 @@ public class MyProfile extends Fragment implements View.OnClickListener
     {
 
         context = getActivity();
-        myProfile=this;
+        myProfile = this;
 
         if (view == null)
         {
@@ -96,8 +106,6 @@ public class MyProfile extends Fragment implements View.OnClickListener
 
             setUpIds();
         }
-
-
 
 
         return view;
@@ -117,6 +125,8 @@ public class MyProfile extends Fragment implements View.OnClickListener
     {
         super.onResume();
 
+
+
         startWork = true;
 
 
@@ -124,11 +134,11 @@ public class MyProfile extends Fragment implements View.OnClickListener
 
         Log.e("firmwareVersionFromBand", "" + firmwareVersionFromBand);
 
-        if(firmwareVersionFromBand.isEmpty())
+        if (firmwareVersionFromBand.isEmpty())
         {
-           // linearLayout_update.setVisibility(View.GONE);
+            // linearLayout_update.setVisibility(View.GONE);
         }
-        else if(getVersion(firmwareVersionFromBand)==32)
+        else if (getVersion(firmwareVersionFromBand) == 32)
         {
             linearLayout_update.setVisibility(View.GONE);
         }
@@ -142,6 +152,9 @@ public class MyProfile extends Fragment implements View.OnClickListener
         txtv_username = (TextView) view.findViewById(R.id.txtv_username);
 //        txtv_gender = (TextView) view.findViewById(R.id.txtv_gender);
 //        txtv_gender_temp = (TextView) view.findViewById(R.id.txtv_gender_temp);
+
+        (txtv_StartTime = (TextView) view.findViewById(R.id.txtv_StartTime)).setOnClickListener(this);
+        (txtv_EndTime = (TextView) view.findViewById(R.id.txtv_EndTime)).setOnClickListener(this);
 
 
         edtv_name = (EditText) view.findViewById(R.id.edtv_name);
@@ -158,8 +171,12 @@ public class MyProfile extends Fragment implements View.OnClickListener
         edtv_weight.setKeyListener(null);
 
 
-        ( linearLayout_update=(LinearLayout) view.findViewById(R.id.linearLayout_update)).setOnClickListener(this);
+        (linearLayout_update = (LinearLayout) view.findViewById(R.id.linearLayout_update)).setOnClickListener(this);
         view.findViewById(R.id.linearLayout_signOut).setOnClickListener(this);
+
+
+        txtv_StartTime.setText(MySharedPreference.getInstance().getSleepStartTime(context));
+        txtv_EndTime.setText(MySharedPreference.getInstance().getSleepEndTime(context));
 
 
 //        edtv_stride = (EditText) view.findViewById(R.id.edtv_stride);
@@ -227,6 +244,21 @@ public class MyProfile extends Fragment implements View.OnClickListener
     {
         switch (view.getId())
         {
+
+            case R.id.txtv_StartTime:
+
+                addTime();
+                START_END_TIME = 1;
+
+                break;
+
+            case R.id.txtv_EndTime:
+
+                addTime();
+                START_END_TIME = 2;
+
+                break;
+
             case R.id.linearLayout_signOut:
 
                 ((MainActivityNew) getActivity()).displayView(5);
@@ -242,7 +274,7 @@ public class MyProfile extends Fragment implements View.OnClickListener
                 Intent intent = new Intent(context, DfuActivity.class);
                    /* intent.putExtra(MyConstant.DEVICE_ADDRESS,((MainActivityNew) getActivity()).mDevice.getAddress());
                     intent.putExtra(MyConstant.DEVICE_NAME,((MainActivityNew) getActivity()).mDevice.getName());*/
-               // startActivity(intent);
+                // startActivity(intent);
                 startActivityForResult(intent, 1390);
 
                 getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
@@ -254,19 +286,23 @@ public class MyProfile extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
 
-        if (requestCode == 1390) {
-            if(resultCode == Activity.RESULT_OK){
-                boolean result=data.getBooleanExtra("result",false);
-                Log.e(TAG,"Result    "+result);
+        if (requestCode == 1390)
+        {
+            if (resultCode == Activity.RESULT_OK)
+            {
+                boolean result = data.getBooleanExtra("result", false);
+                Log.e(TAG, "Result    " + result);
 
-                if(result)
+                if (result)
                 {
-                     MySharedPreference.getInstance().saveFirmwareVersion(context,"CS11753b32");
+                    MySharedPreference.getInstance().saveFirmwareVersion(context, "CS11753b32");
                 }
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
+            if (resultCode == Activity.RESULT_CANCELED)
+            {
                 //Write your code if there's no result
             }
         }
@@ -301,6 +337,45 @@ public class MyProfile extends Fragment implements View.OnClickListener
 //            spinner_gender.setSelection(2);
 //            txtv_gender_temp.setText("Female");
 //        }
+    }
+
+
+    public void addTime()
+    {
+        calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        new TimePickerDialog(getActivity(), this, hour, minute, false).show();
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1)
+    {
+        calendar.set(Calendar.HOUR_OF_DAY, i);
+        calendar.set(Calendar.MINUTE, i1);
+        SimpleDateFormat mSDF = new SimpleDateFormat("hh:mm a");
+
+        SimpleDateFormat mSDF2 = new SimpleDateFormat("HHmm");
+
+        String alarmTime = mSDF2.format(calendar.getTime());
+
+        String showTime = mSDF.format(calendar.getTime());
+
+
+        if (START_END_TIME == 1)
+        {
+            txtv_StartTime.setText(showTime);
+            MySharedPreference.getInstance().saveSleepStartTime(context, showTime);
+        }
+        else
+        {
+            txtv_EndTime.setText(showTime);
+            MySharedPreference.getInstance().saveSleepEndTime(context, showTime);
+        }
+
+
+        Log.e(TAG, " showTime " + showTime + " alarmTime " + alarmTime);
     }
 
 

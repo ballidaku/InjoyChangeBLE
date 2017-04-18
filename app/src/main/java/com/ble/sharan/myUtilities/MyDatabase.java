@@ -27,7 +27,7 @@ public class MyDatabase extends SQLiteOpenHelper
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "stepsManager";
@@ -43,6 +43,7 @@ public class MyDatabase extends SQLiteOpenHelper
     private static final String KEY_STEPS = "steps";
     private static final String KEY_SLEEP_TIME = "sleep_time";// in millis
     private static final String KEY_UID = "uid";
+    private static final String KEY_TIME_RAW_DATA = "time_raw_data";
 
     private static final String KEY_DISTANCE = "distance";
     private static final String KEY_CALORIES = "calories";
@@ -59,6 +60,9 @@ public class MyDatabase extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
+        Log.e(TAG, " Hello ");
+
+
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_STEP_RECORD + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE + " TEXT,"
                 + KEY_STEPS + " TEXT," + KEY_UID + " TEXT" + ")";
@@ -67,7 +71,7 @@ public class MyDatabase extends SQLiteOpenHelper
 
         String CREATE_SLEEP_TABLE = "CREATE TABLE " + TABLE_SLEEP_RECORD + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE + " TEXT,"
-                + KEY_SLEEP_TIME + " INTEGER," + KEY_UID + " TEXT" + ")";
+                + KEY_SLEEP_TIME + " INTEGER," + KEY_UID + " TEXT," + KEY_TIME_RAW_DATA + " TEXT" + ")";
         db.execSQL(CREATE_SLEEP_TABLE);
 
 
@@ -82,13 +86,21 @@ public class MyDatabase extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+
+        Log.e(TAG, " Version " + oldVersion + "-----" + newVersion);
+
+        if (newVersion > 1)
+        {
+            db.execSQL("ALTER TABLE " + TABLE_SLEEP_RECORD + " ADD COLUMN " + KEY_TIME_RAW_DATA + " TEXT ");
+        }
+
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STEP_RECORD);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SLEEP_RECORD);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAILY_GOAL_RECORD);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STEP_RECORD);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SLEEP_RECORD);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DAILY_GOAL_RECORD);
 
         // Create tables again
-        onCreate(db);
+//        onCreate(db);
     }
 
 
@@ -128,7 +140,7 @@ public class MyDatabase extends SQLiteOpenHelper
     public int getStepIdOnDate(Context context, String date)
     {
 
-        int id=0;
+        int id = 0;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_STEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_STEPS, KEY_UID}, KEY_DATE + "=? AND " + KEY_UID + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getUID(context)}, null, null, null, null);
@@ -138,7 +150,7 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (cursor!= null && cursor.getCount() > 0)
+        if (cursor != null && cursor.getCount() > 0)
         {
             id = Integer.parseInt(cursor.getString(0));
 
@@ -262,7 +274,7 @@ public class MyDatabase extends SQLiteOpenHelper
                     stepsList.add(beanRecords);
 
 
-                    Log.e(TAG, "--MissingStepsDate---" + date);
+//                    Log.e(TAG, "--MissingStepsDate---" + date);
                 }
             }
         }
@@ -382,6 +394,37 @@ public class MyDatabase extends SQLiteOpenHelper
 
     }
 
+    public void addSleepData2(Context context, ArrayList<HashMap<String, Object>> list)
+    {
+
+//        Collections.reverse(list);
+
+        for (int i = 0; i < list.size(); i++)
+        {
+
+            //for (String date : list.get(i).keySet())
+            // {
+            long MILLIS = Long.parseLong(list.get(i).get(MyConstant.TOTAL_MILLIS).toString());
+            String date = list.get(i).get(MyConstant.DATE).toString();
+            String timeRawData = list.get(i).get(MyConstant.TIME_RAW_DATA).toString();
+
+
+            int ID = getSleepIdOnDate(context, date);
+
+            if (ID == 0)
+            {
+                addSleepDataOnDate2(context, date, MILLIS, timeRawData);
+            }
+            else
+            {
+                updateSleepData2(ID, date, MILLIS, timeRawData);
+            }
+            //}
+
+        }
+
+    }
+
 
     public void addSleepDataOnDate(Context context, String date, long MILLIS)
     {
@@ -397,11 +440,26 @@ public class MyDatabase extends SQLiteOpenHelper
         db.close(); // Closing database connection
     }
 
+    public void addSleepDataOnDate2(Context context, String date, long MILLIS, String timeRawData)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_DATE, date); // Date
+        values.put(KEY_SLEEP_TIME, MILLIS);
+        values.put(KEY_UID, MySharedPreference.getInstance().getUID(context)); // Access Token
+        values.put(KEY_TIME_RAW_DATA, timeRawData);
+
+        // Inserting Row
+        db.insert(TABLE_SLEEP_RECORD, null, values);
+        db.close(); // Closing database connection
+    }
+
 
     public int getSleepIdOnDate(Context context, String date)
     {
 
-        int id=0;
+        int id = 0;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME, KEY_UID}, KEY_DATE + "=? AND " + KEY_UID + "=?", new String[]{String.valueOf(date), MySharedPreference.getInstance().getUID(context)}, null, null, null, null);
@@ -411,7 +469,7 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (cursor!=null && cursor.getCount() > 0)
+        if (cursor != null && cursor.getCount() > 0)
         {
             id = Integer.parseInt(cursor.getString(0));
             cursor.close();
@@ -424,7 +482,7 @@ public class MyDatabase extends SQLiteOpenHelper
 
     public long getSleepMillisOnDate(String date)
     {
-        long sleepMillis=0;
+        long sleepMillis = 0;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME}, KEY_DATE + "=?", new String[]{String.valueOf(date)}, null, null, null, null);
@@ -434,7 +492,7 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (cursor !=null && cursor.getCount() > 0)
+        if (cursor != null && cursor.getCount() > 0)
         {
             sleepMillis = Long.parseLong(cursor.getString(2));
             cursor.close();
@@ -444,6 +502,31 @@ public class MyDatabase extends SQLiteOpenHelper
 
         return sleepMillis;
     }
+
+    public String getRawSleepDataOnDate(String date)
+    {
+        String  sleepRawData = "";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_SLEEP_RECORD, new String[]{KEY_ID, KEY_DATE, KEY_SLEEP_TIME,KEY_TIME_RAW_DATA}, KEY_DATE + "=?", new String[]{String.valueOf(date)}, null, null, null, null);
+        if (cursor != null)
+        {
+            cursor.moveToFirst();
+        }
+
+
+        if (cursor != null && cursor.getCount() > 0)
+        {
+            sleepRawData = cursor.getString(3);
+            cursor.close();
+        }
+
+        db.close();
+
+        return sleepRawData;
+    }
+
+
 
 
     public long getTodaySleepTime(Context context)
@@ -475,6 +558,24 @@ public class MyDatabase extends SQLiteOpenHelper
         ContentValues values = new ContentValues();
         values.put(KEY_DATE, date);
         values.put(KEY_SLEEP_TIME, MILLIS);
+
+        // updating row
+        db.update(TABLE_SLEEP_RECORD, values, KEY_ID + " = ?", new String[]{String.valueOf(ID)});
+
+        db.close();
+    }
+
+    // Updating sleep Data
+    public void updateSleepData2(int ID, String date, long MILLIS,String timeRawData)
+    {
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_DATE, date);
+        values.put(KEY_SLEEP_TIME, MILLIS);
+        values.put(KEY_TIME_RAW_DATA, timeRawData);
 
         // updating row
         db.update(TABLE_SLEEP_RECORD, values, KEY_ID + " = ?", new String[]{String.valueOf(ID)});
@@ -683,7 +784,7 @@ public class MyDatabase extends SQLiteOpenHelper
 
         // Log.e(TAG,"-----getDailyGoalIdOnDate------DATE-----"+date);
 
-        int id=0;
+        int id = 0;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -694,9 +795,9 @@ public class MyDatabase extends SQLiteOpenHelper
         }
 
 
-        if (cursor!=null &&  cursor.getCount() > 0)
+        if (cursor != null && cursor.getCount() > 0)
         {
-            id= Integer.parseInt(cursor.getString(0));
+            id = Integer.parseInt(cursor.getString(0));
             cursor.close();
         }
 

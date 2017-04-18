@@ -246,7 +246,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             if (String.valueOf(stringBuilder2.charAt(i)).equals("1"))
             {
-                editTextSecond[i].setCompoundDrawablesWithIntrinsicBounds(null, TOP_ICON_CHECKED, null, null);
+              editTextSecond[i].setCompoundDrawablesWithIntrinsicBounds(null, TOP_ICON_CHECKED, null, null);
             }
 
             if (String.valueOf(stringBuilder3.charAt(i)).equals("1"))

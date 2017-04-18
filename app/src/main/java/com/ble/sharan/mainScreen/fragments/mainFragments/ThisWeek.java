@@ -7,12 +7,14 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.ThisWeekAdapter;
+import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
@@ -68,6 +70,8 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
     int currentWeek = 0;
 
+    ArrayList<HashMap<String, String>> listMain=new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -106,7 +110,13 @@ public class ThisWeek extends Fragment implements View.OnClickListener
         super.onResume();
         getActivity().findViewById(R.id.txtv_right).setVisibility(View.VISIBLE);
 
+        ((MainActivityNew) getActivity()).setTitleHeader("This Week");
 
+
+        imgv_leftArrow.setVisibility(View.VISIBLE);
+        imgv_rightArrow.setVisibility(View.INVISIBLE);
+
+        refresh();
     }
 
     private void setUpIds()
@@ -131,22 +141,46 @@ public class ThisWeek extends Fragment implements View.OnClickListener
         imgv_rightArrow.setOnClickListener(this);
 
 
+
+        listView_weekRecords.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+
+//                MyUtil.showToast(context,myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)));
+
+                if(!myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)).isEmpty())
+                {
+                    SleepDetails sleepDetails = new SleepDetails();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(MyConstant.SLEEP, myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)));
+                    bundle.putString(MyConstant.DATE, listMain.get(i).get(MyConstant.DATE));
+                    sleepDetails.setArguments(bundle);
+                    myUtil.switchfragment(ThisWeek.this, sleepDetails);
+                }
+
+            }
+        });
+
+
         // updateUI();
 
 //        Calendar calendar = Calendar.getInstance();
 //
 //        getStartEndOFWeek(calendar.get(Calendar.WEEK_OF_YEAR), calendar.get(Calendar.YEAR));
 
-        imgv_leftArrow.setVisibility(View.VISIBLE);
-        imgv_rightArrow.setVisibility(View.INVISIBLE);
 
 
-        refresh();
+
+
     }
 
     private void updateUI(ArrayList<HashMap<String, String>> list)
     {
         // List<BeanRecords> list = myDatabase.getAllStepRecords(context);
+
+        listMain=list;
 
         if (list.size() > 0)
         {
@@ -254,7 +288,7 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
         int YEAR = calendar.get(Calendar.YEAR);
 
-//        Log.e(TAG, "refresh----currentWeek   " + currentWeek);
+       // Log.e(TAG, "refresh----currentWeek   " + currentWeek+"   kinneHafteaTak "+kinneHafteaTak);
 
         String[] startEndDates= getStartEndOFWeek(currentWeek, YEAR).split(":");
 
@@ -316,6 +350,14 @@ public class ThisWeek extends Fragment implements View.OnClickListener
         if(!containStepsvalue && !containSleepvalue)
         {
             imgv_leftArrow.setVisibility(View.INVISIBLE);
+        }
+
+
+        // To  right arrow when we comes back from nested fragment
+
+        if(currentWeek < kinneHafteaTak + 3 )
+        {
+            imgv_rightArrow.setVisibility(View.VISIBLE);
         }
 
     }

@@ -30,6 +30,8 @@ public class MyConstant
 
     public static final String ID = "id";
     public static final String DATE = "date";
+    public static final String TOTAL_MILLIS = "total_millis";
+    public static final String TIME_RAW_DATA = "time_raw_data";
 
 
     public static final String CONNECTED = "connected";
@@ -54,6 +56,8 @@ public class MyConstant
 //    public static final String WEIGHT_UNIT = "weight_unit";
     public static final String GENDER = "gender";
     public static final String PHOTO = "photo";
+    public static final String START_SLEEP_TIME = "start_sleep_time";
+    public static final String END_SLEEP_TIME = "end_sleep_time";
 
 
     //SET GOALS

@@ -49,7 +49,7 @@ import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
 import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.BleResponseInterface;
 import com.ble.sharan.myUtilities.GetStepsData;
-import com.ble.sharan.myUtilities.ManupulateSleepdata;
+import com.ble.sharan.myUtilities.ManupulateSleepDataNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyDialogs;
@@ -193,7 +193,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         reconnectTimer = new ReconnectTimer(6000, 3500);
 
 
-        oneTimeDialogToConnect(context);
+        if (mBtAdapter.isEnabled())
+        {
+            oneTimeDialogToConnect(context);
+        }
 
 
         // IF there is no data
@@ -722,7 +725,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             String action = intent.getAction();
 
 
-            Log.e(TAG, "Action : " + action);
+            //Log.e(TAG, "Action : " + action);
 
             if (action.equals(MyUartService.ACTION_GATT_CONNECTING))
             {
@@ -855,7 +858,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     Log.e(TAG, "CR---Response of Command   " + new String(txValue, "UTF-8"));
 
 
-
                     // IN MUSIC CASE, TO PLAY MUSIC
                     if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PLAY) || new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PAUSE))
                     {
@@ -895,7 +897,12 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                             Log.e("Total Sleep String", "" + sleepData);
                             // TestingSleep2(sleepData);
 
-                            ManupulateSleepdata manupulateSleepdata = new ManupulateSleepdata();
+                            /*ManupulateSleepdata manupulateSleepdata = new ManupulateSleepdata();
+
+                            manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);*/
+
+
+                            ManupulateSleepDataNew manupulateSleepdata = new ManupulateSleepDataNew();
 
                             manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);
                         }
@@ -983,10 +990,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     }
                     else if (COMMAND.contains("setslptm")) //After setting the sleep time to band
                     {
-                        //To get the fiemware version
-                        //commandToBLE("fw");
 
-                        commandToBLE(MyConstant.CLEAR_SLEEP);
+                          commandToBLE(MyConstant.CLEAR_SLEEP);
                     }
                     else if (COMMAND.contains(MyConstant.CLEAR_SLEEP)) // After clearing the sleep data
                     {
@@ -1264,6 +1269,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 if (resultCode == Activity.RESULT_OK)
                 {
                     MyUtil.showToast(context, "Bluetooth has turned on ");
+                    oneTimeDialogToConnect(context);
                 }
                 else
                 {
@@ -1511,7 +1517,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         return str;
     }
 */
-    public void oneTimeDialogToConnect(Context context)
+    public void oneTimeDialogToConnect(final Context context)
     {
 
         final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
@@ -1521,6 +1527,42 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         // Setting Dialog Message
         alertDialog.setMessage("You have to connect mobile to band to get data.");
+
+        // Setting Icon to Dialog
+        alertDialog.setIcon(R.mipmap.ic_alert);
+
+        // Setting Positive "Yes" Button
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                alertDialog.dismiss();
+
+
+                //If sleep time is not set under My Profile
+
+                if (MySharedPreference.getInstance().getSleepStartTime(context).isEmpty()  && MySharedPreference.getInstance().getSleepEndTime(context).isEmpty())
+                {
+                    oneTimeDialogToSetSleepTime(context);
+                }
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
+
+    public void oneTimeDialogToSetSleepTime(Context context)
+    {
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Set Sleep Time Alert");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("You have to set sleep time under My Profile to get proper sleep time.");
 
         // Setting Icon to Dialog
         alertDialog.setIcon(R.mipmap.ic_alert);

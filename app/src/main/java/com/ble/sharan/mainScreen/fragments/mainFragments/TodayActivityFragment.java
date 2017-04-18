@@ -23,8 +23,6 @@ import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,6 +84,11 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //            autoRefreshTimer = new AutoRefreshTimer(50000, 40000);
 
             autoRefreshTimer = new AutoRefreshTimer(time, 300000);
+
+            /*ManupulateSleepDataNew manupulateSleepdata = new ManupulateSleepDataNew();
+
+            manupulateSleepdata.gettingSleepData(context,myDatabase);*/
+
         }
 
         return view;
@@ -129,6 +132,8 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
                 MyUtil.showToast(context,"Please wait... data is refreshing.");
 
                 onRefresh();
+
+
 
                 break;
 
@@ -218,14 +223,14 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //          myDatabase.addStepData(new BeanRecords("05-01-2017", "2005"));
 
 
-        List<BeanRecords> list = myDatabase.getAllStepRecords(context);
+   //     List<BeanRecords> list = myDatabase.getAllStepRecords(context);
 
-        for (int i = 0; i < list.size(); i++)
-        {
-//            Log.e(TAG, "Ballidaku----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps()+ "----" + list.get(i).getAccess_token());
-
-            // myDatabase.deleteContact(list.get(i));
-        }
+//        for (int i = 0; i < list.size(); i++)
+//        {
+////            Log.e(TAG, "Ballidaku----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps()+ "----" + list.get(i).getAccess_token());
+//
+//            // myDatabase.deleteContact(list.get(i));
+//        }
 
 
 //        DecimalFormat formatter = new DecimalFormat("#,###,###");
@@ -275,7 +280,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         txtv_sleepHour.setText(sleepTime);
 
-        Log.e(TAG,"sleepTime------"+sleepTime);
+       // Log.e(TAG,"sleepTime------"+sleepTime);
 
 
         txtv_sleepHourToGo.setText(myUtil.sleepHrToRemainingHr(context, sleepTime));
@@ -469,6 +474,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
             {
                 onRefresh();
+                autoRefreshTimer.cancel();
                 autoRefreshTimer.start();
             }
             else

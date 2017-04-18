@@ -303,6 +303,34 @@ public class MySharedPreference
         editor.apply();
     }
 
+    public void saveSleepStartTime(Context context, String time)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.START_SLEEP_TIME, time);
+        editor.apply();
+    }
+
+    public void saveSleepEndTime(Context context, String time)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putString(MyConstant.END_SLEEP_TIME, time);
+        editor.apply();
+    }
+
+    public String getSleepStartTime(Context context)
+    {
+        return getPreference(context).getString(MyConstant.START_SLEEP_TIME, "");
+    }
+
+    public String getSleepEndTime(Context context)
+    {
+        return getPreference(context).getString(MyConstant.END_SLEEP_TIME, "");
+    }
+
+
+
+
+
     public String getPhoto(Context context)
     {
         return getPreference(context).getString(MyConstant.PHOTO, "");

@@ -366,7 +366,7 @@ public class MyUtil
             long millis = myDatabase.getTodaySleepTime(context);
             SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
 
-            int Hours = (int)((millis / (1000*60*60)) % 24);
+            int Hours = (int) ((millis / (1000 * 60 * 60)) % 24);
             int Mins = (int) (millis / (1000 * 60)) % 60;
 
             String diff = Hours + ":" + Mins; // updated value every1 second
@@ -436,6 +436,37 @@ public class MyUtil
         }
     }
 
+    public String getDifferenceBetweenTwoTimes(String s, String s1)
+    {
+        Date startDate = null;
+        Date endDate = null;
+
+        try
+        {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+            startDate = simpleDateFormat.parse(s);
+
+            endDate = simpleDateFormat.parse(s1);
+
+
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        long difference = endDate.getTime() - startDate.getTime();
+
+        if (difference > 0)
+        {
+            String[] a = convertMillisToHrMins(difference).split(":");
+            return a[0] + " Hour : " + a[1] + " Min";
+        }
+        else
+        {
+            return "00 Hour : 00 Min";
+        }
+    }
+
 
     public String convertMillisToHrMins(long millis)
     {
@@ -445,7 +476,7 @@ public class MyUtil
 //            Log.e(TAG,"millis        "+millis);
             SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
 
-            int Hours = (int)((millis / (1000*60*60)) % 24);
+            int Hours = (int) ((millis / (1000 * 60 * 60)) % 24);
             int Mins = (int) (millis / (1000 * 60)) % 60;
 
             String diff = Hours + ":" + Mins;
@@ -609,11 +640,13 @@ public class MyUtil
     public void hide_keyboard2(final View view)
     {
 
-        view.postDelayed(new Runnable() {
+        view.postDelayed(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                 imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
             }
         }, 1);
@@ -662,7 +695,7 @@ public class MyUtil
 
     public void showCircularImageWithPicasso(Context context, ImageView imageView, String url)
     {
-        if (url.trim().isEmpty() || url.equals("null") )
+        if (url.trim().isEmpty() || url.equals("null"))
         {
             Picasso.with(context)
                    .load("abc")

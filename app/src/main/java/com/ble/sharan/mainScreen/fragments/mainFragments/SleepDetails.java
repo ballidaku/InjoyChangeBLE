@@ -11,8 +11,12 @@ import android.widget.ListView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.SleepDetailsAdapter;
+import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by brst-pc93 on 4/13/17.
@@ -45,9 +49,24 @@ public class SleepDetails  extends Fragment
 
             sleepData=this.getArguments().getString(MyConstant.SLEEP);
 
-            Log.e(TAG, "SLEEP DATA "+sleepData);
+            String date=this.getArguments().getString(MyConstant.DATE);
+
+            Log.e(TAG, "SLEEP DATA "+sleepData+"  Date "+date);
 
             setUpIds();
+
+
+            SimpleDateFormat inputFormat=new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat outputFormat=new SimpleDateFormat("dd MMM yyyy");
+
+
+            try
+            {
+                ((MainActivityNew) getActivity()).setTitleHeader(outputFormat.format(inputFormat.parse(date)));
+            } catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
 
 
             setData();
