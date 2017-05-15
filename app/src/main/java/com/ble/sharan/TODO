@@ -1,0 +1,48 @@
+
+//**********************
+//****Fabric crashlytics
+//**********************
+
+When i remove crashlytics, i comment in following classes
+
+1. In build.gradle (Module:app)
+
+    apply plugin: 'io.fabric'
+
+    repositories
+     {
+        maven { url 'https://maven.fabric.io/public' }
+     }
+
+    dependencies
+    {
+          compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar')
+          {
+                transitive = true;
+          }
+    }
+
+2. In build.gradle(Project)
+
+    buildscript
+    {
+      repositories
+      {
+        maven { url 'https://maven.fabric.io/public' }
+      }
+
+      dependencies
+      {
+        classpath 'io.fabric.tools:gradle:1.21.6'
+      }
+    }
+
+3. In MyApplication class
+
+    Fabric.with(this, new Crashlytics());
+
+4. In AndroidManifest.xml file
+
+     <meta-data
+                 android:name="io.fabric.ApiKey"
+                 android:value="afb4e68c89e13ed9bcb7388239800bf661b8499a" />

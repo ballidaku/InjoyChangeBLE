@@ -62,7 +62,7 @@
         android:textStyle="bold"/>
 
 
-    <TextView
+  <!--  <TextView
         android:id="@+id/txtv_instruction"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -72,7 +72,20 @@
         android:scrollbars="vertical"
         android:text="*  Make sure the band battery is not going to die.\n\n*  Disconnect connection with band if connected. \n\n*  Press the Select Device button from below.    \n\n*  Then popup of buetooth devices appear.     \n\n*  Select the device which shows name InjoyHealth.\n\n*  After few seconds, it start updating the band.   \n\n*  Do not press the back button while updating. \n\n*  If connection disconnect while updating : \n       *  If band showing OTA. \n       *  Press the Select Device button.\n       *  Then select CH_OTA_ from popup. \n       *  After few seconds band starts updating.\n\n*  After successfully update, Done button shown.\n\n*  Press Done button to go back."
         android:textSize="14sp"
+        android:textStyle="bold"/>-->
+
+    <TextView
+        android:id="@+id/txtv_instruction"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:scrollbars="vertical"
+        android:text="1)  Make sure Acti-Vate Band is charged.\n\n2)  Disconnect Band from mobile device. \n\n3)  Press the &quot;Select Device&quot; button below.    \n\n    - Popup of Bluetooth device will appear.     \n\n4)  Ensure your device is nearest to your mobile device and select the &quot;InjoyHealth&quot; device.\n\n    - In a few seconds the Band will begin updating.   \n\n    - Do not touch buttons on Band during updating. \n\n5)  Press &quot;Done&quot; button after successful update \n\n    Note : \n\n - If Band becomes disconnected during updating:\n\n    - Press &quot;Select Device&quot; button again. \n\n    - Select CH_OTA_ popup.\n\n    - Band should restart updating."
+        android:textSize="14sp"
         android:textStyle="bold"/>
+
 
     <no.nordicsemi.android.nrftoolbox.widget.TrebuchetTextView
         android:id="@+id/device_name"

@@ -80,7 +80,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             myDatabase = new MyDatabase(getActivity());
 
 
-            int time=10*60*1000;
+            int time = 10 * 60 * 1000;
 //            autoRefreshTimer = new AutoRefreshTimer(50000, 40000);
 
             autoRefreshTimer = new AutoRefreshTimer(time, 300000);
@@ -129,10 +129,9 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
             case R.id.linearLayout_refresh:
 
-                MyUtil.showToast(context,"Please wait... data is refreshing.");
+                MyUtil.showToast(context, "Please wait... data is refreshing.");
 
                 onRefresh();
-
 
 
                 break;
@@ -165,10 +164,10 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     public void onResume()
     {
         super.onResume();
-       // Log.e(TAG, "onResume");
+        // Log.e(TAG, "onResume");
 
         // onRefresh get the previous Count
-        calculate(((MainActivityNew) context).stepsTaken,false);
+        calculate(((MainActivityNew) context).stepsTaken, false);
 
         bleStatus(((MainActivityNew) context).BLE_STATUS);
 
@@ -195,7 +194,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     //**********************************************************************************************
 
 
-    public void calculate(int data,boolean wantToUpdate)
+    public void calculate(int data, boolean wantToUpdate)
     {
         int steps = 0;
         int stepsFromBand = data;
@@ -207,11 +206,11 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         if (stepsFromBand > 0)
         {
             steps = stepsFromBand;
-            myDatabase.addStepData(context,new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
+            myDatabase.addStepData(context, new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
         }
         else if (myDatabase.getTodaySteps(context) == 0)
         {
-            myDatabase.addStepData(context,new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
+            myDatabase.addStepData(context, new BeanRecords(myUtil.getTodaydate(), String.valueOf(stepsFromBand)));
             steps = myDatabase.getTodaySteps(context);
         }
         else
@@ -223,13 +222,13 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //          myDatabase.addStepData(new BeanRecords("05-01-2017", "2005"));
 
 
-   //     List<BeanRecords> list = myDatabase.getAllStepRecords(context);
+        //     List<BeanRecords> list = myDatabase.getAllStepRecords(context);
 
 //        for (int i = 0; i < list.size(); i++)
 //        {
 ////            Log.e(TAG, "Ballidaku----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps()+ "----" + list.get(i).getAccess_token());
 //
-//            // myDatabase.deleteContact(list.get(i));
+//            // myDatabase.deleteContact(list.g///et(i));
 //        }
 
 
@@ -250,11 +249,13 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         txtv_calories.setText(todayCalories);
 
 //        String remainingCalories=String.valueOf(Math.round(Double.parseDouble(myUtil.stepsToRemainingCalories(context, steps))));
-        String remainingCalories=myUtil.stepsToRemainingCalories(context, steps);
+        String remainingCalories = myUtil.stepsToRemainingCalories(context, steps);
 
         txtv_caloriesToGo.setText(remainingCalories);
 
         txtv_milesKm.setText(todayMilesCovered = myUtil.stepsToDistance(context, steps));
+
+        Log.e(TAG, "Total Miles Activity " + todayMilesCovered);
 
         txtv_milesKmToGo.setText(myUtil.stepsToRemainingDistance(context, steps));
 
@@ -262,7 +263,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         refreshSleepTextView();
 
 
-        if(wantToUpdate && myUtil.checkConnection())
+        if (wantToUpdate && myUtil.checkConnection())
         {
 //            SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
             POST_DATA_TO_SERVER_RETROFIT(steps, todayCalories, todayMilesCovered);
@@ -276,11 +277,11 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //        txtv_sleepHour.setText(sleepTime());
 
 
-        String sleepTime = myUtil.getSleepHr(context,myDatabase);
+        String sleepTime = myUtil.getSleepHr(context, myDatabase);
 
         txtv_sleepHour.setText(sleepTime);
 
-       // Log.e(TAG,"sleepTime------"+sleepTime);
+        // Log.e(TAG,"sleepTime------"+sleepTime);
 
 
         txtv_sleepHourToGo.setText(myUtil.sleepHrToRemainingHr(context, sleepTime));
@@ -320,14 +321,11 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     //**********************************************************************************************
 
 
-
-
-
     public void bleStatus(String BLE_STATUS)
     {
         // String deviceName = ((MainActivityNew) context).deviceName;
 
-        if(isAdded())
+        if (isAdded())
         {
 
             if (BLE_STATUS.equals(MyConstant.CONNECTING))
@@ -348,16 +346,19 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
                 linearLayout_refresh.setEnabled(true);
 
 
-                if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
-                {
-                    autoRefreshTimer.start();
-                }
+//                if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
+//                {
+                autoRefreshTimer.cancel();
+                autoRefreshTimer.start();
+//                }
             }
             else if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
             {
                 txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
                 txtv_connect_disconnect.setText("Connect");
                 linearLayout_refresh.setEnabled(false);
+
+                autoRefreshTimer.cancel();
             }
         }
     }
@@ -410,28 +411,28 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         String todaySteps = String.valueOf(steps);
 
-        String[] spltm = myUtil.getSleepHr(context,myDatabase).split(":");
+        String[] spltm = myUtil.getSleepHr(context, myDatabase).split(":");
 
-        String todaySleepTime=spltm[0]+"h:"+spltm[1]+"m";
+        String todaySleepTime = spltm[0] + "h:" + spltm[1] + "m";
 
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<UploadDataModel> call = apiService.postData(todayDate,todaySteps,calories,todaySleepTime,todayMilesCovered,MySharedPreference.getInstance().getUID(context));
+        Call<UploadDataModel> call = apiService.postData(todayDate, todaySteps, calories, todaySleepTime, todayMilesCovered, MySharedPreference.getInstance().getUID(context));
 
         call.enqueue(new Callback<UploadDataModel>()
         {
             @Override
             public void onResponse(Call<UploadDataModel> call, Response<UploadDataModel> response)
             {
-               // Log.e(TAG, "Response----"+response.body());
+                // Log.e(TAG, "Response----"+response.body());
 
                 UploadDataModel uploadDataModel = response.body();
 
-                if(uploadDataModel.getStatus().equals("200"))
+                if (uploadDataModel.getStatus().equals("200"))
                 {
 
-                  //  Log.e(TAG,"Upload Response ---"+uploadDataModel.getData());
+                    //  Log.e(TAG,"Upload Response ---"+uploadDataModel.getData());
                 }
             }
 
@@ -444,8 +445,6 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             }
         });
     }
-
-
 
 
     //**********************************************************************************************
@@ -470,7 +469,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         @Override
         public void onFinish()
         {
-            Log.e("BLE STATUS",""+((MainActivityNew) context).BLE_STATUS);
+            Log.e("BLE STATUS", "" + ((MainActivityNew) context).BLE_STATUS);
             if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
             {
                 onRefresh();

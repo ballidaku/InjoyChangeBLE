@@ -262,6 +262,9 @@ public class MyUartService extends Service
             }
         }
 
+
+       // Log.e(TAG," previous address "+mBluetoothDeviceAddress+"  current address "+address );
+
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null)
         {
@@ -297,7 +300,6 @@ public class MyUartService extends Service
             return;
         }
         mBluetoothGatt.disconnect();
-        // mBluetoothGatt.close();
     }
 
     /**

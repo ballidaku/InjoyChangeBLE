@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,6 +65,8 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
     KeyListener edtv_heightListener;
     KeyListener edtv_weightListener;
     KeyListener edtv_strideListener;
+
+    CardView cardviewSleepModule;
 
 
     Drawable RIGHT_ICON_GREEN;
@@ -169,6 +172,11 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
         edtv_weight = (EditText) view.findViewById(R.id.edtv_weight);
         edtv_weightListener = edtv_weight.getKeyListener();
         edtv_weight.setKeyListener(null);
+
+
+        cardviewSleepModule=(CardView)view.findViewById(R.id.cardviewSleepModule);
+        // This  functionality is stopped by client yet
+        cardviewSleepModule.setVisibility(View.GONE);
 
 
         (linearLayout_update = (LinearLayout) view.findViewById(R.id.linearLayout_update)).setOnClickListener(this);

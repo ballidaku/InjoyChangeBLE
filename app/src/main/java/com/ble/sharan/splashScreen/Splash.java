@@ -21,18 +21,10 @@ public class Splash extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-
         context=this;
 
 
-        /*GeometricProgressView progressView15 = (GeometricProgressView) findViewById(R.id.progressView15);
-        progressView15.setType(GeometricProgressView.TYPE.KITE);
-        progressView15.setFigurePaddingInDp(1);
-        progressView15.setNumberOfAngles(30);*/
-
-
         c.start();
-
     }
 
     CountDownTimer c = new CountDownTimer(2000, 1000)
@@ -62,9 +54,15 @@ public class Splash extends AppCompatActivity
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
                 finish();
             }
-
-
-
         }
     };
+
+
+
+
+
+
+
+
+
 }

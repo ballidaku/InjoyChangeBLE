@@ -3,6 +3,7 @@ package com.ble.sharan.mainScreen.fragments.mainFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class Overall extends Fragment
     }
 
     long totalSteps = 0;
+    double totalMiles =0.0f;
 
 
     public void updateUI()
@@ -87,12 +89,14 @@ public class Overall extends Fragment
         List<BeanRecords> list = myDatabase.getAllStepRecords(context);
 
         totalSteps = 0;
+        totalMiles =0.0f;
 
         for (int i = 0; i < list.size(); i++)
         {
 //            Log.e("Data", "----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps());
 
             totalSteps += Long.parseLong(list.get(i).getSteps());
+            totalMiles += Double.parseDouble(myUtil.stepsToDistance(context, Integer.parseInt(list.get(i).getSteps())));
         }
 
         DecimalFormat formatter = new DecimalFormat("#,###,###");
@@ -102,8 +106,15 @@ public class Overall extends Fragment
         txtv_totalSteps.setText(yourFormattedString);
 
 
+
 //        txtv_totalKm.setText(myUtil.stepsToDistance(context, (int) totalSteps));
-        txtv_totalKm.setText(stepsToDistance((int) totalSteps));
+
+        // Issue comming of mismatch miles due to round off
+        //txtv_totalKm.setText(stepsToDistance((int) totalSteps));
+
+        txtv_totalKm.setText(String.valueOf(totalMiles));
+
+        Log.e(TAG,"Total Miles Overall "+ totalMiles);
 
 
         txtv_totalCalories.setText(String.valueOf(Math.round(Double.parseDouble(myUtil.stepsToCalories(context, (int) totalSteps)))));

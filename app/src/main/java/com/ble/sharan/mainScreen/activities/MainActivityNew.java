@@ -28,7 +28,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ble.sharan.MusicPlayer;
 import com.ble.sharan.MyUartService;
 import com.ble.sharan.R;
 import com.ble.sharan.loginScreen.LoginActivity;
@@ -49,7 +48,7 @@ import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
 import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.BleResponseInterface;
 import com.ble.sharan.myUtilities.GetStepsData;
-import com.ble.sharan.myUtilities.ManupulateSleepDataNew;
+import com.ble.sharan.myUtilities.ManupulateSleepdata;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyDialogs;
@@ -128,7 +127,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     View view_challenge;
     View view_data;
     View view_myinfo;
-    View view_alarm;
+    View view_alarm ;
 
 
     ImageView imgv_challenge;
@@ -772,6 +771,17 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 BLE_STATUS = MyConstant.CONNECTED;
 
+            //**********************************************************************************
+                // In case if band is connected in background
+                reconnectTimer.cancel();
+
+
+                if (myDialogs.dialog.isShowing())
+                {
+                    myDialogs.dialog.dismiss();
+                }
+            //**********************************************************************************
+
                 if (fragment instanceof Today)
                 {
                     ((Today) fragment).bleStatus(BLE_STATUS);
@@ -861,15 +871,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     // IN MUSIC CASE, TO PLAY MUSIC
                     if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PLAY) || new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PAUSE))
                     {
-                        MusicPlayer.getInstance().playPause(context);
+                        //MusicPlayer.getInstance().playPause(context);
                     }
                     else if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PREVIOUS))
                     {
-                        MusicPlayer.getInstance().previous(context);
+                        //MusicPlayer.getInstance().previous(context);
                     }
                     else if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_NEXT))
                     {
-                        MusicPlayer.getInstance().next(context);
+                        //MusicPlayer.getInstance().next(context);
                     }
                     else if (COMMAND.contains("dt"))
                     {
@@ -878,6 +888,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                         {
                             //TODO
                             setHeightWeightStrideDataToBLE();
+                            dateCommandresposeCount = 0;
                         }
                     }
                     else if (COMMAND.contains("b") && COMMAND.length() != 2)
@@ -897,14 +908,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                             Log.e("Total Sleep String", "" + sleepData);
                             // TestingSleep2(sleepData);
 
-                            /*ManupulateSleepdata manupulateSleepdata = new ManupulateSleepdata();
-
-                            manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);*/
-
-
-                            ManupulateSleepDataNew manupulateSleepdata = new ManupulateSleepDataNew();
+                            ManupulateSleepdata manupulateSleepdata = new ManupulateSleepdata();
 
                             manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);
+
+                            // This functionality is stopped by client
+
+                           /* ManupulateSleepDataNew manupulateSleepdata = new ManupulateSleepDataNew();
+
+                            manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);*/
                         }
                     }
                     else if (COMMAND.equals(MyConstant.GET_STEPS))// After getting the steps
@@ -939,8 +951,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                                         shownStepsNotification = false;
                                         myUtil.vibrate(context);
                                         myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
-                                                "You Hit Your Steps Goal for Today : )\n" +
-                                                "You Totally Rock!", 1);
+                                                  "You Hit Your Steps Goal for Today : )\n" +
+                                                  "You Totally Rock!", 1);
                                     }
 
                                     double Calories = myUtil.stepsToCaloriesFormula(context, stepsTaken);
@@ -953,8 +965,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                                         shownCaloriesNotification = false;
                                         myUtil.vibrate(context);
                                         myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
-                                                "You Hit Your Calories Goal for Today : )\n" +
-                                                "You're Amazing!", 2);
+                                                  "You Hit Your Calories Goal for Today : )\n" +
+                                                  "You're Amazing!", 2);
                                     }
 
 
@@ -967,8 +979,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                                         shownDistanceNotification = false;
                                         myUtil.vibrate(context);
                                         myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
-                                                "You Hit Your Miles Goal for Today : )\n" +
-                                                "You're Incredible!", 3);
+                                                  "You Hit Your Miles Goal for Today : )\n" +
+                                                  "You're Incredible!", 3);
                                     }
 
 
@@ -991,7 +1003,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                     else if (COMMAND.contains("setslptm")) //After setting the sleep time to band
                     {
 
-                          commandToBLE(MyConstant.CLEAR_SLEEP);
+                        commandToBLE(MyConstant.CLEAR_SLEEP);
                     }
                     else if (COMMAND.contains(MyConstant.CLEAR_SLEEP)) // After clearing the sleep data
                     {
@@ -1051,7 +1063,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
 
 
-            // Log.e("Device Address ", "--" + deviceAddress);
+             Log.e("Device Address on Item select  address", "--" + deviceAddress);
             if (!deviceAddress.isEmpty() && !deviceName.isEmpty())
             {
                 MySharedPreference.getInstance().saveDeviceAddress(context, deviceAddress);
@@ -1135,21 +1147,26 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         @Override
         public void onTick(long millisUntilFinished)
         {
-            // this try catch is due to crash in some devices showd in fabric
+            String address = MySharedPreference.getInstance().getDeviceAddress(context).trim();
+
+          //  Log.e(TAG, "Searching..." + millisUntilFinished+"  address  "+address);
+
+            // this try catch is due to crash in some devices showed in fabric
             try
             {
-                String address = MySharedPreference.getInstance().getDeviceAddress(context).trim();
                 if (!address.isEmpty())
                 {
                     mService.connect(address);
                 }
                 //  MyUtil.showToast(context, "Searching...");
-                Log.e(TAG, "Searching...");
+
             } catch (Exception e)
             {
                 e.printStackTrace();
             }
         }
+
+
     }
 
 
@@ -1541,10 +1558,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 //If sleep time is not set under My Profile
 
-                if (MySharedPreference.getInstance().getSleepStartTime(context).isEmpty()  && MySharedPreference.getInstance().getSleepEndTime(context).isEmpty())
+                /*if (MySharedPreference.getInstance().getSleepStartTime(context).isEmpty()  && MySharedPreference.getInstance().getSleepEndTime(context).isEmpty())
                 {
                     oneTimeDialogToSetSleepTime(context);
-                }
+                }*/
             }
         });
 
@@ -1552,7 +1569,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         alertDialog.show();
     }
 
-
+    // This dialog functionality is stopped by client
     public void oneTimeDialogToSetSleepTime(Context context)
     {
 
