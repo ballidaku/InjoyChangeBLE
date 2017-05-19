@@ -112,9 +112,9 @@ public class Overall extends Fragment
         // Issue comming of mismatch miles due to round off
         //txtv_totalKm.setText(stepsToDistance((int) totalSteps));
 
-        txtv_totalKm.setText(String.valueOf(totalMiles));
+        txtv_totalKm.setText(myUtil.twoDigitsAfterDecimalWithoutRoundOff(totalMiles));
 
-        Log.e(TAG,"Total Miles Overall "+ totalMiles);
+        Log.e(TAG,"Total Miles Overall "+ myUtil.twoDigitsAfterDecimalWithoutRoundOff(totalMiles));
 
 
         txtv_totalCalories.setText(String.valueOf(Math.round(Double.parseDouble(myUtil.stepsToCalories(context, (int) totalSteps)))));

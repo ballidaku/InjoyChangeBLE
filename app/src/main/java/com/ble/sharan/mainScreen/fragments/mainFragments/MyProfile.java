@@ -21,6 +21,7 @@ import android.widget.TimePicker;
 
 import com.ble.sharan.R;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
+import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
 
@@ -135,13 +136,14 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
 
         String firmwareVersionFromBand = MySharedPreference.getInstance().getFirmwareVersion(context);
 
-        Log.e("firmwareVersionFromBand", "" + firmwareVersionFromBand);
+        Log.e("firmwareVersionFromBand", " " + firmwareVersionFromBand);
 
         if (firmwareVersionFromBand.isEmpty())
         {
             // linearLayout_update.setVisibility(View.GONE);
         }
-        else if (getVersion(firmwareVersionFromBand) == 32)
+        //else if (getVersion(firmwareVersionFromBand) == 32)
+        else if (firmwareVersionFromBand.equals(MyConstant.LATEST_BAND_VERSION))
         {
             linearLayout_update.setVisibility(View.GONE);
         }

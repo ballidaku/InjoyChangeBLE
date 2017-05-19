@@ -24,6 +24,18 @@ public class Splash extends AppCompatActivity
         context=this;
 
 
+        // this is to check whether app is in background or not, if yes finish the new one
+        if (!isTaskRoot()
+                  && getIntent().hasCategory(Intent.CATEGORY_LAUNCHER)
+                  && getIntent().getAction() != null
+                  && getIntent().getAction().equals(Intent.ACTION_MAIN)) {
+
+            finish();
+            return;
+        }
+
+
+
         c.start();
     }
 

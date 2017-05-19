@@ -7,6 +7,9 @@ package com.ble.sharan.myUtilities;
 public class MyConstant
 {
 
+    public static final String LATEST_BAND_VERSION = "CS11753b32";
+
+
     public static final String MUSIC_PLAY = "mu9990100";
     public static final String MUSIC_PAUSE = "mu9990200";
     public static final String MUSIC_PREVIOUS = "mu9990101";

@@ -89,6 +89,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
             manupulateSleepdata.gettingSleepData(context,myDatabase);*/
 
+
         }
 
         return view;
@@ -440,7 +441,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             public void onFailure(Call<UploadDataModel> call, Throwable t)
             {
                 Log.e(TAG, t.getMessage());
-                MyUtil.showToast(context, "Server side error");
+              //  MyUtil.showToast(context, "Server side error");
 
             }
         });
