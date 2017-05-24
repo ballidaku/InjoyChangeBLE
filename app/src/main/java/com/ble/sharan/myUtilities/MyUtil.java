@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -77,6 +78,11 @@ public class MyUtil
 
         toast.show();
 
+    }
+
+    public static void  myLog(String tag, String message)
+    {
+        Log.e(tag, message);
     }
 
 
@@ -208,7 +214,7 @@ public class MyUtil
         {
             weight = new HeightWeightHelper().kgToLbConverter(weight);
 
-//            Log.e(TAG, "WeightInLBS-----" + weightInDouble);
+//            myLog(TAG, "WeightInLBS-----" + weightInDouble);
         }
 
         double Energy = (weight - 30) * 0.000315 + 0.00495;
@@ -229,7 +235,7 @@ public class MyUtil
 //        {
 //            weight = new HeightWeightHelper().kgToLbConverter(weight);
 //
-////            Log.e(TAG, "WeightInLBS-----" + weightInDouble);
+////            myLog(TAG, "WeightInLBS-----" + weightInDouble);
 //        }
 //
 //        double Energy = (weight - 30) * 0.000315 + 0.00495;
@@ -239,8 +245,8 @@ public class MyUtil
 
         double Calories = stepsToCaloriesFormula(context, steps);
 
-        //  Log.e(TAG, "Calories-----" + Calories);
-//        Log.e(TAG,"Calories-----"+Calories+"-------------"+(int)(Calories));
+        //  myLog(TAG, "Calories-----" + Calories);
+//        myLog(TAG,"Calories-----"+Calories+"-------------"+(int)(Calories));
 
 //        return Calories > 0 ? new DecimalFormat("##").format(Calories) : "" + 0;
 //        return Calories > 0 ? String.valueOf(round3(Calories) ): "" + 0;
@@ -263,7 +269,7 @@ public class MyUtil
 //        {
 //            weight = new HeightWeightHelper().kgToLbConverter(weight);
 //
-////            Log.e(TAG, "WeightInLBS-----" + weightInDouble);
+////            myLog(TAG, "WeightInLBS-----" + weightInDouble);
 //        }
 //
 //        double Energy = (weight - 30) * 0.000315 + 0.00495;
@@ -283,9 +289,9 @@ public class MyUtil
             //MyUtil.showToast(context, "Calories goal completed.");
         }*/
 
-        //  Log.e(TAG, "remainingCalories-----" + remainingCalories);
+        //  myLog(TAG, "remainingCalories-----" + remainingCalories);
 
-//        Log.e(TAG,"remainingCalories-----"+Calories+"-------------"+remainingCalories);
+//        myLog(TAG,"remainingCalories-----"+Calories+"-------------"+remainingCalories);
 
 
 //        return remainingCalories > 0 ? new DecimalFormat("##.##").format(remainingCalories) : "" + 0;
@@ -305,7 +311,7 @@ public class MyUtil
         String strideUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.STRIDE);
 
 
-//        Log.e(TAG,"distance--strideInDouble-----"+strideInDouble);
+//        myLog(TAG,"distance--strideInDouble-----"+strideInDouble);
 
         if (strideUnit.equals(MyConstant.CM))
         {
@@ -335,7 +341,7 @@ public class MyUtil
     {
         double distance = stepsToDistanceFormula(context, steps);
 
-//        Log.e(TAG,"distance-----1-"+distance+"-------------"+twoDigitsAfterDecimalWithoutRoundOff( distance));
+//        myLog(TAG,"distance-----1-"+distance+"-------------"+twoDigitsAfterDecimalWithoutRoundOff( distance));
 
         return distance > 0 ? twoDigitsAfterDecimalWithoutRoundOff(distance) : "" + 0;
     }
@@ -347,7 +353,7 @@ public class MyUtil
 
         double remainingKm = Double.parseDouble(MySharedPreference.getInstance().getDailyMiles(context).trim()) - distance;
 
-//        Log.e(TAG,"distance-----2-"+remainingKm+"-------------"+twoDigitsAfterDecimalWithoutRoundOff( remainingKm));
+//        myLog(TAG,"distance-----2-"+remainingKm+"-------------"+twoDigitsAfterDecimalWithoutRoundOff( remainingKm));
 
         return remainingKm > 0 ? twoDigitsAfterDecimalWithoutRoundOff(remainingKm) : "" + 0;
     }
@@ -371,7 +377,7 @@ public class MyUtil
 
             String diff = Hours + ":" + Mins; // updated value every1 second
 
-//            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+//            myLog("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
 
             sleepTime = myFormat.format(myFormat.parse(diff));
 
@@ -382,7 +388,7 @@ public class MyUtil
 
 
         return sleepTime;
-//        Log.e("Sleep Database",""+myDatabase.getAllSleepData());
+//        myLog("Sleep Database",""+myDatabase.getAllSleepData());
     }
 
 
@@ -403,7 +409,7 @@ public class MyUtil
             startDate = simpleDateFormat.parse(sleepHr);
 
 
-//            Log.e(TAG,"getDailySleep-----"+MySharedPreference.getInstance().getDailySleep(context));
+//            myLog(TAG,"getDailySleep-----"+MySharedPreference.getInstance().getDailySleep(context));
             endDate = simpleDateFormat.parse(MySharedPreference.getInstance().getDailySleep(context)/*.replace(" hours per day", "")*/);
 
 
@@ -415,7 +421,7 @@ public class MyUtil
 
         long difference = endDate.getTime() - startDate.getTime();
 
-        //  Log.e(TAG, "Difference---" + difference);
+        //  myLog(TAG, "Difference---" + difference);
 
         if (difference > 0)
         {
@@ -473,7 +479,7 @@ public class MyUtil
         String time = "";
         try
         {
-//            Log.e(TAG,"millis        "+millis);
+//            myLog(TAG,"millis        "+millis);
             SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
 
             int Hours = (int) ((millis / (1000 * 60 * 60)) % 24);
@@ -855,7 +861,7 @@ public class MyUtil
         try
         {
 
-//            Log.e(TAG, "Input date : " + inputDate);
+//            myLog(TAG, "Input date : " + inputDate);
 
             Date date = format.parse(inputDate);
             Calendar c = Calendar.getInstance();
@@ -864,7 +870,7 @@ public class MyUtil
             c.add(Calendar.DATE, -1);
             inputDate = format.format(c.getTime());
 
-//            Log.e(TAG, "Previous date : " + inputDate);
+//            myLog(TAG, "Previous date : " + inputDate);
 
         } catch (Exception e)
         {

@@ -56,7 +56,7 @@
                     android:id="@+id/view_data"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorBlue"/>
+                    android:background="@color/colorPrimary"/>
 
                 <ImageView
                     android:id="@+id/imgv_data"
@@ -87,7 +87,7 @@
                     android:id="@+id/view_challenge"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorBlue"/>
+                    android:background="@color/colorPrimary"/>
 
                 <ImageView
                     android:id="@+id/imgv_challenge"
@@ -120,7 +120,7 @@
                     android:id="@+id/view_myinfo"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorBlue"/>
+                    android:background="@color/colorPrimary"/>
 
                 <ImageView
                     android:id="@+id/imgv_myinfo"
@@ -152,7 +152,7 @@
                     android:id="@+id/view_alarm"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorBlue"/>
+                    android:background="@color/colorPrimary"/>
 
                 <ImageView
                     android:id="@+id/imgv_alarm"

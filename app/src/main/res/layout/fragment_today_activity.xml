@@ -532,12 +532,21 @@
                     android:layout_gravity="center_vertical"
                     android:src="@mipmap/ic_refresh"/>
 
+
+                <!--<ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/_13sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_refresh_new"/>-->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Refresh"
                     android:textSize="@dimen/_16sdp"
-                    android:textColor="@color/colorBlue"/>
+                    android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
 
@@ -561,6 +570,14 @@
                     android:paddingRight="@dimen/_10sdp"
                     android:src="@mipmap/ic_connect"/>
 
+             <!--   <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="@dimen/_13sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:src="@drawable/ic_connect_new"/>-->
+
 
                 <TextView
                     android:id="@+id/txtv_connect_disconnect"
@@ -568,7 +585,7 @@
                     android:layout_height="wrap_content"
                     android:text="Connect"
                     android:textSize="@dimen/_16sdp"
-                    android:textColor="@color/colorBlue"/>
+                    android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
 

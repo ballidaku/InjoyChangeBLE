@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,7 +148,7 @@ public class DailyInspirationSeeAll extends Fragment
             {
 
                 myUtil.hideProgressDialog();
-                Log.e(TAG, "Response----"+response.body());
+                MyUtil.myLog(TAG, "Response----"+response.body());
 
                 DailyInspirationViewAllModel dailyInspirationViewAllModel = response.body();
 
@@ -160,7 +159,7 @@ public class DailyInspirationSeeAll extends Fragment
 
                    /* for (int i = 0; i < list.size(); i++)
                     {
-                        Log.e(TAG, ""+list.get(i).getImage());
+                        MyUtil.myLog(TAG, ""+list.get(i).getImage());
                     }*/
 
                     setData(list);
@@ -173,7 +172,7 @@ public class DailyInspirationSeeAll extends Fragment
             public void onFailure(Call<DailyInspirationViewAllModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
                 MyUtil.showToast(context, "Server side error");
 
             }

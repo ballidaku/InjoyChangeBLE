@@ -46,3 +46,24 @@ When i remove crashlytics, i comment in following classes
      <meta-data
                  android:name="io.fabric.ApiKey"
                  android:value="afb4e68c89e13ed9bcb7388239800bf661b8499a" />
+
+
+
+ //****************************************
+ //***** Sleep Functionality
+ //****************************************
+
+ There are two classes which i am using
+ 1 ManupulateSleepdata     =======> Now using this
+ 2 ManupulateSleepDataNew  =======> This will be used in new build, because it has advanced feature and its functionality is halted by the mrinal sir.
+
+
+ //**********************************************
+ //***** Classes which are we not using right now
+ //**********************************************
+
+ 1. MyWeekSleepFragment
+ 2. fragment_myweeksleep.xml
+ 3. MyWeekSleepAdapter
+ 4. ViewGraphFragment
+ 5. fragment_view_graph

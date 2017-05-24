@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.text.method.KeyListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,12 +115,12 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
     }
 
 
-    int getVersion(String firmwareVersion)
+   /* int getVersion(String firmwareVersion)
     {
         int length = firmwareVersion.length();
 
         return Integer.parseInt(firmwareVersion.substring(length - 2, length).trim());
-    }
+    }*/
 
 
     @Override
@@ -136,7 +135,7 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
 
         String firmwareVersionFromBand = MySharedPreference.getInstance().getFirmwareVersion(context);
 
-        Log.e("firmwareVersionFromBand", " " + firmwareVersionFromBand);
+        MyUtil.myLog("firmwareVersionFromBand", " " + firmwareVersionFromBand);
 
         if (firmwareVersionFromBand.isEmpty())
         {
@@ -304,7 +303,7 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
             if (resultCode == Activity.RESULT_OK)
             {
                 boolean result = data.getBooleanExtra("result", false);
-                Log.e(TAG, "Result    " + result);
+                MyUtil.myLog(TAG, "Result    " + result);
 
                 if (result)
                 {
@@ -385,7 +384,7 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
         }
 
 
-        Log.e(TAG, " showTime " + showTime + " alarmTime " + alarmTime);
+        MyUtil.myLog(TAG, " showTime " + showTime + " alarmTime " + alarmTime);
     }
 
 

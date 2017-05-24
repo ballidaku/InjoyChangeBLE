@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -48,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         context = this;
 
 
-//       Log.e("CONNECTION","------------"+ myUtil.checkConnection());
+//       MyUtil.myLog("CONNECTION","------------"+ myUtil.checkConnection());
 
 
         setUpIds();
@@ -171,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             {
 
 
-                Log.e("OUTPUT", "" + output);
+                MyUtil.myLog("OUTPUT", "" + output);
 
                 try
                 {
@@ -266,7 +265,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 } catch (Exception ex)
                 {
-                    Log.e("Exception is", ex.toString());
+                    MyUtil.myLog("Exception is", ex.toString());
                 }
 
             }
@@ -358,15 +357,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Call<LoginModel> call, retrofit2.Response<LoginModel> response)
             {
-                Log.e(TAG, "Response----" + response.isSuccessful());
-                Log.e(TAG, "Response----" + response.message());
-                Log.e(TAG, "Response----" + response.raw());
+                MyUtil.myLog(TAG, "Response----" + response.isSuccessful());
+                MyUtil.myLog(TAG, "Response----" + response.message());
+                MyUtil.myLog(TAG, "Response----" + response.raw());
 
                 *//*LoginModel loginModel = response.body();
 
                 if (loginModel.getStatus().equals("200"))
                 {
-                    Log.e(TAG, "NAME----" + loginModel.getProfile().getFullName());
+                    MyUtil.myLog(TAG, "NAME----" + loginModel.getProfile().getFullName());
                 }*//*
             }
 

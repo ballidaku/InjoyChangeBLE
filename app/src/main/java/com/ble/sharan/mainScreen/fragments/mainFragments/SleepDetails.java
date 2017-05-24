@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments.mainFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.ble.sharan.adapters.SleepDetailsAdapter;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
+import com.ble.sharan.myUtilities.MyUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,7 +51,7 @@ public class SleepDetails  extends Fragment
 
             String date=this.getArguments().getString(MyConstant.DATE);
 
-            Log.e(TAG, "SLEEP DATA "+sleepData+"  Date "+date);
+            MyUtil.myLog(TAG, "SLEEP DATA "+sleepData+"  Date "+date);
 
             setUpIds();
 

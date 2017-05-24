@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlue"
+        android:background="@color/colorPrimary"
         android:elevation="5dp"
         android:padding="5dp">
 
@@ -27,7 +27,7 @@
                 android:background="@drawable/left_selector_white"
                 android:gravity="center"
                 android:text="Activity"
-                android:textColor="@color/colorBlue"
+                android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 

@@ -84,12 +84,12 @@ public class MyWeekSleepAdapter extends BaseAdapter
         {
 
             long millis = Long.parseLong(list.get(position).get(MyConstant.SLEEP));
-            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+            //SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
 
             int Hours = (int) (millis / (1000 * 60 * 60));
             int Mins = (int) (millis / (1000 * 60)) % 60;
 
-            String diff = Hours + ":" + Mins; // updated value every1 second
+           // String diff = Hours + ":" + Mins; // updated value every1 second
 
             //Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
             txtv_time.setText(""+Hours +" Hrs. "+Mins+" Mins");

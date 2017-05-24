@@ -5,6 +5,8 @@
     <color name="colorAccent">@color/colorWhite</color>
 
 
+
+
     <color name="screen_background">#333</color>
     <color name="display_background">#000</color>
 
@@ -24,6 +26,7 @@
 
     <color name="colorRed">#ff0000</color>
     <color name="colorOrange">#fc802f</color>
+    <color name="colorOrangeDark">#e16b1e</color>
 
 
     <color name="colorYellowNew">#e5bc02</color>

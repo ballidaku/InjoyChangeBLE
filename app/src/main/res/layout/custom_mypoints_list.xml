@@ -13,7 +13,7 @@
         android:scaleType="fitXY"
         android:layout_gravity="center_vertical"
         android:layout_margin="@dimen/_5sdp"
-        android:src="@mipmap/ic_imag1"/>
+        android:src="@mipmap/ic_no_user"/>
 
     <LinearLayout
         android:layout_width="0dp"

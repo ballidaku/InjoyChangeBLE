@@ -190,12 +190,12 @@ public class MyDailyGoal extends Fragment implements TimePickerDialog.OnTimeSetL
                         Drawable[] drawables = editText.getCompoundDrawables();
 
 
-//                    Log.e("Bitmap1", "---" + RIGHT_ICON_GREEN);
-//                    Log.e("Bitmap2", "---" + drawables[2]);
+//                    MyUtil.myLog("Bitmap1", "---" + RIGHT_ICON_GREEN);
+//                    MyUtil.myLog("Bitmap2", "---" + drawables[2]);
 
                         if (RIGHT_ICON_GREEN == drawables[2])
                         {
-//                        Log.e("hello", "Hello");
+//                        MyUtil.myLog("hello", "Hello");
                             UpdateProfile(editText);
                         }
                         else
@@ -329,7 +329,7 @@ public class MyDailyGoal extends Fragment implements TimePickerDialog.OnTimeSetL
         edtv_sleep.setText(String.valueOf(Integer.parseInt(st[0]))+" hours "+String.valueOf(Integer.parseInt(st[1]))+" minutes");
 
 
-       // Log.e(TAG, "Map----" + map);
+       // MyUtil.myLog(TAG, "Map----" + map);
 
 
     }

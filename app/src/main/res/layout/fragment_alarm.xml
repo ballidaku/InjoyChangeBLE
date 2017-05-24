@@ -94,6 +94,10 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
+
+                        <!-- android:drawableTop="@mipmap/ic_uncheck_blue"-->
+
+                        <!-- android:drawableTop="@mipmap/ic_uncheck_blue"-->
                         <EditText
                             android:id="@+id/edtv_first_monday"
                             android:layout_width="wrap_content"

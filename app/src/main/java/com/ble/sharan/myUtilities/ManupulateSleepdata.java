@@ -1,7 +1,6 @@
 package com.ble.sharan.myUtilities;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
@@ -42,7 +41,7 @@ public class ManupulateSleepdata
             {
                 String realData = remaining.substring(10, remaining.length());
 
-                // Log.e(TAG,"Reamining Total String  "+ realData);
+                // MyUtil.myLog(TAG,"Reamining Total String  "+ realData);
 
 
                 String date = "";
@@ -55,26 +54,26 @@ public class ManupulateSleepdata
                 startTime = hTD(realData.substring(6, 8)) + ":" + hTD(realData.substring(8, 10));
 
 
-                //Log.e(TAG, "My Bytes  "+hTD(realData.substring(10, 12))+"    "+hTD(realData.substring(12, 14)));
-                // Log.e(TAG, "My Bytes  "+hTD("010C"));
+                //MyUtil.myLog(TAG, "My Bytes  "+hTD(realData.substring(10, 12))+"    "+hTD(realData.substring(12, 14)));
+                // MyUtil.myLog(TAG, "My Bytes  "+hTD("010C"));
 
 //                totalBytes = Integer.parseInt(realData.substring(10, 12), 16) + Integer.parseInt(realData.substring(12, 14), 16);
                 totalBytes = Integer.parseInt(realData.substring(10, 14), 16);
 
-                // Log.e(TAG,"Date   "+date+"  StartTime  "+startTime+"   totalBytes   "+totalBytes);
+                // MyUtil.myLog(TAG,"Date   "+date+"  StartTime  "+startTime+"   totalBytes   "+totalBytes);
 
                 int last = totalBytes * 2;
                 String remainingLast = realData.substring(14, 14 + last);
 
-                //  Log.e("remainingLast", "" + remainingLast);
+                //  MyUtil.myLog("remainingLast", "" + remainingLast);
 
                 int f = last + 24;
 
-                //Log.e("fffffffffffff", "" + f + "--------" + remaining.substring(0, f));
+                //MyUtil.myLog("fffffffffffff", "" + f + "--------" + remaining.substring(0, f));
 
                 int count = 0;
 
-//                Log.e("Last",""+last);
+//                MyUtil.myLog("Last",""+last);
 
                 for (int i = 0; i < last; i += 2)
                 {
@@ -82,7 +81,7 @@ public class ManupulateSleepdata
 
                     String str = remainingLast.substring(i, i + 2);
 
-                    // Log.e("Inside", "" + count + "---" + str);
+                    // MyUtil.myLog("Inside", "" + count + "---" + str);
 
                     int value = Integer.parseInt(str, 16);
 
@@ -97,15 +96,15 @@ public class ManupulateSleepdata
                     }
                 }
 
-                // Log.e("endTime", endTime);
+                // MyUtil.myLog("endTime", endTime);
 
-//                Log.e("remaining", "" + remaining);
-//                Log.e("String to be cut", remaining.substring(0, f));
+//                MyUtil.myLog("remaining", "" + remaining);
+//                MyUtil.myLog("String to be cut", remaining.substring(0, f));
 
 
                 remaining = remaining.replaceFirst(remaining.substring(0, f), "");
 
-//                Log.e("After cut", remaining);
+//                MyUtil.myLog("After cut", remaining);
 
 
                 try
@@ -117,15 +116,15 @@ public class ManupulateSleepdata
                     long mills = Date2.getTime() - Date1.getTime();
 
 //                    totalTime += mills;
-//                    Log.e("Date1", "" + Date1.getTime());
-//                    Log.e("Date2", "" + Date2.getTime());
+//                    MyUtil.myLog("Date1", "" + Date1.getTime());
+//                    MyUtil.myLog("Date2", "" + Date2.getTime());
 //                    int Hours = (int) (mills / (1000 * 60 * 60));
 //                    int Mins = (int) (mills / (1000 * 60)) % 60;
 
 //                    String diff = Hours + ":" + Mins; // updated value every1 second
 
 
-                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills) + "----StartTime----=" + startTime + "-----EndTime----=" + endTime);
+                    MyUtil.myLog("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills) + "----StartTime----=" + startTime + "-----EndTime----=" + endTime);
 
 
                     boolean isStored = false;
@@ -163,7 +162,7 @@ public class ManupulateSleepdata
             }
         }
 
-        Log.e("List-----", "" + list);
+        MyUtil.myLog("List-----", "" + list);
 
         if (list.size() > 0)
         {
@@ -182,7 +181,7 @@ public class ManupulateSleepdata
                     if (listDate.equals(todayDate))
                     {
                         isSleepRecordAvailable = true;
-//                        Log.e(TAG,"----Date----"+todayDate+"-----"+list.get(i).get(listDate));
+//                        MyUtil.myLog(TAG,"----Date----"+todayDate+"-----"+list.get(i).get(listDate));
                         processingSleeptimeForSetting(list.get(i).get(listDate));
 
                         break;
@@ -201,7 +200,7 @@ public class ManupulateSleepdata
             processingSleeptimeForSetting((long) 0);
         }
 
-       // Log.e("Hello","----BALLIDAKu----");
+       // MyUtil.myLog("Hello","----BALLIDAKu----");
         if (((MainActivityNew)context).fragment instanceof Today)
         {
             ((Today) ((MainActivityNew)context).fragment).sleepTime();
@@ -212,9 +211,9 @@ public class ManupulateSleepdata
     public void processingSleeptimeForSetting(Long millis)
     {
         String time = myUtil.convertMillisToHrMins(millis).replace(":", "");
-//        Log.e(TAG,"----Time----"+time);
+//        MyUtil.myLog(TAG,"----Time----"+time);
         String commandSleepTime = "setslptm" + time;
-        //  Log.e(TAG,"----commandSleepTime----"+time);
+        //  MyUtil.myLog(TAG,"----commandSleepTime----"+time);
         ((MainActivityNew)context).commandToBLE(commandSleepTime);
 
 

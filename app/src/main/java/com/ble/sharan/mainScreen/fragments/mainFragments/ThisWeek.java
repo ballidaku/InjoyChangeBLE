@@ -70,7 +70,9 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
     int currentWeek = 0;
 
-    ArrayList<HashMap<String, String>> listMain=new ArrayList<>();
+    ArrayList<HashMap<String, String>> listMain = new ArrayList<>();
+
+    int index = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -91,10 +93,15 @@ public class ThisWeek extends Fragment implements View.OnClickListener
             currentWeek = currentWeekFinal;
             kinneHafteaTak = currentWeekFinal - 3;
 
-        //    Log.e(TAG, "onCreateView----currentWeek" + currentWeek);
+            //    MyUtil.myLog(TAG, "onCreateView----currentWeek" + currentWeek);
 
 
             setUpIds();
+
+
+            imgv_leftArrow.setVisibility(View.VISIBLE);
+            imgv_rightArrow.setVisibility(View.INVISIBLE);
+            newRefresh();
 
 
 
@@ -113,15 +120,16 @@ public class ThisWeek extends Fragment implements View.OnClickListener
         ((MainActivityNew) getActivity()).setTitleHeader("This Week");
 
 
-        imgv_leftArrow.setVisibility(View.VISIBLE);
-        imgv_rightArrow.setVisibility(View.INVISIBLE);
+//        imgv_leftArrow.setVisibility(View.VISIBLE);
+//        imgv_rightArrow.setVisibility(View.INVISIBLE);
 
-        refresh();
+        //  refresh();
+
+
     }
 
     private void setUpIds()
     {
-
 
 
         cardView_noResult = (CardView) view.findViewById(R.id.cardView_noResult);
@@ -141,7 +149,6 @@ public class ThisWeek extends Fragment implements View.OnClickListener
         imgv_rightArrow.setOnClickListener(this);
 
 
-
         listView_weekRecords.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -150,7 +157,7 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
 //                MyUtil.showToast(context,myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)));
 
-                if(!myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)).isEmpty())
+                if (!myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)).isEmpty())
                 {
                     SleepDetails sleepDetails = new SleepDetails();
                     Bundle bundle = new Bundle();
@@ -171,16 +178,13 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 //        getStartEndOFWeek(calendar.get(Calendar.WEEK_OF_YEAR), calendar.get(Calendar.YEAR));
 
 
-
-
-
     }
 
     private void updateUI(ArrayList<HashMap<String, String>> list)
     {
         // List<BeanRecords> list = myDatabase.getAllStepRecords(context);
 
-        listMain=list;
+        listMain = list;
 
         if (list.size() > 0)
         {
@@ -234,13 +238,13 @@ public class ThisWeek extends Fragment implements View.OnClickListener
             case R.id.imgv_leftArrow:
 
 
-                if ((kinneHafteaTak < currentWeek) && (currentWeek < currentWeekFinal || currentWeek == currentWeekFinal))
+          /*      if ((kinneHafteaTak < currentWeek) && (currentWeek < currentWeekFinal || currentWeek == currentWeekFinal))
                 {
 
-                   // txtv_heading.setText("Previous Week");
+                    // txtv_heading.setText("Previous Week");
                     imgv_rightArrow.setVisibility(View.VISIBLE);
 
-                    if(kinneHafteaTak ==  currentWeek-1)
+                    if (kinneHafteaTak == currentWeek - 1)
                     {
                         imgv_leftArrow.setVisibility(View.INVISIBLE);
                     }
@@ -252,20 +256,23 @@ public class ThisWeek extends Fragment implements View.OnClickListener
                 else
                 {
                     MyUtil.showToast(context, "No More Data Found.");
-                }
+                }*/
+
+
+                indexWork("L");
 
 
                 break;
 
             case R.id.imgv_rightArrow:
 
-                if (currentWeek < currentWeekFinal)
+              /*  if (currentWeek < currentWeekFinal)
                 {
                     imgv_leftArrow.setVisibility(View.VISIBLE);
-                    if (currentWeek == currentWeekFinal-1)
+                    if (currentWeek == currentWeekFinal - 1)
                     {
                         imgv_rightArrow.setVisibility(View.INVISIBLE);
-                     //   txtv_heading.setText("This Week");
+                        //   txtv_heading.setText("This Week");
                     }
 
                     calendar.add(Calendar.WEEK_OF_YEAR, +1);
@@ -274,10 +281,73 @@ public class ThisWeek extends Fragment implements View.OnClickListener
                 else
                 {
                     MyUtil.showToast(context, "No More Data Found.");
-                }
+                }*/
+
+                indexWork("R");
 
                 break;
         }
+    }
+
+    public void indexWork(String LR)
+    {
+       // MyUtil.myLog(TAG, "INDEX BEFORE " + index);
+
+
+        if (LR.equals("L") && index >= 0 && index <= 2)
+        {
+            index = index + 1;
+            update();
+
+            if (index > 0)
+                imgv_rightArrow.setVisibility(View.VISIBLE);
+            if (index == 3)
+                imgv_leftArrow.setVisibility(View.INVISIBLE);
+
+        }
+        else if (LR.equals("L"))
+        {
+            MyUtil.showToast(context, "No More Data Found.");
+        }
+        else if ( LR.equals("R") && index >= 1 && index <= 3)
+        {
+            index = index - 1;
+            update();
+
+            if (index == 3)
+                imgv_leftArrow.setVisibility(View.INVISIBLE);
+            if (index == 0)
+                imgv_rightArrow.setVisibility(View.INVISIBLE);
+            if (index < 3)
+                imgv_leftArrow.setVisibility(View.VISIBLE);
+        }
+        else if(LR.equals("R"))
+        {
+            MyUtil.showToast(context, "No More Data Found.");
+        }
+
+        checkLeftArrow();
+
+
+      //  MyUtil.myLog(TAG, "INDEX AFTER " + index);
+    }
+
+    public void checkLeftArrow()
+    {
+
+           if( !containsValue[3] && index == 2)
+           {
+               imgv_leftArrow.setVisibility(View.INVISIBLE);
+           }
+           else if( !containsValue[3] && !containsValue[2] && index == 1)
+           {
+               imgv_leftArrow.setVisibility(View.INVISIBLE);
+           }
+           else if( !containsValue[3] && !containsValue[2] && !containsValue[1] && index == 0)
+           {
+               imgv_leftArrow.setVisibility(View.INVISIBLE);
+           }
+
     }
 
 
@@ -288,18 +358,18 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
         int YEAR = calendar.get(Calendar.YEAR);
 
-       // Log.e(TAG, "refresh----currentWeek   " + currentWeek+"   kinneHafteaTak "+kinneHafteaTak);
+        //  MyUtil.myLog(TAG, "refresh----currentWeek   " + currentWeek + "   kinneHafteaTak " + kinneHafteaTak);
 
-        String[] startEndDates= getStartEndOFWeek(currentWeek, YEAR).split(":");
+        String[] startEndDates = getStartEndOFWeek(currentWeek, YEAR).split(":");
 
-//        for (int i = 0; i <startEndDates.length ; i++)
+//        for (int i = 0; i < startEndDates.length; i++)
 //        {
-//            Log.e(TAG, "refresh----startEndDates   " + startEndDates[i]);
+//            MyUtil.myLog(TAG, "refresh----startEndDates   " + startEndDates[i]);
 //        }
 
 
         // Data which we are ghoing to show
-        ArrayList<HashMap<String, String>> finalList=  getDataList(myUtil.getDates(startEndDates[0], startEndDates[1]));
+        ArrayList<HashMap<String, String>> finalList = getDataList(myUtil.getDates(startEndDates[0], startEndDates[1]));
 
 
         SimpleDateFormat input = new SimpleDateFormat("dd-MM-yyyy");
@@ -308,8 +378,9 @@ public class ThisWeek extends Fragment implements View.OnClickListener
         String heading = null;
         try
         {
-            heading =output.format(input.parse(finalList.get(finalList.size()-1).get(MyConstant.DATE)))+" - "+ output.format(input.parse(finalList.get(0).get(MyConstant.DATE)));
-        } catch (ParseException e)
+            heading = output.format(input.parse(finalList.get(finalList.size() - 1).get(MyConstant.DATE))) + " - " + output.format(input.parse(finalList.get(0).get(MyConstant.DATE)));
+        }
+        catch (ParseException e)
         {
             e.printStackTrace();
         }
@@ -319,53 +390,169 @@ public class ThisWeek extends Fragment implements View.OnClickListener
         updateUI(finalList);
 
 
-
-
         //******************************************************************************************
         // if previous week data is not there then we have to hide
         //*****************************************************************************************(
 
-        String[] startEndDatesPreviousWeek= getStartEndOFWeek(currentWeek-1, YEAR).split(":");
+        String[] startEndDatesPreviousWeek = getStartEndOFWeek(currentWeek - 1, YEAR).split(":");
+
+
+        for (int i = 0; i < startEndDatesPreviousWeek.length; i++)
+        {
+            MyUtil.myLog(TAG, "refresh----startEndDatesPreviousWeekDates   " + startEndDatesPreviousWeek[i]);
+        }
 
         // Data which we are ghoing to show
-        ArrayList<HashMap<String, String>> localList=  getDataList(myUtil.getDates(startEndDatesPreviousWeek[0], startEndDatesPreviousWeek[1]));
+        ArrayList<HashMap<String, String>> localList = getDataList(myUtil.getDates(startEndDatesPreviousWeek[0], startEndDatesPreviousWeek[1]));
 
-        boolean containStepsvalue=false;
-        boolean containSleepvalue=false;
+        boolean containStepsvalue = false;
+        boolean containSleepvalue = false;
 
-        for (int i = 0; i <localList.size() ; i++)
+        for (int i = 0; i < localList.size(); i++)
         {
-            if(Integer.parseInt(localList.get(i).get(MyConstant.STEPS))>0)
+            if (Integer.parseInt(localList.get(i).get(MyConstant.STEPS)) > 0)
             {
-                containStepsvalue=true;
+                containStepsvalue = true;
             }
 
 
-            if(Integer.parseInt(localList.get(i).get(MyConstant.SLEEP))>0)
+            if (Integer.parseInt(localList.get(i).get(MyConstant.SLEEP)) > 0)
             {
-                containSleepvalue=true;
+                containSleepvalue = true;
             }
         }
 
-        if(!containStepsvalue && !containSleepvalue)
+        if (!containStepsvalue && !containSleepvalue)
         {
             imgv_leftArrow.setVisibility(View.INVISIBLE);
         }
 
 
         // To  right arrow when we comes back from nested fragment
-
-        if(currentWeek < kinneHafteaTak + 3 )
+        if (currentWeek < kinneHafteaTak + 3)
         {
             imgv_rightArrow.setVisibility(View.VISIBLE);
         }
 
     }
 
+    String[] myHeading = new String[4];
+    boolean[] containsValue = new boolean[4];
+
+    ArrayList<ArrayList<HashMap<String, String>>> mainList = new ArrayList<>();
+
+    // We have to show data of other weeks if we donot have previous week data
+    public void newRefresh()
+    {
+        int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+
+        int YEAR = calendar.get(Calendar.YEAR);
+
+        //MyUtil.myLog(TAG, "refresh----cuMyUtil.myLogWeek   " + currentWeek + "   kinneHafteaTak " + kinneHafteaTak);
+
+
+        for (int i = 0; i <= 3; i++)
+        {
+            String[] startEndDates = getStartEndOFWeek(currentWeek - i, YEAR).split(":");
+
+            /*for (int j = 0; j < startEndDates.length; j++)
+            {
+                MyUtil.myLog(TAG, "refresh----startEndDates   " + startEndDates[j]);
+            }*/
+
+            // Data which we are going to show
+            ArrayList<HashMap<String, String>> finalList = getDataList(myUtil.getDates(startEndDates[0], startEndDates[1]));
+
+
+            mainList.add(finalList);
+            //MyUtil.myLog(TAG,"Heading  "+getHeading(finalList));
+
+            myHeading[i] = getHeading(finalList);
+
+        }
+
+
+        //******************************************************************************************
+        // if previous week data is not there then we have to hide
+        //*****************************************************************************************(
+
+       /* String[] startEndDatesPreviousWeek = getStartEndOFWeek(currentWeek - 1, YEAR).split(":");
+
+
+        for (int i = 0; i < startEndDatesPreviousWeek.length; i++)
+        {
+            MyUtil.myLog(TAG, "refresh----startEndDatesPreviousWeekDates   " + startEndDatesPreviousWeek[i]);
+        }
+
+        // Data which we are ghoing to show
+        ArrayList<HashMap<String, String>> localList = getDataList(myUtil.getDates(startEndDatesPreviousWeek[0], startEndDatesPreviousWeek[1]));*/
+
+
+        for (int i = 0; i < mainList.size(); i++)
+        {
+            boolean containValue = false;
+
+            for (int j = 0; j < mainList.get(i).size(); j++)
+            {
+                if (Integer.parseInt(mainList.get(i).get(j).get(MyConstant.STEPS)) > 0 || Integer.parseInt(mainList.get(i).get(j).get(MyConstant.SLEEP)) > 0)
+                {
+                    containValue = true;
+                }
+
+            }
+
+           // MyUtil.myLog(TAG,"containValue  "+containValue);
+            containsValue[i] = containValue;
+
+        }
+
+        update();
+
+       checkLeftArrow();
+
+        /*if(!containStepsvalue && !containSleepvalue)
+        {
+            imgv_leftArrow.setVisibility(View.INVISIBLE);
+        }*/
+
+
+        // To  right arrow when we comes back from nested fragment
+        /*if (currentWeek < kinneHafteaTak + 3)
+        {
+            imgv_rightArrow.setVisibility(View.VISIBLE);
+        }*/
+    }
+
+    private void update()
+    {
+        txtv_heading.setText(myHeading[index]);
+
+        updateUI(mainList.get(index));
+    }
+
+    private String getHeading(ArrayList<HashMap<String, String>> finalList)
+    {
+
+        SimpleDateFormat input = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat output = new SimpleDateFormat("MM/dd");
+
+        String heading = null;
+        try
+        {
+            heading = output.format(input.parse(finalList.get(finalList.size() - 1).get(MyConstant.DATE))) + " - " + output.format(input.parse(finalList.get(0).get(MyConstant.DATE)));
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        return heading;
+    }
+
 
     //**********************************************************************************************
 
-    String  getStartEndOFWeek(int enterWeek, int enterYear)
+    String getStartEndOFWeek(int enterWeek, int enterYear)
     {
 
         Calendar calendar = Calendar.getInstance(Locale.GERMANY);
@@ -384,17 +571,17 @@ public class ThisWeek extends Fragment implements View.OnClickListener
         // System.out.println("...date..." + endDaString);
 
 
-        return startDateInStr+":"+endDateString;
+        return startDateInStr + ":" + endDateString;
 
-//        Log.e("Missing List", "-----" + myUtil.getDates(startDateInStr, endDaString));
+//        MyUtil.myLog("Missing List", "-----" + myUtil.getDates(startDateInStr, endDaString));
 
     }
 
 
-    public ArrayList<HashMap<String, String>>  getDataList(List<String> dates)
+    public ArrayList<HashMap<String, String>> getDataList(List<String> dates)
     {
 
-      //  Log.e(TAG, "List of week days----" + dates);
+        //  MyUtil.myLog(TAG, "List of week days----" + dates);
 
         List<BeanRecords> list = myDatabase.getAllStepRecords(context);
 
@@ -415,7 +602,7 @@ public class ThisWeek extends Fragment implements View.OnClickListener
             }
         }
 
-      //  Log.e(TAG, "StepsMap===" + stepsMap);
+        //  MyUtil.myLog(TAG, "StepsMap===" + stepsMap);
 
         ArrayList<HashMap<String, String>> localList = new ArrayList<>();
 
@@ -436,7 +623,7 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
         Collections.reverse(localList);
 
-     //   Log.e(TAG, "finalList===" + localList);
+        //   MyUtil.myLog(TAG, "finalList===" + localList);
 
 
         return localList;

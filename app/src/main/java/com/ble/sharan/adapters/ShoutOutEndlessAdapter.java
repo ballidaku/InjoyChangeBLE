@@ -17,7 +17,6 @@ package com.ble.sharan.adapters;
  */
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +123,7 @@ public class ShoutOutEndlessAdapter extends ArrayAdapter<ShoutOutModel.SubData> 
             @Override
             public void onResponse(Call<ShoutOutModel> call, Response<ShoutOutModel> response)
             {
-                Log.e(TAG, "Response----"+response.body());
+                MyUtil.myLog(TAG, "Response----"+response.body());
 
                 ShoutOutModel shoutOutModel = response.body();
 
@@ -139,7 +138,7 @@ public class ShoutOutEndlessAdapter extends ArrayAdapter<ShoutOutModel.SubData> 
             @Override
             public void onFailure(Call<ShoutOutModel> call, Throwable t)
             {
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
                 MyUtil.showToast(context, "Server side error");
 
             }

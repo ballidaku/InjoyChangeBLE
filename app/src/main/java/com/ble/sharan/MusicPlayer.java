@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.KeyEvent;
+
+import com.ble.sharan.myUtilities.MyUtil;
 
 public class MusicPlayer /*extends AppCompatActivity*/
 {
@@ -48,7 +49,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
     public void previous(Context context)
     {
         String deviceName = android.os.Build.MANUFACTURER;
-        Log.e("Manufacture", deviceName);
+        MyUtil.myLog("Manufacture", deviceName);
 
 
         if (deviceName.contains("LENOVO") || deviceName.contains("vivo"))
@@ -89,7 +90,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
     public void playPause(Context context)
     {
         String deviceName = android.os.Build.MANUFACTURER;
-        Log.e("Manufacture", deviceName);
+        MyUtil.myLog("Manufacture", deviceName);
 
 
         if (deviceName.contains("LENOVO") || deviceName.contains("vivo"))
@@ -137,7 +138,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
     public void next(Context context)
     {
         String deviceName = android.os.Build.MANUFACTURER;
-        Log.e("Manufacture", deviceName);
+        MyUtil.myLog("Manufacture", deviceName);
 
         if (deviceName.contains("LENOVO") || deviceName.contains("vivo"))
         {

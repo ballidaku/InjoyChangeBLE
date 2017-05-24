@@ -1,7 +1,6 @@
 package com.ble.sharan.myUtilities;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
@@ -43,7 +42,7 @@ public class ManupulateSleepDataNew
             {
                 String realData = remaining.substring(10, remaining.length());
 
-              //  Log.e(TAG, "Reamining Total String  " + realData);
+              //  MyUtil.myLog(TAG, "Reamining Total String  " + realData);
 
 
                 String date = "";
@@ -61,21 +60,21 @@ public class ManupulateSleepDataNew
                 //To Get Bytes
                 totalBytes = Integer.parseInt(realData.substring(10, 14), 16);
 
-             //   Log.e(TAG, "Date   " + date + "  StartTime  " + startTime + "   totalBytes   " + totalBytes);
+             //   MyUtil.myLog(TAG, "Date   " + date + "  StartTime  " + startTime + "   totalBytes   " + totalBytes);
 
                 int last = totalBytes * 2;
 
                 String remainingLast = realData.substring(14, 14 + last);
 
-               // Log.e("remainingLast", "" + remainingLast);
+               // MyUtil.myLog("remainingLast", "" + remainingLast);
 
                 int f = last + 24; // 24 is the biginning 24 characters means 12 bytes
 
-              //  Log.e("fffffffffffff", "" + f + "--------" + remaining.substring(0, f));
+              //  MyUtil.myLog("fffffffffffff", "" + f + "--------" + remaining.substring(0, f));
 
                 int count = 0;
 
-//                Log.e("Last",""+last);
+//                MyUtil.myLog("Last",""+last);
 
                 /*int countTimePerBatch = 0;
                 int batchHour = 0;
@@ -91,7 +90,7 @@ public class ManupulateSleepDataNew
 
                     int value = Integer.parseInt(str, 16);
 
-//                    Log.e("Inside", "" + count + "---" + str + "   value  " + value);
+//                    MyUtil.myLog("Inside", "" + count + "---" + str + "   value  " + value);
 
 
                     // To get movements in per second
@@ -117,7 +116,7 @@ public class ManupulateSleepDataNew
 
                         try
                         {
-                            Log.e(TAG, "Batch H:M  " + myFormat.format(myFormat.parse(batchHour + ":" + batchMin))+"  Count "+Integer.parseInt(batchCountString, 16));
+                            MyUtil.myLog(TAG, "Batch H:M  " + myFormat.format(myFormat.parse(batchHour + ":" + batchMin))+"  Count "+Integer.parseInt(batchCountString, 16));
                         } catch (ParseException e)
                         {
                             e.printStackTrace();
@@ -139,15 +138,15 @@ public class ManupulateSleepDataNew
                     }
                 }
 
-              //  Log.e("endTime", endTime);
+              //  MyUtil.myLog("endTime", endTime);
 
-//                Log.e("remaining", "" + remaining);
-//                Log.e("String to be cut", remaining.substring(0, f));
+//                MyUtil.myLog("remaining", "" + remaining);
+//                MyUtil.myLog("String to be cut", remaining.substring(0, f));
 
 
                 remaining = remaining.replaceFirst(remaining.substring(0, f), "");
 
-//                Log.e("After cut", remaining);
+//                MyUtil.myLog("After cut", remaining);
 
 
                 try
@@ -159,7 +158,7 @@ public class ManupulateSleepDataNew
                     Date Date2 = myFormat.parse(endTime);
                     long mills = Date2.getTime() - Date1.getTime();
 
-                    Log.e("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills) + "----StartTime----=" + startTime + "-----EndTime----=" + endTime);
+                    MyUtil.myLog("Final", "" + parseDateToddMMyyyy(date) + "--------------" + mills + "-----" + myUtil.convertMillisToHrMins(mills) + "----StartTime----=" + startTime + "-----EndTime----=" + endTime);
 
                     boolean isStored = false;
 
@@ -170,7 +169,7 @@ public class ManupulateSleepDataNew
                     String ssTime = myFormat.format(myFormat.parse(startTime));
                     String eeTime = myFormat.format(myFormat.parse(endTime));
 
-                    Log.e(TAG, "SSSSSSSSS " + sTime + "  EEEEEEEEEEE " + eTime + " EEEEEEEEEEE " + ssTime + " EEEEEEEEEEE " + eeTime);
+                    MyUtil.myLog(TAG, "SSSSSSSSS " + sTime + "  EEEEEEEEEEE " + eTime + " EEEEEEEEEEE " + ssTime + " EEEEEEEEEEE " + eeTime);
 
 
                     Date sDate = myFormat.parse(sTime);
@@ -192,7 +191,7 @@ public class ManupulateSleepDataNew
                             long myDifference = sDate.getTime() - ssDate.getTime();
 
 
-                            Log.e(TAG, "DDDDDDDDDD " + myUtil.convertMillisToHrMins(myDifference));
+                            MyUtil.myLog(TAG, "DDDDDDDDDD " + myUtil.convertMillisToHrMins(myDifference));
 
                             if (myFormat.parse(myUtil.convertMillisToHrMins(myDifference)).getTime() < myFormat.parse("12:00").getTime())
                             {
@@ -216,7 +215,7 @@ public class ManupulateSleepDataNew
                             difference += eeDate.getTime() - eDate.getTime();
                             myeDate = eDate;
 
-                            Log.e(TAG, "DDDDDDDDDD " + myUtil.convertMillisToHrMins(difference));
+                            MyUtil.myLog(TAG, "DDDDDDDDDD " + myUtil.convertMillisToHrMins(difference));
                         }
                         else
                         {
@@ -270,7 +269,7 @@ public class ManupulateSleepDataNew
             }
         }
 
-        Log.e("List-----", "" + list);
+        MyUtil.myLog("List-----", "" + list);
 
         if (list.size() > 0)
         {
@@ -292,7 +291,7 @@ public class ManupulateSleepDataNew
                 if (listDate.equals(todayDate))
                 {
                     isSleepRecordAvailable = true;
-//                        Log.e(TAG,"----Date----"+todayDate+"-----"+list.get(i).get(listDate));
+//                        MyUtil.myLog(TAG,"----Date----"+todayDate+"-----"+list.get(i).get(listDate));
                     processingSleeptimeForSetting(Long.parseLong(list.get(i).get(MyConstant.TOTAL_MILLIS).toString()));
 
                     break;
@@ -311,7 +310,7 @@ public class ManupulateSleepDataNew
             processingSleeptimeForSetting((long) 0);
         }
 
-        // Log.e("Hello","----BALLIDAKu----");
+        // MyUtil.myLog("Hello","----BALLIDAKu----");
         if (((MainActivityNew) context).fragment instanceof Today)
         {
             ((Today) ((MainActivityNew) context).fragment).sleepTime();
@@ -322,9 +321,9 @@ public class ManupulateSleepDataNew
     public void processingSleeptimeForSetting(Long millis)
     {
         String time = myUtil.convertMillisToHrMins(millis).replace(":", "");
-//        Log.e(TAG,"----Time----"+time);
+//        MyUtil.myLog(TAG,"----Time----"+time);
         String commandSleepTime = "setslptm" + time;
-        //  Log.e(TAG,"----commandSleepTime----"+time);
+        //  MyUtil.myLog(TAG,"----commandSleepTime----"+time);
         ((MainActivityNew) context).commandToBLE(commandSleepTime);
 
 

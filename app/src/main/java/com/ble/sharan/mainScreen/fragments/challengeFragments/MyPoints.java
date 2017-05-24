@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -262,7 +261,7 @@ public class MyPoints extends Fragment
             @Override
             public void onResponse(Call<DataModel> call, Response<DataModel> response)
             {
-                Log.e(TAG, "Response----"+response.body());
+                MyUtil.myLog(TAG, "Response----"+response.body());
 
                 DataModel dataModel = response.body();
 
@@ -281,7 +280,7 @@ public class MyPoints extends Fragment
             @Override
             public void onFailure(Call<DataModel> call, Throwable t)
             {
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
 //                MyUtil.showToast(context, "Server side error");
 
             }
@@ -305,7 +304,7 @@ public class MyPoints extends Fragment
             {
                 myUtil.hideProgressDialog();
 
-                Log.e(TAG, "Response----"+response.body());
+                MyUtil.myLog(TAG, "Response----"+response.body());
 
                 TopUsersModel topUsersModels = response.body();
 
@@ -321,7 +320,7 @@ public class MyPoints extends Fragment
             public void onFailure(Call<TopUsersModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
 //                MyUtil.showToast(context, "Server side error");
 
             }

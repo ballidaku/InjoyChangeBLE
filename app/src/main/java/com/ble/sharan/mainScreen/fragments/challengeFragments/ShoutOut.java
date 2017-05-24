@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -196,7 +195,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
                         }
 
-                        Log.e("TAG","SHOUT_OUT_COUNT"+object.getInt(MyConstant.SHOUT_OUT_COUNT));
+                        MyUtil.myLog("TAG","SHOUT_OUT_COUNT"+object.getInt(MyConstant.SHOUT_OUT_COUNT));
 
                         if(object.getInt(MyConstant.SHOUT_OUT_COUNT)>=3)
                         {
@@ -234,7 +233,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
     public void setData(List<ShoutOutModel.SubData> list)
     {
-        //Log.e("Refreshing",""+swipeRefreshLayout.isRefreshing());
+        //MyUtil.myLog("Refreshing",""+swipeRefreshLayout.isRefreshing());
         if (swipeRefreshLayout.isRefreshing())
         {
             swipeRefreshLayout.setRefreshing(false);
@@ -263,7 +262,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
         val = val + 10;
 
-        Log.e("VAL", "" + val);
+        MyUtil.myLog("VAL", "" + val);
 
         //GET_DATA_FROM_SERVER();
         GET_DATA_FROM_SERVER_RETROFIT();
@@ -315,7 +314,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
     public void SEND_COMMENT_TO_SERVER(final String comment)
     {
         String url = MyConstant.SHOUT_OUT_COMMENT + comment + "&uid=" + MySharedPreference.getInstance().getUID(context)+"&date="+MyUtil.getCurrentTimeStamp();
-        Log.e("URL", url);
+        MyUtil.myLog("URL", url);
         MyUtil.execute(new Super_AsyncTask(context, url, new Super_AsyncTask_Interface()
         {
             @Override
@@ -389,7 +388,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
             @Override
             public void onResponse(Call<ShoutOutModel> call, Response<ShoutOutModel> response)
             {
-                Log.e(TAG, "Response----"+response.body());
+                MyUtil.myLog(TAG, "Response----"+response.body());
 
                 ShoutOutModel shoutOutModel = response.body();
 
@@ -430,7 +429,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
             @Override
             public void onFailure(Call<ShoutOutModel> call, Throwable t)
             {
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
 //                MyUtil.showToast(context, "Server side error");
 
             }
@@ -460,7 +459,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
 
                 myUtil.hideProgressDialog();
 
-                Log.e(TAG, "Response----"+response.body());
+                MyUtil.myLog(TAG, "Response----"+response.body());
 
                 ShoutOutModel shoutOutModel = response.body();
 
@@ -497,7 +496,7 @@ public class ShoutOut extends Fragment implements EndlessListView.EndlessListene
             public void onFailure(Call<ShoutOutModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
 //                MyUtil.showToast(context, "Server side error");
 
             }

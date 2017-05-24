@@ -22,7 +22,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -169,8 +168,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+       // ThemeChanger.getInstance().onActivityCreateSetTheme(MainActivityNew.this, ThemeChanger.THEME_BLUE);
 
         setContentView(R.layout.activity_main);
+
+
 
         context = this;
 
@@ -243,7 +245,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-sharanpal.singh
+
         imgv_profile = (ImageView) mDrawerLayout.findViewById(R.id.circularImageView_Profile);
         txtv_username = (TextView) mDrawerLayout.findViewById(R.id.txtv_username);
 
@@ -305,8 +307,12 @@ sharanpal.singh
         txtv_alarm.setTextColor(ContextCompat.getColor(context, R.color.colorGray));
 
 
-        v.setBackgroundColor(ContextCompat.getColor(context, R.color.colorBlue));
-        txtv.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
+       /* v.setBackgroundColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
+        txtv.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));*/
+
+
+        v.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimary));
+        txtv.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
 
         if (image == imgv_challenge)
         {
@@ -613,13 +619,13 @@ sharanpal.singh
     {
         switch (v.getId())
         {
-            case R.id.frame_layout_profile:
+            /*case R.id.frame_layout_profile:
 
 //                txt_titleTV.setText("Profile");
 //                fragment = new MyProfile();
 //                changeFragment(fragment);
 
-                break;
+                break;*/
 
             case R.id.linearLayout_challenge:
 
@@ -708,10 +714,10 @@ sharanpal.singh
         public void onServiceConnected(ComponentName className, IBinder rawBinder)
         {
             mService = ((MyUartService.LocalBinder) rawBinder).getService();
-            Log.e(TAG, "onServiceConnected mService= " + mService);
+            MyUtil.myLog(TAG, "onServiceConnected mService= " + mService);
             if (!mService.initialize())
             {
-                Log.e(TAG, "Unable to initialize Bluetooth");
+                MyUtil.myLog(TAG, "Unable to initialize Bluetooth");
                 finish();
             }
         }
@@ -734,7 +740,7 @@ sharanpal.singh
             String action = intent.getAction();
 
 
-            //Log.e(TAG, "Action : " + action);
+            MyUtil.myLog(TAG, "Action : " + action);
 
             if (action.equals(MyUartService.ACTION_GATT_CONNECTING))
             {
@@ -743,7 +749,7 @@ sharanpal.singh
 //                    txtv_connect_disconnect.setText("Connecting...");
 //                    txtv_deviceName.setText(deviceName + " : Connecting...");
 //
-                    Log.e(TAG, "Connecting");
+                    MyUtil.myLog(TAG, "Connecting");
 
                     BLE_STATUS = MyConstant.CONNECTING;
 
@@ -760,7 +766,7 @@ sharanpal.singh
 //                txtv_connect_disconnect.setText("Disconnecting...");
 //                txtv_deviceName.setText(deviceName + " : Disconnecting...");
 
-                Log.e(TAG, "Disconnecting");
+                MyUtil.myLog(TAG, "Disconnecting");
 
                 BLE_STATUS = MyConstant.DISCONNECTING;
 
@@ -777,7 +783,7 @@ sharanpal.singh
                 {
                     public void run()
                     {*/
-                Log.e(TAG, "Connected");
+                MyUtil.myLog(TAG, "Connected");
 
                 BLE_STATUS = MyConstant.CONNECTED;
 
@@ -815,7 +821,7 @@ sharanpal.singh
             }
             else if (action.equals(MyUartService.ACTION_GATT_DISCONNECTED_DUE_TO_RANGE))
             {
-                Log.e(TAG, "Disconnected due to range");
+                MyUtil.myLog(TAG, "Disconnected due to range");
 
                 isDisconnectedByRange = true;
 
@@ -850,7 +856,7 @@ sharanpal.singh
             {
                 isDisconnectedByRange = false;
 
-                Log.e(TAG, "Disconnected");
+                MyUtil.myLog(TAG, "Disconnected");
 
                 BLE_STATUS = MyConstant.DISCONNECTED;
 
@@ -886,7 +892,7 @@ sharanpal.singh
 
                 try
                 {
-                    Log.e(TAG, "CR---Response of Command   " + new String(txValue, "UTF-8"));
+                    MyUtil.myLog(TAG, "CR---Response of Command   " + new String(txValue, "UTF-8"));
 
 
                     // IN MUSIC CASE, TO PLAY MUSIC
@@ -922,11 +928,11 @@ sharanpal.singh
                         String hex = MyUtil.bytesToHex(txValue);
                         sleepData += hex.substring(8, hex.length());
 
-//                        Log.e("remaining", "" + sleepData);
+//                        MyUtil.myLog("remaining", "" + sleepData);
 
                         if (new String(txValue, "UTF-8").contains("Done")) // After getting all the sleep data
                         {
-                            Log.e("Total Sleep String", "" + sleepData);
+                            MyUtil.myLog("Total Sleep String", "" + sleepData);
                             // TestingSleep2(sleepData);
 
                             ManupulateSleepdata manupulateSleepdata = new ManupulateSleepdata();
@@ -958,7 +964,7 @@ sharanpal.singh
 
                                     ((Today) fragment).calculate(stepsTaken);
 
-                                    Log.e("Steps", "" + new String(txValue, "UTF-8"));
+                                    MyUtil.myLog("Steps", "" + new String(txValue, "UTF-8"));
 
 
                                     //**************************************************************************
@@ -1038,7 +1044,7 @@ sharanpal.singh
                         //TODO
                         if (fiemwareCommandResposeCount == 1 && !new String(txValue, "UTF-8").equals("OK!"))
                         {
-                            Log.e("Firmware Version", "" + new String(txValue, "UTF-8"));
+                            MyUtil.myLog("Firmware Version", "" + new String(txValue, "UTF-8"));
                             MySharedPreference.getInstance().saveFirmwareVersion(context, new String(txValue, "UTF-8").replace("FW:", ""));
                         }
                         if (fiemwareCommandResposeCount == 2)
@@ -1058,7 +1064,7 @@ sharanpal.singh
                 }
                 catch (Exception e)
                 {
-                    Log.e(TAG, e.toString());
+                    MyUtil.myLog(TAG, e.toString());
                 }
 //                    }
 //                });
@@ -1086,7 +1092,7 @@ sharanpal.singh
             mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
 
 
-            Log.e("select address", "--" + deviceAddress);
+            MyUtil.myLog("select address", "--" + deviceAddress);
             if (!deviceAddress.isEmpty() && !deviceName.isEmpty())
             {
 
@@ -1108,7 +1114,7 @@ sharanpal.singh
     {
         if (!mBtAdapter.isEnabled())
         {
-            Log.i(TAG, "onClick - BT not enabled yet");
+            //Log.i(TAG, "onClick - BT not enabled yet");
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
@@ -1179,7 +1185,7 @@ sharanpal.singh
         {
             String address = MySharedPreference.getInstance().getDeviceAddress(context).trim();
 
-            //  Log.e(TAG, "Searching..." + millisUntilFinished+"  address  "+address);
+            //  MyUtil.myLog(TAG, "Searching..." + millisUntilFinished+"  address  "+address);
 
             // this try catch is due to crash in some devices showed in fabric
             try
@@ -1212,7 +1218,7 @@ sharanpal.singh
 
         if (!mBtAdapter.isEnabled())
         {
-            Log.i(TAG, "onResume - BT not enabled yet");
+            //Log.i(TAG, "onResume - BT not enabled yet");
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         }
@@ -1227,11 +1233,11 @@ sharanpal.singh
             shownDistanceNotification = true;
             shownSleepNotification = true;
 
-            Log.e(TAG, "shownStepsNotification----" + shownStepsNotification);
+            MyUtil.myLog(TAG, "shownStepsNotification----" + shownStepsNotification);
         }
 //
 //
-//        Log.e("BalliDaku onResume", "" + MySharedPreference.getInstance().getIsConnectedNow(context) + "---" + isConnectedEarlier);
+//        MyUtil.myLog("BalliDaku onResume", "" + MySharedPreference.getInstance().getIsConnectedNow(context) + "---" + isConnectedEarlier);
 //
 //        if (!MySharedPreference.getInstance().getIsConnectedNow(context) && isConnectedEarlier)
 //        {
@@ -1266,7 +1272,7 @@ sharanpal.singh
         }
         catch (Exception ignore)
         {
-            Log.e(TAG, ignore.toString());
+            MyUtil.myLog(TAG, ignore.toString());
         }
         context.unbindService(mServiceConnection);
         mService.stopSelf();
@@ -1286,7 +1292,7 @@ sharanpal.singh
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        Log.e(TAG, "RequestCode   " + requestCode);
+        MyUtil.myLog(TAG, "RequestCode   " + requestCode);
 
         switch (requestCode)
         {
@@ -1299,7 +1305,7 @@ sharanpal.singh
                     String deviceAddress = data.getStringExtra(BluetoothDevice.EXTRA_DEVICE).trim();
                     mDevice = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(deviceAddress);
 
-                    Log.d(TAG, "... onActivityResultdevice.address==" + mDevice + "mserviceValue" + mService);
+                    //Log.d(TAG, "... onActivityResultdevice.address==" + mDevice + "mserviceValue" + mService);
 //                    ((TextView) findViewById(R.id.deviceName)).setText(mDevice.getName() + " - connecting");
 //                    mService.connect(deviceAddress);
 
@@ -1327,7 +1333,7 @@ sharanpal.singh
                 break;
 
             default:
-                Log.e(TAG, "wrong request code");
+                MyUtil.myLog(TAG, "wrong request code");
                 break;
         }
     }
@@ -1410,7 +1416,7 @@ sharanpal.singh
     {
         COMMAND = command;
 
-        Log.e(TAG, "CR---COMMANDToBLE----" + command);
+        MyUtil.myLog(TAG, "CR---COMMANDToBLE----" + command);
 
         if (COMMAND.equals(MyConstant.GET_SLEEP))
         {
@@ -1440,7 +1446,7 @@ sharanpal.singh
         COMMAND = command;
         this.bleResponseInterface = bleResponseInterface;
 
-        Log.e(TAG, "CR---COMMANDToBLE----" + command);
+        MyUtil.myLog(TAG, "CR---COMMANDToBLE----" + command);
 
         try
         {
@@ -1468,19 +1474,19 @@ sharanpal.singh
         double weightInDouble = Double.parseDouble(MySharedPreference.getInstance().getWeight(context).replace("Kg", "").replace("Lbs", "").trim());
         String weightUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.WEIGHT);
 
-//        Log.e(TAG, "Weight-----" + weightInDouble + "-----Unit-----" + weightUnit);
+//        MyUtil.myLog(TAG, "Weight-----" + weightInDouble + "-----Unit-----" + weightUnit);
 
 
         if (!weightUnit.equals(MyConstant.LBS))
         {
             weightInDouble = heightWeightHelper.kgToLbConverter(weightInDouble);
 
-//            Log.e(TAG, "WeightInLBS-----" + weightInDouble);
+//            MyUtil.myLog(TAG, "WeightInLBS-----" + weightInDouble);
         }
 
         String finalWeight = String.format("%03d", Math.round(weightInDouble));
 
-//        Log.e(TAG, "FinalWeightInLBS---" + finalWeight);
+//        MyUtil.myLog(TAG, "FinalWeightInLBS---" + finalWeight);
 
 
         // Stride
@@ -1488,18 +1494,18 @@ sharanpal.singh
         double strideInDouble = Double.parseDouble(MySharedPreference.getInstance().getStride(context).replace("In", "").replace("Cm", "").trim());
         String strideUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.STRIDE);
 
-//        Log.e(TAG, "Stride-----" + strideInDouble + "-----Unit-----" + strideUnit);
+//        MyUtil.myLog(TAG, "Stride-----" + strideInDouble + "-----Unit-----" + strideUnit);
 
         if (!strideUnit.equals(MyConstant.IN))
         {
             strideInDouble = heightWeightHelper.cmToInches(strideInDouble);
 
-//            Log.e(TAG, "StrideInINCHES-----" + strideInDouble);
+//            MyUtil.myLog(TAG, "StrideInINCHES-----" + strideInDouble);
         }
 
         String finalStride = String.format("%03d", Math.round(strideInDouble));
 
-//        Log.e(TAG, "FinalStideInINCHES---" + finalStride);
+//        MyUtil.myLog(TAG, "FinalStideInINCHES---" + finalStride);
 
 
         //Height
@@ -1508,11 +1514,11 @@ sharanpal.singh
 
         String finalHeight = String.format("%03d", Math.round(heightInDouble));
 
-        Log.e(TAG, "FinalHeight---" + finalHeight);
+        MyUtil.myLog(TAG, "FinalHeight---" + finalHeight);
 
 
         String commandToSetHeightWeightStride = "b" + finalHeight + finalWeight + finalStride + "1" + "1";
-//        Log.e(TAG, "commandToSetHeightWeightStride---" + commandToSetHeightWeightStride);
+//        MyUtil.myLog(TAG, "commandToSetHeightWeightStride---" + commandToSetHeightWeightStride);
 
 
         if (BLE_STATUS.equals(MyConstant.CONNECTED))
@@ -1528,7 +1534,7 @@ sharanpal.singh
         SimpleDateFormat mSDF1 = new SimpleDateFormat("yyMMddHHmmss");
         String currentDateTime = mSDF1.format(new Date());
 
-//        Log.e("currentDateTime", currentDateTime);
+//        MyUtil.myLog("currentDateTime", currentDateTime);
 
         String commandToSetDateTime = "dt" + currentDateTime;
 

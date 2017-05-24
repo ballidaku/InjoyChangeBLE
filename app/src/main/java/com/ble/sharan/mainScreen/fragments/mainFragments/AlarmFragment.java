@@ -5,7 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -111,8 +111,11 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             view = inflater.inflate(R.layout.fragment_alarm, container, false);
 
 
-            TOP_ICON_CHECKED = getContext().getResources().getDrawable(R.mipmap.ic_check_blue);
-            TOP_ICON_UNCHECKED = getContext().getResources().getDrawable(R.mipmap.ic_uncheck_blue);
+            TOP_ICON_CHECKED = ContextCompat.getDrawable(context,R.mipmap.ic_check_blue);
+            TOP_ICON_UNCHECKED = ContextCompat.getDrawable(context,R.mipmap.ic_uncheck_blue);
+
+//            TOP_ICON_CHECKED = ContextCompat.getDrawable(context,R.drawable.ic_checked);
+//            TOP_ICON_UNCHECKED = ContextCompat.getDrawable(context,R.drawable.ic_unchecked);
 
             setUpIds();
 
@@ -147,7 +150,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             hexStr = "0" + hexStr;
         }
 
-        //Log.e("HelloBalli", hexStr);
+        MyUtil.myLog("HelloBalli", hexStr);
 
         return hexStr;
     }
@@ -266,9 +269,9 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
         String thirdAlarm = map.get(MyConstant.ALARM_THIRD);
 
 
-        Log.e("firstAlarm",firstAlarm);
-        Log.e("secondAlarm",secondAlarm);
-        Log.e("thirdAlarm",thirdAlarm);
+        MyUtil.myLog("firstAlarm",firstAlarm);
+        MyUtil.myLog("secondAlarm",secondAlarm);
+        MyUtil.myLog("thirdAlarm",thirdAlarm);
 
         String[] arrayfirst = firstAlarm.split(",");
         String[] arraySecond = secondAlarm.split(",");
@@ -506,7 +509,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
         saveAlarm(alarmKey, showTime, alarmTime, weeksDaysCommand,true);
 
 
-        Log.e(TAG, "alarmTime---" + alarmTime + "----" + showTime);
+        MyUtil.myLog(TAG, "alarmTime---" + alarmTime + "----" + showTime);
     }
 
 
@@ -514,7 +517,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
     {
         String commandToSetAlarm = "alm" + alarmKey + alarmTime + weeksDaysCommand + "1000000";
 
-        Log.e(TAG, "commandToSetAlarm Map" + commandToSetAlarm + "          " + weeksDaysCommand);
+        MyUtil.myLog(TAG, "commandToSetAlarm Map" + commandToSetAlarm + "          " + weeksDaysCommand);
 
 
         if(isSwitchOn)
@@ -532,7 +535,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
     public void setAlarm(String commandToSetAlarm)
     {
-        Log.e(TAG, "Command" + commandToSetAlarm);
+        MyUtil.myLog(TAG, "Command" + commandToSetAlarm);
 
         ((MainActivityNew) context).commandToBLE(commandToSetAlarm);
 
@@ -546,7 +549,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
         stringBuilder.setCharAt(10, '0');
 
-        Log.e(TAG, "disableAlarm" + stringBuilder.toString());
+        MyUtil.myLog(TAG, "disableAlarm" + stringBuilder.toString());
 
         ((MainActivityNew) context).commandToBLE(stringBuilder.toString());
 
@@ -646,7 +649,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
                             alarmTime2 = output.format(input.parse(showtimeSecond));
                             alarmTime3 = output.format(input.parse(showtimethird));
 
-                            Log.e(TAG, "showTime " + alarmTime1 + "-----" + alarmTime2 + "    " + alarmTime3);
+                            MyUtil.myLog(TAG, "showTime " + alarmTime1 + "-----" + alarmTime2 + "    " + alarmTime3);
 
 
                         } catch (ParseException e)

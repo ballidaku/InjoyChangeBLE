@@ -1,7 +1,6 @@
 package com.ble.sharan.myUtilities;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 
@@ -45,7 +44,7 @@ public class GetStepsData
         @Override
         public void run()
         {
-           // Log.e(TAG,"GetStepsData"+command[count]);
+           // MyUtil.myLog(TAG,"GetStepsData"+command[count]);
 
 
             ((MainActivityNew)context).commandToBLE(command[count],new BleResponseInterface()
@@ -54,7 +53,7 @@ public class GetStepsData
                 public void onResponse(String result)
                 {
 
-                    Log.e(TAG,"onResponse     "+result);
+                    MyUtil.myLog(TAG,"onResponse     "+result);
 
 
                     if(count <= 13 && !result.contains("No Record"))
@@ -73,7 +72,7 @@ public class GetStepsData
 
                             myDatabase.addStepData(context,new BeanRecords(date, String.valueOf(Integer.parseInt(dareSteps[1]))));
 
-                            Log.e(TAG,"Date---"+date+"  Steps----"+ String.valueOf(Integer.parseInt(dareSteps[1])));
+                            MyUtil.myLog(TAG,"Date---"+date+"  Steps----"+ String.valueOf(Integer.parseInt(dareSteps[1])));
                         } catch (ParseException e)
                         {
                             e.printStackTrace();

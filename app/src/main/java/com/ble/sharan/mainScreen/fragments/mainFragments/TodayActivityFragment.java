@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -165,7 +164,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     public void onResume()
     {
         super.onResume();
-        // Log.e(TAG, "onResume");
+        // MyUtil.myLog(TAG, "onResume");
 
         // onRefresh get the previous Count
         calculate(((MainActivityNew) context).stepsTaken, false);
@@ -179,7 +178,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     public void onPause()
     {
         super.onPause();
-       // Log.e(TAG, "onPause");
+       // MyUtil.myLog(TAG, "onPause");
         autoRefreshTimer.cancel();
     }
 
@@ -187,7 +186,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     public void onDestroy()
     {
         super.onDestroy();
-       // Log.e(TAG, "onDestroy");
+       // MyUtil.myLog(TAG, "onDestroy");
         autoRefreshTimer.cancel();
     }*/
 
@@ -227,7 +226,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
 //        for (int i = 0; i < list.size(); i++)
 //        {
-////            Log.e(TAG, "Ballidaku----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps()+ "----" + list.get(i).getAccess_token());
+////            MyUtil.myLog(TAG, "Ballidaku----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps()+ "----" + list.get(i).getAccess_token());
 //
 //            // myDatabase.deleteContact(list.g///et(i));
 //        }
@@ -256,7 +255,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         txtv_milesKm.setText(todayMilesCovered = myUtil.stepsToDistance(context, steps));
 
-        Log.e(TAG, "Total Miles Activity " + todayMilesCovered);
+        MyUtil.myLog(TAG, "Total Miles Activity " + todayMilesCovered);
 
         txtv_milesKmToGo.setText(myUtil.stepsToRemainingDistance(context, steps));
 
@@ -282,7 +281,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         txtv_sleepHour.setText(sleepTime);
 
-        // Log.e(TAG,"sleepTime------"+sleepTime);
+        // MyUtil.myLog(TAG,"sleepTime------"+sleepTime);
 
 
         txtv_sleepHourToGo.setText(myUtil.sleepHrToRemainingHr(context, sleepTime));
@@ -302,7 +301,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //
 //            String diff = Hours + ":" + Mins; // updated value every1 second
 //
-////            Log.e("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
+////            MyUtil.myLog("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
 //
 //            sleepTime = myFormat.format(myFormat.parse(diff));
 //
@@ -313,7 +312,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //
 //
 //        return sleepTime;
-////        Log.e("Sleep Database",""+myDatabase.getAllSleepData());
+////        MyUtil.myLog("Sleep Database",""+myDatabase.getAllSleepData());
 //    }
 
 
@@ -389,8 +388,8 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         map.put(MyConstant.CALORIES, calories);
         map.put(MyConstant.DISTANCE, todayMilesCovered);
 
-        Log.e(TAG, "input-------" + map);
-        Log.e(TAG, "URL-------" + MyConstant.UPLOAD_USER_DATA);
+        MyUtil.myLog(TAG, "input-------" + map);
+        MyUtil.myLog(TAG, "URL-------" + MyConstant.UPLOAD_USER_DATA);
 
 
         MyUtil.execute(new Super_AsyncTask(context, map, MyConstant.UPLOAD_USER_DATA, new Super_AsyncTask_Interface()
@@ -398,7 +397,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             @Override
             public void onTaskCompleted(String output)
             {
-//                Log.e(TAG, "OUTPUT RESPONSE-------" + output);
+//                MyUtil.myLog(TAG, "OUTPUT RESPONSE-------" + output);
             }
         }, false));
 
@@ -417,6 +416,9 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         String todaySleepTime = spltm[0] + "h:" + spltm[1] + "m";
 
 
+        MyUtil.myLog(TAG,"Send Itens "+" Date " +todayDate+" todaySteps "+todaySteps+" calories "+calories +" todaySleepTime "+todaySleepTime+ " UID "+MySharedPreference.getInstance().getUID(context));
+
+
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
         Call<UploadDataModel> call = apiService.postData(todayDate, todaySteps, calories, todaySleepTime, todayMilesCovered, MySharedPreference.getInstance().getUID(context));
@@ -426,22 +428,22 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             @Override
             public void onResponse(Call<UploadDataModel> call, Response<UploadDataModel> response)
             {
-                // Log.e(TAG, "Response----"+response.body());
+                 MyUtil.myLog(TAG, "Response----"+response.body());
 
                 UploadDataModel uploadDataModel = response.body();
 
                 if (uploadDataModel.getStatus().equals("200"))
                 {
 
-                    //  Log.e(TAG,"Upload Response ---"+uploadDataModel.getData());
+                      MyUtil.myLog(TAG,"Upload Response ---"+uploadDataModel.getData());
                 }
             }
 
             @Override
             public void onFailure(Call<UploadDataModel> call, Throwable t)
             {
-                Log.e(TAG, t.getMessage());
-              //  MyUtil.showToast(context, "Server side error");
+                MyUtil.myLog(TAG, t.getMessage());
+                MyUtil.showToast(context, "Server side error");
 
             }
         });
@@ -464,13 +466,13 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         @Override
         public void onTick(long l)
         {
-            Log.e(TAG, "onTick");
+            MyUtil.myLog(TAG, "onTick");
         }
 
         @Override
         public void onFinish()
         {
-            Log.e("BLE STATUS", "" + ((MainActivityNew) context).BLE_STATUS);
+            MyUtil.myLog("BLE STATUS", "" + ((MainActivityNew) context).BLE_STATUS);
             if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
             {
                 onRefresh();

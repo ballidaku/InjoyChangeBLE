@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments.mainFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +92,7 @@ public class Overall extends Fragment
 
         for (int i = 0; i < list.size(); i++)
         {
-//            Log.e("Data", "----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps());
+//            MyUtil.myLog("Data", "----" + list.get(i).getID() + "----" + list.get(i).getDate() + "----" + list.get(i).getSteps());
 
             totalSteps += Long.parseLong(list.get(i).getSteps());
             totalMiles += Double.parseDouble(myUtil.stepsToDistance(context, Integer.parseInt(list.get(i).getSteps())));
@@ -114,7 +113,7 @@ public class Overall extends Fragment
 
         txtv_totalKm.setText(myUtil.twoDigitsAfterDecimalWithoutRoundOff(totalMiles));
 
-        Log.e(TAG,"Total Miles Overall "+ myUtil.twoDigitsAfterDecimalWithoutRoundOff(totalMiles));
+        MyUtil.myLog(TAG,"Total Miles Overall "+ myUtil.twoDigitsAfterDecimalWithoutRoundOff(totalMiles));
 
 
         txtv_totalCalories.setText(String.valueOf(Math.round(Double.parseDouble(myUtil.stepsToCalories(context, (int) totalSteps)))));
@@ -132,7 +131,7 @@ public class Overall extends Fragment
 
         String strideUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.STRIDE);
 
-        //Log.e(TAG, "strideInDouble1-----" + strideInDouble);
+        //MyUtil.myLog(TAG, "strideInDouble1-----" + strideInDouble);
 
 
         if (strideUnit.equals(MyConstant.CM))
@@ -140,13 +139,13 @@ public class Overall extends Fragment
             strideInDouble = new MyUtil.HeightWeightHelper().cmToInches(strideInDouble);
         }
 
-        // Log.e(TAG, "strideInDouble2-----" + strideInDouble);
+        // MyUtil.myLog(TAG, "strideInDouble2-----" + strideInDouble);
 
 
         strideInDouble = (strideInDouble * 0.0254) * 0.001 * 0.621371;
 
 
-        // Log.e(TAG, "strideInDouble3-----" + strideInDouble);
+        // MyUtil.myLog(TAG, "strideInDouble3-----" + strideInDouble);
 
 
 //        double stride = 0.00045; //in Km
@@ -156,7 +155,7 @@ public class Overall extends Fragment
         if (MySharedPreference.getInstance().getUnit(context, MyConstant.DISTANCE).equals(MyConstant.MILES))
         {
             txtv_km_milesHeading.setText("TOTAL MILES");
-            // Log.e(TAG, "distance-----" + distance);
+            // MyUtil.myLog(TAG, "distance-----" + distance);
             return new DecimalFormat("##.##").format(distance);
         }
         else
@@ -164,7 +163,7 @@ public class Overall extends Fragment
             txtv_km_milesHeading.setText("TOTAL KM");
             distance = distance * 1.60934;
 
-//            Log.e(TAG, "distance-----" + distance);
+//            MyUtil.myLog(TAG, "distance-----" + distance);
             return new DecimalFormat("##.##").format(distance);
 
 

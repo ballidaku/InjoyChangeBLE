@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -257,12 +256,12 @@ public class CheckIn extends Fragment implements View.OnClickListener
             {
 
                 myUtil.hideProgressDialog();
-                Log.e(TAG, "Response----" + response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 CheckInModel checkInModel = response.body();
 
 
-                //Log.e("checkInModel.getStatus()",""+checkInModel.getStatus());
+                //MyUtil.myLog("checkInModel.getStatus()",""+checkInModel.getStatus());
                 if (checkInModel.getStatus().equals(MyConstant.TRUE))
                 {
 
@@ -298,7 +297,7 @@ public class CheckIn extends Fragment implements View.OnClickListener
             public void onFailure(Call<CheckInModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
 //                MyUtil.showToast(context, "Server side error");
 
             }
@@ -321,7 +320,7 @@ public class CheckIn extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<CheckInModel> call, Response<CheckInModel> response)
             {
-                Log.e(TAG, "Response----" + response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 CheckInModel checkInModel = response.body();
 
@@ -350,7 +349,7 @@ public class CheckIn extends Fragment implements View.OnClickListener
             public void onFailure(Call<CheckInModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
 //                MyUtil.showToast(context, "Server side error");
 
             }

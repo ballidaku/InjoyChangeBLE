@@ -1,7 +1,7 @@
 
 /*
 
- * Copyright (c) 2015, Nordic Semiconductor
+ * Copyright (c) 2015, Nor0dic Semiconductor
  * All rights reserved.
  *
  * Redistribution and0 use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -263,7 +263,7 @@ public class MyUartService extends Service
         }
 
 
-       // Log.e(TAG," previous address "+mBluetoothDeviceAddress+"  current address "+address );
+       // MyUtil.myLog(TAG," previous address "+mBluetoothDeviceAddress+"  current address "+address );
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null)

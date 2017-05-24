@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +145,7 @@ public class ToolBoxViewAll extends Fragment
             public void onResponse(Call<ToolBoxModel> call, Response<ToolBoxModel> response)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, "Response----"+response.body());
+                MyUtil.myLog(TAG, "Response----"+response.body());
 
                 ToolBoxModel toolBoxModel = response.body();
 
@@ -160,7 +159,7 @@ public class ToolBoxViewAll extends Fragment
             public void onFailure(Call<ToolBoxModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
 //                MyUtil.showToast(context, "Server side error");
 
             }

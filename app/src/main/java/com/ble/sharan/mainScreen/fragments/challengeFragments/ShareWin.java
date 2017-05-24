@@ -173,7 +173,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
                     player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
 
                     String a = videoUrl;
-                    // Log.e(TAG,"ABC   "+a.substring(a.lastIndexOf("/")+1,a.length()));
+                    // MyUtil.myLog(TAG,"ABC   "+a.substring(a.lastIndexOf("/")+1,a.length()));
                     player.cueVideo(a.substring(a.lastIndexOf("/") + 1, a.length()));
 
 
@@ -358,7 +358,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
 
                 myUtil.hideProgressDialog();
 
-                Log.e(TAG, "Response----" + response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 ShareWinModel shareWinModel = response.body();
 
@@ -381,7 +381,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
             public void onFailure(Call<ShareWinModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
              //   MyUtil.showToast(context, "Server side error");
 
             }
@@ -402,7 +402,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<ShareWinModel> call, Response<ShareWinModel> response)
             {
-                Log.e(TAG, "Response----" + response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 ShareWinModel shareWinModel = response.body();
 
@@ -421,7 +421,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<ShareWinModel> call, Throwable t)
             {
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
               //  MyUtil.showToast(context, "Server side error");
 
             }
@@ -443,7 +443,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
             @Override
             public void onResponse(Call<ShareWinModel> call, Response<ShareWinModel> response)
             {
-                Log.e(TAG, "Response----" + response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 ShareWinModel shareWinModel = response.body();
 
@@ -463,7 +463,7 @@ public class ShareWin extends Fragment implements View.OnClickListener
             @Override
             public void onFailure(Call<ShareWinModel> call, Throwable t)
             {
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
               //  MyUtil.showToast(context, "Server side error");
 
             }

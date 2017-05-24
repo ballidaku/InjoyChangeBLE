@@ -10,7 +10,7 @@
         android:layout_width="@dimen/_35sdp"
         android:layout_height="@dimen/_35sdp"
         android:layout_margin="@dimen/_5sdp"
-        android:src="@mipmap/ic_imag1"/>
+        android:src="@mipmap/ic_no_user"/>
 
     <LinearLayout
         android:layout_width="0dp"

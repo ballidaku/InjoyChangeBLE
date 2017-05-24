@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments.challengeFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,7 +135,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
             {
                 myUtil.hideProgressDialog();
 
-                Log.e(TAG, "Response----" + response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 DataModel dataModel = response.body();
 
@@ -146,7 +145,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
                     imageUrl = dataModel.getData();
                     count = dataModel.getCount();
 
-                    //Log.e("ImageUrl",imageUrl);
+                    //MyUtil.myLog("ImageUrl",imageUrl);
                     if (count > 0)
                     {
                         check1_iv.setImageResource(R.mipmap.ic_check);
@@ -159,7 +158,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
             public void onFailure(Call<DataModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
                 MyUtil.showToast(context, "Server side error");
 
             }
@@ -184,7 +183,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
                 myUtil.hideProgressDialog();
 
-                Log.e(TAG, "Response----" + response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 DataModel dataModel = response.body();
 
@@ -204,7 +203,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
             public void onFailure(Call<DataModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
                // MyUtil.showToast(context, "Server side error");
 
             }

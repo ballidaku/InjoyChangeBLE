@@ -107,12 +107,14 @@ public class Today extends Fragment implements View.OnClickListener
 
         if (fromWhere.equals(MyConstant.ACTIVITY))
         {
-            txtv_activity.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
+            //txtv_activity.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
+            txtv_activity.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
             txtv_activity.setBackgroundResource(R.drawable.left_selector_white);
         }
         else
         {
-            txtv_overall.setTextColor(ContextCompat.getColor(context, R.color.colorBlue));
+            //txtv_overall.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
+            txtv_overall.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
             txtv_overall.setBackgroundResource(R.drawable.right_selector_white);
         }
     }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,7 +59,7 @@ public class MyDatabase extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        Log.e(TAG, " Hello ");
+        MyUtil.myLog(TAG, " Hello ");
 
 
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_STEP_RECORD + "("
@@ -87,7 +86,7 @@ public class MyDatabase extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
 
-        Log.e(TAG, " Version " + oldVersion + "-----" + newVersion);
+        MyUtil.myLog(TAG, " Version " + oldVersion + "-----" + newVersion);
 
         if (newVersion > 1)
         {
@@ -168,7 +167,7 @@ public class MyDatabase extends SQLiteOpenHelper
     {
         int ID = getStepIdOnDate(context, myUtil.getTodaydate());
 
-        // Log.e(TAG,"ID------"+ID+"-------Date--"+myUtil.getTodaydate());
+        // MyUtil.myLog(TAG,"ID------"+ID+"-------Date--"+myUtil.getTodaydate());
 
         if (ID == 0)
         {
@@ -274,7 +273,7 @@ public class MyDatabase extends SQLiteOpenHelper
                     stepsList.add(beanRecords);
 
 
-//                    Log.e(TAG, "--MissingStepsDate---" + date);
+//                    MyUtil.myLog(TAG, "--MissingStepsDate---" + date);
                 }
             }
         }
@@ -532,10 +531,10 @@ public class MyDatabase extends SQLiteOpenHelper
     public long getTodaySleepTime(Context context)
     {
 
-        //Log.e(TAG, "TodaySleepDate---" + myUtil.getTodaydate());
+        //MyUtil.myLog(TAG, "TodaySleepDate---" + myUtil.getTodaydate());
         int ID = getSleepIdOnDate(context, myUtil.getTodaydate());
 
-        //Log.e(TAG, "ID---" + ID);
+        //MyUtil.myLog(TAG, "ID---" + ID);
 
         if (ID == 0)
         {
@@ -698,7 +697,7 @@ public class MyDatabase extends SQLiteOpenHelper
                     list.add(map);
 
 
-                    // Log.e(TAG, "--MissingDate---" + date);
+                    // MyUtil.myLog(TAG, "--MissingDate---" + date);
                 }
             }
         }
@@ -762,7 +761,7 @@ public class MyDatabase extends SQLiteOpenHelper
         values.put(KEY_SLEEP_TIME, map.get(MyConstant.SLEEP)); // Sleep Time
 
 
-//        Log.e(TAG, "----addDailyGoalData----ID---" + ID);
+//        MyUtil.myLog(TAG, "----addDailyGoalData----ID---" + ID);
 
         if (ID == 0)
         {
@@ -782,7 +781,7 @@ public class MyDatabase extends SQLiteOpenHelper
     public int getDailyGoalIdOnDate(String date)
     {
 
-        // Log.e(TAG,"-----getDailyGoalIdOnDate------DATE-----"+date);
+        // MyUtil.myLog(TAG,"-----getDailyGoalIdOnDate------DATE-----"+date);
 
         int id = 0;
 
@@ -855,13 +854,13 @@ public class MyDatabase extends SQLiteOpenHelper
         String oldestDateInDatabase = getOldestDateInDailyGoalRecord();
         String previousDateOfOldestDate = myUtil.getPreviousDate(oldestDateInDatabase);
 
-        //   Log.e(TAG, "----Oldest Date----" + getOldestDateInDailyGoalRecord()+"-----oldestDate----"+previousDateOfOldestDate+"-----currentWeekDate date-----"+currentWeekDate);
+        //   MyUtil.myLog(TAG, "----Oldest Date----" + getOldestDateInDailyGoalRecord()+"-----oldestDate----"+previousDateOfOldestDate+"-----currentWeekDate date-----"+currentWeekDate);
 
 
         if (myUtil.convertStringToDate(currentWeekDate).before(myUtil.convertStringToDate(oldestDateInDatabase)))
         {
             map.putAll(getGoalDataOnDate(oldestDateInDatabase));
-            //  Log.e(TAG, "---------Database 1");
+            //  MyUtil.myLog(TAG, "---------Database 1");
 
 
         }
@@ -873,14 +872,14 @@ public class MyDatabase extends SQLiteOpenHelper
                 if (getDailyGoalIdOnDate(currentWeekDate) == 0)
                 {
                     currentWeekDate = myUtil.getPreviousDate(currentWeekDate);
-                    // Log.e(TAG, "---------Database 2");
+                    // MyUtil.myLog(TAG, "---------Database 2");
                 }
                 else
                 {
 
-                    //  Log.e(TAG, "---------Database DATA--------" + getGoalDataOnDate(currentWeekDate));
+                    //  MyUtil.myLog(TAG, "---------Database DATA--------" + getGoalDataOnDate(currentWeekDate));
                     map.putAll(getGoalDataOnDate(currentWeekDate));
-                    // Log.e(TAG, "---------Database 3");
+                    // MyUtil.myLog(TAG, "---------Database 3");
                     break;
                 }
             }

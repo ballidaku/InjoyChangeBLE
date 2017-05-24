@@ -3,7 +3,6 @@ package com.ble.sharan.mainScreen.fragments.mainFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,13 @@ import android.widget.TextView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.adapters.ChallengeAdapter;
+import com.ble.sharan.apiModels.ApiClient;
+import com.ble.sharan.apiModels.ApiInterface;
+import com.ble.sharan.apiModels.DataModel;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
-import com.ble.sharan.apiModels.ApiClient;
-import com.ble.sharan.apiModels.ApiInterface;
-import com.ble.sharan.apiModels.DataModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -184,7 +183,7 @@ public class Challenge extends Fragment
             @Override
             public void onResponse(Call<DataModel> call, Response<DataModel> response)
             {
-                Log.e(TAG, "Response----"+response.body());
+                //Log.e(TAG, "Response----"+response.body());
 
                 DataModel dataModel = response.body();
 
@@ -203,7 +202,7 @@ public class Challenge extends Fragment
             @Override
             public void onFailure(Call<DataModel> call, Throwable t)
             {
-                Log.e(TAG, t.getMessage());
+                //Log.e(TAG, t.getMessage());
                 MyUtil.showToast(context, "Server side error");
 
             }

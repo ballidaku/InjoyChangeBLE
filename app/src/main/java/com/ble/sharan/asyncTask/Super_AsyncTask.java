@@ -3,7 +3,6 @@ package com.ble.sharan.asyncTask;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.ble.sharan.R;
 import com.ble.sharan.myUtilities.GeometricProgressView;
@@ -107,7 +106,7 @@ public class Super_AsyncTask extends AsyncTask<Void, Void, String>
     {
         String response = "";
 
-        Log.e("inputData", "" + inputData);
+        MyUtil.myLog("inputData", "" + inputData);
 
         try
         {
@@ -144,7 +143,7 @@ public class Super_AsyncTask extends AsyncTask<Void, Void, String>
             }
         }
 
-        Log.e("Response for " + context.getClass().getName(), " " + ResponseString);
+        MyUtil.myLog("Response for " + context.getClass().getName(), " " + ResponseString);
 
         if (!ResponseString.equals("SLOW") && !ResponseString.equals("ERROR"))
         {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -187,7 +186,7 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
 
         val = val + 10;
 
-        Log.e("VAL", "" + val);
+        MyUtil.myLog("VAL", "" + val);
 
 //        GET_DATA_FROM_SERVER();
         GET_DATA_FROM_SERVER_RETROFIT();
@@ -227,7 +226,7 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
             {
 
                 myUtil.hideProgressDialog();
-                Log.e(TAG, "Response----" + response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 ShareWinSeeAllModel shareWinSeeAllModel = response.body();
 
@@ -247,7 +246,7 @@ public class ShareWinSeeAll extends Fragment implements EndlessListView.EndlessL
             public void onFailure(Call<ShareWinSeeAllModel> call, Throwable t)
             {
                 myUtil.hideProgressDialog();
-                Log.e(TAG, t.getMessage());
+                MyUtil.myLog(TAG, t.getMessage());
 //                MyUtil.showToast(context, "Server side error");
 
             }

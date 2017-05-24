@@ -143,7 +143,7 @@ public class MyDialogs
             public void onDismiss(DialogInterface dialog)
             {
                 mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                // Log.e("Dialog","Dismiss");
+                // MyUtil.myLog("Dialog","Dismiss");
             }
         });
 

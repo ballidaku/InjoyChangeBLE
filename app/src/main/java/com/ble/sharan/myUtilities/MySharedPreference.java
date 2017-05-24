@@ -303,6 +303,15 @@ public class MySharedPreference
         editor.apply();
     }
 
+    public String getPhoto(Context context)
+    {
+        return getPreference(context).getString(MyConstant.PHOTO, "");
+    }
+
+
+
+
+
     public void saveSleepStartTime(Context context, String time)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
@@ -331,10 +340,7 @@ public class MySharedPreference
 
 
 
-    public String getPhoto(Context context)
-    {
-        return getPreference(context).getString(MyConstant.PHOTO, "");
-    }
+
 
     //**********************************************************************************************
     // Set Goals

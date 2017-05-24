@@ -169,7 +169,7 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
        // System.out.println("...date..." + endDaString);
 
 
-//        Log.e("Missing List", "-----" + myUtil.getDates(startDateInStr, endDaString));
+//        MyUtil.myLog("Missing List", "-----" + myUtil.getDates(startDateInStr, endDaString));
 
 
         setData(myUtil.getDates(startDateInStr, endDaString));
@@ -180,7 +180,7 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
     public void setData(List<String> dates)
     {
 
-       // Log.e(TAG,"List of week days----"+dates);
+       // MyUtil.myLog(TAG,"List of week days----"+dates);
 
 
         // STEPS
@@ -208,7 +208,7 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
             }
         }
 
-//        Log.e(TAG, "MAP----" + stepsMap);
+//        MyUtil.myLog(TAG, "MAP----" + stepsMap);
 
         ArrayList<String> xAxisValues = getXAxisWeakValues();
 
@@ -347,11 +347,11 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
     public float percentage(String type,String date, float obtained)
     {
 
-       // Log.e(TAG, "--Type---"+type+"----date---"+date+"-----obtained---=-" + obtained);
+       // MyUtil.myLog(TAG, "--Type---"+type+"----date---"+date+"-----obtained---=-" + obtained);
 
         HashMap<String, String> mapGoal = myDatabase.getGoalDataOnDateIfExistsOrNot(date);
 
-//        Log.e(TAG, "---------Database  Goal Data   " + mapGoal);
+//        MyUtil.myLog(TAG, "---------Database  Goal Data   " + mapGoal);
 
 
         float total=0.0f;
@@ -381,7 +381,7 @@ public class ViewGraphFragment extends Fragment implements View.OnClickListener
         float percentage = (obtained*100)/total;
 
 
-//        Log.e(TAG, "--Type---"+type+"----obtained---"+obtained+"-----percentage data    " + percentage);
+//        MyUtil.myLog(TAG, "--Type---"+type+"----obtained---"+obtained+"-----percentage data    " + percentage);
 
 
         return percentage;

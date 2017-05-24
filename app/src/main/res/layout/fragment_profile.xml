@@ -625,7 +625,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Update Device"
-                android:textColor="@color/colorBlue"
+                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_16sdp"/>
 
         </LinearLayout>
@@ -648,7 +648,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign Out"
-                android:textColor="@color/colorBlue"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_16sdp"/>
 
         </LinearLayout>
