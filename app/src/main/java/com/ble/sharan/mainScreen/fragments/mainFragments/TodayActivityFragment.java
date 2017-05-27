@@ -1,6 +1,8 @@
 package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -8,6 +10,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +24,7 @@ import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+import com.ble.sharan.myUtilities.ThemeChanger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,7 +75,19 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         if (view == null)
         {
-            view = inflater.inflate(R.layout.fragment_today_activity, container, false);
+            int layout;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            {
+                layout = R.layout.fragment_today_activity;
+            }
+            else
+            {
+                layout = R.layout.fragment_today_activity_kitkat;
+            }
+
+//            view = inflater.inflate(R.layout.fragment_today_activity, container, false);
+            view = inflater.inflate(layout, container, false);
 
             setUpIds();
 
@@ -97,6 +113,14 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
     private void setUpIds()
     {
+
+        view.findViewById(R.id.linearLayoutBackground).setBackground((Drawable) ThemeChanger.getInstance().getBackground(context, MyConstant.BACKGROUND));
+
+        ImageView imageViewRefresh=(ImageView)view.findViewById(R.id.imageViewRefresh);
+        imageViewRefresh.setImageResource(ThemeChanger.getInstance().getActivityOverallBackground(MyConstant.REFRESH));
+
+        ImageView imageViewConnect=(ImageView)view.findViewById(R.id.imageViewConnect);
+        imageViewConnect.setImageResource(ThemeChanger.getInstance().getActivityOverallBackground(MyConstant.CONNECT));
 
         txtv_steps = (TextView) view.findViewById(R.id.txtv_steps);
         txtv_stepsToGo = (TextView) view.findViewById(R.id.txtv_stepsToGo);
@@ -356,6 +380,8 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             {
                 txtv_connect_disconnect.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen._16sdp));
                 txtv_connect_disconnect.setText("Connect");
+
+
                 linearLayout_refresh.setEnabled(false);
 
                 autoRefreshTimer.cancel();

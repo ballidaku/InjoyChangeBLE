@@ -1,6 +1,7 @@
 package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+import com.ble.sharan.myUtilities.ThemeChanger;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -62,6 +64,8 @@ public class Overall extends Fragment
 
     private void setUpIds()
     {
+        view.findViewById(R.id.linearLayoutBackground).setBackground((Drawable) ThemeChanger.getInstance().getBackground(context, MyConstant.BACKGROUND));
+
         txtv_totalSteps = (TextView) view.findViewById(R.id.txtv_totalSteps);
         txtv_totalKm = (TextView) view.findViewById(R.id.txtv_totalKm);
         txtv_totalCalories = (TextView) view.findViewById(R.id.txtv_totalCalories);

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.ThemeChanger;
 
 /**
  * Created by brst-pc93 on 1/4/17.
@@ -99,22 +100,25 @@ public class Today extends Fragment implements View.OnClickListener
     public void change(String fromWhere)
     {
         txtv_activity.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
-        txtv_activity.setBackgroundResource(R.drawable.left_selector_blue);
+
+        //txtv_activity.setBackgroundResource(R.drawable.left_selector_blue);
+        txtv_activity.setBackgroundResource(ThemeChanger.getInstance().getActivityOverallBackground(MyConstant.ACTIVITY));
 
         txtv_overall.setTextColor(ContextCompat.getColor(context, R.color.colorWhite));
-        txtv_overall.setBackgroundResource(R.drawable.right_selector_blue);
+        //txtv_overall.setBackgroundResource(R.drawable.right_selector_blue);
+        txtv_overall.setBackgroundResource(ThemeChanger.getInstance().getActivityOverallBackground(MyConstant.OVERALL));
 
 
         if (fromWhere.equals(MyConstant.ACTIVITY))
         {
-            //txtv_activity.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
-            txtv_activity.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+            txtv_activity.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
+            //txtv_activity.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
             txtv_activity.setBackgroundResource(R.drawable.left_selector_white);
         }
         else
         {
-            //txtv_overall.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
-            txtv_overall.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+            txtv_overall.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
+            //txtv_overall.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
             txtv_overall.setBackgroundResource(R.drawable.right_selector_white);
         }
     }

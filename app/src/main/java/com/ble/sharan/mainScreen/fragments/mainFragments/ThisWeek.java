@@ -1,6 +1,7 @@
 package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -19,6 +20,7 @@ import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MyUtil;
+import com.ble.sharan.myUtilities.ThemeChanger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -130,7 +132,7 @@ public class ThisWeek extends Fragment implements View.OnClickListener
 
     private void setUpIds()
     {
-
+        view.findViewById(R.id.linearLayoutBackground).setBackground((Drawable) ThemeChanger.getInstance().getBackground(context, MyConstant.BACKGROUND));
 
         cardView_noResult = (CardView) view.findViewById(R.id.cardView_noResult);
         cardView_myWeekActivity = (CardView) view.findViewById(R.id.cardView_myWeekActivity);

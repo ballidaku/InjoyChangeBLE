@@ -24,7 +24,10 @@
 
 
 
-    <color name="colorRed">#ff0000</color>
+    <color name="colorRed">#cd1e24</color>
+    <color name="colorRedDark">#a4080d</color>
+
+
     <color name="colorOrange">#fc802f</color>
     <color name="colorOrangeDark">#e16b1e</color>
 

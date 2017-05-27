@@ -55,6 +55,7 @@ import com.ble.sharan.myUtilities.MyDialogs;
 import com.ble.sharan.myUtilities.MyNotification;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+import com.ble.sharan.myUtilities.ThemeChanger;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -84,20 +85,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     String sleepData = "";
 
 
-//    ImageView imgv_profile;
-//    TextView txtv_username;
-
     Toolbar mToolbar;
 
-    //DrawerLayout mDrawerLayout;
-
-    // FragmentDrawer drawerFragment;
-
-//    ListView listv_drawer;
 
     ArrayList<String> listDataHeader;
 
-    //  DrawerListAdapter drawer_adapter;
     Context context;
 
     // LinearLayout frame_layout_profile;
@@ -141,8 +133,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     TextView txtv_myinfo;
     TextView txtv_alarm;
 
-//    ImageView imgv_leftArrow;
-//    ImageView imgv_rightArrow;
 
     TextView txtv_heading;
     TextView txtv_right;
@@ -168,7 +158,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-       // ThemeChanger.getInstance().onActivityCreateSetTheme(MainActivityNew.this, ThemeChanger.THEME_BLUE);
+        ThemeChanger.getInstance().onActivityCreateSetTheme(MainActivityNew.this, ThemeChanger.THEME_RED);
+
+
+
 
         setContentView(R.layout.activity_main);
 
@@ -296,10 +289,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         view_alarm.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite));
 
 
-        imgv_challenge.setImageResource(R.mipmap.ic_challenge);
-        imgv_data.setImageResource(R.mipmap.ic_data);
-        imgv_myinfo.setImageResource(R.mipmap.ic_myinfo);
-        imgv_alarm.setImageResource(R.mipmap.ic_alarm);
+        imgv_challenge.setImageResource(R.mipmap.ic_challenge_gray);
+        imgv_data.setImageResource(R.mipmap.ic_home_gray);
+        imgv_myinfo.setImageResource(R.mipmap.ic_profile_gray);
+        imgv_alarm.setImageResource(R.mipmap.ic_alarm_gray);
 
         txtv_challenge.setTextColor(ContextCompat.getColor(context, R.color.colorGray));
         txtv_data.setTextColor(ContextCompat.getColor(context, R.color.colorGray));
@@ -307,28 +300,32 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         txtv_alarm.setTextColor(ContextCompat.getColor(context, R.color.colorGray));
 
 
-       /* v.setBackgroundColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
-        txtv.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));*/
+        v.setBackgroundColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
+        txtv.setTextColor(ThemeChanger.getInstance().getThemePrimaryColor(context));
 
 
-        v.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimary));
-        txtv.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
+//        v.setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimary));
+//        txtv.setTextColor(ContextCompat.getColor(context,R.color.colorPrimary));
 
         if (image == imgv_challenge)
         {
-            imgv_challenge.setImageResource(R.mipmap.ic_challenge_selected);
+            //imgv_challenge.setImageResource(R.mipmap.ic_challenge_blue);
+            imgv_challenge.setImageResource((int)ThemeChanger.getInstance().getBackground(context,MyConstant.CHALLENGE));
         }
         else if (image == imgv_data)
         {
-            imgv_data.setImageResource(R.mipmap.ic_data_selected);
+            //imgv_data.setImageResource(R.mipmap.ic_home_blue);
+            imgv_data.setImageResource((int)ThemeChanger.getInstance().getBackground(context,MyConstant.HOME));
         }
         else if (image == imgv_myinfo)
         {
-            imgv_myinfo.setImageResource(R.mipmap.ic_myinfo_selected);
+            //imgv_myinfo.setImageResource(R.mipmap.ic_profile_blue);
+            imgv_myinfo.setImageResource((int)ThemeChanger.getInstance().getBackground(context,MyConstant.PROFILE));
         }
         else if (image == imgv_alarm)
         {
-            imgv_alarm.setImageResource(R.mipmap.ic_alarm_selected);
+            //imgv_alarm.setImageResource(R.mipmap.ic_alarm_blue);
+            imgv_alarm.setImageResource((int)ThemeChanger.getInstance().getBackground(context,MyConstant.ALARM));
         }
 
 

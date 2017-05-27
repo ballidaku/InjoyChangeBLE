@@ -17,7 +17,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +85,7 @@ public class MyUtil
     }
 
 
-    public static class MyTextWatcher implements android.text.TextWatcher
+    /*public static class MyTextWatcher implements android.text.TextWatcher
     {
 
         EditText editText;
@@ -121,7 +120,7 @@ public class MyUtil
                 editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_unselected, 0);
             }
         }
-    }
+    }*/
 
 
 

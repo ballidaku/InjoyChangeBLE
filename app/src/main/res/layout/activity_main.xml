@@ -11,7 +11,7 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/colorWhite"
-            android:elevation="20dp"
+            app:elevation="20dp"
             android:orientation="horizontal">
 
 
@@ -56,14 +56,14 @@
                     android:id="@+id/view_data"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorPrimary"/>
+                    android:background="?attr/colorPrimary"/>
 
                 <ImageView
                     android:id="@+id/imgv_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_data"/>
+                    android:src="@mipmap/ic_home_gray"/>
 
                 <TextView
                     android:id="@+id/txtv_data"
@@ -87,14 +87,14 @@
                     android:id="@+id/view_challenge"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorPrimary"/>
+                    android:background="?attr/colorPrimary"/>
 
                 <ImageView
                     android:id="@+id/imgv_challenge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_challenge"/>
+                    android:src="@mipmap/ic_challenge_gray"/>
 
                 <TextView
                     android:id="@+id/txtv_challenge"
@@ -120,14 +120,14 @@
                     android:id="@+id/view_myinfo"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorPrimary"/>
+                    android:background="?attr/colorPrimary"/>
 
                 <ImageView
                     android:id="@+id/imgv_myinfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_myinfo"/>
+                    android:src="@mipmap/ic_profile_gray"/>
 
                 <TextView
                     android:id="@+id/txtv_myinfo"
@@ -152,14 +152,14 @@
                     android:id="@+id/view_alarm"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorPrimary"/>
+                    android:background="?attr/colorPrimary"/>
 
                 <ImageView
                     android:id="@+id/imgv_alarm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:src="@mipmap/ic_alarm"/>
+                    android:src="@mipmap/ic_alarm_gray"/>
 
                 <TextView
                     android:id="@+id/txtv_alarm"

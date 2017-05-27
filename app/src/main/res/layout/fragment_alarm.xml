@@ -2,9 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/linearLayoutBackground"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/ic_background_with_shadow"
+              android:background="@drawable/ic_background_blue"
               android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -81,13 +82,13 @@
 
                     </LinearLayout>
 
-                 <!--   <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:text="EVERYDAY"
-                        android:textSize="11sp"
-                        android:textStyle="bold"/>-->
+                    <!--   <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:paddingLeft="5dp"
+                           android:text="EVERYDAY"
+                           android:textSize="11sp"
+                           android:textStyle="bold"/>-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -102,9 +103,9 @@
                             android:id="@+id/edtv_first_monday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
                             android:editable="false"
-                            android:background="@null"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="M"/>
@@ -113,10 +114,10 @@
                             android:id="@+id/edtv_first_tuesday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableTop="@mipmap/ic_uncheck_blue"
-                            android:gravity="center"
-                            android:editable="false"
                             android:background="@null"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
+                            android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="T"/>
 
@@ -124,11 +125,11 @@
                             android:id="@+id/edtv_first_wednesday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="W"/>
 
 
@@ -136,11 +137,11 @@
                             android:id="@+id/edtv_first_thursday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="T"/>
 
 
@@ -148,11 +149,11 @@
                             android:id="@+id/edtv_first_friday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="F"/>
 
 
@@ -160,11 +161,11 @@
                             android:id="@+id/edtv_first_saturday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="S"/>
 
 
@@ -172,11 +173,11 @@
                             android:id="@+id/edtv_first_sunday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="S"/>
 
 
@@ -264,13 +265,13 @@
 
                     </LinearLayout>
 
-                   <!-- <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:text="EVERYDAY"
-                        android:textSize="11sp"
-                        android:textStyle="bold"/>-->
+                    <!-- <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:paddingLeft="5dp"
+                         android:text="EVERYDAY"
+                         android:textSize="11sp"
+                         android:textStyle="bold"/>-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -281,9 +282,9 @@
                             android:id="@+id/edtv_second_monday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
                             android:editable="false"
-                            android:background="@null"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="M"/>
@@ -292,10 +293,10 @@
                             android:id="@+id/edtv_second_tuesday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableTop="@mipmap/ic_uncheck_blue"
-                            android:gravity="center"
-                            android:editable="false"
                             android:background="@null"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
+                            android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="T"/>
 
@@ -303,11 +304,11 @@
                             android:id="@+id/edtv_second_wednesday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="W"/>
 
 
@@ -315,11 +316,11 @@
                             android:id="@+id/edtv_second_thursday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="T"/>
 
 
@@ -327,11 +328,11 @@
                             android:id="@+id/edtv_second_friday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="F"/>
 
 
@@ -339,11 +340,11 @@
                             android:id="@+id/edtv_second_saturday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="S"/>
 
 
@@ -351,11 +352,11 @@
                             android:id="@+id/edtv_second_sunday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="S"/>
 
 
@@ -443,13 +444,13 @@
 
                     </LinearLayout>
 
-                   <!-- <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:text="EVERYDAY"
-                        android:textSize="11sp"
-                        android:textStyle="bold"/>-->
+                    <!-- <TextView
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:paddingLeft="5dp"
+                         android:text="EVERYDAY"
+                         android:textSize="11sp"
+                         android:textStyle="bold"/>-->
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -460,9 +461,9 @@
                             android:id="@+id/edtv_third_monday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
                             android:editable="false"
-                            android:background="@null"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="M"/>
@@ -471,10 +472,10 @@
                             android:id="@+id/edtv_third_tuesday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableTop="@mipmap/ic_uncheck_blue"
-                            android:gravity="center"
-                            android:editable="false"
                             android:background="@null"
+                            android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
+                            android:gravity="center"
                             android:padding="@dimen/_5sdp"
                             android:text="T"/>
 
@@ -482,11 +483,11 @@
                             android:id="@+id/edtv_third_wednesday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="W"/>
 
 
@@ -494,11 +495,11 @@
                             android:id="@+id/edtv_third_thursday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="T"/>
 
 
@@ -506,11 +507,11 @@
                             android:id="@+id/edtv_third_friday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="F"/>
 
 
@@ -518,11 +519,11 @@
                             android:id="@+id/edtv_third_saturday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="S"/>
 
 
@@ -530,11 +531,11 @@
                             android:id="@+id/edtv_third_sunday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@null"
                             android:drawableTop="@mipmap/ic_uncheck_blue"
+                            android:editable="false"
                             android:gravity="center"
                             android:padding="@dimen/_5sdp"
-                            android:editable="false"
-                            android:background="@null"
                             android:text="S"/>
 
 

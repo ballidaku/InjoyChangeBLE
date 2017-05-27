@@ -177,6 +177,20 @@ public class MyConstant
 
 
 
+    public static final String BACKGROUND = "background";
+    public static final String TODAY = "today";
+    public static final String THIS_WEEK = "this_week";
+    public static final String MY_GOALS = "my_goals";
+
+    public static final String CHALLENGE = "challenge";
+    public static final String HOME = "home";
+    public static final String ALARM = "alarm";
+    public static final String REFRESH = "refresh";
+    public static final String CONNECT = "connect";
+    public static final String ALARM_CHECKED = "alarm_checked";
+    public static final String ALARM_UNCHECKED = "alarm_unchecked";
+
+
 
 
 }

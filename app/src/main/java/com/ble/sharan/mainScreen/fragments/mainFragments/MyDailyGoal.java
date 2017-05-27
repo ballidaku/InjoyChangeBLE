@@ -20,6 +20,7 @@ import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MyDatabase;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+import com.ble.sharan.myUtilities.ThemeChanger;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -85,7 +86,7 @@ public class MyDailyGoal extends Fragment implements TimePickerDialog.OnTimeSetL
 
     private void setUpIds()
     {
-
+        view.findViewById(R.id.linearLayoutBackground).setBackground((Drawable) ThemeChanger.getInstance().getBackground(context, MyConstant.BACKGROUND));
 
         edtv_steps = (EditText) view.findViewById(R.id.edtv_steps);
         edtv_stepsListener = edtv_steps.getKeyListener();

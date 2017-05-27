@@ -43,7 +43,8 @@ import android.util.Log;
 import java.util.List;
 import java.util.UUID;
 
-/**0
+/**
+ * 0
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
  */
@@ -134,7 +135,7 @@ public class MyUartService extends Service
                                          int status)
         {
 
-            Log.w(TAG, "onCharacteristicRead" + characteristic+"--status--"+status);
+            Log.w(TAG, "onCharacteristicRead" + characteristic + "--status--" + status);
             if (status == BluetoothGatt.GATT_SUCCESS)
             {
                 broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
@@ -200,7 +201,7 @@ public class MyUartService extends Service
 
     /**
      * Initializes a reference to the local Bluetooth adapter.
-                                     *
+     *
      * @return Return true if the initialization is successful.
      */
     public boolean initialize()
@@ -230,8 +231,9 @@ public class MyUartService extends Service
 
     /**
      * Connects to the GATT server hosted on the Bluetooth LE device.
+     * <p>
+     * 79695     * @param address The device address of the destination device.
      *
-79695     * @param address The device address of the destination device.
      * @return Return true if the connection is initiated successfully. The connection result
      * is reported asynchronously through the
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
@@ -247,7 +249,7 @@ public class MyUartService extends Service
 
         // Previously connected device.  Try to reconnect.
         if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
-                && mBluetoothGatt != null)
+                  && mBluetoothGatt != null)
         {
             Log.w(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect())
@@ -263,7 +265,7 @@ public class MyUartService extends Service
         }
 
 
-       // MyUtil.myLog(TAG," previous address "+mBluetoothDeviceAddress+"  current address "+address );
+        // MyUtil.myLog(TAG," previous address "+mBluetoothDeviceAddress+"  current address "+address );
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null)
@@ -319,7 +321,8 @@ public class MyUartService extends Service
             mBluetoothGatt.close();
             mBluetoothGatt = null;
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -356,7 +359,7 @@ public class MyUartService extends Service
     public void enableTXNotification()
     { 
         /*if (mBluetoothGatt == null) {
-    		showMessage("mBluetoothGatt null" + mBluetoothGatt);
+            showMessage("mBluetoothGatt null" + mBluetoothGatt);
     		broadcastUpdate(DEVICE_DOES_NOT_SUPPORT_UART);
     		return;
     	}*/
@@ -377,11 +380,27 @@ public class MyUartService extends Service
         }
         mBluetoothGatt.setCharacteristicNotification(TxChar, true);
 
-        BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
-        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-        mBluetoothGatt.writeDescriptor(descriptor);
 
+
+
+
+        BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
+        //descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+
+         /*After error in descriptor, Ballidaku changed the code and commented the previous upper line*/
+
+        //***************************************************************************
+        // Added extra by BALLIDAKU : this is bcz  descriptor.setValue() giving error in 6.0.1
+        //***************************************************************************
+        byte[] ENABLE_NOTIFICATION_VALUE = {0x01, 0x00};
+        descriptor.setValue(ENABLE_NOTIFICATION_VALUE);
+
+        /*End Here*/
+
+        mBluetoothGatt.writeDescriptor(descriptor);
     }
+
+
 
     public void writeRXCharacteristic(byte[] value)
     {
@@ -408,7 +427,8 @@ public class MyUartService extends Service
             boolean status = mBluetoothGatt.writeCharacteristic(RxChar);
 
             Log.d(TAG, "write TXchar - status=" + status);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }

@@ -6,14 +6,14 @@
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
             <padding
-                android:right="@dimen/_5sdp"/>
+                android:right="@dimen/_1sdp"/>
 
 
             <size
                 android:width="@dimen/_40sdp"
-                android:height="@dimen/_20sdp"/>
+                android:height="25dp"/>
 
-            <corners android:radius="@dimen/_20sdp"/>
+            <corners android:radius="25dp"/>
 
             <solid android:color="#00C24B"/>
 
@@ -28,13 +28,13 @@
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
             <padding
-                     android:left="@dimen/_5sdp"/>
+                     android:left="@dimen/_1sdp"/>
             <size
                 android:width="@dimen/_40sdp"
-                android:height="@dimen/_20sdp"/>
+                android:height="25dp"/>
 
 
-            <corners android:radius="@dimen/_20sdp"/>
+            <corners android:radius="25dp"/>
 
             <solid android:color="@color/colorGray"/>
 

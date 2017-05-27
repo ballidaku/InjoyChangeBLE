@@ -1,15 +1,19 @@
 package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.ble.sharan.R;
 import com.ble.sharan.mainScreen.activities.MainActivityNew;
+import com.ble.sharan.myUtilities.MyConstant;
+import com.ble.sharan.myUtilities.ThemeChanger;
 
 /**
  * Created by brst-pc93 on 1/4/17.
@@ -19,6 +23,8 @@ public class HealthData extends Fragment implements View.OnClickListener
 {
 
     String TAG = HealthData.class.getSimpleName();
+
+
 
     FrameLayout frameLayout_today;
     FrameLayout frameLayout_myweek;
@@ -63,6 +69,13 @@ public class HealthData extends Fragment implements View.OnClickListener
 
     private void setUpIds()
     {
+        view.findViewById(R.id.linearLayoutBackground).setBackground((Drawable) ThemeChanger.getInstance().getBackground(context, MyConstant.BACKGROUND));
+        ((ImageView)view.findViewById(R.id.imageViewToday)).setImageResource((Integer) ThemeChanger.getInstance().getBackground(context,MyConstant.TODAY));
+        ((ImageView)view.findViewById(R.id.imageViewThisWeek)).setImageResource((Integer) ThemeChanger.getInstance().getBackground(context,MyConstant.THIS_WEEK));
+        ((ImageView)view.findViewById(R.id.imageViewMyGoals)).setImageResource((Integer) ThemeChanger.getInstance().getBackground(context,MyConstant.MY_GOALS));
+        ((ImageView)view.findViewById(R.id.imageViewOverall)).setImageResource((Integer) ThemeChanger.getInstance().getBackground(context,MyConstant.OVERALL));
+
+
         (frameLayout_today = (FrameLayout) view.findViewById(R.id.frameLayout_today)).setOnClickListener(this);
         (frameLayout_myweek = (FrameLayout) view.findViewById(R.id.frameLayout_myweek)).setOnClickListener(this);
         (frameLayout_mygoal = (FrameLayout) view.findViewById(R.id.frameLayout_mygoal)).setOnClickListener(this);

@@ -5,7 +5,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="?attr/colorPrimary"
     android:minHeight="?attr/actionBarSize"
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -14,7 +14,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         android:orientation="vertical">
 
         <!-- <ImageView
@@ -73,7 +73,7 @@
             android:gravity="center"
             android:padding="3dp"
             android:text="Overall"
-            android:textColor="@color/colorBlue"
+            android:textColor="?attr/colorPrimary"
             android:visibility="gone"/>
 
     </FrameLayout>

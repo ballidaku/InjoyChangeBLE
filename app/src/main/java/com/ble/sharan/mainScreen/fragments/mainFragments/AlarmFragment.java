@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.ble.sharan.mainScreen.activities.MainActivityNew;
 import com.ble.sharan.myUtilities.MyConstant;
 import com.ble.sharan.myUtilities.MySharedPreference;
 import com.ble.sharan.myUtilities.MyUtil;
+import com.ble.sharan.myUtilities.ThemeChanger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -111,8 +113,17 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
             view = inflater.inflate(R.layout.fragment_alarm, container, false);
 
 
-            TOP_ICON_CHECKED = ContextCompat.getDrawable(context,R.mipmap.ic_check_blue);
-            TOP_ICON_UNCHECKED = ContextCompat.getDrawable(context,R.mipmap.ic_uncheck_blue);
+//            TOP_ICON_CHECKED = ContextCompat.getDrawable(context,R.mipmap.ic_check_blue);
+//            TOP_ICON_UNCHECKED = ContextCompat.getDrawable(context,R.mipmap.ic_uncheck_blue);
+
+
+            TOP_ICON_CHECKED= ContextCompat.getDrawable(context,ThemeChanger.getInstance().getActivityOverallBackground(MyConstant.ALARM_CHECKED));
+            TOP_ICON_UNCHECKED=ContextCompat.getDrawable(context,ThemeChanger.getInstance().getActivityOverallBackground(MyConstant.ALARM_UNCHECKED));
+
+
+
+
+
 
 //            TOP_ICON_CHECKED = ContextCompat.getDrawable(context,R.drawable.ic_checked);
 //            TOP_ICON_UNCHECKED = ContextCompat.getDrawable(context,R.drawable.ic_unchecked);
@@ -134,6 +145,12 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
 
         return view;
+    }
+
+    public static Drawable setTint(Drawable d, int color) {
+        Drawable wrappedDrawable = DrawableCompat.wrap(d);
+        DrawableCompat.setTint(wrappedDrawable, color);
+        return wrappedDrawable;
     }
 
 
@@ -168,6 +185,8 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
     private void setUpIds()
     {
+        view.findViewById(R.id.linearLayoutBackground).setBackground((Drawable) ThemeChanger.getInstance().getBackground(context, MyConstant.BACKGROUND));
+
         (txtv_alarmFirst = (TextView) view.findViewById(R.id.txtv_alarmFirst)).setOnClickListener(this);
         (txtv_alarmSecond = (TextView) view.findViewById(R.id.txtv_alarmSecond)).setOnClickListener(this);
         (txtv_alarmThird = (TextView) view.findViewById(R.id.txtv_alarmThird)).setOnClickListener(this);
