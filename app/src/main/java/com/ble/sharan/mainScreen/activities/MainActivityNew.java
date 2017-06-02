@@ -158,7 +158,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        ThemeChanger.getInstance().onActivityCreateSetTheme(MainActivityNew.this, ThemeChanger.THEME_RED);
+        ThemeChanger.getInstance().onActivityCreateSetTheme(MainActivityNew.this, ThemeChanger.THEME_BLUE);
 
 
 
@@ -188,7 +188,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         reconnectTimer = new ReconnectTimer(6000, 3500);
 
 
-        if (mBtAdapter.isEnabled())
+        if (mBtAdapter !=null && mBtAdapter.isEnabled())
         {
             oneTimeDialogToConnect(context);
         }
@@ -644,10 +644,11 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                 if (!(fragment instanceof HealthData))
                 {
+
                     removeFragmentsOfChallenge();
                     setBottomTabSelected(view_data, imgv_data, txtv_data);
-
                     displayView(0);
+
                 }
 
                 break;
@@ -715,7 +716,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             if (!mService.initialize())
             {
                 MyUtil.myLog(TAG, "Unable to initialize Bluetooth");
-                finish();
+                //finish();
             }
         }
 
@@ -1213,7 +1214,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     {
         super.onResume();
 
-        if (!mBtAdapter.isEnabled())
+        if (mBtAdapter!=null &&  !mBtAdapter.isEnabled())
         {
             //Log.i(TAG, "onResume - BT not enabled yet");
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -1502,7 +1503,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         String finalStride = String.format("%03d", Math.round(strideInDouble));
 
-//        MyUtil.myLog(TAG, "FinalStideInINCHES---" + finalStride);
+//        MyUtil.myLo1g(TAG, "FinalStideInINCHES---" + finalStride);
 
 
         //Height

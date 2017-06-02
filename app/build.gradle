@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
-/*apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
-}*/
+}
 
 android {
     compileSdkVersion 25
@@ -12,7 +12,8 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "tbi.enjoy.health"
+        //applicationId "tbi.enjoy.health"  // LIVE
+        applicationId "tbi.enjoy.global"    // NOT LIVE
         minSdkVersion 19
         targetSdkVersion 22
 
@@ -30,9 +31,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-       /*compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+       compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
             transitive = true;
-        }*/
+        }
     compile files('libs/YouTubeAndroidPlayerApi.jar')
 
     compile project(path: ':dfuapp')

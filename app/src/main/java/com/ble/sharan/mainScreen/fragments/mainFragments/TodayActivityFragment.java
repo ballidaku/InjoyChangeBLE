@@ -171,6 +171,9 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
 //                    }
 //                });
+               /* Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.howicompare");
+                startActivity( LaunchIntent );*/
+
 
                 break;
 
