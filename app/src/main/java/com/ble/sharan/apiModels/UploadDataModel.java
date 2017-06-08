@@ -10,8 +10,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class UploadDataModel
 {
+
     @SerializedName(MyConstant.STATUS)
-    String status;
+    String status ;
 
     public String getStatus()
     {

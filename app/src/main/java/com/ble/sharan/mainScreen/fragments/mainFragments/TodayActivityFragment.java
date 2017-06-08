@@ -168,11 +168,9 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //                    {
                 ((MainActivityNew) context).connectDisconnect();
 
-
 //                    }
 //                });
-               /* Intent LaunchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.howicompare");
-                startActivity( LaunchIntent );*/
+
 
 
                 break;
@@ -292,8 +290,18 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         if (wantToUpdate && myUtil.checkConnection())
         {
-//            SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
-            POST_DATA_TO_SERVER_RETROFIT(steps, todayCalories, todayMilesCovered);
+
+            try
+            {
+                //            SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
+                POST_DATA_TO_SERVER_RETROFIT(steps, todayCalories, todayMilesCovered);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+
 
         }
 
@@ -445,7 +453,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         String todaySleepTime = spltm[0] + "h:" + spltm[1] + "m";
 
 
-        MyUtil.myLog(TAG,"Send Itens "+" Date " +todayDate+" todaySteps "+todaySteps+" calories "+calories +" todaySleepTime "+todaySleepTime+ " UID "+MySharedPreference.getInstance().getUID(context));
+        MyUtil.myLog(TAG,"Send Items "+" Date " +todayDate+" todaySteps "+todaySteps+" calories "+calories +" todaySleepTime "+todaySleepTime+ " UID "+MySharedPreference.getInstance().getUID(context));
 
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -461,7 +469,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
                 UploadDataModel uploadDataModel = response.body();
 
-                if (uploadDataModel.getStatus().equals("200"))
+                if (uploadDataModel.getStatus() != null  &&  uploadDataModel.getStatus().equals("200"))
                 {
 
                       MyUtil.myLog(TAG,"Upload Response ---"+uploadDataModel.getData());

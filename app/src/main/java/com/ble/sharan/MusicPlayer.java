@@ -12,11 +12,11 @@ public class MusicPlayer /*extends AppCompatActivity*/
 {
 
     String TAG = MusicPlayer.class.getSimpleName();
-    AudioManager mAudioManager;
+    private AudioManager mAudioManager;
 
-    Context context;
+   // Context context;
 
-    boolean isPlayingInKarbon= false;
+    private boolean isPlayingInKarbon= false;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,7 +31,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
 
     }*/
 
-    public static MusicPlayer instance = null;
+    private static MusicPlayer instance = null;
 
     public static MusicPlayer getInstance()
     {
@@ -52,7 +52,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
         MyUtil.myLog("Manufacture", deviceName);
 
 
-        if (deviceName.contains("LENOVO") || deviceName.contains("vivo"))
+        if (deviceName.contains("LENOVO") || deviceName.contains("vivo") || deviceName.contains("htc"))
         {
             refresh(context);
             long eventtime = SystemClock.uptimeMillis();
@@ -93,7 +93,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
         MyUtil.myLog("Manufacture", deviceName);
 
 
-        if (deviceName.contains("LENOVO") || deviceName.contains("vivo"))
+        if (deviceName.contains("LENOVO") || deviceName.contains("vivo") || deviceName.contains("htc") )
         {
             refresh(context);
             long eventtime = SystemClock.uptimeMillis();
@@ -133,6 +133,24 @@ public class MusicPlayer /*extends AppCompatActivity*/
         }
     }
 
+ /*  public void p(final Context context)
+    {
+        Intent mediaEvent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY);
+        mediaEvent.putExtra(Intent.EXTRA_KEY_EVENT, event);
+        context.sendBroadcast(mediaEvent);
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Intent mediaEvent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+                KeyEvent event = new KeyEvent(KeyEvent.ACTION_UP,KeyEvent.KEYCODE_MEDIA_PLAY);
+                mediaEvent.putExtra(Intent.EXTRA_KEY_EVENT, event);
+                context.sendBroadcast(mediaEvent);
+            }
+        }, 100);
+    }*/
+
 
    // public void next(View v)
     public void next(Context context)
@@ -140,7 +158,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
         String deviceName = android.os.Build.MANUFACTURER;
         MyUtil.myLog("Manufacture", deviceName);
 
-        if (deviceName.contains("LENOVO") || deviceName.contains("vivo"))
+        if (deviceName.contains("LENOVO") || deviceName.contains("vivo") || deviceName.contains("htc"))
         {
             refresh(context);
             long eventtime = SystemClock.uptimeMillis();
@@ -171,7 +189,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
     }
 
 
-    public void refresh(Context context)
+    private void refresh(Context context)
     {
         long eventtime = SystemClock.uptimeMillis();
         Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
@@ -181,7 +199,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
 
     }
 
-    public void refreshKarbon(Context context)
+    private void refreshKarbon(Context context)
     {
         long eventtime = SystemClock.uptimeMillis();
         Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
@@ -190,5 +208,7 @@ public class MusicPlayer /*extends AppCompatActivity*/
         context.sendOrderedBroadcast(upIntent, null);
 
     }
+
+
 
 }

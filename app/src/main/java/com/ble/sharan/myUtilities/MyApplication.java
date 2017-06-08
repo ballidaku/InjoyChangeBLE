@@ -16,16 +16,19 @@ public class MyApplication extends Application
     public void onCreate()
     {
         super.onCreate();
-//        Fabric.with(this, new Crashlytics());
+        //
+       // Fabric.with(this, new Crashlytics());
 
         mInstance = this;
     }
 
     @Override
-    protected void attachBaseContext(Context base) {
+    protected void attachBaseContext(Context base)
+    {
         super.attachBaseContext(base);
 //        MultiDex.install(this);
     }
+
     public static synchronized MyApplication getInstance()
     {
         return mInstance;

@@ -112,16 +112,16 @@ public class MyConstant
 
 
     //APIS
-   // public static final String BASE_URL="https://hydraflow.injoyglobal.com";  // Live URL (InjoyHealth)
+    public static final String BASE_URL="https://hydraflow.injoyglobal.com";  // Live URL (InjoyHealth)
 
 
-    public static final String BASE_URL="http://injoy.devinjoyglobal.com";  // Not Live URL  (InjoyGlobal)
+//    public static final String BASE_URL="http://injoy.devinjoyglobal.com";  // Not Live URL  (InjoyGlobal)
 
     public static final String SIGN_UP = BASE_URL+"/user/register";
     public static final String SIGN_IN = BASE_URL+"/api/login-token";
     public static final String FORGOT_PASSWORD = BASE_URL+"/user/password";
-//    public static final String CHALLENGE_API = BASE_URL+"/user/login";
-    public static final String CHALLENGE_API = BASE_URL+"/healthy/dashboard";
+   public static final String CHALLENGE_API = BASE_URL+"/user/login";  // LIVE
+ //   public static final String CHALLENGE_API = BASE_URL+"/healthy/dashboard";  // NOT LIVE
 
     public static final String UPLOAD_USER_DATA = BASE_URL+"/api/postdata";
     public static final String SHOUT_OUT_USERS = BASE_URL+"/api/shout_out?date=";

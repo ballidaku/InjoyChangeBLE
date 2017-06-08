@@ -85,9 +85,14 @@ When i remove crashlytics, i comment in following classes
 
  ==> InjoyHealth
  * Live App ( tbi.enjoy.health )
- *
+ * BaseUrl : https://hydraflow.injoyglobal.com
+ * App Icon : app_icon
+ * challenge link
 
 
  ==> InjoyGlobal
  * App logo is changes
  * package name is changed ( tbi.enjoy.global )
+ * BaseUrl  : http://injoy.devinjoyglobal.com
+ * App icon : ic_app_logo_injoy_global
+ * challenge link

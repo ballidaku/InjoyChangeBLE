@@ -11,6 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -1110,7 +1112,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public void connectDisconnect()
     {
-        if (!mBtAdapter.isEnabled())
+        if (mBtAdapter!=null && !mBtAdapter.isEnabled())
         {
             //Log.i(TAG, "onClick - BT not enabled yet");
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -1544,6 +1546,15 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager)
+                  getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) return true;
+        return false;
+
+    }
+
 
     /*public void stopPlaying()
     {
@@ -1591,6 +1602,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         context.sendOrderedBroadcast(intent,null);
     }*/
+
+
+
 
 
 }
