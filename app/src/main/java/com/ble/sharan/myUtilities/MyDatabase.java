@@ -513,7 +513,6 @@ public class MyDatabase extends SQLiteOpenHelper
             cursor.moveToFirst();
         }
 
-
         if (cursor != null && cursor.getCount() > 0)
         {
             sleepRawData = cursor.getString(3);

@@ -156,18 +156,19 @@ public class ThisWeek extends Fragment implements View.OnClickListener
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
             {
+                // This functionality is stopped by mrinal sir.
 
-//                MyUtil.showToast(context,myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)));
+               /* String rawTime=myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE));
 
-                if (!myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)).isEmpty())
+                if (rawTime != null && !rawTime.isEmpty())
                 {
                     SleepDetails sleepDetails = new SleepDetails();
                     Bundle bundle = new Bundle();
-                    bundle.putString(MyConstant.SLEEP, myDatabase.getRawSleepDataOnDate(listMain.get(i).get(MyConstant.DATE)));
+                    bundle.putString(MyConstant.SLEEP, rawTime);
                     bundle.putString(MyConstant.DATE, listMain.get(i).get(MyConstant.DATE));
                     sleepDetails.setArguments(bundle);
                     myUtil.switchfragment(ThisWeek.this, sleepDetails);
-                }
+                }*/
 
             }
         });

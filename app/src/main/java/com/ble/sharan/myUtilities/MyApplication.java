@@ -16,7 +16,7 @@ public class MyApplication extends Application
     public void onCreate()
     {
         super.onCreate();
-        //
+
        // Fabric.with(this, new Crashlytics());
 
         mInstance = this;
@@ -26,7 +26,6 @@ public class MyApplication extends Application
     protected void attachBaseContext(Context base)
     {
         super.attachBaseContext(base);
-//        MultiDex.install(this);
     }
 
     public static synchronized MyApplication getInstance()

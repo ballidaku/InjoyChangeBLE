@@ -30,12 +30,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.NotificationCompat;
 
+import no.nordicsemi.android.nrftoolbox.R;
 import no.nordicsemi.android.log.Logger;
 import no.nordicsemi.android.nrftoolbox.FeaturesActivity;
-import no.nordicsemi.android.nrftoolbox.R;
 import no.nordicsemi.android.nrftoolbox.profile.BleManager;
 import no.nordicsemi.android.nrftoolbox.profile.BleProfileService;
 
@@ -97,6 +97,7 @@ public class HTSService extends BleProfileService implements HTSManagerCallbacks
 	@Override
 	protected void onUnbind() {
 		// when the activity closes we need to show the notification that user is connected to the sensor
+		//TODO Commented by Ballidaku
 		createNotification(R.string.hts_notification_connected_message, 0);
 	}
 
@@ -122,6 +123,9 @@ public class HTSService extends BleProfileService implements HTSManagerCallbacks
 	 * @param defaults
 	 *            signals that will be used to notify the user
 	 */
+
+
+   //TODO Commented by Ballidaku
 	private void createNotification(final int messageResId, final int defaults) {
 		final Intent parentIntent = new Intent(this, FeaturesActivity.class);
 		parentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

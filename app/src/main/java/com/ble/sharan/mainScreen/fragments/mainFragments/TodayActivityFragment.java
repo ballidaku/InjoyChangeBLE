@@ -2,7 +2,6 @@ package com.ble.sharan.mainScreen.fragments.mainFragments;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -75,19 +74,19 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         if (view == null)
         {
-            int layout;
+            //int layout;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             {
                 layout = R.layout.fragment_today_activity;
             }
             else
-            {
-                layout = R.layout.fragment_today_activity_kitkat;
-            }
+            {*/
+//                layout = R.layout.fragment_today_activity;
+//            }
 
 //            view = inflater.inflate(R.layout.fragment_today_activity, container, false);
-            view = inflater.inflate(layout, container, false);
+            view = inflater.inflate(R.layout.fragment_today_activity, container, false);
 
             setUpIds();
 

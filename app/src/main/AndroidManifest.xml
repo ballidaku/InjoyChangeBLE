@@ -12,9 +12,15 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
+
+    <!--LIVE  android:icon="@mipmap/app_icon"-->
+    <!--NOT LIVE  android:icon="@mipmap/ic_app_logo_injoy_global"-->
+
+
+
     <application
         android:name=".myUtilities.MyApplication"
-        android:icon="@mipmap/app_icon"
+        android:icon="@mipmap/ic_app_logo_injoy_global"
         android:label="@string/app_name"
         android:theme="@style/AppThemeBlue">
         <activity
@@ -76,6 +82,7 @@
         <service
             android:name="no.nordicsemi.android.nrftoolbox.proximity.ProximityService"
             android:label="@string/proximity_feature_title"/>
+
         <service
             android:name="no.nordicsemi.android.nrftoolbox.dfu.DfuService"
             android:exported="true"

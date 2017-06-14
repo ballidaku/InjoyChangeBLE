@@ -670,7 +670,7 @@ public class MyUtil
             Glide.with(context)
                  .load("abc")
                  .centerCrop()
-                 .placeholder(R.drawable.ic_no_user)
+                 .placeholder(R.drawable.ic_no_user_new)
                  .crossFade()
                  .into(imageView);
 
@@ -702,10 +702,17 @@ public class MyUtil
     {
         if (url.trim().isEmpty() || url.equals("null"))
         {
-            Picasso.with(context)
+            /*Picasso.with(context)
                    .load("abc")
                    .placeholder(R.drawable.ic_no_user)
                    .error(R.drawable.ic_no_user)
+                   .into(imageView);*/
+
+            Picasso.with(context)
+                   .load("abc")
+                   .placeholder(R.drawable.ic_no_user_new)
+                   .error(R.drawable.ic_no_user_new)
+                   .transform(new CircleTransform())
                    .into(imageView);
         }
         else
@@ -713,8 +720,8 @@ public class MyUtil
 
             Picasso.with(context)
                    .load(url.trim())
-                   .placeholder(R.drawable.ic_no_user)
-                   .error(R.drawable.ic_no_user)
+                   .placeholder(R.drawable.ic_no_user_new)
+                   .error(R.drawable.ic_no_user_new)
                    .transform(new CircleTransform())
                    .into(imageView);
         }
@@ -727,8 +734,8 @@ public class MyUtil
 
         Picasso.with(context)
                .load(file)
-               .placeholder(R.drawable.ic_no_user)
-               .error(R.drawable.ic_no_user)
+               .placeholder(R.drawable.ic_no_user_new)
+               .error(R.drawable.ic_no_user_new)
                .transform(new CircleTransform())
                .into(imageView);
 
@@ -740,8 +747,8 @@ public class MyUtil
         {
             Picasso.with(context)
                    .load("abc")
-                   // .placeholder(R.drawable.ic_no_user)
-                   // .error(R.drawable.ic_no_user)
+                   // .placeholder(R.mipmap.ic_no_user_new)
+                   // .error(R.mipmap.ic_no_user_new)
                    .into(imageView);
         }
         else
@@ -749,8 +756,8 @@ public class MyUtil
 
             Picasso.with(context)
                    .load(url.trim())
-                   // .placeholder(R.drawable.ic_no_user)
-                   // .error(R.drawable.ic_no_user)
+                   // .placeholder(R.mipmap.ic_no_user_new)
+                   // .error(R.mipmap.ic_no_user_new)
                    .into(imageView);
         }
     }

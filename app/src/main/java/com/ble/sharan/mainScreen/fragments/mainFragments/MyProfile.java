@@ -338,7 +338,8 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
     private void refreshUI()
     {
 
-        myUtil.showCircularImageWithPicasso(context, circularImageView_Profile, MySharedPreference.getInstance().getPhoto(context));
+       myUtil.showCircularImageWithPicasso(context, circularImageView_Profile, MySharedPreference.getInstance().getPhoto(context));
+//        myUtil.showCircularImageWithPicasso(context,circularImageView_Profile, "");
 
         txtv_username.setText(MySharedPreference.getInstance().getName(context));
 //        txtv_gender.setText(MySharedPreference.getInstance().getGender(context));

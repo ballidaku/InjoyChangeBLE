@@ -35,10 +35,25 @@
                 android:padding="10dp">
 
 
-                <ImageView
-                    android:id="@+id/circularImageView_Profile"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"/>
+                <FrameLayout android:layout_width="wrap_content"
+                             android:layout_height="wrap_content">
+
+
+                    <ImageView
+                        android:layout_width="125dp"
+                        android:layout_height="125dp"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/ic_back_imageholder"/>
+
+                    <ImageView
+                        android:id="@+id/circularImageView_Profile"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_no_user_new"/>
+
+
+                </FrameLayout>
 
 
                 <TextView
@@ -617,8 +632,8 @@
             android:layout_width="@dimen/_160sdp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:cardUseCompatPadding="true"
             android:layout_marginTop="@dimen/_5sdp"
+            app:cardUseCompatPadding="true"
             card_view:cardCornerRadius="@dimen/_15sdp"
             card_view:cardElevation="@dimen/_6sdp">
 
