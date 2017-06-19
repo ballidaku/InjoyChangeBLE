@@ -37,7 +37,6 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
     ImageView check1_iv;
 
     MyUtil myUtil = new MyUtil();
-    MyDialogs myDialogs = new MyDialogs();
 
     String imageUrl = "";
 
@@ -99,7 +98,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
 
                 if (!imageUrl.isEmpty())
                 {
-                    myDialogs.showDailyInspirationDialog(context, "DailyInspiration", imageUrl, count,submitPointsClickListener);
+                    MyDialogs.getInstance().showDailyInspirationDialog(context, "DailyInspiration", imageUrl, count, submitPointsClickListener);
                 }
 
                 break;
@@ -107,12 +106,12 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
     }
 
 
-    View.OnClickListener submitPointsClickListener=new View.OnClickListener()
+    View.OnClickListener submitPointsClickListener = new View.OnClickListener()
     {
         @Override
         public void onClick(View view)
         {
-            myDialogs.dialog.dismiss();
+            MyDialogs.getInstance().dialog.dismiss();
             SUBMIT_POINTS_TO_SERVER_RETROFIT();
         }
     };
@@ -166,14 +165,13 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
     }
 
 
-
     public void SUBMIT_POINTS_TO_SERVER_RETROFIT()
     {
         myUtil.showProgressDialog(context);
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<DataModel> call = apiService.submitDailyInspirationPoints(MySharedPreference.getInstance().getUID(context),myUtil.getCurrentTimeStamp());
+        Call<DataModel> call = apiService.submitDailyInspirationPoints(MySharedPreference.getInstance().getUID(context), myUtil.getCurrentTimeStamp());
 
         call.enqueue(new Callback<DataModel>()
         {
@@ -204,7 +202,7 @@ public class DailyInspiration extends Fragment implements View.OnClickListener
             {
                 myUtil.hideProgressDialog();
                 MyUtil.myLog(TAG, t.getMessage());
-               // MyUtil.showToast(context, "Server side error");
+                // MyUtil.showToast(context, "Server side error");
 
             }
         });

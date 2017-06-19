@@ -6,10 +6,12 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -41,33 +43,42 @@ public class MyDialogs
 {
     public Dialog dialog;
 
-    BluetoothAdapter mBluetoothAdapter;
+    private BluetoothAdapter mBluetoothAdapter;
 
-    List<BluetoothDevice> deviceList;
-    Map<String, Integer> devRssiValues;
+    private List<BluetoothDevice> deviceList;
+    private Map<String, Integer> devRssiValues;
 
-    DeviceAdapter deviceAdapter;
+    private DeviceAdapter deviceAdapter;
 
 //    String deviceAddess = "";
 
-    final long SCAN_PERIOD = 10000;
-
-    boolean mScanning;
+    private boolean mScanning;
 
 
-    ListView listv_newDevices;
+    private ListView listv_newDevices;
 
-    TextView txtv_close;
-    TextView txtv_noDevice;
+    private TextView txtv_close;
+    private TextView txtv_noDevice;
 
-    Handler mHandler;
+    private Handler mHandler;
 
-    AdapterView.OnItemClickListener mDeviceClickListener;
+    private AdapterView.OnItemClickListener mDeviceClickListener;
 
 
     Context context;
 
-    MyUtil myUtil = new MyUtil();
+    private MyUtil myUtil = new MyUtil();
+
+    private static MyDialogs instance = null;
+
+    public static MyDialogs getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new MyDialogs();
+        }
+        return instance;
+    }
 
 
     public void bleDeviceAvailable(Context context, AdapterView.OnItemClickListener mDeviceClickListener)
@@ -157,7 +168,7 @@ public class MyDialogs
     }
 
 
-    public void onStart()
+    private void onStart()
     {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -289,6 +300,7 @@ public class MyDialogs
         if (enable)
         {
             // Stops scanning after a pre-defined scan period.
+            long SCAN_PERIOD = 10000;
             mHandler.postDelayed(new Runnable()
             {
                 @Override
@@ -321,7 +333,7 @@ public class MyDialogs
     }
 
 
-    class DeviceAdapter extends BaseAdapter
+    private class DeviceAdapter extends BaseAdapter
     {
         Context context;
         List<BluetoothDevice> devices;
@@ -381,7 +393,8 @@ public class MyDialogs
                 tvrssi.setText("Rssi = " + String.valueOf(rssival));
 
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 e.printStackTrace();
             }
@@ -508,7 +521,7 @@ public class MyDialogs
     }
 
 
-    public void showDailyInspirationDialog(Context context, String fromWhere,String image,int count, View.OnClickListener onClickListener)
+    public void showDailyInspirationDialog(Context context, String fromWhere, String image, int count, View.OnClickListener onClickListener)
     {
         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -534,7 +547,6 @@ public class MyDialogs
         myUtil.showImageWithPicasso(context, imgvCenter, image);
 
 
-
         CardView cardViewBtn = (CardView) dialog.findViewById(R.id.cardViewBtn);
 
         cardViewBtn.setOnClickListener(onClickListener);
@@ -552,21 +564,92 @@ public class MyDialogs
 
     }
 
-
+    AlertDialog alertDialog;
 
     public void showExitDialog(Context context, DialogInterface.OnClickListener onClickListener)
     {
-        new AlertDialog.Builder(context)
-                .setTitle("Close Confirmation")
-                .setMessage("Are you sure you want to close app?")
-                .setPositiveButton("CLOSE", onClickListener)
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setIcon(R.mipmap.ic_alert)
-                .show();
+        alertDialog = new AlertDialog.Builder(context)
+                  .setTitle("Close Confirmation")
+                  .setMessage("Are you sure you want to close app?")
+                  .setPositiveButton("CLOSE", onClickListener)
+                  .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener()
+                  {
+                      public void onClick(DialogInterface dialog, int which)
+                      {
+                          dialog.dismiss();
+                      }
+                  })
+                  .setIcon(R.mipmap.ic_alert)
+                  .show();
+    }
+
+    public void oneTimeDialogToConnect(final Context context)
+    {
+        alertDialog = new AlertDialog.Builder(context)
+                  .setTitle("Connection Alert")
+                  .setMessage("You have to connect mobile to band to get data.")
+                  .setIcon(R.mipmap.ic_alert)
+                  .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                  {
+                      public void onClick(DialogInterface dialog, int which)
+                      {
+                          alertDialog.dismiss();
+
+
+                          if(MySharedPreference.getInstance().getIsNewVersionAvailable(context))
+                          {
+                              showUpdateDialog(context);
+                          }
+                          //If sleep time is not set under My Profile
+                /*if (MySharedPreference.getInstance().getSleepStartTime(context).isEmpty()  && MySharedPreference.getInstance().getSleepEndTime(context).isEmpty())
+                {
+                    oneTimeDialogToSetSleepTime(context);
+                }*/
+                      }
+                  })
+                  .show();
+    }
+
+    public void showUpdateDialog(final Context context)
+    {
+        alertDialog =  new AlertDialog.Builder(context)
+                  .setTitle("App Update!")
+                  .setMessage("App new version is avaliable now. Do you want to update?")
+                  .setPositiveButton("UPDATE", new DialogInterface.OnClickListener()
+                  {
+                      public void onClick(DialogInterface dialog, int which)
+                      {
+                          context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName())));
+                      }
+                  })
+                  .setNegativeButton("DISMISS", new DialogInterface.OnClickListener()
+                  {
+                      public void onClick(DialogInterface dialog, int which)
+                      {
+                          dialog.dismiss();
+                      }
+                  })
+                  .setIcon(R.mipmap.ic_alert)
+                  .show();
+    }
+
+
+    // This dialog functionality is stopped by client
+    public void oneTimeDialogToSetSleepTime(Context context)
+    {
+
+        alertDialog = new AlertDialog.Builder(context)
+                  .setTitle("Set Sleep Time Alert")
+                  .setMessage("You have to set sleep time under My Profile to get proper sleep time.")
+                  .setIcon(R.mipmap.ic_alert)
+                  .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                  {
+                      public void onClick(DialogInterface dialog, int which)
+                      {
+                          alertDialog.dismiss();
+                      }
+                  })
+                  .show();
     }
 
 

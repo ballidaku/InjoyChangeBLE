@@ -13,13 +13,13 @@ import java.util.HashMap;
 
 public class MySharedPreference
 {
-    public final String PreferenceName = "MyPreference";
+    private final String PreferenceName = "MyPreference";
 
     public MySharedPreference()
     {
     }
 
-    public static MySharedPreference instance = null;
+    private static MySharedPreference instance = null;
 
     public static MySharedPreference getInstance()
     {
@@ -34,6 +34,24 @@ public class MySharedPreference
     {
         return context.getSharedPreferences(PreferenceName, Activity.MODE_PRIVATE);
     }
+
+
+
+
+
+    public void saveIsNewVersionAvailable(Context context, boolean isNewVersionAvailable)
+    {
+        SharedPreferences.Editor editor = getPreference(context).edit();
+        editor.putBoolean(MyConstant.VERSION_AVAILABLE, isNewVersionAvailable);
+        editor.apply();
+    }
+
+
+    public boolean getIsNewVersionAvailable(Context context)
+    {
+        return getPreference(context).getBoolean(MyConstant.VERSION_AVAILABLE,false);
+    }
+
 
     public void saveDeviceAddress(Context context, String deviceAddress)
     {
@@ -92,7 +110,7 @@ public class MySharedPreference
     //**********************************************************************************************
 
 
-    public void saveIsManualDisconnected(Context context, boolean isTrue)
+   /* public void saveIsManualDisconnected(Context context, boolean isTrue)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
         editor.putBoolean(MyConstant.IS_MANUAL_DISCONNECTED, isTrue);
@@ -102,7 +120,7 @@ public class MySharedPreference
     public boolean getIsManualDisconnected(Context context)
     {
         return getPreference(context).getBoolean(MyConstant.IS_MANUAL_DISCONNECTED, false);
-    }
+    }*/
 
 
     //**********************************************************************************************
@@ -124,7 +142,7 @@ public class MySharedPreference
     }
 
     // For switch
-    public void setFalseIsAlarmActivated(Context context, String alarmKey, boolean b)
+    private void setFalseIsAlarmActivated(Context context, String alarmKey, boolean b)
     {
         SharedPreferences.Editor editor = getPreference(context).edit();
 

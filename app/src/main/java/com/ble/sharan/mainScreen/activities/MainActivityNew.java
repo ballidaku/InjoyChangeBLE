@@ -1,7 +1,6 @@
 package com.ble.sharan.mainScreen.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -11,8 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -49,6 +46,7 @@ import com.ble.sharan.mainScreen.fragments.mainFragments.ThisWeek;
 import com.ble.sharan.mainScreen.fragments.mainFragments.Today;
 import com.ble.sharan.myUtilities.BeanRecords;
 import com.ble.sharan.myUtilities.BleResponseInterface;
+import com.ble.sharan.myUtilities.CheckUpdates;
 import com.ble.sharan.myUtilities.GetStepsData;
 import com.ble.sharan.myUtilities.ManupulateSleepdata;
 import com.ble.sharan.myUtilities.MyConstant;
@@ -63,6 +61,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by brst-pc93 on 12/27/16.
@@ -109,7 +108,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     private BluetoothAdapter mBtAdapter = null;
 
 
-    MyDialogs myDialogs = new MyDialogs();
+   // MyDialogs myDialogs = new MyDialogs();
 
     MyDatabase myDatabase;
 
@@ -163,19 +162,24 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         ThemeChanger.getInstance().onActivityCreateSetTheme(MainActivityNew.this, ThemeChanger.THEME_BLUE);
 
 
-
-
         setContentView(R.layout.activity_main);
 
 
-
         context = this;
+
+
+
+        /*Check new version*/
+        new CheckUpdates(context);
 
 
         myDatabase = new MyDatabase(context);
 
         setUpIds();
         prepareListData();
+
+
+
 
 
         // Bluetooth
@@ -190,10 +194,10 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         reconnectTimer = new ReconnectTimer(6000, 3500);
 
 
-        if (mBtAdapter !=null && mBtAdapter.isEnabled())
+        /*if (mBtAdapter != null && mBtAdapter.isEnabled())
         {
             oneTimeDialogToConnect(context);
-        }
+        }*/
 
 
         // IF there is no data
@@ -312,22 +316,22 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         if (image == imgv_challenge)
         {
             //imgv_challenge.setImageResource(R.mipmap.ic_challenge_blue);
-            imgv_challenge.setImageResource((int)ThemeChanger.getInstance().getBackground(context,MyConstant.CHALLENGE));
+            imgv_challenge.setImageResource((int) ThemeChanger.getInstance().getBackground(context, MyConstant.CHALLENGE));
         }
         else if (image == imgv_data)
         {
             //imgv_data.setImageResource(R.mipmap.ic_home_blue);
-            imgv_data.setImageResource((int)ThemeChanger.getInstance().getBackground(context,MyConstant.HOME));
+            imgv_data.setImageResource((int) ThemeChanger.getInstance().getBackground(context, MyConstant.HOME));
         }
         else if (image == imgv_myinfo)
         {
             //imgv_myinfo.setImageResource(R.mipmap.ic_profile_blue);
-            imgv_myinfo.setImageResource((int)ThemeChanger.getInstance().getBackground(context,MyConstant.PROFILE));
+            imgv_myinfo.setImageResource((int) ThemeChanger.getInstance().getBackground(context, MyConstant.PROFILE));
         }
         else if (image == imgv_alarm)
         {
             //imgv_alarm.setImageResource(R.mipmap.ic_alarm_blue);
-            imgv_alarm.setImageResource((int)ThemeChanger.getInstance().getBackground(context,MyConstant.ALARM));
+            imgv_alarm.setImageResource((int) ThemeChanger.getInstance().getBackground(context, MyConstant.ALARM));
         }
 
 
@@ -563,7 +567,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         if (count == 1)
         {
-            myDialogs.showExitDialog(context, onBackPressedClickListener);
+            MyDialogs.getInstance().showExitDialog(context, onBackPressedClickListener);
         }
         else
         {
@@ -742,337 +746,354 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
             MyUtil.myLog(TAG, "Action : " + action);
 
-            if (action.equals(MyUartService.ACTION_GATT_CONNECTING))
+
+            switch (action)
             {
-                if (!isDisconnectedByRange)
-                {
+                case MyUartService.ACTION_GATT_CONNECTING:
+
+                    if (!isDisconnectedByRange)
+                    {
 //                    txtv_connect_disconnect.setText("Connecting...");
 //                    txtv_deviceName.setText(deviceName + " : Connecting...");
 //
-                    MyUtil.myLog(TAG, "Connecting");
+                        MyUtil.myLog(TAG, "Connecting");
 
-                    BLE_STATUS = MyConstant.CONNECTING;
+                        BLE_STATUS = MyConstant.CONNECTING;
+
+                        if (fragment instanceof Today)
+                        {
+
+                            ((Today) fragment).bleStatus(BLE_STATUS);
+                        }
+                    }
+
+                    break;
+
+                case MyUartService.ACTION_GATT_DISCONNECTING:
+
+//                txtv_connect_disconnect.setText("Disconnecting...");
+//                txtv_deviceName.setText(deviceName + " : Disconnecting...");
+
+                    MyUtil.myLog(TAG, "Disconnecting");
+
+                    BLE_STATUS = MyConstant.DISCONNECTING;
 
                     if (fragment instanceof Today)
                     {
 
                         ((Today) fragment).bleStatus(BLE_STATUS);
                     }
-                }
 
-            }
-            else if (action.equals(MyUartService.ACTION_GATT_DISCONNECTING))
-            {
-//                txtv_connect_disconnect.setText("Disconnecting...");
-//                txtv_deviceName.setText(deviceName + " : Disconnecting...");
+                    break;
 
-                MyUtil.myLog(TAG, "Disconnecting");
+                case MyUartService.ACTION_GATT_CONNECTED:
 
-                BLE_STATUS = MyConstant.DISCONNECTING;
-
-                if (fragment instanceof Today)
-                {
-
-                    ((Today) fragment).bleStatus(BLE_STATUS);
-                }
-
-            }
-            else if (action.equals(MyUartService.ACTION_GATT_CONNECTED))
-            {
               /*  getActivity().runOnUiThread(new Runnable()
                 {
                     public void run()
                     {*/
-                MyUtil.myLog(TAG, "Connected");
+                    MyUtil.myLog(TAG, "Connected");
 
-                BLE_STATUS = MyConstant.CONNECTED;
+                    BLE_STATUS = MyConstant.CONNECTED;
 
-                //**********************************************************************************
-                // In case if band is connected in background
-                reconnectTimer.cancel();
-
-
-                // Client is getting error of " java.lang.NullPointerException: Attempt to invoke virtual method 'boolean android.app.Dialog.isShowing()' on a null object reference"
-                // After this i add : myDialogs != null && myDialogs.dialog != null
-                try
-                {
-                    if (myDialogs != null && myDialogs.dialog != null && myDialogs.dialog.isShowing())
-                    {
-                        myDialogs.dialog.dismiss();
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-                //**********************************************************************************
-
-                if (fragment instanceof Today)
-                {
-                    ((Today) fragment).bleStatus(BLE_STATUS);
-                }
+                    //**********************************************************************************
+                    // In case if band is connected in background
+                    reconnectTimer.cancel();
 
 
-                MyUtil.showToast(context, "Device Connected");
-
-                MySharedPreference.getInstance().saveIsConnectedNow(context, true);
-
-            }
-            else if (action.equals(MyUartService.ACTION_GATT_DISCONNECTED_DUE_TO_RANGE))
-            {
-                MyUtil.myLog(TAG, "Disconnected due to range");
-
-                isDisconnectedByRange = true;
-
-                BLE_STATUS = MyConstant.DISCONNECTED;
+                    // Client is getting error of " java.lang.NullPointerException: Attempt to invoke virtual method 'boolean android.app.Dialog.isShowing()' on a null object reference"
+                    // After this i add : myDialogs != null && myDialogs.dialog != null
 
 
-                if (fragment instanceof Today)
-                {
                     try
                     {
-                        ((Today) fragment).bleStatus(BLE_STATUS);
+                        if ( MyDialogs.getInstance().dialog != null && MyDialogs.getInstance().dialog.isShowing())
+                        {
+                            MyDialogs.getInstance().dialog.dismiss();
+                        }
                     }
                     catch (Exception e)
                     {
                         e.printStackTrace();
                     }
-                }
+
+                    //**********************************************************************************
+
+                    if (fragment instanceof Today)
+                    {
+                        ((Today) fragment).bleStatus(BLE_STATUS);
+                    }
 
 
-                if (mService != null)
-                {
-                    mService.close();
-                }
+                    MyUtil.showToast(context, "Device Connected");
 
-                // If Connection Lost
-                MySharedPreference.getInstance().saveIsConnectedNow(context, false);
+                    MySharedPreference.getInstance().saveIsConnectedNow(context, true);
 
-                reconnectTimer.cancel();
-                reconnectTimer.start();
-            }
-            else if (action.equals(MyUartService.ACTION_GATT_DISCONNECTED))
-            {
-                isDisconnectedByRange = false;
+                    break;
 
-                MyUtil.myLog(TAG, "Disconnected");
+                case MyUartService.ACTION_GATT_DISCONNECTED_DUE_TO_RANGE:
 
-                BLE_STATUS = MyConstant.DISCONNECTED;
+                    MyUtil.myLog(TAG, "Disconnected due to range");
 
-                if (fragment instanceof Today)
-                {
-                    ((Today) fragment).bleStatus(BLE_STATUS);
-                }
+                    isDisconnectedByRange = true;
 
-                MyUtil.showToast(context, "Device Disconnected");
+                    BLE_STATUS = MyConstant.DISCONNECTED;
 
-                mService.close();
-            }
-            else if (action.equals(MyUartService.ACTION_GATT_SERVICES_DISCOVERED))
-            {
 
-                if (mService != null)
-                {
-                    mService.enableTXNotification();
-                }
+                    if (fragment instanceof Today)
+                    {
+                        try
+                        {
+                            ((Today) fragment).bleStatus(BLE_STATUS);
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
 
-                SetDateCountDownTimer setDateCountDownTimer = new SetDateCountDownTimer(2000, 1000);
-                setDateCountDownTimer.start();
 
-            }
-            else if (action.equals(MyUartService.ACTION_DATA_AVAILABLE))
-            {
+                    if (mService != null)
+                    {
+                        mService.close();
+                    }
 
-                final byte[] txValue = intent.getByteArrayExtra(MyUartService.EXTRA_DATA);
+                    // If Connection Lost
+                    MySharedPreference.getInstance().saveIsConnectedNow(context, false);
+
+                    reconnectTimer.cancel();
+                    reconnectTimer.start();
+                    break;
+
+                case MyUartService.ACTION_GATT_DISCONNECTED:
+
+                    isDisconnectedByRange = false;
+
+                    MyUtil.myLog(TAG, "Disconnected");
+
+                    BLE_STATUS = MyConstant.DISCONNECTED;
+
+                    if (fragment instanceof Today)
+                    {
+                        ((Today) fragment).bleStatus(BLE_STATUS);
+                    }
+
+                    MyUtil.showToast(context, "Device Disconnected");
+
+                    if (mService != null)
+                    {
+                        mService.close();
+                    }
+
+                    break;
+
+                case MyUartService.ACTION_GATT_SERVICES_DISCOVERED:
+
+
+                    if (mService != null)
+                    {
+                        mService.enableTXNotification();
+                    }
+
+                    SetDateCountDownTimer setDateCountDownTimer = new SetDateCountDownTimer(2000, 1000);
+                    setDateCountDownTimer.start();
+
+                    break;
+
+                case MyUartService.ACTION_DATA_AVAILABLE:
+
+
+                    final byte[] txValue = intent.getByteArrayExtra(MyUartService.EXTRA_DATA);
          /*       getActivity().runOnUiThread(new Runnable()
                 {
                     public void run()
                     {*/
 
-                try
-                {
-                    MyUtil.myLog(TAG, "CR---Response of Command   " + new String(txValue, "UTF-8"));
+                    try
+                    {
+                        MyUtil.myLog(TAG, "CR---Response of Command   " + new String(txValue, "UTF-8"));
 
 
-                    // IN MUSIC CASE, TO PLAY MUSIC
-                    if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PLAY) || new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PAUSE))
-                    {
-                        MusicPlayer.getInstance().playPause(context);
-                    }
-                    else if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PREVIOUS))
-                    {
-                        MusicPlayer.getInstance().previous(context);
-                    }
-                    else if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_NEXT))
-                    {
-                        MusicPlayer.getInstance().next(context);
-                    }
-                    else if (COMMAND.contains("dt"))
-                    {
-                        dateCommandresposeCount++;
-                        if (dateCommandresposeCount == 4)
+                        // IN MUSIC CASE, TO PLAY MUSIC
+                        if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PLAY) || new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PAUSE))
+                        {
+                            MusicPlayer.getInstance().playPause(context);
+                        }
+                        else if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_PREVIOUS))
+                        {
+                            MusicPlayer.getInstance().previous(context);
+                        }
+                        else if (new String(txValue, "UTF-8").equals(MyConstant.MUSIC_NEXT))
+                        {
+                            MusicPlayer.getInstance().next(context);
+                        }
+                        else if (COMMAND.contains("dt"))
+                        {
+                            dateCommandresposeCount++;
+                            if (dateCommandresposeCount == 4)
+                            {
+                                //TODO
+                                setHeightWeightStrideDataToBLE();
+                                dateCommandresposeCount = 0;
+                            }
+                        }
+                        else if (COMMAND.contains("b") && COMMAND.length() != 2)
                         {
                             //TODO
-                            setHeightWeightStrideDataToBLE();
-                            dateCommandresposeCount = 0;
+                            commandToBLE(MyConstant.GET_STEPS);
                         }
-                    }
-                    else if (COMMAND.contains("b") && COMMAND.length() != 2)
-                    {
-                        //TODO
-                        commandToBLE(MyConstant.GET_STEPS);
-                    }
-                    else if (COMMAND.equals(MyConstant.GET_SLEEP)) //After getting all the sleep data
-                    {
-                        String hex = MyUtil.bytesToHex(txValue);
-                        sleepData += hex.substring(8, hex.length());
+                        else if (COMMAND.equals(MyConstant.GET_SLEEP)) //After getting all the sleep data
+                        {
+                            String hex = MyUtil.bytesToHex(txValue);
+                            sleepData += hex.substring(8, hex.length());
 
 //                        MyUtil.myLog("remaining", "" + sleepData);
 
-                        if (new String(txValue, "UTF-8").contains("Done")) // After getting all the sleep data
-                        {
-                            MyUtil.myLog("Total Sleep String", "" + sleepData);
-                            // TestingSleep2(sleepData);
+                            if (new String(txValue, "UTF-8").contains("Done")) // After getting all the sleep data
+                            {
+                                MyUtil.myLog("Total Sleep String", "" + sleepData);
+                                // TestingSleep2(sleepData);
 
-                            ManupulateSleepdata manupulateSleepdata = new ManupulateSleepdata();
+                                ManupulateSleepdata manupulateSleepdata = new ManupulateSleepdata();
 
-                            manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);
+                                manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);
 
-                            // This functionality is stopped by client
+                                // This functionality is stopped by client
 
                            /* ManupulateSleepDataNew manupulateSleepdata = new ManupulateSleepDataNew();
 
                             manupulateSleepdata.gettingSleepData(context, sleepData, myDatabase);*/
+                            }
                         }
-                    }
-                    else if (COMMAND.equals(MyConstant.GET_STEPS))// After getting the steps
-                    {
-
-                        if (fragment instanceof Today)
+                        else if (COMMAND.equals(MyConstant.GET_STEPS))// After getting the steps
                         {
 
-                            String stepsString = new String(txValue, "UTF-8");
-
-
-                            try
+                            if (fragment instanceof Today)
                             {
-                                if (stepsString.length() == 6)
+
+                                String stepsString = new String(txValue, "UTF-8");
+
+
+                                try
                                 {
-                                    stepsTaken = Integer.parseInt(stepsString);
-
-
-                                    ((Today) fragment).calculate(stepsTaken);
-
-                                    MyUtil.myLog("Steps", "" + new String(txValue, "UTF-8"));
-
-
-                                    //**************************************************************************
-                                    // Notification
-                                    //**************************************************************************
-
-                                    int remainingSteps = Integer.parseInt(MySharedPreference.getInstance().getDailySteps(context)) - stepsTaken;
-
-                                    if (remainingSteps <= 0 && shownStepsNotification)
+                                    if (stepsString.length() == 6)
                                     {
-                                        shownStepsNotification = false;
-                                        myUtil.vibrate(context);
-                                        myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
-                                                  "You Hit Your Steps Goal for Today : )\n" +
-                                                  "You Totally Rock!", 1);
+                                        stepsTaken = Integer.parseInt(stepsString);
+
+
+                                        ((Today) fragment).calculate(stepsTaken);
+
+                                        MyUtil.myLog("Steps", "" + new String(txValue, "UTF-8"));
+
+
+                                        //**************************************************************************
+                                        // Notification
+                                        //**************************************************************************
+
+                                        int remainingSteps = Integer.parseInt(MySharedPreference.getInstance().getDailySteps(context)) - stepsTaken;
+
+                                        if (remainingSteps <= 0 && shownStepsNotification)
+                                        {
+                                            shownStepsNotification = false;
+                                            myUtil.vibrate(context);
+                                            myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
+                                                      "You Hit Your Steps Goal for Today : )\n" +
+                                                      "You Totally Rock!", 1);
+                                        }
+
+                                        double Calories = myUtil.stepsToCaloriesFormula(context, stepsTaken);
+
+                                        double remainingCalories = Double.parseDouble(MySharedPreference.getInstance().getDailyCalories(context).trim()) - (int) Calories;
+
+
+                                        if (remainingCalories <= 0 && shownCaloriesNotification)
+                                        {
+                                            shownCaloriesNotification = false;
+                                            myUtil.vibrate(context);
+                                            myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
+                                                      "You Hit Your Calories Goal for Today : )\n" +
+                                                      "You're Amazing!", 2);
+                                        }
+
+
+                                        double distance = myUtil.stepsToDistanceFormula(context, stepsTaken);
+
+                                        double remainingKm = Double.parseDouble(MySharedPreference.getInstance().getDailyMiles(context).trim()) - distance;
+
+                                        if (remainingKm < 0 && shownDistanceNotification)
+                                        {
+                                            shownDistanceNotification = false;
+                                            myUtil.vibrate(context);
+                                            myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
+                                                      "You Hit Your Miles Goal for Today : )\n" +
+                                                      "You're Incredible!", 3);
+                                        }
+
+
+                                        //**************************************************************************
+                                        //**************************************************************************
+                                        //**************************************************************************
+                                        // To get Sleep data********************************************************
+                                        //TODO
+                                        commandToBLE(MyConstant.GET_SLEEP);
+                                        //**************************************************************************
+
                                     }
-
-                                    double Calories = myUtil.stepsToCaloriesFormula(context, stepsTaken);
-
-                                    double remainingCalories = Double.parseDouble(MySharedPreference.getInstance().getDailyCalories(context).trim()) - (int) Calories;
-
-
-                                    if (remainingCalories <= 0 && shownCaloriesNotification)
-                                    {
-                                        shownCaloriesNotification = false;
-                                        myUtil.vibrate(context);
-                                        myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
-                                                  "You Hit Your Calories Goal for Today : )\n" +
-                                                  "You're Amazing!", 2);
-                                    }
-
-
-                                    double distance = myUtil.stepsToDistanceFormula(context, stepsTaken);
-
-                                    double remainingKm = Double.parseDouble(MySharedPreference.getInstance().getDailyMiles(context).trim()) - distance;
-
-                                    if (remainingKm < 0 && shownDistanceNotification)
-                                    {
-                                        shownDistanceNotification = false;
-                                        myUtil.vibrate(context);
-                                        myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
-                                                  "You Hit Your Miles Goal for Today : )\n" +
-                                                  "You're Incredible!", 3);
-                                    }
-
-
-                                    //**************************************************************************
-                                    //**************************************************************************
-                                    //**************************************************************************
-                                    // To get Sleep data********************************************************
-                                    //TODO
-                                    commandToBLE(MyConstant.GET_SLEEP);
-                                    //**************************************************************************
 
                                 }
-
+                                catch (NumberFormatException e)
+                                {
+                                    e.printStackTrace();
+                                }
                             }
-                            catch (NumberFormatException e)
+                        }
+                        else if (COMMAND.contains("setslptm")) //After setting the sleep time to band
+                        {
+
+                            commandToBLE(MyConstant.CLEAR_SLEEP);
+                        }
+                        else if (COMMAND.contains(MyConstant.CLEAR_SLEEP)) // After clearing the sleep data
+                        {
+                            //To get the fiemware version
+                            commandToBLE("fw");
+                        }
+                        else if (COMMAND.contains("fw")) // After gettting the band firmware version
+                        {
+                            fiemwareCommandResposeCount++;
+                            //TODO
+                            if (fiemwareCommandResposeCount == 1 && !new String(txValue, "UTF-8").equals("OK!"))
                             {
-                                e.printStackTrace();
+                                MyUtil.myLog("Firmware Version", "" + new String(txValue, "UTF-8"));
+                                MySharedPreference.getInstance().saveFirmwareVersion(context, new String(txValue, "UTF-8").replace("FW:", ""));
+                            }
+                            if (fiemwareCommandResposeCount == 2)
+                            {
+                                // To get previous days steps from memory
+                                getStepsData.count = 0;
+                                getStepsData.st();
+                                fiemwareCommandResposeCount = 0;
                             }
                         }
-                    }
-                    else if (COMMAND.contains("setslptm")) //After setting the sleep time to band
-                    {
-
-                        commandToBLE(MyConstant.CLEAR_SLEEP);
-                    }
-                    else if (COMMAND.contains(MyConstant.CLEAR_SLEEP)) // After clearing the sleep data
-                    {
-                        //To get the fiemware version
-                        commandToBLE("fw");
-                    }
-                    else if (COMMAND.contains("fw")) // After gettting the band firmware version
-                    {
-                        fiemwareCommandResposeCount++;
-                        //TODO
-                        if (fiemwareCommandResposeCount == 1 && !new String(txValue, "UTF-8").equals("OK!"))
+                        else if (COMMAND.contains("d") && COMMAND.length() == 2)  // To get previous steps
                         {
-                            MyUtil.myLog("Firmware Version", "" + new String(txValue, "UTF-8"));
-                            MySharedPreference.getInstance().saveFirmwareVersion(context, new String(txValue, "UTF-8").replace("FW:", ""));
+                            bleResponseInterface.onResponse(new String(txValue, "UTF-8"));
                         }
-                        if (fiemwareCommandResposeCount == 2)
-                        {
-                            // To get previous days steps from memory
-                            getStepsData.count = 0;
-                            getStepsData.st();
-                            fiemwareCommandResposeCount = 0;
-                        }
+
+
                     }
-                    else if (COMMAND.contains("d") && COMMAND.length() == 2)  // To get previous steps
+                    catch (Exception e)
                     {
-                        bleResponseInterface.onResponse(new String(txValue, "UTF-8"));
+                        MyUtil.myLog(TAG, e.toString());
                     }
+                    break;
 
+                case MyUartService.DEVICE_DOES_NOT_SUPPORT_UART:
 
-                }
-                catch (Exception e)
-                {
-                    MyUtil.myLog(TAG, e.toString());
-                }
-//                    }
-//                });
-            }
-            else if (action.equals(MyUartService.DEVICE_DOES_NOT_SUPPORT_UART))
-            {
-                MyUtil.showToast(context, "Device doesn't support UART. Disconnecting");
-                mService.disconnect();
+                    MyUtil.showToast(context, "Device doesn't support UART. Disconnecting");
+                    mService.disconnect();
+
+                    break;
+
             }
 
         }
@@ -1104,7 +1125,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 mService.connect(deviceAddress);
 
             }
-            myDialogs.dialog.dismiss();
+            MyDialogs.getInstance().dialog.dismiss();
 
         }
     };
@@ -1112,7 +1133,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public void connectDisconnect()
     {
-        if (mBtAdapter!=null && !mBtAdapter.isEnabled())
+        if (mBtAdapter != null && !mBtAdapter.isEnabled())
         {
             //Log.i(TAG, "onClick - BT not enabled yet");
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -1126,7 +1147,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             {
 //                Intent newIntent = new Intent(MainActivityNew.this, DeviceListActivity.class);
 //                startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
-                myDialogs.bleDeviceAvailable(context, mDeviceClickListener);
+                MyDialogs.getInstance().bleDeviceAvailable(context, mDeviceClickListener);
             }
             else
             {
@@ -1142,9 +1163,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public class SetDateCountDownTimer extends CountDownTimer
+    private class SetDateCountDownTimer extends CountDownTimer
     {
-        public SetDateCountDownTimer(long startTime, long interval)
+        private SetDateCountDownTimer(long startTime, long interval)
         {
             super(startTime, interval);
         }
@@ -1163,9 +1184,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public class ReconnectTimer extends CountDownTimer
+    private class ReconnectTimer extends CountDownTimer
     {
-        public ReconnectTimer(long startTime, long interval)
+        private ReconnectTimer(long startTime, long interval)
         {
             super(startTime, interval);
         }
@@ -1216,7 +1237,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     {
         super.onResume();
 
-        if (mBtAdapter!=null &&  !mBtAdapter.isEnabled())
+        if (mBtAdapter != null && !mBtAdapter.isEnabled())
         {
             //Log.i(TAG, "onResume - BT not enabled yet");
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -1233,7 +1254,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             shownDistanceNotification = true;
             shownSleepNotification = true;
 
-            MyUtil.myLog(TAG, "shownStepsNotification----" + shownStepsNotification);
+            // MyUtil.myLog(TAG, "shownStepsNotification----" + shownStepsNotification);
         }
 //
 //
@@ -1245,6 +1266,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //        }
 
     }
+
+
+
 
     @Override
     protected void onPause()
@@ -1279,6 +1303,12 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         mService = null;
 
 
+        if (mBtAdapter!=null && mBtAdapter.isEnabled())
+        {
+            mBtAdapter.disable();
+        }
+
+
     }
 
 
@@ -1292,7 +1322,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
 
 
-        MyUtil.myLog(TAG, "RequestCode   " + requestCode);
+        // MyUtil.myLog(TAG, "RequestCode   " + requestCode);
 
         switch (requestCode)
         {
@@ -1324,7 +1354,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 if (resultCode == Activity.RESULT_OK)
                 {
                     MyUtil.showToast(context, "Bluetooth has turned on ");
-                    oneTimeDialogToConnect(context);
+                    MyDialogs.getInstance().oneTimeDialogToConnect(context);
                 }
                 else
                 {
@@ -1338,68 +1368,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void oneTimeDialogToConnect(final Context context)
-    {
-
-        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-
-        // Setting Dialog Title
-        alertDialog.setTitle("Connection Alert");
-
-        // Setting Dialog Message
-        alertDialog.setMessage("You have to connect mobile to band to get data.");
-
-        // Setting Icon to Dialog
-        alertDialog.setIcon(R.mipmap.ic_alert);
-
-        // Setting Positive "Yes" Button
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                alertDialog.dismiss();
 
 
-                //If sleep time is not set under My Profile
 
-                /*if (MySharedPreference.getInstance().getSleepStartTime(context).isEmpty()  && MySharedPreference.getInstance().getSleepEndTime(context).isEmpty())
-                {
-                    oneTimeDialogToSetSleepTime(context);
-                }*/
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
-    // This dialog functionality is stopped by client
-    public void oneTimeDialogToSetSleepTime(Context context)
-    {
-
-        final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-
-        // Setting Dialog Title
-        alertDialog.setTitle("Set Sleep Time Alert");
-
-        // Setting Dialog Message
-        alertDialog.setMessage("You have to set sleep time under My Profile to get proper sleep time.");
-
-        // Setting Icon to Dialog
-        alertDialog.setIcon(R.mipmap.ic_alert);
-
-        // Setting Positive "Yes" Button
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                alertDialog.dismiss();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
 
 
     //*********************************************************************************************
@@ -1426,11 +1397,14 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         try
         {
-            if (!command.isEmpty() && command != null)
+            if (command != null && !command.isEmpty())
             {
                 byte[] value = command.getBytes("UTF-8");
 
-                mService.writeRXCharacteristic(value);
+                if(value.length != 0)
+                {
+                    mService.writeRXCharacteristic(value);
+                }
             }
 
         }
@@ -1450,11 +1424,14 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         try
         {
-            if (!command.isEmpty() && command != null)
+            if (command != null && !command.isEmpty())
             {
                 byte[] value = command.getBytes("UTF-8");
 
-                mService.writeRXCharacteristic(value);
+                if(value.length != 0)
+                {
+                    mService.writeRXCharacteristic(value);
+                }
             }
 
         }
@@ -1484,7 +1461,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //            MyUtil.myLog(TAG, "WeightInLBS-----" + weightInDouble);
         }
 
-        String finalWeight = String.format("%03d", Math.round(weightInDouble));
+        String finalWeight = String.format(Locale.US, "%03d", Math.round(weightInDouble));
 
 //        MyUtil.myLog(TAG, "FinalWeightInLBS---" + finalWeight);
 
@@ -1503,7 +1480,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 //            MyUtil.myLog(TAG, "StrideInINCHES-----" + strideInDouble);
         }
 
-        String finalStride = String.format("%03d", Math.round(strideInDouble));
+        String finalStride = String.format(Locale.US, "%03d", Math.round(strideInDouble));
 
 //        MyUtil.myLo1g(TAG, "FinalStideInINCHES---" + finalStride);
 
@@ -1512,9 +1489,9 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         double heightInDouble = Double.parseDouble(MySharedPreference.getInstance().getHeight(context).replace("Inches", "").trim());
 
-        String finalHeight = String.format("%03d", Math.round(heightInDouble));
+        String finalHeight = String.format(Locale.US, "%03d", Math.round(heightInDouble));
 
-        MyUtil.myLog(TAG, "FinalHeight---" + finalHeight);
+        //MyUtil.myLog(TAG, "FinalHeight---" + finalHeight);
 
 
         String commandToSetHeightWeightStride = "b" + finalHeight + finalWeight + finalStride + "1" + "1";
@@ -1531,7 +1508,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public void setDateToBLE()
     {
-        SimpleDateFormat mSDF1 = new SimpleDateFormat("yyMMddHHmmss");
+        SimpleDateFormat mSDF1 = new SimpleDateFormat("yyMMddHHmmss", Locale.US);
         String currentDateTime = mSDF1.format(new Date());
 
 //        MyUtil.myLog("currentDateTime", currentDateTime);
@@ -1546,14 +1523,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager)
-                  getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) return true;
-        return false;
-
-    }
 
 
     /*public void stopPlaying()
@@ -1602,9 +1571,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         intent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
         context.sendOrderedBroadcast(intent,null);
     }*/
-
-
-
 
 
 }

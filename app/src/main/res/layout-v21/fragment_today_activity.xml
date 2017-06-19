@@ -463,7 +463,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
                             android:gravity="center"
-                            android:text="SLEEP"
+                            android:text="HOURS"
                             android:textColor="@color/colorBlack"
                             android:textSize="10sp"/>
                     </FrameLayout>

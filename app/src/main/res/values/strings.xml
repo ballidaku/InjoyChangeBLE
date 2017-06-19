@@ -24,7 +24,7 @@
 
     <!--InjoyHealth-->
     <!--InjoyGlobal-->
-    <string name="app_name">InjoyGlobal</string>
+    <string name="app_name">InjoyHealth</string>
     <string name="device">Device:</string>
     <string name="no_device">&lt;Select a device&gt;</string>
     <string name="select_device">Select a device</string>

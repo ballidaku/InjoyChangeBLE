@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -81,7 +80,7 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
 //    RadioGroup radioGroupStandard;
 
 
-    MyUtil.HeightWeightHelper heightWeightHelper = new MyUtil.HeightWeightHelper();
+   // MyUtil.HeightWeightHelper heightWeightHelper = new MyUtil.HeightWeightHelper();
 
 
     MyUtil myUtil = new MyUtil();
@@ -104,20 +103,7 @@ public class MyProfile extends Fragment implements View.OnClickListener, TimePic
 
         if (view == null)
         {
-
-            int layout;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            {
-                layout = R.layout.fragment_profile;
-            }
-            else
-            {
-                layout = R.layout.fragment_profile_kitkat;
-            }
-
-//            view = inflater.inflate(R.layout.fragment_profile, container, false);
-            view = inflater.inflate(layout, container, false);
+            view = inflater.inflate(R.layout.fragment_profile, container, false);
 
             RIGHT_ICON_GREEN = getContext().getResources().getDrawable(R.drawable.ic_tick);
             EDIT_ICON = getContext().getResources().getDrawable(R.mipmap.ic_edit);

@@ -34,6 +34,7 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
+
                 <FrameLayout android:layout_width="wrap_content"
                              android:layout_height="wrap_content">
 
@@ -44,13 +45,13 @@
                         android:layout_gravity="center"
                         android:src="@mipmap/ic_back_imageholder"/>
 
-
                     <ImageView
                         android:id="@+id/circularImageView_Profile"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center"
-                    android:src="@drawable/ic_no_user_new"/>
+                        android:src="@drawable/ic_no_user_new"/>
+
 
                 </FrameLayout>
 
@@ -627,63 +628,63 @@
         </android.support.v7.widget.CardView>
 
 
-        <!--
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardViewUpdate"
-                    android:layout_width="@dimen/_200sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    card_view:cardUseCompatPadding="true"
-                    card_view:cardCornerRadius="20dp"
-                    card_view:cardElevation="5dp">
-        -->
-
-        <LinearLayout
-            android:id="@+id/linearLayout_update"
-            android:layout_width="@dimen/_150sdp"
+        <android.support.v7.widget.CardView
+            android:layout_width="@dimen/_160sdp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_5sdp"
-            android:background="@drawable/round_corner_white"
-            android:clickable="true">
+            card_view:cardCornerRadius="@dimen/_15sdp"
+            card_view:cardElevation="@dimen/_6sdp">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/linearLayout_update"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/_7sdp"
-                android:text="Update Device"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="@dimen/_15sdp"
-                android:textStyle="bold"/>
+                android:clickable="true">
 
-        </LinearLayout>
-        <!--        </android.support.v7.widget.CardView>-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/_6sdp"
+                    android:text="Update Device"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
 
-        <LinearLayout
-            android:id="@+id/linearLayout_signOut"
-            android:layout_width="@dimen/_100sdp"
+        <android.support.v7.widget.CardView
+            android:layout_width="@dimen/_120sdp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/_30sdp"
-            android:layout_marginTop="@dimen/_25sdp"
-            android:background="@drawable/round_corner_white"
-            android:clickable="true"
-            android:gravity="center">
+            app:cardUseCompatPadding="true"
+            card_view:cardCornerRadius="@dimen/_15sdp"
+            card_view:cardElevation="@dimen/_6sdp">
 
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/linearLayout_signOut"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="@dimen/_7sdp"
-                android:text="Sign Out"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="@dimen/_15sdp"
-                android:textStyle="bold"/>
+                android:layout_height="wrap_content">
 
-        </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/_6sdp"
+                    android:text="Sign Out"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
 
     </LinearLayout>

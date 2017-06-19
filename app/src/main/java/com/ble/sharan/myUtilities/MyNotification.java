@@ -29,11 +29,21 @@ public class MyNotification
     public void showNotification(Context context, String message, int number)
     {
 
-        int icon = R.mipmap.ic_notification;
+        //int icon = R.mipmap.ic_notification;
+        int icon = R.mipmap.ic_injoy_health_notification;
         String title = "InjoyHealth";
 
+        Intent intent;
 
-        Intent intent = new Intent(context.getApplicationContext(), MainActivityNew.class);
+        /*if (number != 5)
+        {*/
+            intent = new Intent(context.getApplicationContext(), MainActivityNew.class);
+      /*  }
+        else //
+        {
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
+        }*/
+
         intent.setFlags(IntentCompat.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
@@ -58,14 +68,14 @@ public class MyNotification
 
         NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context).
-                                                                                            setContentTitle(title).
-                                                                                            setContentText(message).
-                                                                                            setContentIntent(pIntent).
-                                                                                            setSmallIcon(icon).
-                                                                                            setLargeIcon(largeIcon).
-                                                                                            setLights(Color.MAGENTA, 1, 2).
-                                                                                            setAutoCancel(true).
-                                                                                            setStyle(style).setSound(defaultSound);
+                                                                                              setContentTitle(title).
+                                                                                              setContentText(message).
+                                                                                              setContentIntent(pIntent).
+                                                                                              setSmallIcon(icon).
+                                                                                              setLargeIcon(largeIcon).
+                                                                                              setLights(Color.MAGENTA, 1, 2).
+                                                                                              setAutoCancel(true).
+                                                                                              setStyle(style).setSound(defaultSound);
 
         //builder.setNumber(5);
 
@@ -77,7 +87,6 @@ public class MyNotification
 
         notificationManager.notify(number, notification);
     }
-
 
 
 }

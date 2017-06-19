@@ -9,7 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -44,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by brst-pc93 on 12/21/16.
@@ -57,7 +57,13 @@ public class MyUtil
     public static Toast toast;
     public static Snackbar snackbar;
 
-    MyNotification myNotification = new MyNotification();
+
+    private SimpleDateFormat simpleDateFormat_ddMMyyyy = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+    private SimpleDateFormat simpleDateFormat_HHmm = new SimpleDateFormat("HH:mm", Locale.US);
+    private SimpleDateFormat simpleDateFormat_EEE = new SimpleDateFormat("EEEE", Locale.US);
+
+
+    private MyNotification myNotification = new MyNotification();
 
 
     public boolean checkConnection()
@@ -79,7 +85,7 @@ public class MyUtil
 
     }
 
-    public static void  myLog(String tag, String message)
+    public static void myLog(String tag, String message)
     {
         Log.e(tag, message);
     }
@@ -163,8 +169,8 @@ public class MyUtil
         Calendar c = Calendar.getInstance();
         //System.out.println("Current time => " + c.getTime());
 
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        return df.format(c.getTime());
+        // SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
+        return simpleDateFormat_ddMMyyyy.format(c.getTime());
     }
 
     public String getTodaydate2()
@@ -172,9 +178,17 @@ public class MyUtil
         Calendar c = Calendar.getInstance();
         //System.out.println("Current time => " + c.getTime());
 
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         return df.format(c.getTime());
     }
+
+
+
+
+
+
+
+
 
 
     //**********************************************************************************************
@@ -216,10 +230,11 @@ public class MyUtil
 //            myLog(TAG, "WeightInLBS-----" + weightInDouble);
         }
 
-        double Energy = (weight - 30) * 0.000315 + 0.00495;
-        double Calories = Energy * steps;
+        //weight = 252;
 
-        return Calories;
+        double Energy = (weight - 30) * 0.000315 + 0.00495;
+
+        return Energy * steps;  // Calories
     }
 
 
@@ -309,21 +324,16 @@ public class MyUtil
 
         String strideUnit = MySharedPreference.getInstance().getUnit(context, MyConstant.STRIDE);
 
-
-//        myLog(TAG,"distance--strideInDouble-----"+strideInDouble);
+        // myLog(TAG,"distance--strideInDouble-----"+strideInDouble);
 
         if (strideUnit.equals(MyConstant.CM))
         {
             strideInDouble = new HeightWeightHelper().cmToInches(strideInDouble);
         }
 
-        strideInDouble = ((int) strideInDouble * 0.0254) * 0.001 * 0.621371;
+        strideInDouble = (Math.round(strideInDouble) * 0.0254) * 0.001 * 0.621371;
 
-//        double stride = 0.00045; //in Km
-
-        double distance = steps * strideInDouble;
-
-        return distance;
+        return steps * strideInDouble; // distance;
     }
 
     public String twoDigitsAfterDecimalWithoutRoundOff(double value)
@@ -340,7 +350,7 @@ public class MyUtil
     {
         double distance = stepsToDistanceFormula(context, steps);
 
-//        myLog(TAG,"distance-----1-"+distance+"-------------"+twoDigitsAfterDecimalWithoutRoundOff( distance));
+        myLog(TAG, "distance-----1-" + distance + "-------------" + twoDigitsAfterDecimalWithoutRoundOff(distance));
 
         return distance > 0 ? twoDigitsAfterDecimalWithoutRoundOff(distance) : "" + 0;
     }
@@ -369,7 +379,7 @@ public class MyUtil
         try
         {
             long millis = myDatabase.getTodaySleepTime(context);
-            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+            //SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm", Locale.US);
 
             int Hours = (int) ((millis / (1000 * 60 * 60)) % 24);
             int Mins = (int) (millis / (1000 * 60)) % 60;
@@ -378,9 +388,10 @@ public class MyUtil
 
 //            myLog("dakuu","---"+millis+"----"+myFormat.format(myFormat.parse(diff)));
 
-            sleepTime = myFormat.format(myFormat.parse(diff));
+            sleepTime = simpleDateFormat_HHmm.format(simpleDateFormat_HHmm.parse(diff));
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -404,15 +415,16 @@ public class MyUtil
 
         try
         {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-            startDate = simpleDateFormat.parse(sleepHr);
+            // SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+            startDate = simpleDateFormat_HHmm.parse(sleepHr);
 
 
 //            myLog(TAG,"getDailySleep-----"+MySharedPreference.getInstance().getDailySleep(context));
-            endDate = simpleDateFormat.parse(MySharedPreference.getInstance().getDailySleep(context)/*.replace(" hours per day", "")*/);
+            endDate = simpleDateFormat_HHmm.parse(MySharedPreference.getInstance().getDailySleep(context)/*.replace(" hours per day", "")*/);
 
 
-        } catch (ParseException e)
+        }
+        catch (ParseException e)
         {
             e.printStackTrace();
         }
@@ -433,8 +445,8 @@ public class MyUtil
                 MainActivityNew.shownSleepNotification = false;
                 vibrate(context);
                 myNotification.showNotification(context, "CONGRATULATIONS!!\n" +
-                        "You Hit Your Sleep Goal for Today : )\n" +
-                        "You Totally Rock!\n", 4);
+                          "You Hit Your Sleep Goal for Today : )\n" +
+                          "You Totally Rock!\n", 4);
             }
 
             return "00:00";
@@ -448,13 +460,14 @@ public class MyUtil
 
         try
         {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-            startDate = simpleDateFormat.parse(s);
+            //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+            startDate = simpleDateFormat_HHmm.parse(s);
 
-            endDate = simpleDateFormat.parse(s1);
+            endDate = simpleDateFormat_HHmm.parse(s1);
 
 
-        } catch (ParseException e)
+        }
+        catch (ParseException e)
         {
             e.printStackTrace();
         }
@@ -479,15 +492,16 @@ public class MyUtil
         try
         {
 //            myLog(TAG,"millis        "+millis);
-            SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+            // SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm", Locale.US);
 
             int Hours = (int) ((millis / (1000 * 60 * 60)) % 24);
             int Mins = (int) (millis / (1000 * 60)) % 60;
 
             String diff = Hours + ":" + Mins;
-            time = myFormat.format(myFormat.parse(diff));
+            time = simpleDateFormat_HHmm.format(simpleDateFormat_HHmm.parse(diff));
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -523,10 +537,10 @@ public class MyUtil
          * @param lb - pounds
          * @return kg rounded to 1 decimal place
          */
-        public double lbToKgConverter(double lb)
+       /* public double lbToKgConverter(double lb)
         {
             return format(lb * 0.45359237);
-        }
+        }*/
 
         /**
          * @param kg - kilograms
@@ -541,26 +555,25 @@ public class MyUtil
          * @param cm - centimeters
          * @return feet rounded to 1 decimal place
          */
-        public double cmToFeetConverter(double cm)
+        /*public double cmToFeetConverter(double cm)
         {
             return format(cm * 0.032808399);
-        }
+        }*/
 
         /**
-         * @param feet - feet
+         * @param "feet" - feet
          * @return centimeters rounded to 1 decimal place
          */
-        public double feetToCmConverter(double feet)
+        /*public double feetToCmConverter(double feet)
         {
             return format(feet * 30.48);
-        }
+        }*/
 
 
-        public double inchesToCm(double inches)
+       /* public double inchesToCm(double inches)
         {
             return inches * 2.54;
-        }
-
+        }*/
         public double cmToInches(double cm)
         {
             return cm / 2.54;
@@ -570,7 +583,7 @@ public class MyUtil
     }
 
 
-    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    final private static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     public static String bytesToHex(byte[] bytes)
     {
@@ -589,14 +602,14 @@ public class MyUtil
     public static void execute(Super_AsyncTask asyncTask)
     {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+        {*/
+        asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        /*}
         else
         {
             asyncTask.execute();
-        }
+        }*/
 
     }
 
@@ -625,8 +638,6 @@ public class MyUtil
     // To hide Keyboard *************************************************************************************************
     public void hide_keyboard(final Context con)
     {
-
-
         try
         {
             InputMethodManager inputMethodManager = (InputMethodManager) con.getSystemService(con.INPUT_METHOD_SERVICE);
@@ -634,12 +645,11 @@ public class MyUtil
             {
                 inputMethodManager.hideSoftInputFromWindow(((Activity) con).getCurrentFocus().getWindowToken(), 0);
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
-
-
     }
 
     public void hide_keyboard2(final View view)
@@ -784,7 +794,7 @@ public class MyUtil
             Canvas canvas = new Canvas(bitmap);
             Paint paint = new Paint();
             BitmapShader shader = new BitmapShader(squaredBitmap,
-                    BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+                      BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
             paint.setShader(shader);
             paint.setAntiAlias(true);
 
@@ -809,14 +819,15 @@ public class MyUtil
     {
         String day = "";
 
-        SimpleDateFormat input = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat output = new SimpleDateFormat("EEEE");
+        //SimpleDateFormat input = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
+        //SimpleDateFormat output = new SimpleDateFormat("EEEE", Locale.US);
 
         try
         {
-            day = output.format(input.parse(date));
+            day = simpleDateFormat_EEE.format(simpleDateFormat_ddMMyyyy.parse(date));
 
-        } catch (ParseException e)
+        }
+        catch (ParseException e)
         {
             e.printStackTrace();
         }
@@ -829,16 +840,17 @@ public class MyUtil
     public List<String> getDates(String dateString1, String dateString2)
     {
         ArrayList<String> dates = new ArrayList<String>();
-        SimpleDateFormat df1 = new SimpleDateFormat("dd-MM-yyyy");
+        //SimpleDateFormat df1 = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
 
         Date date1 = null;
         Date date2 = null;
 
         try
         {
-            date1 = df1.parse(dateString1);
-            date2 = df1.parse(dateString2);
-        } catch (ParseException e)
+            date1 = simpleDateFormat_ddMMyyyy.parse(dateString1);
+            date2 = simpleDateFormat_ddMMyyyy.parse(dateString2);
+        }
+        catch (ParseException e)
         {
             e.printStackTrace();
         }
@@ -852,7 +864,7 @@ public class MyUtil
 
         while (!cal1.after(cal2))
         {
-            dates.add(df1.format(cal1.getTime()));
+            dates.add(simpleDateFormat_ddMMyyyy.format(cal1.getTime()));
             cal1.add(Calendar.DATE, 1);
         }
         return dates;
@@ -863,22 +875,23 @@ public class MyUtil
     public String getPreviousDate(String inputDate)
     {
 //        inputDate = "15-12-2015"; // for example
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        //SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
         try
         {
 
 //            myLog(TAG, "Input date : " + inputDate);
 
-            Date date = format.parse(inputDate);
+            Date date = simpleDateFormat_ddMMyyyy.parse(inputDate);
             Calendar c = Calendar.getInstance();
             c.setTime(date);
 
             c.add(Calendar.DATE, -1);
-            inputDate = format.format(c.getTime());
+            inputDate = simpleDateFormat_ddMMyyyy.format(c.getTime());
 
 //            myLog(TAG, "Previous date : " + inputDate);
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -893,12 +906,13 @@ public class MyUtil
 
         Date date = null;
 
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        //SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
         try
         {
 
-            date = format.parse(inputDate);
-        } catch (Exception e)
+            date = simpleDateFormat_ddMMyyyy.parse(inputDate);
+        }
+        catch (Exception e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -914,11 +928,11 @@ public class MyUtil
         try
         {
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String currentDateTime = dateFormat.format(new Date()); // Find todays date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            return dateFormat.format(new Date()); // Find todays date
 
-            return currentDateTime;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
 
@@ -931,12 +945,11 @@ public class MyUtil
     {
         try
         {
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.US);
+            return simpleDateFormat_EEE.format(new Date()); // Find todays date
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE");
-            String currentDateTime = dateFormat.format(new Date()); // Find todays date
-
-            return currentDateTime;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
 
@@ -981,7 +994,7 @@ public class MyUtil
     }
 
 
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     public void showProgressDialog(Context context)
     {

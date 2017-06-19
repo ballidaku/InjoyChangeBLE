@@ -76,7 +76,6 @@ public class CheckIn extends Fragment implements View.OnClickListener
 
     FrameLayout frameLayoutSubmit;
 
-    MyDialogs myDialogs = new MyDialogs();
 
 
     int commentCount = 0;
@@ -162,7 +161,7 @@ public class CheckIn extends Fragment implements View.OnClickListener
 
                 if (commentCount > 0)
                 {
-                    edtv_comment = myDialogs.showShareWinCheckInDialog(context, "CheckIn", onClickListenerShareWin);
+                    edtv_comment = MyDialogs.getInstance().showShareWinCheckInDialog(context, "CheckIn", onClickListenerShareWin);
                 }
                 else
                 {
@@ -194,7 +193,7 @@ public class CheckIn extends Fragment implements View.OnClickListener
             if (!comment.isEmpty())
             {
 
-                myDialogs.dialog.dismiss();
+                MyDialogs.getInstance().dialog.dismiss();
                 ADD_COMMENT_RETROFIT(comment);
 
             }

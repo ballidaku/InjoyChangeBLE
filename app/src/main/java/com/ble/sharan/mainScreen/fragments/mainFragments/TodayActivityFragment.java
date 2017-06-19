@@ -74,18 +74,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         if (view == null)
         {
-            //int layout;
 
-            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            {
-                layout = R.layout.fragment_today_activity;
-            }
-            else
-            {*/
-//                layout = R.layout.fragment_today_activity;
-//            }
-
-//            view = inflater.inflate(R.layout.fragment_today_activity, container, false);
             view = inflater.inflate(R.layout.fragment_today_activity, container, false);
 
             setUpIds();
@@ -115,10 +104,10 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         view.findViewById(R.id.linearLayoutBackground).setBackground((Drawable) ThemeChanger.getInstance().getBackground(context, MyConstant.BACKGROUND));
 
-        ImageView imageViewRefresh=(ImageView)view.findViewById(R.id.imageViewRefresh);
+        ImageView imageViewRefresh = (ImageView) view.findViewById(R.id.imageViewRefresh);
         imageViewRefresh.setImageResource(ThemeChanger.getInstance().getActivityOverallBackground(MyConstant.REFRESH));
 
-        ImageView imageViewConnect=(ImageView)view.findViewById(R.id.imageViewConnect);
+        ImageView imageViewConnect = (ImageView) view.findViewById(R.id.imageViewConnect);
         imageViewConnect.setImageResource(ThemeChanger.getInstance().getActivityOverallBackground(MyConstant.CONNECT));
 
         txtv_steps = (TextView) view.findViewById(R.id.txtv_steps);
@@ -171,7 +160,6 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //                });
 
 
-
                 break;
 
         }
@@ -218,13 +206,12 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     //**********************************************************************************************
 
 
-    public void calculate(int data, boolean wantToUpdate)
+    public void calculate(int stepsFromBand, boolean wantToUpdate)
     {
-        int steps = 0;
-        int stepsFromBand = data;
+        int steps;
 
-        String todayCalories = "";
-        String todayMilesCovered = "";
+        String todayCalories;
+        String todayMilesCovered;
 
         // DATABASE UPDATE
         if (stepsFromBand > 0)
@@ -259,7 +246,8 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 //        DecimalFormat formatter = new DecimalFormat("#,###,###");
 //        String yourFormattedString = formatter.format(steps);
 
-//        steps=139;
+
+        // steps= 12121;
 
         txtv_steps.setText(String.valueOf(steps));
 
@@ -292,14 +280,13 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
             try
             {
-                //            SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
+                //SEND_DATA_TO_SERVER(steps, todayCalories, todayMilesCovered);
                 POST_DATA_TO_SERVER_RETROFIT(steps, todayCalories, todayMilesCovered);
             }
             catch (Exception e)
             {
                 e.printStackTrace();
             }
-
 
 
         }
@@ -452,7 +439,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
         String todaySleepTime = spltm[0] + "h:" + spltm[1] + "m";
 
 
-        MyUtil.myLog(TAG,"Send Items "+" Date " +todayDate+" todaySteps "+todaySteps+" calories "+calories +" todaySleepTime "+todaySleepTime+ " UID "+MySharedPreference.getInstance().getUID(context));
+        MyUtil.myLog(TAG, "Send Items " + " Date " + todayDate + " todaySteps " + todaySteps + " calories " + calories + " todaySleepTime " + todaySleepTime + " UID " + MySharedPreference.getInstance().getUID(context));
 
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
@@ -464,14 +451,14 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
             @Override
             public void onResponse(Call<UploadDataModel> call, Response<UploadDataModel> response)
             {
-                 MyUtil.myLog(TAG, "Response----"+response.body());
+                MyUtil.myLog(TAG, "Response----" + response.body());
 
                 UploadDataModel uploadDataModel = response.body();
 
-                if (uploadDataModel.getStatus() != null  &&  uploadDataModel.getStatus().equals("200"))
+                if (uploadDataModel.getStatus() != null && uploadDataModel.getStatus().equals("200"))
                 {
 
-                      MyUtil.myLog(TAG,"Upload Response ---"+uploadDataModel.getData());
+                    MyUtil.myLog(TAG, "Upload Response ---" + uploadDataModel.getData());
                 }
             }
 
@@ -491,10 +478,10 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
     //**********************************************************************************************
 
 
-    public class AutoRefreshTimer extends CountDownTimer
+    private class AutoRefreshTimer extends CountDownTimer
     {
 
-        public AutoRefreshTimer(long millisInFuture, long countDownInterval)
+        private AutoRefreshTimer(long millisInFuture, long countDownInterval)
         {
             super(millisInFuture, countDownInterval);
         }

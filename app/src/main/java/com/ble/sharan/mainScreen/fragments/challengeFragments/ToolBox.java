@@ -44,7 +44,6 @@ public class ToolBox extends Fragment implements View.OnClickListener
 
     String currentDay = "";
 
-    MyDialogs myDialogs = new MyDialogs();
 
     String image = "";
     String title = "";
@@ -242,7 +241,7 @@ public class ToolBox extends Fragment implements View.OnClickListener
                     {
                         if (!title.isEmpty() && !image.isEmpty() && !description.isEmpty())
                         {
-                            myDialogs.showToolBoxDialog(context, title, image, description, onClickListener, hitDay, count);
+                            MyDialogs.getInstance().showToolBoxDialog(context, title, image, description, onClickListener, hitDay, count);
                         }
                     }
                     firstTimeOnly = true;
@@ -269,7 +268,7 @@ public class ToolBox extends Fragment implements View.OnClickListener
         public void onClick(View view)
         {
 
-            myDialogs.dialog.dismiss();
+            MyDialogs.getInstance().dialog.dismiss();
             SUBMIT_POINTS_RETROFIT();
         }
     };

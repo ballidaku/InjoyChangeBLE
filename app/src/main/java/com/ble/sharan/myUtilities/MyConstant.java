@@ -21,9 +21,9 @@ public class MyConstant
     public static final String MY_WEEK_ACTIVITY_FRAGMENT = "MyWeekActivityFragment";
 
 
-
-
     public static final String LOGIN_ACTIVITY = "login_activity";
+
+    public static final String VERSION_AVAILABLE = "version_available";
 
     public static final String DEVICE_ADDRESS = "device_address";
     public static final String DEVICE_NAME = "device_name";
@@ -108,37 +108,32 @@ public class MyConstant
     public static final String ALARM_THIRD_COMMAND = "alarm_third_command";
 
 
-
-
-
     //APIS
-//    public static final String BASE_URL="https://hydraflow.injoyglobal.com";  // Live URL (InjoyHealth)
+    public static final String BASE_URL = "https://hydraflow.injoyglobal.com";  // Live URL (InjoyHealth)
+//    public static final String BASE_URL="http://injoy.devinjoyglobal.com";  // Not Live URL  (InjoyGlobal)
+
+    public static final String SIGN_UP = BASE_URL + "/user/register";
+    public static final String SIGN_IN = BASE_URL + "/api/login-token";
+    public static final String FORGOT_PASSWORD = BASE_URL + "/user/password";
 
 
-    public static final String BASE_URL="http://injoy.devinjoyglobal.com";  // Not Live URL  (InjoyGlobal)
+    public static final String CHALLENGE_API = BASE_URL + "/user/login";  // LIVE
+//    public static final String CHALLENGE_API = BASE_URL+"/healthy/dashboard";  // NOT LIVE
 
-    public static final String SIGN_UP = BASE_URL+"/user/register";
-    public static final String SIGN_IN = BASE_URL+"/api/login-token";
-    public static final String FORGOT_PASSWORD = BASE_URL+"/user/password";
-
-
-  // public static final String CHALLENGE_API = BASE_URL+"/user/login";  // LIVE
-    public static final String CHALLENGE_API = BASE_URL+"/healthy/dashboard";  // NOT LIVE
-
-    public static final String UPLOAD_USER_DATA = BASE_URL+"/api/postdata";
-    public static final String SHOUT_OUT_USERS = BASE_URL+"/api/shout_out?date=";
-    public static final String SHOUT_OUT_COMMENT = BASE_URL+"/api/submit_shout_out?comment=";
-    public static final String USER_POINTS = BASE_URL+"/api/user_point?date=";
+    public static final String UPLOAD_USER_DATA = BASE_URL + "/api/postdata";
+    public static final String SHOUT_OUT_USERS = BASE_URL + "/api/shout_out?date=";
+    public static final String SHOUT_OUT_COMMENT = BASE_URL + "/api/submit_shout_out?comment=";
+    public static final String USER_POINTS = BASE_URL + "/api/user_point?date=";
 
 
-    public static final String TOP_USERS = BASE_URL+"/api/top_users";
-    public static final String SHARE_WIN_API = BASE_URL+"/api/share_win";
-    public static final String SHARE_WIN_SEE_ALL_API = BASE_URL+"/api/share_win_see_all?scroll_id=";
-    public static final String DAILY_INSPIRATION = BASE_URL+"/api/daily_inspiration";
-    public static final String TOOL_BOX = BASE_URL+"/api/toolbox";
+    public static final String TOP_USERS = BASE_URL + "/api/top_users";
+    public static final String SHARE_WIN_API = BASE_URL + "/api/share_win";
+    public static final String SHARE_WIN_SEE_ALL_API = BASE_URL + "/api/share_win_see_all?scroll_id=";
+    public static final String DAILY_INSPIRATION = BASE_URL + "/api/daily_inspiration";
+    public static final String TOOL_BOX = BASE_URL + "/api/toolbox";
 
 
-    public static final String YOU_TUBE_KEY="AIzaSyBAf3SjwZb4YAomFYzDvS03OM2AZ9JoVkg";
+    public static final String YOU_TUBE_KEY = "AIzaSyBAf3SjwZb4YAomFYzDvS03OM2AZ9JoVkg";
 
 
     //API KEYS
@@ -180,8 +175,6 @@ public class MyConstant
     public static final String PROFILE_PICTURE = "profile_picture";
 
 
-
-
     public static final String BACKGROUND = "background";
     public static final String TODAY = "today";
     public static final String THIS_WEEK = "this_week";
@@ -194,8 +187,6 @@ public class MyConstant
     public static final String CONNECT = "connect";
     public static final String ALARM_CHECKED = "alarm_checked";
     public static final String ALARM_UNCHECKED = "alarm_unchecked";
-
-
 
 
 }
