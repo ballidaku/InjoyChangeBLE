@@ -40,7 +40,6 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -99,7 +98,7 @@ public class MyUartService extends Service
                 broadcastUpdate(ACTION_GATT_CONNECTED);
                 Log.w(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
-                Log.w(TAG, "Attempting to start service discovery:" + mBluetoothGatt.discoverServices());
+                //Log.w(TAG, "Attempting to start service discovery:" + mBluetoothGatt.discoverServices());
 
             }
             else if (newState == BluetoothProfile.STATE_DISCONNECTED && status == 0)
@@ -248,8 +247,7 @@ public class MyUartService extends Service
         }
 
         // Previously connected device.  Try to reconnect.
-        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
-                  && mBluetoothGatt != null)
+        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress) && mBluetoothGatt != null)
         {
             Log.w(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect())
@@ -345,6 +343,7 @@ public class MyUartService extends Service
         mBluetoothGatt.readCharacteristic(characteristic);
     }
 
+
     /**
      * Enables or disables notification on a give characteristic.
      *
@@ -395,6 +394,8 @@ public class MyUartService extends Service
         byte[] ENABLE_NOTIFICATION_VALUE = {0x01, 0x00};
         descriptor.setValue(ENABLE_NOTIFICATION_VALUE);
 
+
+
         /*End Here*/
 
         mBluetoothGatt.writeDescriptor(descriptor);
@@ -404,8 +405,6 @@ public class MyUartService extends Service
 
     public void writeRXCharacteristic(byte[] value)
     {
-
-
         try
         {
             BluetoothGattService RxService = mBluetoothGatt.getService(RX_SERVICE_UUID);
@@ -445,11 +444,11 @@ public class MyUartService extends Service
      *
      * @return A {@code List} of supported services.
      */
-    public List<BluetoothGattService> getSupportedGattServices()
+   /* public List<BluetoothGattService> getSupportedGattServices()
     {
         if (mBluetoothGatt == null) return null;
 
         return mBluetoothGatt.getServices();
-    }
+    }*/
 }
 

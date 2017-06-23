@@ -15,7 +15,7 @@ android {
         applicationId "tbi.enjoy.health"  // LIVE
 //        applicationId "tbi.enjoy.global"    // NOT LIVE
         minSdkVersion 19
-        targetSdkVersion 22
+        targetSdkVersion 25
 
 
     }

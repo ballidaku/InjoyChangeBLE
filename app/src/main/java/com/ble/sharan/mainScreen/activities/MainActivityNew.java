@@ -3,6 +3,7 @@ package com.ble.sharan.mainScreen.activities;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
@@ -108,7 +110,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     private BluetoothAdapter mBtAdapter = null;
 
 
-   // MyDialogs myDialogs = new MyDialogs();
+    // MyDialogs myDialogs = new MyDialogs();
 
     MyDatabase myDatabase;
 
@@ -177,9 +179,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
         setUpIds();
         prepareListData();
-
-
-
 
 
         // Bluetooth
@@ -636,12 +635,18 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 String url = MyConstant.CHALLENGE_API;
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(url));
-                startActivity(i);
 
-                /*setBottomTabSelected(view_challenge, imgv_challenge, txtv_challenge);
-
-                displayView(8);*/
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                {
+                    i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
+                try
+                {
+                    startActivity(i);
+                }
+                catch (ActivityNotFoundException ex)
+                {
+                }
 
                 break;
 
@@ -807,7 +812,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
                     try
                     {
-                        if ( MyDialogs.getInstance().dialog != null && MyDialogs.getInstance().dialog.isShowing())
+                        if (MyDialogs.getInstance().dialog != null && MyDialogs.getInstance().dialog.isShowing())
                         {
                             MyDialogs.getInstance().dialog.dismiss();
                         }
@@ -1268,8 +1273,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
-
     @Override
     protected void onPause()
     {
@@ -1303,7 +1306,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
         mService = null;
 
 
-        if (mBtAdapter!=null && mBtAdapter.isEnabled())
+        if (mBtAdapter != null && mBtAdapter.isEnabled())
         {
             mBtAdapter.disable();
         }
@@ -1369,10 +1372,6 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
-
-
-
     //*********************************************************************************************
     //*********************************************************************************************
     //  Commands To Device
@@ -1401,7 +1400,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
             {
                 byte[] value = command.getBytes("UTF-8");
 
-                if(value.length != 0)
+                if (value.length != 0)
                 {
                     mService.writeRXCharacteristic(value);
                 }
@@ -1417,28 +1416,8 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
 
     public void commandToBLE(String command, BleResponseInterface bleResponseInterface)
     {
-        COMMAND = command;
         this.bleResponseInterface = bleResponseInterface;
-
-        MyUtil.myLog(TAG, "CR---COMMANDToBLE----" + command);
-
-        try
-        {
-            if (command != null && !command.isEmpty())
-            {
-                byte[] value = command.getBytes("UTF-8");
-
-                if(value.length != 0)
-                {
-                    mService.writeRXCharacteristic(value);
-                }
-            }
-
-        }
-        catch (NullPointerException | UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
+        commandToBLE(command);
     }
 
 

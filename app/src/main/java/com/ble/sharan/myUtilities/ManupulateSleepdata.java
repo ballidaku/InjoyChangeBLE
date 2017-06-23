@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by brst-pc93 on 3/22/17.
@@ -110,7 +111,7 @@ public class ManupulateSleepdata
                 try
                 {
 
-                    SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm");
+                    SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm", Locale.US);
                     Date Date1 = myFormat.parse(startTime);
                     Date Date2 = myFormat.parse(endTime);
                     long mills = Date2.getTime() - Date1.getTime();

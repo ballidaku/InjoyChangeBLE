@@ -367,11 +367,8 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
                 linearLayout_refresh.setEnabled(true);
 
 
-//                if (((MainActivityNew) context).BLE_STATUS.equals(MyConstant.CONNECTED))
-//                {
                 autoRefreshTimer.cancel();
                 autoRefreshTimer.start();
-//                }
             }
             else if (BLE_STATUS.equals(MyConstant.DISCONNECTED))
             {
