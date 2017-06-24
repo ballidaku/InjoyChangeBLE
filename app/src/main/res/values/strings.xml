@@ -81,5 +81,8 @@
         <item>FEMALE</item>
     </string-array>
 
+    <string name="permission">Please enable all permission</string>
+
+
 
 </resources>

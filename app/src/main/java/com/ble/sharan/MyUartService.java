@@ -240,45 +240,53 @@ public class MyUartService extends Service
      */
     public boolean connect(final String address)
     {
-        if (mBluetoothAdapter == null || address == null)
-        {
-            Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
-            return false;
-        }
 
-        // Previously connected device.  Try to reconnect.
-        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress) && mBluetoothGatt != null)
+        try
         {
-            Log.w(TAG, "Trying to use an existing mBluetoothGatt for connection.");
-            if (mBluetoothGatt.connect())
+            if (mBluetoothAdapter == null || address == null)
             {
-                // mConnectionState = STATE_CONNECTING;
-                broadcastUpdate(ACTION_GATT_CONNECTING);
-                return true;
-            }
-            else
-            {
+                Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
                 return false;
             }
+
+            // Previously connected device.  Try to reconnect.
+            if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress) && mBluetoothGatt != null)
+            {
+                Log.w(TAG, "Trying to use an existing mBluetoothGatt for connection.");
+                if (mBluetoothGatt.connect())
+                {
+                    // mConnectionState = STATE_CONNECTING;
+                    broadcastUpdate(ACTION_GATT_CONNECTING);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+
+            // MyUtil.myLog(TAG," previous address "+mBluetoothDeviceAddress+"  current address "+address );
+
+            final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+            if (device == null)
+            {
+                Log.w(TAG, "Device not found.  Unable to connect.");
+                return false;
+            }
+            // We want to directly connect to the device, so we are setting the autoConnect
+            // parameter to false.
+            mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
+            Log.w(TAG, "Trying to create a new connection.");
+            mBluetoothDeviceAddress = address;
+            //  mConnectionState = STATE_CONNECTING;
+
+            broadcastUpdate(ACTION_GATT_CONNECTING);
         }
-
-
-        // MyUtil.myLog(TAG," previous address "+mBluetoothDeviceAddress+"  current address "+address );
-
-        final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        if (device == null)
+        catch (Exception e)
         {
-            Log.w(TAG, "Device not found.  Unable to connect.");
             return false;
         }
-        // We want to directly connect to the device, so we are setting the autoConnect
-        // parameter to false.
-        mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
-        Log.w(TAG, "Trying to create a new connection.");
-        mBluetoothDeviceAddress = address;
-        //  mConnectionState = STATE_CONNECTING;
-
-        broadcastUpdate(ACTION_GATT_CONNECTING);
 
         return true;
     }
