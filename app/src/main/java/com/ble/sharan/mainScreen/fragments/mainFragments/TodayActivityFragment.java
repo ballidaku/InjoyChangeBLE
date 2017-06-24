@@ -164,8 +164,7 @@ public class TodayActivityFragment extends Fragment implements View.OnClickListe
 
         }
     }
-
-
+    
     public void onRefresh()
     {
         ((MainActivityNew) context).commandToBLE(MyConstant.GET_STEPS);

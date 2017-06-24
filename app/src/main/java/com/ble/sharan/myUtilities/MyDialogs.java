@@ -69,14 +69,10 @@ public class MyDialogs
 
     private MyUtil myUtil = new MyUtil();
 
-    private static MyDialogs instance = null;
+    private static MyDialogs  instance = new MyDialogs();
 
     public static MyDialogs getInstance()
     {
-        if (instance == null)
-        {
-            instance = new MyDialogs();
-        }
         return instance;
     }
 

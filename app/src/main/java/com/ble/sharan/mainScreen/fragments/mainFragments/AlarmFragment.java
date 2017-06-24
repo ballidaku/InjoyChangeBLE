@@ -130,7 +130,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener, /*D
 
             setUpIds();
 
-            ((MainActivityNew) context).setDateToBLE();
+            //((MainActivityNew) context).setDateToBLE();
 
             getDataAndShow();
 

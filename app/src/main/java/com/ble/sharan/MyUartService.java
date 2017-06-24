@@ -40,6 +40,7 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 /**
@@ -98,7 +99,7 @@ public class MyUartService extends Service
                 broadcastUpdate(ACTION_GATT_CONNECTED);
                 Log.w(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
-                //Log.w(TAG, "Attempting to start service discovery:" + mBluetoothGatt.discoverServices());
+                Log.w(TAG, "Attempting to start service discovery:" + mBluetoothGatt.discoverServices());
 
             }
             else if (newState == BluetoothProfile.STATE_DISCONNECTED && status == 0)
@@ -269,11 +270,32 @@ public class MyUartService extends Service
             // MyUtil.myLog(TAG," previous address "+mBluetoothDeviceAddress+"  current address "+address );
 
             final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+
+
+
+
+
             if (device == null)
             {
                 Log.w(TAG, "Device not found.  Unable to connect.");
                 return false;
             }
+
+
+            //**************************************************************************************
+            //**************************************************************************************
+            // If device is paired remove the bonded state : 12 Bonded,  10 unbounded
+           // Log.e("getBondState",""+ device.getBondState());
+            if(device.getBondState() == 12)
+            {
+                unpairDevice(device);
+            }
+
+            //**************************************************************************************
+            //**************************************************************************************
+
+
+
             // We want to directly connect to the device, so we are setting the autoConnect
             // parameter to false.
             mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
@@ -290,6 +312,32 @@ public class MyUartService extends Service
 
         return true;
     }
+
+
+    public void unpairDevice(BluetoothDevice device)
+    {
+       //Log.e("getBondState",""+ mBluetoothAdapter.getRemoteDevice(address).getBondState());
+        try
+        {
+            Method m = device.getClass().getMethod("removeBond", (Class[]) null);
+            m.invoke(device, (Object[]) null);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+
+   /* public boolean createBond(BluetoothDevice btDevice)
+              throws Exception
+    {
+        Class class1 = Class.forName("android.bluetooth.BluetoothDevice");
+        Method createBondMethod = class1.getMethod("createBond");
+        Boolean returnValue = (Boolean) createBondMethod.invoke(btDevice);
+        return returnValue.booleanValue();
+    }*/
+
 
     /**
      * Disconnects an existing connection or cancel a pending connection. The disconnection result
@@ -388,9 +436,6 @@ public class MyUartService extends Service
         mBluetoothGatt.setCharacteristicNotification(TxChar, true);
 
 
-
-
-
         BluetoothGattDescriptor descriptor = TxChar.getDescriptor(CCCD);
         //descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 
@@ -408,7 +453,6 @@ public class MyUartService extends Service
 
         mBluetoothGatt.writeDescriptor(descriptor);
     }
-
 
 
     public void writeRXCharacteristic(byte[] value)
@@ -452,7 +496,7 @@ public class MyUartService extends Service
      *
      * @return A {@code List} of supported services.
      */
-   /* public List<BluetoothGattService> getSupportedGattServices()
+  /*  public List<BluetoothGattService> getSupportedGattServices()
     {
         if (mBluetoothGatt == null) return null;
 

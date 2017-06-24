@@ -1129,6 +1129,7 @@ public class MainActivityNew extends AppCompatActivity implements View.OnClickLi
                 MySharedPreference.getInstance().saveDeviceAddress(context, deviceAddress);
                 mService.connect(deviceAddress);
 
+
             }
             MyDialogs.getInstance().dialog.dismiss();
 
