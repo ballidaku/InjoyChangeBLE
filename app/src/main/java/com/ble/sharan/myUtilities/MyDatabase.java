@@ -88,7 +88,7 @@ public class MyDatabase extends SQLiteOpenHelper
 
         MyUtil.myLog(TAG, " Version " + oldVersion + "-----" + newVersion);
 
-        if (newVersion > 1)
+        if (oldVersion == 1)
         {
             db.execSQL("ALTER TABLE " + TABLE_SLEEP_RECORD + " ADD COLUMN " + KEY_TIME_RAW_DATA + " TEXT ");
         }
